@@ -1,4 +1,8 @@
 .bundle
+bin/*
 db/*.sqlite3
 log/*.log
 tmp/
+config/mongoid.yml
+config/settings.yml
+*.swp
