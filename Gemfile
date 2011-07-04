@@ -4,6 +4,7 @@ group :test do
   gem 'database_cleaner'
   gem 'mongoid-rspec',    :require => false
   gem 'rspec-rails'
+  gem 'spork'
   gem 'watchr'
 end
 
