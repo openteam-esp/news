@@ -21,7 +21,9 @@ Spork.prefork do
     config.mock_with :rspec
 
     config.before(:each) do
-      Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+      DatabaseCleaner.strategy = :truncation
+      DatabaseCleaner.orm = "mongoid"
+      #Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
     end
   end
 end
