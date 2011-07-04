@@ -1,5 +1,9 @@
 News::Application.routes.draw do
   devise_for :users
 
-  root :to => "users#index"
+  resources :authentications
+
+  match '/auth/:provider/callback' => 'authentications#create'
+
+  root :to => "authentications#index"
 end

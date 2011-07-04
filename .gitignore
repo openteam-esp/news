@@ -6,3 +6,4 @@ tmp/
 config/mongoid.yml
 config/settings.yml
 *.swp
+*.swo
