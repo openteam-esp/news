@@ -9,6 +9,10 @@ group :test do
   gem 'watchr',                 :require => false
 end
 
+group :development do
+  gem 'unicorn'
+end
+
 gem 'bson_ext',                 :require => false
 gem 'devise'
 gem 'configliere'

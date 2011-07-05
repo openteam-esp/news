@@ -48,6 +48,7 @@ GEM
       multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
     i18n (0.5.0)
+    kgio (2.5.0)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -130,6 +131,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.4)
+    raindrops (0.7.0)
     rake (0.9.2)
     rdoc (3.7)
     rest-client (1.6.3)
@@ -158,6 +160,10 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.29)
+    unicorn (4.0.1)
+      kgio (~> 2.4)
+      rack
+      raindrops (~> 0.6)
     warden (1.0.4)
       rack (>= 1.0)
     watchr (0.7)
@@ -178,4 +184,5 @@ DEPENDENCIES
   ruby-growl
   russian
   spork (>= 0.9.0.rc9)
+  unicorn
   watchr
