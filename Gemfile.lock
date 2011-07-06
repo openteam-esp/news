@@ -43,6 +43,7 @@ GEM
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    fabrication (1.0.1)
     faraday (0.6.1)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
@@ -176,6 +177,7 @@ DEPENDENCIES
   configliere
   database_cleaner
   devise
+  fabrication
   mongoid
   mongoid-rspec
   omniauth

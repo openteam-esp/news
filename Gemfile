@@ -2,6 +2,7 @@ source :rubygems
 
 group :test do
   gem 'database_cleaner'
+  gem 'fabrication'
   gem 'mongoid-rspec'
   gem 'rspec-rails',            :require => false
   gem 'ruby-growl',             :require => false
