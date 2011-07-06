@@ -1,4 +1,6 @@
 News::Application.routes.draw do
+  resources :entries
+
   devise_for :users
 
   resources :authentications

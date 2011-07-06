@@ -1,0 +1,13 @@
+<%= semantic_form_for(@entry) do |form| %>
+
+  <%= form.inputs do  %>
+    <%= form.input :title %>
+    <%= form.input :annotation, :as => :text %>
+    <%= form.input :body,       :as => :text %>
+    <%= form.input :since,      :as => :datetime %>
+    <%= form.input :until,      :as => :datetime %>
+  <% end %>
+
+  <%= form.buttons %>
+
+<% end %>

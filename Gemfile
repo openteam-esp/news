@@ -16,7 +16,9 @@ end
 
 gem 'bson_ext',                 :require => false
 gem 'devise'
+#gem 'dynamic_form'
 gem 'configliere'
+gem 'formtastic', '>=2.0.0.rc'
 gem 'mongoid'
 gem 'omniauth'
 gem 'rails',  '3.0.9',          :require => false
