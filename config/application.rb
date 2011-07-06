@@ -43,8 +43,9 @@ module News
     config.filter_parameters += [:password]
 
     config.generators do | generators |
-      generators.orm            :mongoid
-      generators.test_framework :rspec
+      generators.orm                  :mongoid
+      generators.test_framework       :rspec, :fixture => true
+      generators.fixture_replacement  :fabrication
     end
   end
 end

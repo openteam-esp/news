@@ -1,7 +1,9 @@
 class User
   include Mongoid::Document
 
-  attr_accessible :provider, :uid, :name, :email
+  field :name,  :type => String
+  field :email, :type => String
+
 
   has_many :authentications
 

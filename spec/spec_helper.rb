@@ -18,12 +18,14 @@ Spork.prefork do
 
     include Mongoid::Matchers
 
+    config.include Devise::TestHelpers
+
     config.mock_with :rspec
 
     config.before(:each) do
-      DatabaseCleaner.strategy = :truncation
-      DatabaseCleaner.orm = "mongoid"
-      #Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+      #DatabaseCleaner.strategy = :truncation
+      #DatabaseCleaner.orm = "mongoid"
+      Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
     end
   end
 end

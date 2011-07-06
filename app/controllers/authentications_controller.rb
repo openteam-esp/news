@@ -15,7 +15,7 @@ class AuthenticationsController < ApplicationController
       flash[:notice] = "Authentication successful."
       redirect_to authentications_url
     else
-      user = User.new
+      user = User.new :name => omniauth['user.info']['name'] || omniauth['user.info']['nickname'], :email => omniauth['user.info']['email']
       authentication = user.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
       user.save :validate => false
       authentication.save!
