@@ -18,7 +18,7 @@ Spork.prefork do
 
     include Mongoid::Matchers
 
-    config.include Devise::TestHelpers
+    config.include Devise::TestHelpers, :type => :controller
 
     config.mock_with :rspec
 
