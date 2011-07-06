@@ -4,10 +4,11 @@ class User
   field :name,  :type => String
   field :email, :type => String
 
-
-  has_many :authentications
-
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  has_one :authentication
+
+  delegate :provider, :to => :authentication
 
 end

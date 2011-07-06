@@ -4,4 +4,5 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook,   Settings['omniauth.facebook.app_key'],  Settings['omniauth.facebook.app_secret']
   provider :vkontakte,  Settings['omniauth.vkontakte.app_key'], Settings['omniauth.vkontakte.app_secret']
   use OmniAuth::Strategies::OpenID, OpenID::Store::Filesystem.new('/tmp'), :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id'
+  provider :open_id, OpenID::Store::Filesystem.new('/tmp')
 end

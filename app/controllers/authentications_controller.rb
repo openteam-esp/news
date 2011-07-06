@@ -1,7 +1,11 @@
+# encoding: utf-8
 class AuthenticationsController < ApplicationController
 
+  protect_from_forgery :except => :create
+  skip_before_filter :verify_authenticity_token, :on => :create
+
   def index
-    @authentications = current_user.authentications if current_user
+    @authentications = [current_user.authentication] if current_user
   end
 
   def create
@@ -11,12 +15,11 @@ class AuthenticationsController < ApplicationController
       flash[:notice] = "Signed in successfully."
       sign_in_and_redirect(:user, authentication.user)
     elsif current_user
-      current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'])
-      flash[:notice] = "Authentication successful."
+      flash[:notice] = "Вы уже зашли как #{current_user.name} (#{current_user.provider})"
       redirect_to authentications_url
     else
-      user = User.new :name => omniauth['user.info']['name'] || omniauth['user.info']['nickname'], :email => omniauth['user.info']['email']
-      authentication = user.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+      user = User.new :name => omniauth['user_info']['name'] || omniauth['user_info']['nickname'], :email => omniauth['user_info']['email']
+      authentication = user.build_authentication(:provider => omniauth['provider'], :uid => omniauth['uid'])
       user.save :validate => false
       authentication.save!
       flash[:notice] = "Signed in successfully."
@@ -25,7 +28,7 @@ class AuthenticationsController < ApplicationController
   end
 
   def destroy
-    @authentication = current_user.authentications.find(params[:id])
+    @authentication = current_user.authentication
     @authentication.destroy
     flash[:notice] = "Successfully destroyed authentication."
     redirect_to authentications_url
