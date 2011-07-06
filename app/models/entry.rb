@@ -10,4 +10,11 @@ class Entry
   has_many :events
 
   validates_presence_of :body
+
+  after_create :create_event
+
+  private
+    def create_event
+      events.create! :type => 'created'
+    end
 end

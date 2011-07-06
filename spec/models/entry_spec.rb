@@ -1,5 +1,13 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe Entry do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  let :entry do Fabricate :entry end
+
+  it "после создания должно появится событие 'новость создана'" do
+    entry.events.should be_one
+  end
+
 end

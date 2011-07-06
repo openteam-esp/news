@@ -1,4 +1,10 @@
 class Event
   include Mongoid::Document
-  field :title, :type => String
+
+  belongs_to :entry
+
+  field :type, :type => String
+  field :text, :type => String
+
+  scope :created, :type => 'created'
 end
