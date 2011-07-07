@@ -6,5 +6,4 @@ class Event
   field :type, :type => String
   field :text, :type => String
 
-  scope :created, :type => 'created'
 end
