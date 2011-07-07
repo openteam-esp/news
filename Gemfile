@@ -20,10 +20,10 @@ gem 'compass'
 gem 'configliere'
 gem 'devise'
 gem 'formtastic', '>=2.0.0.rc'
+gem 'inherited_resources'
 gem 'jquery-rails',             :require => false
 gem 'mongoid'
 gem 'omniauth'
 gem 'rails',  '3.0.9',          :require => false
 gem 'russian'
 gem 'state_machine'
-

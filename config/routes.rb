@@ -1,5 +1,8 @@
 News::Application.routes.draw do
-  resources :entries
+
+  resources :entries do
+    resources :events, :only => [:new, :create]
+  end
 
   devise_for :users
 
