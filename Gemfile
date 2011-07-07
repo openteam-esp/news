@@ -16,13 +16,14 @@ group :development do
 end
 
 gem 'bson_ext',                 :require => false
-gem 'devise'
+gem 'compass'
 gem 'configliere'
+gem 'devise'
 gem 'formtastic', '>=2.0.0.rc'
+gem 'jquery-rails',             :require => false
 gem 'mongoid'
 gem 'omniauth'
 gem 'rails',  '3.0.9',          :require => false
 gem 'russian'
 gem 'state_machine'
-gem 'jquery-rails'
 
