@@ -157,6 +157,7 @@ GEM
       activesupport (~> 3.0)
       railties (~> 3.0)
       rspec (~> 2.6.0)
+    ruby-graphviz (1.0.0)
     ruby-growl (3.0)
     ruby-openid (2.1.8)
     ruby-openid-apps-discovery (1.2.0)
@@ -193,6 +194,7 @@ DEPENDENCIES
   omniauth
   rails (= 3.0.9)
   rspec-rails
+  ruby-graphviz
   ruby-growl
   russian
   spork (>= 0.9.0.rc9)

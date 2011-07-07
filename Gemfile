@@ -12,6 +12,7 @@ end
 
 group :development do
   gem 'unicorn'
+  gem 'ruby-graphviz',          :require => false
 end
 
 gem 'bson_ext',                 :require => false

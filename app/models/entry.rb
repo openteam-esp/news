@@ -15,9 +15,6 @@ class Entry
   after_create :create_event
 
   state_machine :initial => :draft do
-    after_transition do | entry, transition |
-      entry.events.create! :type => transition.event
-    end
 
     event :send_to_corrector do
       transition :draft => :awaiting_correction
