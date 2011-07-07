@@ -23,3 +23,5 @@ gem 'omniauth'
 gem 'rails',  '3.0.9',          :require => false
 gem 'russian'
 gem 'state_machine'
+gem 'jquery-rails'
+
