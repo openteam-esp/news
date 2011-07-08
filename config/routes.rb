@@ -1,5 +1,4 @@
 News::Application.routes.draw do
-
   resources :entries do
     resources :events, :only => [:new, :create]
   end
@@ -10,5 +9,5 @@ News::Application.routes.draw do
 
   match '/auth/:provider/callback' => 'authentications#create'
 
-  root :to => "authentications#index"
+  root :to => "entries#index"
 end
