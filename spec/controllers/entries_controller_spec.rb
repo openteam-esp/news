@@ -70,6 +70,7 @@ describe EntriesController do
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Entry.any_instance.stub(:save).and_return(false)
+        Entry.any_instance.stub(:errors).and_return [true]
         post :create, :entry => {}
         response.should render_template("new")
       end
@@ -113,6 +114,7 @@ describe EntriesController do
       it "re-renders the 'edit' template" do
         entry = Entry.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
+        Entry.any_instance.stub(:errors).and_return [true]
         Entry.any_instance.stub(:save).and_return(false)
         put :update, :id => entry.id.to_s, :entry => {}
         response.should render_template("edit")

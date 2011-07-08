@@ -1,7 +1,8 @@
 # encoding: utf-8
-class AuthenticationsController < ApplicationController
 
+class AuthenticationsController < ApplicationController
   protect_from_forgery :except => :create
+
   skip_before_filter :verify_authenticity_token, :on => :create
 
   def index
