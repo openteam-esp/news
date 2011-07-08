@@ -2,12 +2,7 @@
 
 class AuthenticationsController < ApplicationController
   protect_from_forgery :except => :create
-
   skip_before_filter :verify_authenticity_token, :on => :create
-
-  def index
-    @authentications = [current_user.authentication] if current_user
-  end
 
   def create
     omniauth = request.env["omniauth.auth"]

@@ -4,6 +4,11 @@ require 'spec_helper'
 
 describe EntriesController do
 
+  before :each do
+    user = Fabricate(:user)
+    sign_in user
+  end
+
   def valid_attributes
     {:body => 'Текст новости'}
   end

@@ -1,13 +1,13 @@
 News::Application.routes.draw do
+  devise_for :users
+
+  match '/auth/:provider/callback' => 'authentications#create'
+
+  resources :authentications, :only => [:create, :destroy]
+
   resources :entries do
     resources :events, :only => [:new, :create]
   end
-
-  devise_for :users
-
-  resources :authentications
-
-  match '/auth/:provider/callback' => 'authentications#create'
 
   root :to => "entries#index"
 end
