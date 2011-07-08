@@ -1,4 +1,6 @@
-class EventsController < InheritedResources::Base
+class EventsController < ApplicationController
+  inherit_resources
+
   belongs_to :entry
 
   actions :new, :create
