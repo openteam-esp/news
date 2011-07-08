@@ -1,5 +1,11 @@
 source :rubygems
 
+group :development do
+  gem 'itslog'
+  gem 'ruby-graphviz',          :require => false
+  gem 'unicorn'
+end
+
 group :test do
   gem 'database_cleaner'
   gem 'fabrication'
@@ -8,11 +14,6 @@ group :test do
   gem 'ruby-growl',             :require => false
   gem 'spork', '>= 0.9.0.rc9',  :require => false
   gem 'watchr',                 :require => false
-end
-
-group :development do
-  gem 'unicorn'
-  gem 'ruby-graphviz',          :require => false
 end
 
 gem 'bson_ext',                 :require => false

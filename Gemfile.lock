@@ -62,6 +62,7 @@ GEM
     inherited_resources (1.2.2)
       has_scope (~> 0.5.0)
       responders (~> 0.6.0)
+    itslog (0.5.0)
     jquery-rails (1.0.12)
       railties (~> 3.0)
       thor (~> 0.14)
@@ -202,6 +203,7 @@ DEPENDENCIES
   fabrication
   formtastic (>= 2.0.0.rc)
   inherited_resources
+  itslog
   jquery-rails
   mongoid
   mongoid-rspec
