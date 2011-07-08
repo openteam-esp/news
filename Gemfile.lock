@@ -202,6 +202,7 @@ DEPENDENCIES
   devise
   fabrication
   formtastic (>= 2.0.0.rc)
+  has_scope
   inherited_resources
   itslog
   jquery-rails

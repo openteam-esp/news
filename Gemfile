@@ -21,6 +21,7 @@ gem 'compass'
 gem 'configliere'
 gem 'devise'
 gem 'formtastic', '>=2.0.0.rc'
+gem 'has_scope'
 gem 'inherited_resources'
 gem 'jquery-rails',             :require => false
 gem 'mongoid'

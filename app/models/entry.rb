@@ -12,6 +12,8 @@ class Entry
 
   validates_presence_of :body
 
+  named_scope :by_state, proc {|state| where(:state => state) }
+
   after_create :create_event
 
   state_machine :initial => :draft do

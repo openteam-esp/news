@@ -7,8 +7,9 @@
     <%= csrf_meta_tag %>
   </head>
   <body>
-    <%= p current_user.name if current_user %>
+    <%= current_user.name if current_user %>
     <%= link_to "Выход", destroy_user_session_path, :method => :delete if current_user %>
+    <hr />
     <%= yield %>
   </body>
 </html>
