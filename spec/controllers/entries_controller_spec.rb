@@ -16,8 +16,10 @@ describe EntriesController do
   describe "GET index" do
     it "assigns all entries as @entries" do
       entry = Entry.create! valid_attributes
+      entry.send_to_corrector
+      entries = Entry.all.folder('inbox')
       get :index
-      assigns(:entries).should eq([entry])
+      assigns(:entries).should eq(entries)
     end
   end
 

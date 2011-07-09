@@ -8,11 +8,10 @@ class Entry
   field :state,       :type => String
 
   has_and_belongs_to_many :channels
+
   has_many :events
 
   validates_presence_of :body
-
-  named_scope :by_state, proc {|state| where(:state => state) }
 
   after_create :create_event
 
@@ -43,6 +42,10 @@ class Entry
     end
   end
 
+  def self.folder(folder)
+    states = folder == 'inbox' ? ['awaiting_correction', 'awaiting_publication'] : [folder]
+    any_in(:state => states).group_by {|entry| entry.state}
+  end
 
   private
     def create_event

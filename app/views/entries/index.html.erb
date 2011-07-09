@@ -1,10 +1,15 @@
 <%= link_to t(:new_entry), new_entry_path %>
 
-<% @entries.each do |entry| %>
-    <td><%= entry.title %></td>
-    <td><%= link_to 'Show', entry %></td>
-    <td><%= link_to 'Edit', edit_entry_path(entry) %></td>
-    <td><%= link_to 'Destroy', entry, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-
+<% @entries.each do |state, entries|%>
+  <h4><%= state %></h4>
+  <ul>
+    <% entries.each do | entry |%>
+      <li>
+        <%= entry.title%>
+        <%= link_to 'Show', entry%>
+        <%= link_to 'Edit', edit_entry_path(entry)%>
+        <%= link_to 'Destroy', entry, :confirm => 'Are you sure?', :method => :delete%>
+      </li>
+    <% end%>
+  </ul>
+<% end%>
