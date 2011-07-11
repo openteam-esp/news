@@ -8,3 +8,4 @@ config/settings.yml
 *.swp
 *.swo
 *.css
+.rake_tasks~

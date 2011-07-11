@@ -1,0 +1,23 @@
+<%= content_for :content do %>
+  <%= current_user.name if current_user %>
+  <%= link_to "Выход", destroy_user_session_path, :method => :delete if current_user %>
+  <hr />
+  <div class="dashboard">
+    <ul>
+      <li>
+        <%= link_to "Входящие", entries_path(:folder => 'inbox') %>
+      </li>
+      <li>
+        <%= link_to "Опубликованные", entries_path(:folder => 'published') %>
+      </li>
+      <li>
+        <%= link_to "Черновики", entries_path(:folder => 'draft') %>
+      </li>
+      <li>
+        <%= link_to "Корзина", '#' %>
+      </li>
+    </ul>
+  </div>
+  <%= yield %>
+<% end %>
+<%= render :file => 'layouts/application' %>
