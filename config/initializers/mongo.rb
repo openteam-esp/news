@@ -1,5 +1,5 @@
 if Settings['mongo.url']
-  settings = URI.parse(Settings['mongohq.url'])
+  settings = URI.parse(Settings['mongo.url'])
   database_name = settings.path.gsub(/^\//, '')
 
   Mongoid.configure do |config|
