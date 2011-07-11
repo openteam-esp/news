@@ -19,6 +19,7 @@ end
 gem 'bson_ext',                 :require => false
 gem 'compass'
 gem 'configliere'
+gem 'ckeditor'
 gem 'devise'
 gem 'formtastic', '>=2.0.0.rc'
 gem 'has_scope'
@@ -26,6 +27,7 @@ gem 'inherited_resources'
 gem 'jquery-rails',             :require => false
 gem 'mongoid'
 gem 'omniauth'
+gem 'paperclip'
 gem 'rails',  '3.0.9',          :require => false
 gem 'russian'
 gem 'state_machine'
