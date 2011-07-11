@@ -11,7 +11,7 @@ class AuthenticationsController < ApplicationController
       flash[:notice] = "Signed in successfully."
       sign_in_and_redirect(:user, authentication.user)
     elsif current_user
-      flash[:notice] = "Вы уже зашли как #{current_user.name} (#{current_user.provider})"
+      flash[:notice] = "You signed in as #{current_user.name} (#{current_user.provider})"
       redirect_to authentications_url
     else
       user = User.new :name => omniauth['user_info']['name'] || omniauth['user_info']['nickname'], :email => omniauth['user_info']['email']

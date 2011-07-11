@@ -1,13 +1,19 @@
-<% @entries.each do |state, entries|%>
-  <h4><%= state %></h4>
-  <ul>
-    <% entries.each do | entry |%>
-      <li>
-        <%= entry.title%>
-        <%= link_to 'Show', entry%>
-        <%= link_to 'Edit', edit_entry_path(entry)%>
-        <%= link_to 'Destroy', entry, :confirm => 'Are you sure?', :method => :delete%>
-      </li>
-    <% end%>
-  </ul>
-<% end%>
+<% if @entries.any? %>
+  <% @entries.each do |state, entries|%>
+    <%= content_tag :h4, state, :class => state %>
+    <ul>
+      <% entries.each do | entry |%>
+        <li>
+          <% last_event = entry.events.last %>
+          <%= l last_event.created_at, :format => :long %>
+          <%= link_to strip_tags(entry.title_or_body), entry %>
+          <%= last_event.type %>
+          <%= "by #{last_event.user}" %>
+        </li>
+      <% end%>
+    </ul>
+  <% end%>
+<% else %>
+  <%= content_tag :h4, t('no_any_entries'), :class => 'empty' %>
+<% end %>
+

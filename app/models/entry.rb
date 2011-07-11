@@ -1,5 +1,6 @@
 class Entry
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
   field :title,       :type => String
   field :annotation,  :type => String
   field :body,        :type => String
@@ -9,6 +10,8 @@ class Entry
 
   has_and_belongs_to_many :channels
   has_many :events
+
+  attr_accessor :user_id
 
   validates_presence_of :body
 
@@ -41,6 +44,10 @@ class Entry
     end
   end
 
+  def title_or_body
+    title.present? ? title : body.truncate(100)
+  end
+
   def self.folder(folder)
     states = folder == 'inbox' ? ['awaiting_correction', 'awaiting_publication'] : [folder]
     any_in(:state => states).group_by {|entry| entry.state}
@@ -48,6 +55,6 @@ class Entry
 
   private
     def create_event
-      events.create! :type => 'created'
+      events.create! :type => 'created', :user_id => user_id
     end
 end

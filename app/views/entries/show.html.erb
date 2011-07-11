@@ -1,11 +1,66 @@
-<p id="notice"><%= notice %></p>
+<h2 <%= 'class=empty' if @entry.title.blank? %>><%= @entry.title.present? ? @entry.title : t('empty_title') %></h2>
 
-<div class="show_entry">
-<h1><%= @entry.title %></h1>
-<%= raw @entry.annotation %>
-<%= raw @entry.body %>
+<p class='annotation <%= "empty" if @entry.annotation.blank? %>'>
+  <%= @entry.annotation.present? ? raw(@entry.annotation) : t('empty_annotation') %>
+</p>
+
+<div class='content'>
+  <%= raw @entry.body %>
 </div>
 
-<%= link_to 'Edit', edit_entry_path(@entry) %> |
-<%= link_to 'Back', entries_path %>
+<div class='channels'>
+  <h4><%= t('channels') %></h4>
+  <ul>
+    <% if @entry.channels.any? %>
+      <% @entry.channels.each do |channel| %>
+        <li><%= channel.title %></li>
+      <% end %>
+    <% else %>
+      <%= content_tag :li, t('not_any_channels'), :class => 'empty' %>
+    <% end %>
+  </ul>
+</div>
 
+<div class='availability'>
+  <h4><%= t('availability') %></h4>
+  <ul>
+    <li><%= t('since') %> <%= @entry.since ? l(@entry.since, :format => :long) : t('immediately_after_correcting') %></li>
+    <li><%= t('until') %> <%= @entry.until ? l(@entry.until, :format => :long) : t('not_limited_in_time') %></li>
+  </ul>
+</div>
+
+<div class='actions'>
+  <h4><%= t('actions') %></h4>
+  <ul>
+    <% @entry.state_events.each do |event| %>
+      <li>
+        <h6><%= event %></h6>
+        <%= semantic_form_for :event, :url => entry_events_path(@entry) do |form| %>
+          <%= form.inputs do %>
+            <%= form.input :type, :as => :hidden, :value => event %>
+            <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
+            <%= form.input :text, :as => :text %>
+          <% end %>
+          <%= form.buttons do %>
+            <%= form.commit_button event.to_s %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<div class='history'>
+  <h4><%= t('history') %></h4>
+  <ul>
+    <% @entry.events.each do |event| %>
+      <li>
+        <%= l event.created_at, :format => :long %>
+        <%= event.type %>
+        <%= "by #{event.user}" %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<%= link_to 'Edit', edit_entry_path(@entry) %> | <%= link_to 'Back', entries_path %>

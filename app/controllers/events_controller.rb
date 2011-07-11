@@ -1,6 +1,4 @@
-class EventsController < ApplicationController
-  inherit_resources
-
+class EventsController < InheritedResources::Base
   belongs_to :entry
 
   actions :new, :create
@@ -8,5 +6,4 @@ class EventsController < ApplicationController
   def create
     create! { root_path }
   end
-
 end

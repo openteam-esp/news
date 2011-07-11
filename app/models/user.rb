@@ -12,4 +12,8 @@ class User
 
   delegate :provider, :to => :authentication
 
+  def to_s
+    name
+  end
+
 end

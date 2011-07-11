@@ -1,5 +1,6 @@
 class Event
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :type, :type => String
   field :text, :type => String
 
@@ -8,10 +9,10 @@ class Event
 
   after_create :fire_entry_event
 
-  private
+  default_scope order_by([:created_at, :desc])
 
+  private
     def fire_entry_event
       entry.fire_events type.to_sym unless type == 'created'
     end
-
 end
