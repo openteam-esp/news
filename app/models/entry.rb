@@ -8,7 +8,6 @@ class Entry
   field :state,       :type => String
 
   has_and_belongs_to_many :channels
-
   has_many :events
 
   validates_presence_of :body

@@ -1,10 +1,10 @@
 class Event
   include Mongoid::Document
-
-  belongs_to :entry
-
   field :type, :type => String
   field :text, :type => String
+
+  belongs_to :entry
+  belongs_to :user
 
   after_create :fire_entry_event
 
