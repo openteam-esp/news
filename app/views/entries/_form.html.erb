@@ -2,8 +2,8 @@
 
   <%= form.inputs do  %>
     <%= form.input :title %>
-    <%= form.input :annotation, :as => :text %>
-    <%= form.input :body,       :as => :text %>
+    <%= form.cktext_area :annotation %>
+    <%= form.cktext_area :body %>
     <%= form.input :since,      :as => :datetime %>
     <%= form.input :until,      :as => :datetime %>
     <%= form.input :channels,   :as => :check_boxes %>
@@ -12,3 +12,4 @@
   <%= form.buttons %>
 
 <% end %>
+
