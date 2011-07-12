@@ -58,6 +58,7 @@
         <%= l event.created_at, :format => :long %>
         <%= event.type %>
         <%= "by #{event.user}" %>
+        <%= content_tag :span, event.text, :class => 'text' if event.text.present? %>
       </li>
     <% end %>
   </ul>

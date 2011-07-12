@@ -45,7 +45,7 @@ class Entry
   end
 
   def title_or_body
-    title.present? ? title : body.truncate(100)
+    title.present? ? title.truncate(100) : body.truncate(100)
   end
 
   def self.folder(folder)
