@@ -19,6 +19,7 @@ end
 
 group :production do
   gem 'hassle',                 :git => 'git://github.com/koppen/hassle'
+  gem 'hoptoad_notifier'
 end
 
 gem 'bson_ext',                 :require => false

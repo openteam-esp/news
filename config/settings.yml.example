@@ -2,3 +2,15 @@ omniauth:
   twitter:
     consumer_key:     key
     consumer_secret:  secret
+  facebook:
+    app_key:          key
+    app_secret:       secret
+  vkontakte:
+    app_key:          key
+    app_secret:       secret
+
+hoptoad:
+  api_key:            key
+  host:               host
+
+
