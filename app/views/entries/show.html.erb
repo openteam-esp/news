@@ -1,8 +1,8 @@
 <h2 <%= 'class=empty' if @entry.title.blank? %>><%= @entry.title.present? ? @entry.title : t('empty_title') %></h2>
 
-<p class='annotation <%= "empty" if @entry.annotation.blank? %>'>
+<div class='annotation <%= "empty" if @entry.annotation.blank? %>'>
   <%= @entry.annotation.present? ? raw(@entry.annotation) : t('empty_annotation') %>
-</p>
+</div>
 
 <div class='content'>
   <%= raw @entry.body %>
