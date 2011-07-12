@@ -7,23 +7,7 @@
   <div class='container'>
     <div class='sidebar'>
       <%= link_to t('new_entry'), new_entry_path, :class => 'new_entry' %>
-      <ul>
-        <li>
-          <%= link_to t('inbox'), entries_path(:folder => 'inbox') %>
-        </li>
-        <li>
-          <%= link_to t('published'), entries_path(:folder => 'published') %>
-        </li>
-        <li>
-          <%= link_to t('correcting'), entries_path(:folder => 'correcting') %>
-        </li>
-        <li>
-          <%= link_to t('draft'), entries_path(:folder => 'draft') %>
-        </li>
-        <li style='background:red;'>
-          <%= link_to t('trash'), '#' %>
-        </li>
-      </ul>
+      <%= render_navigation %>
     </div>
     <div class='content_wrapper'>
       <%= yield %>

@@ -7,6 +7,11 @@ group :development do
   gem 'unicorn'
 end
 
+group :production do
+  gem 'hassle',                 :git => 'git://github.com/koppen/hassle'
+  gem 'hoptoad_notifier'
+end
+
 group :test do
   gem 'database_cleaner'
   gem 'fabrication'
@@ -17,15 +22,10 @@ group :test do
   gem 'watchr',                 :require => false
 end
 
-group :production do
-  gem 'hassle',                 :git => 'git://github.com/koppen/hassle'
-  gem 'hoptoad_notifier'
-end
-
 gem 'bson_ext',                 :require => false
+gem 'ckeditor'
 gem 'compass'
 gem 'configliere'
-gem 'ckeditor'
 gem 'devise'
 gem 'formtastic', '>=2.0.0.rc'
 gem 'has_scope'
@@ -36,4 +36,5 @@ gem 'omniauth'
 gem 'paperclip'
 gem 'rails',  '3.0.9',          :require => false
 gem 'russian'
+gem 'simple-navigation'
 gem 'state_machine'
