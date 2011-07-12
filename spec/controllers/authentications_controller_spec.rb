@@ -57,7 +57,7 @@ describe AuthenticationsController do
         post :create
         mock_omniauth_fields :vkontakte, :email
         post :create
-        flash[:notice].should eql "Вы уже зашли как #{user[:name]} (twitter)"
+        flash[:notice].should eql "You signed in as #{user[:name]} (twitter)"
       end
     end
 

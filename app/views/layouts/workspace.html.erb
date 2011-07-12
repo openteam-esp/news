@@ -1,4 +1,5 @@
 <%= content_for :content do %>
+  <%= flash[:notice] %>
   <div class='login_info'>
     <%= current_user.name if current_user %>
     <%= link_to t('logout'), destroy_user_session_path, :method => :delete if current_user %>
