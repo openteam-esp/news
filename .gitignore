@@ -7,5 +7,5 @@ config/mongoid.yml
 config/settings.yml
 *.swp
 *.swo
-*.css
+public/stylesheets/*.css
 .rake_tasks~
