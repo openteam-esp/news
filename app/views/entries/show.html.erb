@@ -29,6 +29,24 @@
   </ul>
 </div>
 
+<div class='modification'>
+  <h4><%= t('i_want_to_change_the_news') %></h4>
+  <ul>
+    <li>
+      <%= semantic_form_for :event, :url => entry_events_path(@entry) do |form| %>
+        <%= form.inputs do %>
+          <%= form.input :type, :as => :hidden, :value => 'modification'%>
+          <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
+          <%= form.input :text, :as => :text %>
+        <% end %>
+        <%= form.buttons do %>
+          <%= form.commit_button t('modification') %>
+        <% end %>
+      <% end %>
+    </li>
+  </ul>
+</div>
+
 <div class='actions'>
   <h4><%= t('actions') %></h4>
   <ul>
@@ -42,7 +60,7 @@
             <%= form.input :text, :as => :text %>
           <% end %>
           <%= form.buttons do %>
-            <%= form.commit_button event.to_s %>
+            <%= form.commit_button t(event.to_s) %>
           <% end %>
         <% end %>
       </li>
@@ -64,4 +82,4 @@
   </ul>
 </div>
 
-<%= link_to 'Edit', edit_entry_path(@entry) %> | <%= link_to 'Back', entries_path %>
+<%= link_to t('edit'), edit_entry_path(@entry) %> | <%= link_to t('to_trash'), to_trash_entry_path(@entry) %> | <%= link_to t('back'), entries_path %>

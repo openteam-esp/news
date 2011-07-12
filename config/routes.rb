@@ -7,6 +7,7 @@ News::Application.routes.draw do
 
   resources :entries do
     resources :events, :only => [:new, :create]
+    get :to_trash, :on => :member
   end
 
   root :to => "entries#index"

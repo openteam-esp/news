@@ -1,12 +1,14 @@
 class Entry
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes
+  include Mongoid::Timestamps
   field :title,       :type => String
   field :annotation,  :type => String
   field :body,        :type => String
   field :since,       :type => DateTime
   field :until,       :type => DateTime
   field :state,       :type => String
+  field :deleted,     :type => Boolean, :default => false
 
   has_and_belongs_to_many :channels
   has_many :events
@@ -49,8 +51,9 @@ class Entry
   end
 
   def self.folder(folder)
+    return Entry.where(:deleted => true).group_by {|entry| I18n.l(entry.updated_at, :format => '%d %B %Y') } if folder == 'trash'
     states = folder == 'inbox' ? ['awaiting_correction', 'awaiting_publication'] : [folder]
-    any_in(:state => states).group_by {|entry| entry.state}
+    any_in(:state => states).where(:deleted => false).group_by {|entry| entry.state}
   end
 
   private
