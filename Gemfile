@@ -17,6 +17,10 @@ group :test do
   gem 'watchr',                 :require => false
 end
 
+group :production do
+  gem 'hassle',                 :git => 'git://github.com/koppen/hassle'
+end
+
 gem 'bson_ext',                 :require => false
 gem 'compass'
 gem 'configliere'
