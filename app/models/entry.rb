@@ -51,12 +51,6 @@ class Entry
     title.present? ? title.truncate(100) : body.truncate(100)
   end
 
-  def self.folder(folder)
-    return Entry.where(:deleted => true).group_by {|entry| I18n.l(entry.updated_at, :format => '%d %B %Y') } if folder == 'trash'
-    states = folder == 'inbox' ? ['awaiting_correction', 'awaiting_publication'] : [folder]
-    any_in(:state => states).where(:deleted => false).group_by {|entry| entry.state}
-  end
-
   private
     def create_event
       events.create! :type => 'created', :user_id => user_id

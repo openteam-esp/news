@@ -1,4 +1,5 @@
 class EventsController < InheritedResources::Base
+  belongs_to :folder
   belongs_to :entry
 
   actions :new, :create

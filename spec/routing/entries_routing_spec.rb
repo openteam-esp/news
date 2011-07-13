@@ -4,32 +4,27 @@ describe EntriesController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/entries").should route_to("entries#index")
+      get("/folders/inbox/entries").should route_to("entries#index", :folder_id => 'inbox')
     end
 
     it "routes to #new" do
-      get("/entries/new").should route_to("entries#new")
+      get("/folders/draft/entries/new").should route_to("entries#new", :folder_id => 'draft')
     end
 
     it "routes to #show" do
-      get("/entries/1").should route_to("entries#show", :id => "1")
+      get("/folders/inbox/entries/1").should route_to("entries#show", :id => "1", :folder_id => 'inbox')
     end
 
     it "routes to #edit" do
-      get("/entries/1/edit").should route_to("entries#edit", :id => "1")
+      get("/folders/correcting/entries/1/edit").should route_to("entries#edit", :id => "1", :folder_id => 'correcting')
     end
 
     it "routes to #create" do
-      post("/entries").should route_to("entries#create")
+      post("/folders/draft/entries").should route_to("entries#create", :folder_id => 'draft')
     end
 
     it "routes to #update" do
-      put("/entries/1").should route_to("entries#update", :id => "1")
+      put("/folders/correcting/entries/1").should route_to("entries#update", :id => "1", :folder_id => 'correcting')
     end
-
-    it "routes to #destroy" do
-      delete("/entries/1").should route_to("entries#destroy", :id => "1")
-    end
-
   end
 end
