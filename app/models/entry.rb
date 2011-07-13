@@ -12,6 +12,7 @@ class Entry
 
   has_and_belongs_to_many :channels
   has_many :events
+  belongs_to :folder
 
   attr_accessor :user_id
 

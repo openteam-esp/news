@@ -5,9 +5,11 @@ News::Application.routes.draw do
 
   resources :authentications, :only => [:create, :destroy]
 
-  resources :entries do
-    resources :events, :only => [:new, :create]
-    get :to_trash, :on => :member
+  resources :folders do
+    resources :entries do
+      resources :events, :only => [:new, :create]
+      get :to_trash, :on => :member
+    end
   end
 
   root :to => "entries#index"
