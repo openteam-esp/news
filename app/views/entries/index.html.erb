@@ -6,7 +6,7 @@
         <li>
           <% last_event = entry.events.first %>
           <%= l last_event.created_at, :format => :long %>
-          <%= link_to strip_tags(entry.title_or_body), entry_path(entry.id) %>
+          <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), entry_path(entry.id) %>
           <%= last_event.type %>
           <%= "by #{last_event.user}" %>
           <%= content_tag :span, last_event.text.truncate(150), :class => 'text' if last_event.text.present? %>

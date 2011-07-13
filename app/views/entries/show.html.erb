@@ -1,11 +1,11 @@
-<h2 <%= 'class=empty' if @entry.title.blank? %>><%= @entry.title.present? ? @entry.title : t('empty_title') %></h2>
+<h2 <%= 'class=empty' if @entry.title.blank? %>><%= @entry.title.present? ? raw(@entry.title.gsub('&quot;', '"').gilensize) : t('empty_title') %></h2>
 
 <div class='annotation <%= "empty" if @entry.annotation.blank? %>'>
-  <%= @entry.annotation.present? ? raw(@entry.annotation) : t('empty_annotation') %>
+  <%= @entry.annotation.present? ? raw(@entry.annotation.gsub('&quot;', '"').gilensize) : t('empty_annotation') %>
 </div>
 
 <div class='content'>
-  <%= raw @entry.body %>
+  <%= raw @entry.body.gsub('&quot;', '"').gilensize %>
 </div>
 
 <div class='channels'>
@@ -83,3 +83,4 @@
 </div>
 
 <%= link_to t('edit'), edit_entry_path(@entry) %> | <%= link_to t('to_trash'), to_trash_entry_path(@entry) %> | <%= link_to t('back'), entries_path %>
+
