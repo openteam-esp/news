@@ -23,6 +23,7 @@ group :test do
 end
 
 gem 'bson_ext',                 :require => false
+gem 'cancan'
 gem 'ckeditor'
 gem 'compass'
 gem 'configliere'
