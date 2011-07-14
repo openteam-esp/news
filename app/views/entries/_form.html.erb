@@ -1,4 +1,4 @@
-<%= semantic_form_for(@entry) do |form| %>
+<%= semantic_form_for([@folder, @entry]) do |form| %>
 
   <%= form.inputs do  %>
     <%= form.input :user_id,    :as => :hidden, :value => current_user.id %>

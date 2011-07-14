@@ -1,19 +1,34 @@
 <% if @entries.any? %>
-  <% @entries.each do |state, entries|%>
-    <%= content_tag :h4, state, :class => state %>
+  <% @entries.each do |entry|%>
+    <%#= content_tag :h4, state, :class => state %>
     <ul class='entries'>
-      <% entries.each do | entry |%>
+      <%# entries.each do | entry |%>
         <li>
           <% last_event = entry.events.first %>
           <%= l last_event.created_at, :format => :long %>
-          <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), entry_path(entry.id) %>
+          <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), folder_entry_path(@folder, entry) %>
           <%= last_event.type %>
           <%= "by #{last_event.user}" %>
           <%= content_tag :span, last_event.text.truncate(150), :class => 'text' if last_event.text.present? %>
         </li>
-      <% end%>
+      <%# end%>
     </ul>
   <% end%>
+  <%# @entries.each do |state, entries|%>
+    <%#= content_tag :h4, state, :class => state %>
+    <%#<ul class='entries'>%>
+      <%# entries.each do | entry |%>
+        <%#<li>%>
+          <%# last_event = entry.events.first %>
+          <%#= l last_event.created_at, :format => :long %>
+          <%#= link_to strip_tags(entry.title_or_body), entry_path(entry.id) %>
+          <%#= last_event.type %>
+          <%#= "by #{last_event.user}" %>
+          <%#= content_tag :span, last_event.text.truncate(150), :class => 'text' if last_event.text.present? %>
+        <%#</li>%>
+      <%# end%>
+    <%#</ul>%>
+  <%# end%>
 <% else %>
   <%= content_tag :h4, t('no_any_entries'), :class => 'empty' %>
 <% end %>

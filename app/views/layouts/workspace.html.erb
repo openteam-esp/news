@@ -6,7 +6,7 @@
   </div>
   <div class='container'>
     <div class='sidebar'>
-      <%= link_to t('new_entry'), new_entry_path, :class => 'new_entry' %>
+      <%= link_to t('new_entry'), new_folder_entry_path(Folder.where(:title => 'draft').first), :class => 'new_entry' %>
       <%= render_navigation %>
     </div>
     <div class='content_wrapper'>

@@ -33,7 +33,7 @@
   <h4><%= t('i_want_to_change_the_news') %></h4>
   <ul>
     <li>
-      <%= semantic_form_for :event, :url => entry_events_path(@entry) do |form| %>
+      <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
         <%= form.inputs do %>
           <%= form.input :type, :as => :hidden, :value => 'modification'%>
           <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
@@ -53,7 +53,7 @@
     <% @entry.state_events.each do |event| %>
       <li>
         <h6><%= event %></h6>
-        <%= semantic_form_for :event, :url => entry_events_path(@entry) do |form| %>
+        <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
           <%= form.inputs do %>
             <%= form.input :type, :as => :hidden, :value => event %>
             <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
@@ -82,5 +82,4 @@
   </ul>
 </div>
 
-<%= link_to t('edit'), edit_entry_path(@entry) %> | <%= link_to t('to_trash'), to_trash_entry_path(@entry) %> | <%= link_to t('back'), entries_path %>
-
+<%= link_to t('edit'), edit_folder_entry_path(@folder, @entry) %> | <%= link_to t('back'), folder_entries_path(@folder) %>

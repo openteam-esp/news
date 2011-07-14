@@ -2,6 +2,7 @@ class Entry
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes
   include Mongoid::Timestamps
+
   field :title,       :type => String
   field :annotation,  :type => String
   field :body,        :type => String
@@ -10,9 +11,11 @@ class Entry
   field :state,       :type => String
   field :deleted,     :type => Boolean, :default => false
 
-  has_and_belongs_to_many :channels
-  has_many :events
   belongs_to :folder
+
+  has_and_belongs_to_many :channels
+
+  has_many :events
 
   attr_accessor :user_id
 
@@ -21,6 +24,20 @@ class Entry
   after_create :create_event
 
   state_machine :initial => :draft do
+    after_transition :to => [:awaiting_correction, :awaiting_publication] do |entry, transition|
+      entry.folder = Folder.where(:title => 'inbox').first
+      entry.save!
+    end
+
+    after_transition :to => :correcting do |entry, transition|
+      entry.folder = Folder.where(:title => 'correcting').first
+      entry.save!
+    end
+
+    after_transition :to => :published do |entry, transition|
+      entry.folder = Folder.where(:title => 'published').first
+      entry.save!
+    end
 
     event :send_to_corrector do
       transition :draft => :awaiting_correction
@@ -54,5 +71,7 @@ class Entry
   private
     def create_event
       events.create! :type => 'created', :user_id => user_id
+      self.folder = Folder.where(:title => 'draft').first
+      self.save!
     end
 end
