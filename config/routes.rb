@@ -12,5 +12,5 @@ News::Application.routes.draw do
     end
   end
 
-  match '/' => 'entries#index', :defaults => {:folder => 'inbox'}, :as => :root
+  match '/folders/inbox/entries' => 'entries#index', :defaults => {:folder_id => 'inbox'}, :as => :root
 end
