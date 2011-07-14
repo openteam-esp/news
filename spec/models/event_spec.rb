@@ -12,5 +12,4 @@ describe Event do
       entry.should be_awaiting_correction
     end
   end
-
 end

@@ -1,4 +1,6 @@
 class EventsController < InheritedResources::Base
+  load_and_authorize_resource
+
   belongs_to :entry
 
   actions :new, :create
