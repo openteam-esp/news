@@ -39,6 +39,11 @@ class Entry
       entry.save!
     end
 
+    after_transition :to => :trash do |entry, transition|
+      entry.folder = Folder.where(:title => 'trash').first
+      entry.save!
+    end
+
     event :send_to_corrector do
       transition :draft => :awaiting_correction
     end
@@ -61,6 +66,10 @@ class Entry
 
     event :return_to_corrector do
       transition [:awaiting_publication, :published] => :awaiting_correction
+    end
+
+    event :to_trash do
+      transition [:awaiting_publication, :awaiting_correction, :draft, :published] => :trash
     end
   end
 

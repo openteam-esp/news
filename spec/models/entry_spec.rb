@@ -8,6 +8,7 @@ describe Entry do
     @inbox = Fabricate(:folder, :title => 'inbox')
     @correcting = Fabricate(:folder, :title => 'correcting')
     @published = Fabricate(:folder, :title => 'published')
+    @trash = Fabricate(:folder, :title => 'trash')
   end
 
   let :entry do Fabricate(:entry) end
@@ -16,6 +17,7 @@ describe Entry do
   let :correcting_entry do awaiting_correction_entry.correct!; entry end
   let :awaiting_publication_entry do correcting_entry.send_to_publisher!; entry end
   let :published_entry do awaiting_publication_entry.publish!; entry end
+  let :trash_entry do awaiting_publication_entry.to_trash!; entry end
 
   describe "после создания" do
     it "должно появится событие 'новость создана'" do
@@ -85,4 +87,9 @@ describe Entry do
     end
   end
 
+  describe "после удаления" do
+    it 'должна быть в папке trash' do
+      trash_entry.folder.title.should eql 'trash'
+    end
+  end
 end
