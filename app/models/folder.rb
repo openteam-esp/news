@@ -12,4 +12,10 @@ class Folder
   def to_param
     title
   end
+
+  [:inbox, :published, :correcting, :draft, :trash].each do |method_name|
+    define_method "#{method_name}?" do
+      self.title == method_name.to_s
+    end
+  end
 end
