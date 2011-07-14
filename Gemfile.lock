@@ -66,8 +66,12 @@ GEM
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
-    formtastic (2.0.0.rc3)
-      rails (~> 3.0)
+    formtastic (1.2.4)
+      actionpack (>= 2.3.7)
+      activesupport (>= 2.3.7)
+      i18n (~> 0.4)
+    formtastic_date_as_string (0.0.5.1)
+      formtastic
     fssm (0.2.7)
     gilenson (1.2.1)
     haml (3.1.2)
@@ -228,7 +232,8 @@ DEPENDENCIES
   database_cleaner
   devise
   fabrication
-  formtastic (>= 2.0.0.rc)
+  formtastic
+  formtastic_date_as_string
   gilenson
   has_scope
   hassle!
