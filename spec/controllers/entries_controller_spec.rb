@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe EntriesController do
-
   before :each do
     user = Fabricate(:user)
     sign_in user
@@ -147,4 +146,42 @@ describe EntriesController do
     end
   end
 
+  describe 'редактирование' do
+    before do
+      user = Fabricate(:user, :email => 'corrector@mail.com', :roles => ['corrector', 'publisher'])
+      sign_in user
+
+      @correcting = Fabricate(:folder, :title => 'correcting')
+      @published = Fabricate(:folder, :title => 'published')
+
+      @entry = @draft.entries.create! valid_attributes
+      @entry.send_to_corrector
+      @entry.correct!
+    end
+
+    describe 'корректор' do
+      it "assigns the requested entry as @entry" do
+        get :edit, :id => @entry.id, :folder_id => @correcting.title
+      end
+
+      it "updates the requested entry" do
+        put :update, :id => @entry.id, :entry => valid_attributes, :folder_id => @correcting.title
+      end
+    end
+
+    describe 'публикатор' do
+      before do
+        @entry.send_to_publisher!
+        @entry.publish!
+      end
+
+      it "assigns the requested entry as @entry" do
+        get :edit, :id => @entry.id, :folder_id => @published.title
+      end
+
+      it "updates the requested entry" do
+        put :update, :id => @entry.id, :entry => valid_attributes, :folder_id => @published.title
+      end
+    end
+  end
 end

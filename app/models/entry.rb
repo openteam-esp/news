@@ -95,7 +95,6 @@ class Entry
     state_events & [:return_to_corrector, :publish, :to_trash]
   end
 
-
   def state_events_for_user(user)
     return state_events_for_corrector if user.corrector?
     return state_events_for_publisher if user.publisher?
