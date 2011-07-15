@@ -1,0 +1,17 @@
+<p>
+  <b>Пресс-служба администрации Томской области</b>
+</p>
+
+<p>
+  <b>Пресс-релиз <%= l Date.today, :format => :long %></b>
+</p>
+
+<h1><%= @entry.title %></h1>
+
+<p>
+  <b><%= raw @entry.annotation.gsub('&quot;', '"').gilensize %></b>
+</p>
+
+<div>
+  <%= raw @entry.body.gsub('&quot;', '"').gilensize %>
+</div>
