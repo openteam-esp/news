@@ -154,7 +154,7 @@ describe EntriesController do
       @correcting = Fabricate(:folder, :title => 'correcting')
       @published = Fabricate(:folder, :title => 'published')
 
-      @entry = @draft.entries.create! valid_attributes
+      @entry = Fabricate(:entry, :folder => @draft)
       @entry.send_to_corrector
       @entry.correct!
     end
