@@ -1,9 +1,12 @@
 News::Application.routes.draw do
+
   devise_for :users
 
   match '/auth/:provider/callback' => 'authentications#create'
 
   resources :authentications, :only => [:create, :destroy]
+
+  resources :recipients
 
   resources :folders, :only => [] do
     resources :entries do
