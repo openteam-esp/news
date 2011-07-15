@@ -85,22 +85,30 @@ class Entry
     title.present? ? title.truncate(100) : body.truncate(100)
   end
 
-  # TODO: обработать удаление в корзину
+  # TODO: разобраться с корзиной
   def state_events_for_author
     state_events & [:send_to_corrector, :to_trash]
   end
+
   def state_events_for_corrector
-    state_events & [:return_to_author, :correct, :send_to_publisher, :to_trash]
+    result = state_events & [:return_to_author, :correct, :send_to_publisher]
+    result << :to_trash if state == 'awaiting_correction'
+    result
   end
 
   def state_events_for_publisher
-    state_events & [:return_to_corrector, :publish, :to_trash]
+    result = state_events & [:return_to_corrector, :publish]
+    result << :to_trash if state == 'awaiting_publication'
+    result
   end
 
   def state_events_for_user(user)
-    return state_events_for_corrector if user.corrector?
-    return state_events_for_publisher if user.publisher?
-    return state_events_for_author
+    return state_events_for_author if !user.corrector? && !user.publisher?
+
+    result = []
+    result << state_events_for_corrector if user.corrector?
+    result << state_events_for_publisher if user.publisher?
+    result.flatten.uniq.sort
   end
 
   private
