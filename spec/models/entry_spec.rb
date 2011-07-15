@@ -59,7 +59,7 @@ describe Entry do
 
   describe "после взятия на корректуру" do
     it "возможны переходы 'отправить публикатору'" do
-      correcting_entry.state_events.should eql [:send_to_publisher, :to_trash]
+      correcting_entry.state_events.should eql [:send_to_publisher]
     end
 
     it 'должна быть в папке correcting' do
@@ -79,7 +79,7 @@ describe Entry do
 
   describe "после публикации" do
     it "возможны переходы 'вернуть корректору'" do
-      published_entry.state_events.should == [:return_to_corrector, :to_trash]
+      published_entry.state_events.should == [:return_to_corrector]
     end
 
     it 'должна быть в папке published' do

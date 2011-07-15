@@ -69,7 +69,7 @@ class Entry
     end
 
     event :to_trash do
-      transition [:awaiting_publication, :awaiting_correction, :correcting, :draft, :published] => :trash
+      transition [:awaiting_publication, :awaiting_correction, :draft] => :trash
     end
   end
 
