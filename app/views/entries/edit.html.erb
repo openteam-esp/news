@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @entry %> |
-<%= link_to 'Back', entries_path %>
+<%= link_to 'Show', [@folder,@entry] %> |
+<%= link_to 'Back', folder_entries_path(@folder) %>
