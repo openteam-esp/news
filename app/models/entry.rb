@@ -23,6 +23,8 @@ class Entry
 
   after_create :create_event
 
+  after_update :create_update_event
+
   state_machine :initial => :draft do
     after_transition :to => :draft do |entry, transition|
       entry.folder = Folder.where(:title => 'draft').first
@@ -106,5 +108,11 @@ class Entry
       events.create! :type => 'created', :user_id => user_id
       self.folder = Folder.where(:title => 'draft').first
       self.save!
+    end
+
+    def create_update_event
+       if previous_changes.has_key?('annotation') || previous_changes.has_key?('body') || previous_changes.has_key?('title')
+         events.create! :type => 'updated', :user_id => user_id
+       end
     end
 end

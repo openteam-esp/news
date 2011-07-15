@@ -37,6 +37,13 @@ describe Entry do
     end
   end
 
+  describe 'после редактирования' do
+    it 'должно появиться событие updated' do
+      entry.update_attribute(:title, 'ololo')
+      entry.events.last.type.should == 'updated'
+    end
+  end
+
   describe "после отправки на корректуру" do
     it "возможны переходы 'корректировать' и 'вернуть автору'" do
       awaiting_correction_entry.state_events.should eql [:correct, :return_to_author, :to_trash]
