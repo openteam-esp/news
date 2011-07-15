@@ -10,6 +10,8 @@ smtp_settings:
   password:             ''
   authentication:       'plain'
   enable_starttls_auto: true
+  default_from:         'no-reply@tomsk.gov.ru'
+  default_to:           ''
 
 omniauth:
   twitter:

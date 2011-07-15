@@ -1,8 +1,8 @@
 class EntryMailer < ActionMailer::Base
-  default :from => "no-reply@openteam.ru"
+  default :from => Settings[:smtp_settings][:default_from]
 
   def entry_mailing(entry)
     @entry = entry
-    mail(:to => '*', :subject => @entry.title)
+    mail(:to => Settings[:smtp_settings][:default_to], :subject => @entry.title)
   end
 end

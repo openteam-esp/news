@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 Fabricator(:entry) do
-  title "MyString"
-  body "Текст новости"
+  title       'Заголовок новости'
+  annotation  'Аннотация новости'
+  body        'Текст новости'
 end
