@@ -36,7 +36,8 @@ module News
 
     # JavaScript files you want as :defaults (application.js is always included).
     config.action_view.javascript_expansions[:defaults]  = %w(jquery.min jquery.ujs)
-    config.action_view.javascript_expansions[:defaults] += %w(jquery.ui/jquery.ui.min jquery.ui/jquery.ui.datepicker.ru.js)
+    config.action_view.javascript_expansions[:defaults] += %w(jquery_ui/jquery.ui.min jquery_ui/jquery.ui.datepicker.ru)
+    config.action_view.javascript_expansions[:defaults] += %w(jquery_ui/jquery.ui.timepicker jquery_ui/jquery.ui.timepicker.ru)
     config.action_view.javascript_expansions[:defaults] += %w(ckeditor/ckeditor)
 
     # Configure the default encoding used in templates for Ruby 1.9.

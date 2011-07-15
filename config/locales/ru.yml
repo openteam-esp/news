@@ -1,0 +1,5 @@
+ru:
+  time:
+    formats:
+      datetime: "%d.%m.%Y %H:%M"
+

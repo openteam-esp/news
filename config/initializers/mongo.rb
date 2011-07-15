@@ -7,3 +7,8 @@ if Settings['mongo.url']
     config.master.authenticate(settings.user, settings.password) if settings.user
   end
 end
+
+
+Mongoid.configure do |config|
+  config.use_utc = false
+end
