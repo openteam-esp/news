@@ -53,7 +53,7 @@ describe Entry do
     end
 
     it 'должна быть в папке draft' do
-      entry.folder.title.should eql 'draft'
+      returned_to_author_entry.folder.title.should eql 'draft'
     end
   end
 

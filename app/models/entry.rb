@@ -24,6 +24,11 @@ class Entry
   after_create :create_event
 
   state_machine :initial => :draft do
+    after_transition :to => :draft do |entry, transition|
+      entry.folder = Folder.where(:title => 'draft').first
+      entry.save!
+    end
+
     after_transition :to => [:awaiting_correction, :awaiting_publication] do |entry, transition|
       entry.folder = Folder.where(:title => 'inbox').first
       entry.save!
@@ -75,6 +80,25 @@ class Entry
 
   def title_or_body
     title.present? ? title.truncate(100) : body.truncate(100)
+  end
+
+  # TODO: обработать удаление в корзину
+  def state_events_for_author
+    state_events & [:send_to_corrector, :to_trash]
+  end
+  def state_events_for_corrector
+    state_events & [:return_to_author, :correct, :send_to_publisher, :to_trash]
+  end
+
+  def state_events_for_publisher
+    state_events & [:return_to_corrector, :publish, :to_trash]
+  end
+
+
+  def state_events_for_user(user)
+    return state_events_for_corrector if user.corrector?
+    return state_events_for_publisher if user.publisher?
+    return state_events_for_author
   end
 
   private
