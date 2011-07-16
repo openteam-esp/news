@@ -8,6 +8,8 @@ News::Application.routes.draw do
 
   resources :recipients
 
+  match '/rss' => 'entries#rss'
+
   resources :folders, :only => [] do
     resources :entries do
       resources :events, :only => [:new, :create]

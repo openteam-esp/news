@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     user ||= User.new
 
-    can [:read, :create], Entry
+    can [:rss, :read, :create], Entry
 
     can [:update, :destroy], Entry do |entry|
       entry.draft?
