@@ -22,6 +22,7 @@ group :test do
   gem 'watchr',                 :require => false
 end
 
+gem 'aws-s3'
 gem 'bson_ext',                 :require => false
 gem 'cancan'
 gem 'ckeditor',                 :git => 'git://github.com/lda/ckeditor'
