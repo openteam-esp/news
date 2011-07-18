@@ -8,7 +8,6 @@ if Settings['mongo.url']
   end
 end
 
-
 Mongoid.configure do |config|
   config.use_utc = false
 end
