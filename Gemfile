@@ -24,7 +24,7 @@ end
 
 gem 'bson_ext',                 :require => false
 gem 'cancan'
-gem 'ckeditor'
+gem 'ckeditor',                 :git => 'git://github.com/lda/ckeditor'
 gem 'compass'
 gem 'configliere'
 gem 'devise'
@@ -36,7 +36,7 @@ gem 'inherited_resources'
 gem 'jquery-rails',             :require => false
 gem 'mongoid'
 gem 'omniauth'
-gem 'paperclip'
+gem 'mongoid-paperclip',        :require => 'mongoid_paperclip'
 gem 'rails',  '3.0.9',          :require => false
 gem 'rake', '0.8.7'
 gem 'russian'
