@@ -29,9 +29,9 @@ describe User do
       end
 
       it 'draft' do
-        entry.state_events_for_user(@corrector).should eql []
-        entry.state_events_for_user(@publisher).should eql []
-        entry.state_events_for_user(@corrector_and_publisher).should eql []
+        entry.state_events_for_user(@corrector).should eql [:immediately_send_to_publisher]
+        entry.state_events_for_user(@publisher).should eql [:immediately_publish]
+        entry.state_events_for_user(@corrector_and_publisher).should eql [:immediately_publish, :immediately_send_to_publisher]
       end
 
       it 'awaiting_correction' do

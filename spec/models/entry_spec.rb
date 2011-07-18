@@ -28,8 +28,8 @@ describe Entry do
       entry.should be_draft
     end
 
-    it "можно отправить корректору" do
-      entry.state_events.should eql [:send_to_corrector, :to_trash]
+    it "доступны следующие действия" do
+      entry.state_events.should eql [:immediately_publish, :immediately_send_to_publisher, :send_to_corrector, :to_trash]
     end
 
     it 'должна быть в папке draft' do

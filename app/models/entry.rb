@@ -26,18 +26,13 @@ class Entry
   after_update :create_update_event
 
   state_machine :initial => :draft do
-    after_transition :to => :draft do |entry, transition|
-      entry.folder = Folder.where(:title => 'draft').first
-      entry.save!
-    end
-
-    after_transition :to => [:awaiting_correction, :awaiting_publication] do |entry, transition|
-      entry.folder = Folder.where(:title => 'inbox').first
-      entry.save!
-    end
-
     after_transition :to => :correcting do |entry, transition|
       entry.folder = Folder.where(:title => 'correcting').first
+      entry.save!
+    end
+
+    after_transition :to => :draft do |entry, transition|
+      entry.folder = Folder.where(:title => 'draft').first
       entry.save!
     end
 
@@ -52,28 +47,41 @@ class Entry
       entry.save!
     end
 
-    event :send_to_corrector do
-      transition :draft => :awaiting_correction
+    after_transition :to => [:awaiting_correction, :awaiting_publication] do |entry, transition|
+      entry.folder = Folder.where(:title => 'inbox').first
+      entry.save!
     end
 
     event :correct do
       transition :awaiting_correction => :correcting
     end
 
-    event :return_to_author do
-      transition :awaiting_correction => :draft
+    event :immediately_publish do
+      transition :draft => :published
     end
 
-    event :send_to_publisher do
-      transition :correcting => :awaiting_publication
+    event :immediately_send_to_publisher do
+      transition :draft => :awaiting_publication
     end
 
     event :publish do
       transition :awaiting_publication => :published
     end
 
+    event :return_to_author do
+      transition :awaiting_correction => :draft
+    end
+
     event :return_to_corrector do
       transition [:awaiting_publication, :published] => :awaiting_correction
+    end
+
+    event :send_to_corrector do
+      transition :draft => :awaiting_correction
+    end
+
+    event :send_to_publisher do
+      transition :correcting => :awaiting_publication
     end
 
     event :to_trash do
@@ -91,12 +99,14 @@ class Entry
 
   def state_events_for_corrector
     result = state_events & [:return_to_author, :correct, :send_to_publisher]
+    result << :immediately_send_to_publisher if draft?
     result << :to_trash if awaiting_correction?
     result
   end
 
   def state_events_for_publisher
     result = state_events & [:return_to_corrector, :publish]
+    result << :immediately_publish if draft?
     result << :to_trash if awaiting_publication?
     result
   end

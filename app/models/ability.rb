@@ -16,7 +16,7 @@ class Ability
 
     if user.corrector?
       can :create, Event do |event|
-        %w[correct send_to_publisher return_to_author to_trash].include? event.type
+        %w[correct immediately_send_to_publisher return_to_author send_to_publisher to_trash ].include? event.type
       end
 
       can :update, Entry do |entry|
@@ -26,7 +26,7 @@ class Ability
 
     if user.publisher?
       can [:create, :destroy], Event do |event|
-        %w[publish return_to_corrector to_trash].include? event.type
+        %w[immediately_publish publish return_to_corrector to_trash].include? event.type
       end
 
       can [:update, :destroy], Entry do |entry|
