@@ -8,7 +8,22 @@
     <%= javascript_include_tag :defaults %>
   </head>
   <body>
-    <%= yield :content %>
+    <%= flash[:notice] %>
+    <div class='login_info'>
+      <%= current_user.name if current_user %>
+      <%= link_to t('logout'), destroy_user_session_path, :method => :delete if current_user %>
+      <%= link_to t('login'), new_user_session_path unless current_user %>
+    </div>
+    <div class='container'>
+      <div class='sidebar'>
+        <%= link_to t('new_entry'), new_folder_entry_path(Folder.where(:title => 'draft').first), :class => 'new_entry' %>
+        <%= render_navigation :context => :folders if current_user %>
+        <%= render_navigation :context => :channels %>
+      </div>
+      <div class='content_wrapper'>
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>
 

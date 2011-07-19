@@ -8,7 +8,10 @@ News::Application.routes.draw do
 
   resources :recipients
 
-  match '/rss' => 'entries#rss'
+  resources :channels, :only => [:index, :show] do
+    resources :published_entries, :only => [:index, :show]
+    match '/rss' => 'published_entries#rss'
+  end
 
   resources :folders, :only => [] do
     resources :entries do
@@ -17,5 +20,5 @@ News::Application.routes.draw do
     end
   end
 
-  match '/' => 'entries#index', :defaults => {:folder_id => 'inbox'}, :as => :root
+  root :to => 'roots#index'
 end

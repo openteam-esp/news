@@ -1,0 +1,3 @@
+<%= render(:partial => "entry.html.erb", :locals => {:entry => @published_entry}) %>
+
+<%= link_to t('back'), channel_published_entries_path(@channel) %>

@@ -1,4 +1,5 @@
 ru:
+  default_author: Пресс-служба администрации Томской области
   time:
     formats:
       datetime: "%d.%m.%Y %H:%M"

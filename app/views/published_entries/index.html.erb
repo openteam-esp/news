@@ -1,0 +1,13 @@
+<% if collection.any? %>
+  <% collection.each do |entry|%>
+    <ul class='entries'>
+      <li>
+        <% last_event = entry.events.first %>
+        <%= l last_event.created_at, :format => :long %>
+        <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), channel_published_entry_path(@channel, entry) %>
+      </li>
+    </ul>
+  <% end%>
+<% else %>
+  <%= content_tag :h4, t('no_any_entries'), :class => 'empty' %>
+<% end %>

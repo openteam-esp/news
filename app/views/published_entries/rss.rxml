@@ -1,0 +1,28 @@
+# encoding: utf-8
+
+xml.instruct!
+
+xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
+
+  xml.title   @channel.title
+  xml.link    "rel" => "self", "href" => url_for(:only_path => false, :controller => 'published_entries', :action => 'rss')
+  xml.link    "rel" => "alternate", "href" => url_for(:only_path => false, :controller => 'published_entries')
+  xml.id      url_for(:only_path => false, :controller => 'published_entries')
+  xml.updated @published_entries.first.updated_at.strftime "%Y-%m-%dT%H:%M:%SZ" if @published_entries.any?
+  xml.author  { xml.name "Пресс-служба администрации Томской области" }
+
+  @published_entries.each do |entry|
+    xml.entry do
+      xml.title   entry.title
+      xml.link    "rel" => "alternate", "href" => url_for(:only_path => false, :controller => 'published_entries', :action => 'show', :id => entry.id)
+      xml.id      url_for(:only_path => false, :controller => 'published_entries', :action => 'show', :id => entry.id)
+      xml.updated entry.updated_at.strftime "%Y-%m-%dT%H:%M:%SZ"
+      xml.author  { xml.name entry.author }
+      xml.summary entry.annotation
+      xml.content "type" => "html" do
+        xml.text! render(:partial => "entry.html.erb", :locals => {:entry => entry})
+      end
+    end
+  end
+
+end

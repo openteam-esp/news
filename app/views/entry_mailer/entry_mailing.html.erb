@@ -6,12 +6,4 @@
   <b>Пресс-релиз <%= l Date.today, :format => :long %></b>
 </p>
 
-<h1><%= @entry.title %></h1>
-
-<p>
-  <b><%= raw @entry.annotation.gsub('&quot;', '"').gilensize if @entry.annotation %></b>
-</p>
-
-<div>
-  <%= raw @entry.body.gsub('&quot;', '"').gilensize %>
-</div>
+<%= render(:partial => "published_entries/entry.html.erb", :locals => {:entry => @published_entry}) %>

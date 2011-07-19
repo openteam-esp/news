@@ -3,7 +3,7 @@ class EventsController < InheritedResources::Base
 
   belongs_to :entry
 
-  actions :new, :create
+  actions :create
 
   def create
     create! { root_path }

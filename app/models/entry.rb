@@ -10,6 +10,7 @@ class Entry
   field :until,       :type => DateTime
   field :state,       :type => String
   field :deleted,     :type => Boolean, :default => false
+  field :author,      :type => String,  :default => ::I18n.t('default_author')
 
   belongs_to :folder
 
@@ -18,6 +19,8 @@ class Entry
   has_many :events
 
   attr_accessor :user_id
+
+  scope :published, where(:state => 'published')
 
   validates_presence_of :body
 

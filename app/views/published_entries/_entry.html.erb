@@ -1,0 +1,11 @@
+<h2>
+  <%= raw entry.title.gsub('&quot;', '"').gilensize %>
+</h2>
+
+<div class='annotation'>
+  <%= raw entry.annotation.gsub('&quot;', '"').gilensize %>
+</div>
+
+<div class='content'>
+  <%= raw entry.body.gsub('&quot;', '"').gilensize %>
+</div>
