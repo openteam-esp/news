@@ -29,3 +29,11 @@ user.update_attributes(
   :password_confirmation => '123123',
   :name => 'user'
 )
+
+corrector_and_publisher = User.find_or_create_by :email => 'cp@demo.de'
+corrector_and_publisher.update_attributes(
+  :password => '123123',
+  :password_confirmation => '123123',
+  :name => 'corrector_and_publisher',
+  :roles => ['corrector', 'publisher']
+)
