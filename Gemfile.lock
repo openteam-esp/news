@@ -8,7 +8,8 @@ GIT
 
 GIT
   remote: git://github.com/lda/ckeditor
-  revision: 41d6adbc3c22cd1afde6e4859ff1f94d0cce43a7
+  revision: 96014a852635b3719e58de1f76b2702074069c8d
+  branch: unreset_current_user
   specs:
     ckeditor (3.6.0.pre)
       mime-types (~> 1.16)
