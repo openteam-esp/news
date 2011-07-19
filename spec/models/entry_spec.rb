@@ -19,6 +19,14 @@ describe Entry do
   let :published_entry do awaiting_publication_entry.publish!; entry end
   let :trash_entry do awaiting_publication_entry.to_trash!; entry end
 
+  describe "дата публикации" do
+    it "должна корректно проставляться и отображаться" do
+      entry.since = "19.07.2011 09:20"
+      entry.save!
+      I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
+    end
+  end
+
   describe "после создания" do
     it "должно появится событие 'новость создана'" do
       entry.events.first.type.should == 'created'
