@@ -3,8 +3,8 @@
   <%= form.inputs do  %>
     <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
     <%= form.input :title %>
-    <%= form.cktext_area :annotation %>
-    <%= form.cktext_area :body %>
+    <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => "150" } %>
+    <%= form.input :body, :as => :ckeditor, :input_html => { :height => "300" } %>
     <%= form.input :since %>
     <%= form.input :until %>
     <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>

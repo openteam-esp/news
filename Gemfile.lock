@@ -69,6 +69,7 @@ GEM
       orm_adapter (~> 0.0.3)
       warden (~> 1.0.3)
     diff-lcs (1.1.2)
+    dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fabrication (1.0.1)
@@ -245,6 +246,7 @@ DEPENDENCIES
   configliere
   database_cleaner
   devise
+  dynamic_form
   fabrication
   formtastic
   formtastic_date_as_string
