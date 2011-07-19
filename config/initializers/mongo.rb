@@ -10,4 +10,6 @@ end
 
 Mongoid.configure do |config|
   config.use_utc = false
+  config.use_activesupport_time_zone = true
 end
+
