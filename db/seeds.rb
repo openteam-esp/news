@@ -22,3 +22,10 @@ publisher.update_attributes(
   :name => 'publisher',
   :roles => ['publisher']
 )
+
+user = User.find_or_create_by :email => 'user@demo.de'
+publisher.update_attributes(
+  :password => '123123',
+  :password_confirmation => '123123',
+  :name => 'user'
+)
