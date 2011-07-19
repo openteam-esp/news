@@ -42,7 +42,7 @@ class Entry
     after_transition :to => :published do |entry, transition|
       entry.folder = Folder.where(:title => 'published').first
       entry.save!
-      EntryMailer.entry_mailing(entry, entry.channels).deliver
+      entry.send_by_email
     end
 
     after_transition :to => :trash do |entry, transition|
@@ -90,6 +90,15 @@ class Entry
     event :to_trash do
       transition [:awaiting_publication, :awaiting_correction, :draft] => :trash
     end
+  end
+
+  def send_by_email
+    mailing_channels = []
+    self.channels.each do |channel|
+      mailing_channels << channel if channel.recipients.any?
+    end
+
+    EntryMailer.entry_mailing(self, mailing_channels).deliver if mailing_channels.any?
   end
 
   def title_or_body

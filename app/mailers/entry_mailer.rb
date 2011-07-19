@@ -4,14 +4,12 @@ class EntryMailer < ActionMailer::Base
   def entry_mailing(entry, channels)
     @published_entry = entry
 
-    if channels.any?
-      channels.each do |channel|
-        channel.recipients.each do |recipient|
-          mail(
-            :to => recipient.email,
-            :subject => @published_entry.title
-          )
-        end
+    channels.each do |channel|
+      channel.recipients.each do |recipient|
+        mail(
+          :to => recipient.email,
+          :subject => @published_entry.title
+        )
       end
     end
   end
