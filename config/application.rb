@@ -35,10 +35,7 @@ module News
     config.i18n.default_locale = :ru
 
     # JavaScript files you want as :defaults (application.js is always included).
-    config.action_view.javascript_expansions[:defaults]  = %w(jquery.min jquery.ujs)
-    config.action_view.javascript_expansions[:defaults] += %w(jquery_ui/jquery.ui.min jquery_ui/jquery.ui.datepicker.ru)
-    config.action_view.javascript_expansions[:defaults] += %w(jquery_ui/jquery.ui.timepicker jquery_ui/jquery.ui.timepicker.ru)
-    config.action_view.javascript_expansions[:defaults] += %w(ckeditor/ckeditor)
+    # config.action_view.javascript_expansions[:defaults]  = %w(jquery.min jquery.ujs)
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
