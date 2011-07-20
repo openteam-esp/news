@@ -11,7 +11,7 @@ class Ability
     end
 
     can :create, Event do |event|
-      %w[send_to_corrector to_trash].include? event.type
+      %w[send_to_corrector to_trash].include? event.type if event.entry.initiator.id == user.id
     end
 
     if user.corrector?

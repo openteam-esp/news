@@ -107,4 +107,16 @@ describe Entry do
       trash_entry.folder.title.should eql 'trash'
     end
   end
+
+  describe 'пользователи' do
+    it 'могут оперировать только со своими новостями' do
+      @joe = Fabricate(:user)
+      @chandler = Fabricate(:user)
+
+      entry = Fabricate(:entry, :user_id => @joe.id)
+
+      entry.state_events_for_user(@joe).should eql [:send_to_corrector, :to_trash]
+      entry.state_events_for_user(@chandler).should be_empty
+    end
+  end
 end

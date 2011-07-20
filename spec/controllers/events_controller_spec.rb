@@ -5,14 +5,14 @@ require 'spec_helper'
 describe EventsController do
   describe 'POST create' do
     before do
+      @user = Fabricate(:user)
       @draft = Fabricate(:folder, :title => 'draft')
-      @entry = Fabricate(:entry, :folder => @draft)
+      @entry = Fabricate(:entry, :folder => @draft, :user_id => @user.id)
     end
 
     describe 'user' do
       before do
-        user = Fabricate(:user)
-        sign_in user
+        sign_in @user
       end
 
       it 'может создать событие с типом send_to_corrector' do

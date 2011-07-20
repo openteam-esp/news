@@ -61,5 +61,27 @@ describe User do
       # TODO: разобраться с корзиной
     end
   end
+
+  it 'может помещать в корзину только свои черновики' do
+    my_entry = Fabricate(:entry, :user_id => user.id)
+    other_user = Fabricate(:user)
+    other_entry = Fabricate(:entry, :user_id => other_user.id)
+
+    ability = Ability.new(user)
+
+    event_for_my_entry = user.events.new :type => 'to_trash', :entry_id => my_entry.id
+    event_for_other_entry = other_user.events.new :type => 'to_trash', :entry_id => other_entry.id
+
+    ability.should be_able_to(:create, event_for_my_entry)
+    ability.should_not be_able_to(:create, event_for_other_entry)
+  end
+
+  it 'имея роль корректора, может помещать в корзину новости ожидающие корректировки' do
+    pending
+  end
+
+  it 'имея роль публикатора, может помещать в корзину новости ожидающие публикации и уже опубликованные' do
+    pending
+  end
 end
 

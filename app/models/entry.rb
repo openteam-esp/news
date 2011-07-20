@@ -92,6 +92,10 @@ class Entry
     end
   end
 
+  def initiator
+    events.where(:type => 'created').first.user
+  end
+
   def send_by_email
     mailing_channels = []
     self.channels.each do |channel|
@@ -105,7 +109,8 @@ class Entry
     title.present? ? title.truncate(100) : body.truncate(100)
   end
 
-  def state_events_for_author
+  def state_events_for_author(user)
+    return [] if initiator.id != user.id
     state_events & [:send_to_corrector, :to_trash]
   end
 
@@ -124,7 +129,7 @@ class Entry
   end
 
   def state_events_for_user(user)
-    return state_events_for_author if !user.corrector? && !user.publisher?
+    return state_events_for_author(user) if !user.corrector? && !user.publisher?
 
     result = []
     result << state_events_for_corrector if user.corrector?
