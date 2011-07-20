@@ -1,6 +1,7 @@
 source :rubygems
 
 group :development do
+  gem 'active_reload'
   gem 'hirb',                   :require => false
   gem 'itslog'
   gem 'ruby-graphviz',          :require => false
