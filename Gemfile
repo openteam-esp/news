@@ -2,6 +2,7 @@ source :rubygems
 
 group :development do
   gem 'active_reload'
+  gem 'guard-rspec'
   gem 'hirb',                   :require => false
   gem 'itslog'
   gem 'ruby-graphviz',          :require => false
@@ -13,15 +14,17 @@ group :production do
   gem 'hoptoad_notifier'
 end
 
-gem 'simplecov', '>= 0.4.0', :require => false, :group => :test
 group :test do
   gem 'database_cleaner'
   gem 'fabrication'
+  gem 'ffi'
+  gem 'guard-spork'
+  gem 'libnotify'
   gem 'mongoid-rspec'
+  gem 'rb-inotify'
   gem 'rspec-rails',            :require => false
   gem 'ruby-growl',             :require => false
-  gem 'spork', '>= 0.9.0.rc9',  :require => false
-  gem 'watchr',                 :require => false
+  gem 'simplecov', '>= 0.4.0'#,  :require => false
 end
 
 gem 'aws-s3'
@@ -46,4 +49,3 @@ gem 'rake', '0.8.7'
 gem 'russian'
 gem 'simple-navigation'
 gem 'state_machine'
-

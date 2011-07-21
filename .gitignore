@@ -10,4 +10,5 @@ config/settings.yml
 public/stylesheets/*.css
 public/ckeditor_assets/*
 .rake_tasks~
-coverage/*
+coverage/index.html
+coverage/resultset.yml
