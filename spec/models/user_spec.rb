@@ -96,7 +96,7 @@ describe User do
     ability.should_not be_able_to(:create, event_for_entry_at_correcting)
   end
 
-  it 'имея роль публикатора, может помещать в корзину новости ожидающие публикации и уже опубликованные' do
+  it 'имея роль публикатора, может помещать в корзину новости ожидающие публикации и уже опубликованные и свои черновики' do
     @publicator = Fabricate(:user, :roles => ['publisher'], :email => 'publisher@mail.com')
     ability = Ability.new(@publicator)
 
@@ -108,6 +108,27 @@ describe User do
 
     event_for_published = @publicator.events.new(:type => 'to_trash', :entry_id => published_entry.id)
     ability.should be_able_to(:create, event_for_published)
+  end
+
+  it 'имея роль корректора и публикатора, может помещать в корзину новости ожидающие публикации, уже опубликованные, ожидающие коррекции, свои черновики ' do
+    @super_user = Fabricate(:user, :roles => ['corrector', 'publisher'], :email => 'superuser@mail.com')
+    ability = Ability.new(@super_user)
+
+    @other_user = Fabricate(:user, :roles => [], :email => 'otheruser@mail.com')
+    other_user_ability = Ability.new(@other_user_ability)
+    other_user_entry = Fabricate(:entry, :user_id => @other_user.id)
+
+    event_for_draft = @super_user.events.new(:type => 'to_trash', :entry_id => entry.id)
+    ability.should be_able_to(:create, event_for_draft)
+
+    event_for_awaiting_correction_entry = @super_user.events.new(:type => 'to_trash', :entry_id => awaiting_correction_entry.id)
+    ability.should be_able_to(:create, event_for_awaiting_correction_entry)
+
+    event_for_awaiting_publication_entry = @super_user.events.new(:type => 'to_trash', :entry_id => awaiting_publication_entry.id)
+    ability.should be_able_to(:create, event_for_awaiting_publication_entry)
+
+    event_for_published_entry = @super_user.events.new(:type => 'to_trash', :entry_id => published_entry.id)
+    ability.should be_able_to(:create, event_for_published_entry)
   end
 end
 

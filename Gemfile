@@ -2,6 +2,8 @@ source :rubygems
 
 group :development do
   gem 'active_reload'
+  gem 'flog'
+  gem 'flay'
   gem 'guard-rspec'
   gem 'hirb',                   :require => false
   gem 'itslog'
