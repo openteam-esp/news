@@ -11,7 +11,11 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
-    <%= flash[:notice] %>
+    <% flash.each do |name, msg| %>
+      <div id="flash_wrapper">
+        <%= content_tag :div, msg, :id => "flash_#{name}", :class => "flash_block" %>
+      </div>
+    <% end %>
     <div class='login_info'>
       <%= current_user.name if current_user %>
       <%= link_to t('logout'), destroy_user_session_path, :method => :delete if current_user %>
