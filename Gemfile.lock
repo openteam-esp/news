@@ -86,7 +86,7 @@ GEM
     formtastic_date_as_string (0.0.5.3)
       formtastic
     fssm (0.2.7)
-    gilenson (1.2.1)
+    gilenson (1.2.2)
     haml (3.1.2)
     has_scope (0.5.0)
     hirb (0.4.5)
