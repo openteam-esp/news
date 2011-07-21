@@ -71,6 +71,8 @@ ru:
     type:
       created: создано
       publish: опубликованно
-      return_to_corrector: вернуть корректору
+      updated: измененно
+      to_trash: удаленно
+      return_to_corrector: вернул корректору
       immediately_publish: немедленно опубликован
 
