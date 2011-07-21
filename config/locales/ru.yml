@@ -70,6 +70,7 @@ ru:
   event:
     type:
       created: создано
+      publish: опубликованно
       return_to_corrector: вернуть корректору
       immediately_publish: немедленно опубликован
 
