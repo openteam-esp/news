@@ -1,6 +1,79 @@
 ru:
-  default_author: Пресс-служба администрации Томской области
   time:
     formats:
       datetime: "%d.%m.%Y %H:%M"
+  default_author: Пресс-служба администрации Томской области
+  mongoid:
+    devicse:
+      passwords:
+        edit:
+          change_password: "Изменить пароль"
+        new:
+          forgot_password: "Забыли пароль?"
+          no_account: "Нет ни одного контакта с этим email. Если вы ожидаете приглашения, мы отправим их как можно скорее"
+          send_password_instructions: "Отправить мне инструкции по сбросу пароля"
+        send_instructions: "Вы получите email с инструкцией по сбросу пароля в течении нескольких минут."
+        updated: "Ваш пароль изменён."
+
+
+
+  send_to_corrector: "Отправить корректору"
+  to_trash: "В корзину"
+  send_to_publisher: "Отправить публикатору"
+  correct: "Взять на корректуру"
+  immediately_send_to_publisher: "Немедленно отправить публикатору"
+  modification: "Отправить пожелание"
+  return_to_author: "Вернуть автору"
+  send_to_publisher: "Отправить публикатору"
+  immediately_publish: "Немедленно опубликовать"
+  publish: "Опубликовать"
+  return_to_corrector: "Вернуть корректору"
+  channels: "Каналы"
+  availability: "Когда будет доступно?"
+  entry_title: "Заголовок"
+  inbox: "Входящие"
+  published: "Опубликованные"
+  correcting: "На корректировке"
+  draft: "Черновик"
+  trash: "Корзина"
+  login: "Войти"
+  new_entry: "Создать новость"
+  edit: "Редактировать"
+  back: "Назад"
+  immediately_after_correcting: "Немедленно после корректировки"
+  history: "История"
+  actions: "Доступные действия"
+  no_any_entries: "Нет новостей"
+  logout: "Выход"
+  not_any_channels: "Нет каналов"
+  empty_annotation: "Нет аннотации"
+  i_want_to_change_the_news: "Я хочу изменить новость"
+  since: "С"
+  until: "До"
+  not_limited_in_time: "Не ограниченно во времени"
+  cteated_by: sada
+  mongoid:
+    attributes:
+      user:
+        email: Email
+        password: Пароль
+        remember_me: Запомнить меня
+      entry:
+        New_entry: Новость
+        title: Заголовок
+        annotation: Аннотация
+        body: Текст
+        since: Публиковать с
+        until: Публиковать до
+        channels: Каналы
+        creat_entry: Создать новость
+
+      folder:
+        event:
+          by: ""
+          fire_events:
+            created: "Созданно"
+          created: "Созданно"
+
+
 
