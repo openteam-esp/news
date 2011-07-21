@@ -3,8 +3,9 @@ ru:
     formats:
       datetime: "%d.%m.%Y %H:%M"
   default_author: Пресс-служба администрации Томской области
+
   mongoid:
-    devicse:
+    device:
       passwords:
         edit:
           change_password: "Изменить пароль"
@@ -14,8 +15,6 @@ ru:
           send_password_instructions: "Отправить мне инструкции по сбросу пароля"
         send_instructions: "Вы получите email с инструкцией по сбросу пароля в течении нескольких минут."
         updated: "Ваш пароль изменён."
-
-
 
   send_to_corrector: "Отправить корректору"
   to_trash: "В корзину"
@@ -68,12 +67,9 @@ ru:
         channels: Каналы
         creat_entry: Создать новость
 
-      folder:
-        event:
-          by: ""
-          fire_events:
-            created: "Созданно"
-          created: "Созданно"
-
-
+  event:
+    type:
+      created: создано
+      return_to_corrector: вернуть корректору
+      immediately_publish: немедленно опубликован
 
