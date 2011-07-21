@@ -4,15 +4,15 @@ require 'spec_helper'
 
 describe EntriesController do
   before :each do
-    user = Fabricate(:user)
-    sign_in user
+    @user = Fabricate(:user)
+    sign_in @user
 
     @draft = Fabricate(:folder, :title => 'draft')
     @inbox = Fabricate(:folder, :title => 'inbox')
   end
 
   def valid_attributes
-    {:body => 'Текст новости'}
+    {:body => 'Текст новости', :user_id => @user.id}
   end
 
   describe "GET index" do
@@ -132,17 +132,25 @@ describe EntriesController do
   end
 
   describe "DELETE destroy" do
+    before do
+      @trash = Fabricate(:folder, :title => 'trash')
+    end
+
     it "destroys the requested entry" do
       entry = @draft.entries.create! valid_attributes
+      entry.to_trash!
+
       expect {
-        delete :destroy, :id => entry.id, :folder_id => @draft.title
+        delete :destroy, :id => entry.id, :folder_id => @trash.title
       }.to change(Entry, :count).by(-1)
     end
 
     it "redirects to the entries list" do
       entry = @draft.entries.create! valid_attributes
-      delete :destroy, :id => entry.id, :folder_id => @draft.title
-      response.should redirect_to(folder_entries_path(@draft))
+      entry.to_trash!
+
+      delete :destroy, :id => entry.id, :folder_id => @trash.title
+      response.should redirect_to(folder_entries_path(@trash))
     end
   end
 

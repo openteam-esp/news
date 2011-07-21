@@ -5,7 +5,7 @@ require 'spec_helper'
 describe User do
   let :user do Fabricate(:user) end
 
-  let :entry do Fabricate(:entry) end
+  let :entry do Fabricate(:entry, :user_id => user.id) end
   let :awaiting_correction_entry do entry.send_to_corrector!; entry end
   let :returned_to_author_entry do awaiting_correction_entry.return_to_author!; entry end
   let :correcting_entry do awaiting_correction_entry.correct!; entry end
@@ -57,8 +57,6 @@ describe User do
         published_entry.state_events_for_user(@publisher).should eql [:return_to_corrector]
         published_entry.state_events_for_user(@corrector_and_publisher).should eql [:return_to_corrector]
       end
-
-      # TODO: разобраться с корзиной
     end
   end
 
@@ -76,12 +74,40 @@ describe User do
     ability.should_not be_able_to(:create, event_for_other_entry)
   end
 
-  it 'имея роль корректора, может помещать в корзину новости ожидающие корректировки' do
-    pending
+  it 'может удалять новости только из корзины' do
+    ability = Ability.new(user)
+
+    ability.should_not be_able_to(:destroy, entry)
+    ability.should_not be_able_to(:destroy, awaiting_publication_entry)
+    ability.should be_able_to(:destroy, trash_entry)
+  end
+
+  it 'имея роль корректора, может помещать в корзину новости только ожидающие корректировки и свои черновики' do
+    @corrector = Fabricate(:user, :roles => ['corrector'], :email => 'corrector@mail.com')
+    ability = Ability.new(@corrector)
+
+    event_for_draft = @corrector.events.new(:type => 'to_trash', :entry_id => entry.id)
+    ability.should be_able_to(:create, event_for_draft)
+
+    event = @corrector.events.new(:type => 'to_trash', :entry_id => awaiting_correction_entry.id)
+    ability.should be_able_to(:create, event)
+
+    event_for_entry_at_correcting = @corrector.events.new(:type => 'to_trash', :entry_id => correcting_entry.id)
+    ability.should_not be_able_to(:create, event_for_entry_at_correcting)
   end
 
   it 'имея роль публикатора, может помещать в корзину новости ожидающие публикации и уже опубликованные' do
-    pending
+    @publicator = Fabricate(:user, :roles => ['publisher'], :email => 'publisher@mail.com')
+    ability = Ability.new(@publicator)
+
+    event_for_draft = @publicator.events.new(:type => 'to_trash', :entry_id => entry.id)
+    ability.should be_able_to(:create, event_for_draft)
+
+    event = @publicator.events.new(:type => 'to_trash', :entry_id => awaiting_publication_entry.id)
+    ability.should be_able_to(:create, event)
+
+    event_for_published = @publicator.events.new(:type => 'to_trash', :entry_id => published_entry.id)
+    ability.should be_able_to(:create, event_for_published)
   end
 end
 
