@@ -10,3 +10,4 @@ config/settings.yml
 public/stylesheets/*.css
 public/ckeditor_assets/*
 .rake_tasks~
+coverage/*

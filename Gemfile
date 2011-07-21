@@ -13,6 +13,7 @@ group :production do
   gem 'hoptoad_notifier'
 end
 
+gem 'simplecov', '>= 0.4.0', :require => false, :group => :test
 group :test do
   gem 'database_cleaner'
   gem 'fabrication'
