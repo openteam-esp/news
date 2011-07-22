@@ -52,7 +52,7 @@
   <ul>
     <% @entry.state_events_for_user(current_user).each do |event| %>
       <li>
-        <h6><%= t "event.type.#{event}" %></h6>
+        <h6><%= t "event.type.before.#{event}" %></h6>
         <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
           <%= form.inputs do %>
             <%= form.input :type, :as => :hidden, :value => event %>
@@ -74,7 +74,7 @@
     <% @entry.events.each do |event| %>
       <li>
         <%= l event.created_at, :format => :long %>
-        <%= t "event.type.#{event.type}" %>
+        <%= t "event.type.after.#{event.type}" %>
         <%= "#{event.user}" %>
         <%= content_tag :span, event.text, :class => 'text' if event.text.present? %>
       </li>

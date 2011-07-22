@@ -8,6 +8,15 @@ ru:
     messages:
       not_saved: Ошибка
 
+  formtastic:
+    required: обязательное поле
+    actions:
+      create: "Создать %{model}"
+      update: "Обновить %{model}"
+    labels:
+      event:
+        text: Комментарий
+
   send_to_corrector: "Отправить корректору"
   to_trash: "В корзину"
   send_to_publisher: "Отправить публикатору"
@@ -47,9 +56,6 @@ ru:
   Editing entry: Редактирование новости
   New entry: Создание новости
 
-
-
-
   News system: Новостная система
   Tomsk Administration: Администрация Томской области
   I want to log in using: "Я хочу войти, используя:"
@@ -77,6 +83,9 @@ ru:
               confirmation: не совпадает. Пожалуйста, проверьте
               too_short: слишком короткий
 
+    models:
+      entry: новость
+
     attributes:
       user:
         email: Email
@@ -96,20 +105,32 @@ ru:
         channels: Каналы
         creat_entry: Создать новость
 
-
   event:
     type:
-      created: создано
-      correct: взято на корректуру
-      publish: опубликованно
-      updated: измененно
-      to_trash: удаленно
-      return_to_corrector: возвращенно корректору
-      immediately_publish: немедленно опубликовано
-      immediately_send_to_publisher: немедленно отправленно публикатору
-      return_to_author: возвращено автору
-      send_to_corrector: отправленно корректору
-      send_to_publisher: отправленно публикатору
-      to_trash: удалено
-
+      before:
+        created: создать
+        correct: взять на корректуру
+        publish: опубликовать
+        updated: изменить
+        to_trash: удалить
+        return_to_corrector: возвратить корректору
+        immediately_publish: немедленно опубликовать
+        immediately_send_to_publisher: немедленно отправить публикатору
+        return_to_author: возвратить автору
+        send_to_corrector: отправить корректору
+        send_to_publisher: отправить публикатору
+        to_trash: удалить
+      after:
+        created: создано
+        correct: взято на корректуру
+        publish: опубликованно
+        updated: измененно
+        to_trash: удаленно
+        return_to_corrector: возвращенно корректору
+        immediately_publish: немедленно опубликовано
+        immediately_send_to_publisher: немедленно отправленно публикатору
+        return_to_author: возвращено автору
+        send_to_corrector: отправленно корректору
+        send_to_publisher: отправленно публикатору
+        to_trash: удалено
 
