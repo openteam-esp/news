@@ -13,6 +13,8 @@ smtp_settings:
   default_from:         'no-reply@tomsk.gov.ru'
   default_to:           ''
 
+host: 'localhost:3000'
+
 omniauth:
   twitter:
     key:              key

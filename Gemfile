@@ -26,7 +26,7 @@ group :test do
   gem 'rb-inotify'
   gem 'rspec-rails',            :require => false
   gem 'ruby-growl',             :require => false
-  gem 'simplecov', '>= 0.4.0'#,  :require => false
+  gem 'simplecov', '>= 0.4.0'
 end
 
 gem 'aws-s3'
