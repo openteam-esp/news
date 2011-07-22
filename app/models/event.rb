@@ -13,6 +13,6 @@ class Event
 
   private
     def fire_entry_event
-      entry.fire_events type.to_sym if type != 'created' && type != 'updated'
+      entry.fire_events type.to_sym if type != t('created') && type != 'updated'
     end
 end

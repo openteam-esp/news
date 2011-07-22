@@ -1,7 +1,7 @@
 <div class='auth_block'>
   <div class='top'>
-    <h1>Новостная система</h1>
-    <p>Администрация Томской области</p>
+    <h1><%= t("News system") %></h1>
+    <p><%= t("Tomsk Administration") %></p>
   </div>
   <div class='center'>
     <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
@@ -23,7 +23,7 @@
     <% end %>
   </div>
   <div class='social_services'>
-    <h4>Я хочу войти, используя:</h4>
+    <h4><%= t("I want to log in using") %></h4>
     <ul>
       <% Settings['omniauth'].each do | provider, app | %>
         <li class='<%= provider %>'>
@@ -39,7 +39,7 @@
     </ul>
   </div>
   <div class='bottom'>
-    <p>по всем вопросам обращайтесь на <a href="#">admin@esp-news.ru</a></p>
+    <p><%= t("refer all questions to") %><a href="#">admin@esp-news.ru</a></p>
   </div>
 </div>
 

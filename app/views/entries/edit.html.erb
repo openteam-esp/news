@@ -1,6 +1,6 @@
-<h1>Editing entry</h1>
+<h1><%= t("Editing entry") %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', [@folder,@entry] %> |
-<%= link_to 'Back', folder_entries_path(@folder) %>
+<%= link_to t('Show'), [@folder,@entry] %> |
+<%= link_to t('Back'), folder_entries_path(@folder) %>

@@ -73,8 +73,8 @@ ru:
         remember_me: "Запомнить"
         sign_in: "Войти"
         username: "Имя пользователя"
-      signed_in: "Вошли."
-      signed_out: "Вышли."
+      signed_in: "Вы успешно вошли в систему"
+      signed_out: "Сессия сброшена"
     shared:
       links:
         forgot_your_password: "Забыли пароль?"

@@ -4,17 +4,9 @@ ru:
       datetime: "%d.%m.%Y %H:%M"
   default_author: Пресс-служба администрации Томской области
 
-
-  device:
-    passwords:
-      edit:
-        change_password: "Изменить пароль"
-      new:
-        forgot_password: "Забыли пароль?"
-        no_account: "Нет ни одного контакта с этим email. Если вы ожидаете приглашения, мы отправим их как можно скорее"
-        send_password_instructions: "Отправить мне инструкции по сбросу пароля"
-      send_instructions: "Вы получите email с инструкцией по сбросу пароля в течении нескольких минут."
-      updated: "Ваш пароль изменён."
+  errors:
+    messages:
+      not_saved: Ошибка
 
   send_to_corrector: "Отправить корректору"
   to_trash: "В корзину"
@@ -39,6 +31,7 @@ ru:
   new_entry: "Создать новость"
   edit: "Редактировать"
   back: "Назад"
+  Back: "Назад"
   immediately_after_correcting: "Немедленно опубликовать после корректировки"
   history: "История"
   actions: "Доступные действия"
@@ -50,15 +43,45 @@ ru:
   since: "С"
   until: "До"
   not_limited_in_time: "Не ограниченно во времени"
+  Show: Просмотреть
+  Editing entry: Редактирование новости
+  New entry: Создание новости
+
+
+
+
+  News system: Новостная система
+  Tomsk Administration: Администрация Томской области
+  I want to log in using: "Я хочу войти, используя:"
+  refer all questions to: по всем вопросам обращайтесь на
   Sign in: Войти
-  Sign up: Зарегистрироваться
+  sign up: Зарегистрироваться
+  Sign up: Регистрация
   Forgot your password?: Забыли пароль?
+  Send me reset password instructions: Отправить инструкции для востонавления пароля
+  Resend confirmation instructions: Выслать инструкции
+  New password: Новый пароль
+  Confirm new password: Подтвердите новый пароль
+  Change your password: Изменение пароля
+  Resend unlock instructions: Отправить инструкции повторно
+  Change my password: Изменить пароль
   mongoid:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: не введен
+            password:
+              blank: не введен
+              confirmation: не совпадает. Пожалуйста, проверьте
+              too_short: слишком короткий
+
     attributes:
       user:
         email: Email
         password: Пароль
-        password_confirmation: Подтверждение пароля
+        password_confirmation: Подтвердите пароль
         remember_me: Запомнить меня
         sign_in: defew
         sign_up: dsfdsf
@@ -72,6 +95,7 @@ ru:
         until: Публиковать до
         channels: Каналы
         creat_entry: Создать новость
+
 
   event:
     type:
