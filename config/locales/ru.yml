@@ -4,17 +4,17 @@ ru:
       datetime: "%d.%m.%Y %H:%M"
   default_author: Пресс-служба администрации Томской области
 
-  mongoid:
-    device:
-      passwords:
-        edit:
-          change_password: "Изменить пароль"
-        new:
-          forgot_password: "Забыли пароль?"
-          no_account: "Нет ни одного контакта с этим email. Если вы ожидаете приглашения, мы отправим их как можно скорее"
-          send_password_instructions: "Отправить мне инструкции по сбросу пароля"
-        send_instructions: "Вы получите email с инструкцией по сбросу пароля в течении нескольких минут."
-        updated: "Ваш пароль изменён."
+
+  device:
+    passwords:
+      edit:
+        change_password: "Изменить пароль"
+      new:
+        forgot_password: "Забыли пароль?"
+        no_account: "Нет ни одного контакта с этим email. Если вы ожидаете приглашения, мы отправим их как можно скорее"
+        send_password_instructions: "Отправить мне инструкции по сбросу пароля"
+      send_instructions: "Вы получите email с инструкцией по сбросу пароля в течении нескольких минут."
+      updated: "Ваш пароль изменён."
 
   send_to_corrector: "Отправить корректору"
   to_trash: "В корзину"
@@ -39,7 +39,7 @@ ru:
   new_entry: "Создать новость"
   edit: "Редактировать"
   back: "Назад"
-  immediately_after_correcting: "Немедленно после корректировки"
+  immediately_after_correcting: "Немедленно опубликовать после корректировки"
   history: "История"
   actions: "Доступные действия"
   no_any_entries: "Нет новостей"
@@ -50,13 +50,19 @@ ru:
   since: "С"
   until: "До"
   not_limited_in_time: "Не ограниченно во времени"
-  cteated_by: sada
+  Sign in: Войти
+  Sign up: Зарегистрироваться
+  Forgot your password?: Забыли пароль?
   mongoid:
     attributes:
       user:
         email: Email
         password: Пароль
+        password_confirmation: Подтверждение пароля
         remember_me: Запомнить меня
+        sign_in: defew
+        sign_up: dsfdsf
+
       entry:
         New_entry: Новость
         title: Заголовок
@@ -70,9 +76,16 @@ ru:
   event:
     type:
       created: создано
+      correct: взято на корректуру
       publish: опубликованно
       updated: измененно
       to_trash: удаленно
-      return_to_corrector: вернул корректору
-      immediately_publish: немедленно опубликован
+      return_to_corrector: возвращенно корректору
+      immediately_publish: немедленно опубликовано
+      immediately_send_to_publisher: немедленно отправленно публикатору
+      return_to_author: возвращено автору
+      send_to_corrector: отправленно корректору
+      send_to_publisher: отправленно публикатору
+      to_trash: удалено
+
 
