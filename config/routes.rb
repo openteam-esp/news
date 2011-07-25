@@ -15,8 +15,7 @@ News::Application.routes.draw do
 
   resources :folders, :only => [] do
     resources :entries do
-      resources :events, :only => [:new, :create]
-      get :to_trash, :on => :member
+      resources :events, :only => :create
     end
   end
 

@@ -2,7 +2,7 @@
   <% collection.each do |entry|%>
     <ul class='entries'>
       <li>
-        <% last_event = entry.events.first %>
+        <% last_event = entry.events.last %>
         <%= l last_event.created_at, :format => :long %>
         <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), channel_published_entry_path(@channel, entry) %>
       </li>

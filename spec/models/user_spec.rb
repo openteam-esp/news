@@ -26,6 +26,7 @@ describe User do
       another_user_ability = Ability.new(another_user)
       @draft.events.create(:type => 'to_trash', :user_id => @user.id)
       restore_event_from_another_user = @draft.events.new(:type => 'restore', :user_id => another_user.id)
+      @draft.reload
       another_user_ability.should_not be_able_to(:create, restore_event_from_another_user)
     end
 

@@ -3,20 +3,21 @@ class Entry
   include Mongoid::MultiParameterAttributes
   include Mongoid::Timestamps
 
-  field :title,       :type => String
-  field :annotation,  :type => String
-  field :body,        :type => String
-  field :since,       :type => DateTime
-  field :until,       :type => DateTime
-  field :state,       :type => String
-  field :deleted,     :type => Boolean, :default => false
-  field :author,      :type => String,  :default => ::I18n.t('default_author')
+  field :title,         :type => String
+  field :annotation,    :type => String
+  field :body,          :type => String
+  field :since,         :type => DateTime
+  field :until,         :type => DateTime
+  field :state,         :type => String
+  field :deleted,       :type => Boolean, :default => false
+  field :author,        :type => String,  :default => ::I18n.t('default_author')
 
+  belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
   has_and_belongs_to_many :channels
 
-  has_many :events
+  embeds_many :events, :order => [[:created_at, :desc]]
 
   attr_accessor :user_id
 
@@ -96,9 +97,12 @@ class Entry
     end
   end
 
-  def initiator
-    events.where(:type => 'created').first.user
+  def self.filter_for(user, folder)
+    return where(:initiator_id => user.id) if user.roles.nil? || folder == 'draft'
+    return where('events.user_id' => user.id) if folder == 'trash'
+    all
   end
+
 
   def related_to(user)
     events.where(:user_id => user.id).any?
@@ -155,6 +159,7 @@ class Entry
   private
     def create_event
       events.create! :type => 'created', :user_id => user_id
+      self.initiator_id = user_id
       self.folder = Folder.where(:title => 'draft').first
       self.save!
     end
