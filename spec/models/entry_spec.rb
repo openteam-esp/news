@@ -10,6 +10,14 @@ describe Entry do
     I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
   end
 
+  it 'должна знать кто к ней имеет отношение' do
+    first_user = Fabricate(:user)
+    second_user = Fabricate(:user, :roles => ['corrector', 'publisher'])
+    entry = Fabricate(:entry, :user_id => first_user.id)
+    entry.related_to(first_user).should be_true
+    entry.related_to(second_user).should be_false
+  end
+
   describe 'после создания должна' do
     let :new_entry do Fabricate(:entry) end
     before do Fabricate(:folder, :title => 'draft') end

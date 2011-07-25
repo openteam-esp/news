@@ -15,10 +15,22 @@ describe User do
       @draft = Fabricate(:entry, :user_id => @user.id)
     end
 
-    it 'восстановить новость к которой он имеет отношение'
+    it 'восстановить новость к которой он имеет отношение' do
+      @draft.events.create(:type => 'to_trash', :user_id => @user.id)
+      restore_event = @draft.events.new(:type => 'restore', :user_id => @user.id)
+      @ability.should be_able_to(:create, restore_event)
+    end
+
+    it 'не может восстановить новость к которой не имеет отношения' do
+      another_user = Fabricate(:user)
+      another_user_ability = Ability.new(another_user)
+      @draft.events.create(:type => 'to_trash', :user_id => @user.id)
+      restore_event_from_another_user = @draft.events.new(:type => 'restore', :user_id => another_user.id)
+      another_user_ability.should_not be_able_to(:create, restore_event_from_another_user)
+    end
 
     it 'отправить только по следующим переходам' do
-      @draft.state_events_for_user(@user).should eql [:send_to_corrector, :to_trash]
+      @draft.state_events_for(@user).should eql [:send_to_corrector, :to_trash]
     end
 
     it 'отправить только свой черновик корректору' do
@@ -42,7 +54,7 @@ describe User do
     it 'выполнять действия только над своим черновиком' do
       other_user = Fabricate(:user)
       other_draft = Fabricate(:entry, :user_id => other_user.id)
-      other_draft.state_events_for_user(@user).should be_empty
+      other_draft.state_events_for(@user).should be_empty
       other_draft_event = other_draft.events.new(:type => 'send_to_corrector')
       @ability.should_not be_able_to(:create, other_draft_event)
     end
@@ -54,12 +66,10 @@ describe User do
       @ability = Ability.new(@corrector)
     end
 
-    it 'восстановить новость к которой он имеет отношение'
-
     it 'выполнять действия только над своим черновиком' do
       other_user = Fabricate(:user)
       other_draft = Fabricate(:entry, :user_id => other_user.id)
-      other_draft.state_events_for_user(@corrector).should be_empty
+      other_draft.state_events_for(@corrector).should be_empty
       other_draft_event = other_draft.events.new(:type => 'send_to_corrector')
       @ability.should_not be_able_to(:create, other_draft_event)
     end
@@ -68,7 +78,7 @@ describe User do
       let :draft do Fabricate(:entry, :user_id => @corrector.id) end
 
       it 'отправить только по следующим переходам' do
-        draft.state_events_for_user(@corrector).should eql [:immediately_send_to_publisher, :to_trash]
+        draft.state_events_for(@corrector).should eql [:immediately_send_to_publisher, :to_trash]
       end
 
       it 'отправить в корзину' do
@@ -98,7 +108,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_correction_entry.state_events_for_user(@corrector).should eql [:correct, :return_to_author, :to_trash]
+        awaiting_correction_entry.state_events_for(@corrector).should eql [:correct, :return_to_author, :to_trash]
       end
 
       it 'вернуть инициатору' do
@@ -126,7 +136,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        correcting_entry.state_events_for_user(@corrector).should eql [:send_to_publisher, :to_trash]
+        correcting_entry.state_events_for(@corrector).should eql [:send_to_publisher, :to_trash]
       end
 
       it 'отправить в корзину' do
@@ -151,13 +161,11 @@ describe User do
       @ability = Ability.new(@publisher)
     end
 
-    it 'восстановить новость к которой он имеет отношение'
-
     describe 'только свой черновик' do
       let :draft do Fabricate(:entry, :user_id => @publisher.id) end
 
       it 'отправить только по следующим переходам' do
-        draft.state_events_for_user(@publisher).should eql [:send_to_corrector, :to_trash]
+        draft.state_events_for(@publisher).should eql [:send_to_corrector, :to_trash]
       end
 
       it 'отправить в корзину' do
@@ -189,7 +197,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_publication_entry.state_events_for_user(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
+        awaiting_publication_entry.state_events_for(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -219,7 +227,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        published_entry.state_events_for_user(@publisher).should eql [:return_to_corrector, :to_trash]
+        published_entry.state_events_for(@publisher).should eql [:return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -244,13 +252,11 @@ describe User do
       @ability = Ability.new(@corpuber)
     end
 
-    it 'восстановить новость к которой он имеет отношение'
-
     describe 'только свой черновик' do
       let :draft do Fabricate(:entry, :user_id => @corpuber.id) end
 
       it 'отправить только по следующим переходам' do
-       draft.state_events_for_user(@corpuber).should eql [:immediately_publish, :to_trash]
+       draft.state_events_for(@corpuber).should eql [:immediately_publish, :to_trash]
       end
 
       it 'опубликовать' do
@@ -280,7 +286,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_correction_entry.state_events_for_user(@corpuber).should eql [:correct, :return_to_author, :to_trash]
+        awaiting_correction_entry.state_events_for(@corpuber).should eql [:correct, :return_to_author, :to_trash]
       end
 
       it 'вернуть инициатору' do
@@ -308,7 +314,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        correcting_entry.state_events_for_user(@corpuber).should eql [:publish, :to_trash]
+        correcting_entry.state_events_for(@corpuber).should eql [:publish, :to_trash]
       end
 
       it 'опубликовать' do
@@ -336,7 +342,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_publication_entry.state_events_for_user(@corpuber).should eql [:publish, :return_to_corrector, :to_trash]
+        awaiting_publication_entry.state_events_for(@corpuber).should eql [:publish, :return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -370,7 +376,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        published_entry.state_events_for_user(@corpuber).should eql [:return_to_corrector, :to_trash]
+        published_entry.state_events_for(@corpuber).should eql [:return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do

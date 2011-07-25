@@ -100,6 +100,10 @@ class Entry
     events.where(:type => 'created').first.user
   end
 
+  def related_to(user)
+    events.where(:user_id => user.id).any?
+  end
+
   def send_by_email
     mailing_channels = []
     self.channels.each do |channel|
@@ -138,7 +142,7 @@ class Entry
     result
   end
 
-  def state_events_for_user(user)
+  def state_events_for(user)
     return state_events_for_author(user) if !user.corrector? && !user.publisher?
 
     result = []

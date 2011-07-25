@@ -18,6 +18,10 @@ class Ability
       %w[send_to_corrector to_trash].include?(event.type) && event.entry.initiator == user
     end
 
+    can :create, Event do |event|
+      %w[restore].include?(event.type) && event.entry.related_to(user) && event.entry.trash?
+    end
+
     #################
     #   corrector   #
     #################

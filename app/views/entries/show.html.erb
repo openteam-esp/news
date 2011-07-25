@@ -50,7 +50,7 @@
 <div class='actions'>
   <h4><%= t('actions') %></h4>
   <ul>
-    <% @entry.state_events_for_user(current_user).each do |event| %>
+    <% @entry.state_events_for(current_user).each do |event| %>
       <li>
         <h6><%= t "event.type.before.#{event}" %></h6>
         <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
