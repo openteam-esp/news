@@ -3,132 +3,390 @@
 require 'spec_helper'
 
 describe User do
-  let :user do Fabricate(:user) end
+  describe '- анонимный пользователь может' do
+    it 'читать rss'
+    it 'читать опубликованные новости'
+  end
 
-  let :entry do Fabricate(:entry, :user_id => user.id) end
-  let :awaiting_correction_entry do entry.send_to_corrector!; entry end
-  let :returned_to_author_entry do awaiting_correction_entry.return_to_author!; entry end
-  let :correcting_entry do awaiting_correction_entry.correct!; entry end
-  let :awaiting_publication_entry do correcting_entry.send_to_publisher!; entry end
-  let :published_entry do awaiting_publication_entry.publish!; entry end
-  let :trash_entry do awaiting_publication_entry.to_trash!; entry end
+  describe '- обычный пользователь может' do
+    before do
+      @user = Fabricate(:user)
+      @ability = Ability.new(@user)
+      @draft = Fabricate(:entry, :user_id => @user.id)
+    end
 
-  describe 'пользователь' do
-    it 'может создавать новости' do
-      ability = Ability.new(user)
-      ability.should be_able_to(:create, Entry)
+    it 'восстановить новость к которой он имеет отношение'
+
+    it 'отправить только по следующим переходам' do
+      @draft.state_events_for_user(@user).should eql [:send_to_corrector, :to_trash]
+    end
+
+    it 'отправить только свой черновик корректору' do
+      send_to_corrector_event = @draft.events.new(:type => 'send_to_corrector')
+      @ability.should be_able_to(:create, send_to_corrector_event)
+    end
+
+    it 'отправить только свой черновик в корзину' do
+      to_trash_event = @draft.events.new(:type => 'to_trash')
+      @ability.should be_able_to(:create, to_trash_event)
+    end
+
+    it 'редактировать только свой черновик' do
+      @ability.should be_able_to(:update, @draft)
+    end
+
+    it 'создать черновик' do
+      @ability.should be_able_to(:create, Entry)
+    end
+
+    it 'выполнять действия только над своим черновиком' do
+      other_user = Fabricate(:user)
+      other_draft = Fabricate(:entry, :user_id => other_user.id)
+      other_draft.state_events_for_user(@user).should be_empty
+      other_draft_event = other_draft.events.new(:type => 'send_to_corrector')
+      @ability.should_not be_able_to(:create, other_draft_event)
     end
   end
 
-  describe 'доступные действия' do
-    describe 'с новостью в состоянии' do
-      before do
-        @corrector = Fabricate(:user, :roles => ['corrector'], :email => 'corrector@mail.com')
-        @publisher = Fabricate(:user, :roles => ['publisher'], :email => 'publisher@mail.com')
-        @corrector_and_publisher = Fabricate(:user, :roles => ['corrector', 'publisher'], :email => 'cp@mail.com')
+  describe '- корректор может' do
+    before do
+      @corrector = Fabricate(:user, :roles => ['corrector'])
+      @ability = Ability.new(@corrector)
+    end
+
+    it 'восстановить новость к которой он имеет отношение'
+
+    it 'выполнять действия только над своим черновиком' do
+      other_user = Fabricate(:user)
+      other_draft = Fabricate(:entry, :user_id => other_user.id)
+      other_draft.state_events_for_user(@corrector).should be_empty
+      other_draft_event = other_draft.events.new(:type => 'send_to_corrector')
+      @ability.should_not be_able_to(:create, other_draft_event)
+    end
+
+    describe 'только свой черновик' do
+      let :draft do Fabricate(:entry, :user_id => @corrector.id) end
+
+      it 'отправить только по следующим переходам' do
+        draft.state_events_for_user(@corrector).should eql [:immediately_send_to_publisher, :to_trash]
       end
 
-      it 'draft' do
-        entry.state_events_for_user(@corrector).should eql [:immediately_send_to_publisher]
-        entry.state_events_for_user(@publisher).should eql [:immediately_publish]
-        entry.state_events_for_user(@corrector_and_publisher).should eql [:immediately_publish, :immediately_send_to_publisher]
+      it 'отправить в корзину' do
+        to_trash_event = draft.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
       end
 
-      it 'awaiting_correction' do
+      it 'отправить публикатору' do
+        send_publisher_event = draft.events.new(:type => 'immediately_send_to_publisher')
+        @ability.should be_able_to(:create, send_publisher_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, draft)
+      end
+
+      it 'создать' do
+        @ability.should be_able_to(:create, Event)
+      end
+    end
+
+    describe 'новость ожидающую корректировки' do
+      let :awaiting_correction_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry
+      end
+
+      it 'отправить только по следующим переходам' do
         awaiting_correction_entry.state_events_for_user(@corrector).should eql [:correct, :return_to_author, :to_trash]
-        awaiting_correction_entry.state_events_for_user(@publisher).should eql []
-        awaiting_correction_entry.state_events_for_user(@corrector_and_publisher).should eql [:correct, :return_to_author, :to_trash]
       end
 
-      it 'correcting' do
-        correcting_entry.state_events_for_user(@corrector).should eql [:send_to_publisher]
-        correcting_entry.state_events_for_user(@publisher).should eql []
-        correcting_entry.state_events_for_user(@corrector_and_publisher).should eql [:send_to_publisher]
+      it 'вернуть инициатору' do
+        return_to_author_event = awaiting_correction_entry.events.new(:type => 'return_to_author')
+        @ability.should be_able_to(:create, return_to_author_event)
       end
 
-      it 'awaiting_publication' do
-        awaiting_publication_entry.state_events_for_user(@corrector).should eql []
-        awaiting_publication_entry.state_events_for_user(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
-        awaiting_publication_entry.state_events_for_user(@corrector_and_publisher).should eql [:publish, :return_to_corrector, :to_trash]
+      it 'взять на корректировку' do
+        correct_event = awaiting_correction_entry.events.new(:type => 'correct')
+        @ability.should be_able_to(:create, correct_event)
       end
 
-      it 'published' do
-        published_entry.state_events_for_user(@corrector).should eql []
-        published_entry.state_events_for_user(@publisher).should eql [:return_to_corrector]
-        published_entry.state_events_for_user(@corrector_and_publisher).should eql [:return_to_corrector]
+      it 'отправить в корзину' do
+         to_trash_event = awaiting_correction_entry.events.new(:type => 'to_trash')
+         @ability.should be_able_to(:create, to_trash_event)
+      end
+    end
+
+    describe 'корректируемую новость' do
+      let :correcting_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:type => 'correct')
+        entry
+      end
+
+      it 'отправить только по следующим переходам' do
+        correcting_entry.state_events_for_user(@corrector).should eql [:send_to_publisher, :to_trash]
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = correcting_entry.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+
+      it 'отправить публикатору' do
+        send_publisher_event = correcting_entry.events.new(:type => 'send_to_publisher')
+        @ability.should be_able_to(:create, send_publisher_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, correcting_entry)
       end
     end
   end
 
-  it 'может помещать в корзину только свои черновики' do
-    my_entry = Fabricate(:entry, :user_id => user.id)
-    other_user = Fabricate(:user)
-    other_entry = Fabricate(:entry, :user_id => other_user.id)
+  describe '- публикатор может' do
+    before do
+      @publisher = Fabricate(:user, :roles => ['publisher'])
+      @ability = Ability.new(@publisher)
+    end
 
-    ability = Ability.new(user)
+    it 'восстановить новость к которой он имеет отношение'
 
-    event_for_my_entry = user.events.new :type => 'to_trash', :entry_id => my_entry.id
-    event_for_other_entry = other_user.events.new :type => 'to_trash', :entry_id => other_entry.id
+    describe 'только свой черновик' do
+      let :draft do Fabricate(:entry, :user_id => @publisher.id) end
 
-    ability.should be_able_to(:create, event_for_my_entry)
-    ability.should_not be_able_to(:create, event_for_other_entry)
+      it 'отправить только по следующим переходам' do
+        draft.state_events_for_user(@publisher).should eql [:send_to_corrector, :to_trash]
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = draft.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+
+      it 'отправить корректору' do
+        send_to_corrector_event = draft.events.new(:type => 'send_to_corrector')
+        @ability.should be_able_to(:create, send_to_corrector_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, draft)
+      end
+
+      it 'создать' do
+        @ability.should be_able_to(:create, Event)
+      end
+    end
+
+    describe 'новость ожидающую публикации' do
+      let :awaiting_publication_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:type => 'correct')
+        entry.events.create(:type => 'send_to_publisher')
+        entry
+      end
+
+      it 'отправить только по следующим переходам' do
+        awaiting_publication_entry.state_events_for_user(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
+      end
+
+      it 'вернуть корректору' do
+        return_to_corrector_event = awaiting_publication_entry.events.new(:type => 'return_to_corrector')
+        @ability.should be_able_to(:create, return_to_corrector_event)
+      end
+
+      it 'опубликовать' do
+        publish_event = awaiting_publication_entry.events.new(:type => 'publish')
+        @ability.should be_able_to(:create, publish_event)
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = awaiting_publication_entry.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+    end
+
+    describe 'опубликованную новость' do
+      let :published_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:type => 'correct')
+        entry.events.create(:type => 'send_to_publisher')
+        entry.events.create(:type => 'publish')
+        entry
+      end
+
+      it 'отправить только по следующим переходам' do
+        published_entry.state_events_for_user(@publisher).should eql [:return_to_corrector, :to_trash]
+      end
+
+      it 'вернуть корректору' do
+        return_to_corrector_event = published_entry.events.new(:type => 'return_to_corrector')
+        @ability.should be_able_to(:create, return_to_corrector_event)
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = published_entry.events.new(:type => 'to_trash')
+        @ability.should  be_able_to(:create, to_trash_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, published_entry)
+      end
+    end
   end
 
-  it 'может удалять новости только из корзины' do
-    ability = Ability.new(user)
+  describe '- корректор+публикатор может' do
+    before do
+      @corpuber = Fabricate(:user, :roles => ['corrector','publisher'])
+      @ability = Ability.new(@corpuber)
+    end
 
-    ability.should_not be_able_to(:destroy, entry)
-    ability.should_not be_able_to(:destroy, awaiting_publication_entry)
-    ability.should be_able_to(:destroy, trash_entry)
-  end
+    it 'восстановить новость к которой он имеет отношение'
 
-  it 'имея роль корректора, может помещать в корзину новости только ожидающие корректировки и свои черновики' do
-    @corrector = Fabricate(:user, :roles => ['corrector'], :email => 'corrector@mail.com')
-    ability = Ability.new(@corrector)
+    describe 'только свой черновик' do
+      let :draft do Fabricate(:entry, :user_id => @corpuber.id) end
 
-    event_for_draft = @corrector.events.new(:type => 'to_trash', :entry_id => entry.id)
-    ability.should be_able_to(:create, event_for_draft)
+      it 'отправить только по следующим переходам' do
+       draft.state_events_for_user(@corpuber).should eql [:immediately_publish, :to_trash]
+      end
 
-    event = @corrector.events.new(:type => 'to_trash', :entry_id => awaiting_correction_entry.id)
-    ability.should be_able_to(:create, event)
+      it 'опубликовать' do
+        publish_event = draft.events.new(:type => 'immediately_publish')
+        @ability.should be_able_to(:create, publish_event)
+      end
 
-    event_for_entry_at_correcting = @corrector.events.new(:type => 'to_trash', :entry_id => correcting_entry.id)
-    ability.should_not be_able_to(:create, event_for_entry_at_correcting)
-  end
+      it 'отправить в корзину' do
+        to_trash_event = draft.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
 
-  it 'имея роль публикатора, может помещать в корзину новости ожидающие публикации и уже опубликованные и свои черновики' do
-    @publicator = Fabricate(:user, :roles => ['publisher'], :email => 'publisher@mail.com')
-    ability = Ability.new(@publicator)
+      it 'редактировать' do
+        @ability.should be_able_to(:update, draft)
+      end
 
-    event_for_draft = @publicator.events.new(:type => 'to_trash', :entry_id => entry.id)
-    ability.should be_able_to(:create, event_for_draft)
+      it 'создать' do
+        @ability.should be_able_to(:create, Entry)
+      end
+    end
 
-    event = @publicator.events.new(:type => 'to_trash', :entry_id => awaiting_publication_entry.id)
-    ability.should be_able_to(:create, event)
+    describe 'новость ожидающую корректировки' do
+      let :awaiting_correction_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry
+      end
 
-    event_for_published = @publicator.events.new(:type => 'to_trash', :entry_id => published_entry.id)
-    ability.should be_able_to(:create, event_for_published)
-  end
+      it 'отправить только по следующим переходам' do
+        awaiting_correction_entry.state_events_for_user(@corpuber).should eql [:correct, :return_to_author, :to_trash]
+      end
 
-  it 'имея роль корректора и публикатора, может помещать в корзину новости ожидающие публикации, уже опубликованные, ожидающие коррекции, свои черновики ' do
-    @super_user = Fabricate(:user, :roles => ['corrector', 'publisher'], :email => 'superuser@mail.com')
-    ability = Ability.new(@super_user)
+      it 'вернуть инициатору' do
+        return_to_author_event =  awaiting_correction_entry.events.new(:type => 'return_to_author')
+        @ability.should be_able_to(:create, return_to_author_event)
+      end
 
-    @other_user = Fabricate(:user, :roles => [], :email => 'otheruser@mail.com')
-    other_user_ability = Ability.new(@other_user_ability)
-    other_user_entry = Fabricate(:entry, :user_id => @other_user.id)
+      it 'взять на корректировку' do
+        correct_event = awaiting_correction_entry.events.new(:type => 'correct')
+        @ability.should be_able_to(:create, correct_event)
+      end
 
-    event_for_draft = @super_user.events.new(:type => 'to_trash', :entry_id => entry.id)
-    ability.should be_able_to(:create, event_for_draft)
+      it 'отправить в корзину' do
+        to_trash_event = awaiting_correction_entry.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+    end
 
-    event_for_awaiting_correction_entry = @super_user.events.new(:type => 'to_trash', :entry_id => awaiting_correction_entry.id)
-    ability.should be_able_to(:create, event_for_awaiting_correction_entry)
+    describe 'корректируемую новость' do
+      let :correcting_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:type => 'correct')
+        entry
+      end
 
-    event_for_awaiting_publication_entry = @super_user.events.new(:type => 'to_trash', :entry_id => awaiting_publication_entry.id)
-    ability.should be_able_to(:create, event_for_awaiting_publication_entry)
+      it 'отправить только по следующим переходам' do
+        correcting_entry.state_events_for_user(@corpuber).should eql [:publish, :to_trash]
+      end
 
-    event_for_published_entry = @super_user.events.new(:type => 'to_trash', :entry_id => published_entry.id)
-    ability.should be_able_to(:create, event_for_published_entry)
+      it 'опубликовать' do
+        publish_event = correcting_entry.events.new(:type => 'publish')
+        @ability.should be_able_to(:create, publish_event)
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = correcting_entry.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, correcting_entry)
+      end
+    end
+
+    describe 'новость ожидающую публикации' do
+      let :awaiting_publication_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:type => 'correct')
+        entry.events.create(:type => 'send_to_publisher')
+        entry
+      end
+
+      it 'отправить только по следующим переходам' do
+        awaiting_publication_entry.state_events_for_user(@corpuber).should eql [:publish, :return_to_corrector, :to_trash]
+      end
+
+      it 'вернуть корректору' do
+        return_to_corrector_event = awaiting_publication_entry.events.new(:type => 'return_to_corrector')
+        @ability.should be_able_to(:create, return_to_corrector_event)
+      end
+
+      it 'опубликовать' do
+        publish_event = awaiting_publication_entry.events.new(:type => 'publish')
+        @ability.should be_able_to(:create, publish_event)
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = awaiting_publication_entry.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, awaiting_publication_entry)
+      end
+    end
+
+    describe 'опубликованную новость' do
+      let :published_entry do
+        entry = Fabricate(:entry)
+        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:type => 'correct')
+        entry.events.create(:type => 'send_to_publisher')
+        entry.events.create(:type => 'publish')
+        entry
+      end
+
+      it 'отправить только по следующим переходам' do
+        published_entry.state_events_for_user(@corpuber).should eql [:return_to_corrector, :to_trash]
+      end
+
+      it 'вернуть корректору' do
+        return_to_corrector_event = published_entry.events.new(:type => 'return_to_corrector')
+        @ability.should be_able_to(:create, return_to_corrector_event)
+      end
+
+      it 'отправить в корзину' do
+        to_trash_event = published_entry.events.new(:type => 'to_trash')
+        @ability.should be_able_to(:create, to_trash_event)
+      end
+
+      it 'редактировать' do
+        @ability.should be_able_to(:update, published_entry)
+      end
+    end
   end
 end
 

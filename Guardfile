@@ -1,7 +1,7 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, :wait => 30 do
+guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, :wait => 40 do
   watch('config/application.rb')
   watch('config/environment.rb')
   watch(%r{^config/environments/.+\.rb$})

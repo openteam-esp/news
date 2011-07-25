@@ -131,29 +131,6 @@ describe EntriesController do
     end
   end
 
-  describe "DELETE destroy" do
-    before do
-      @trash = Fabricate(:folder, :title => 'trash')
-    end
-
-    it "destroys the requested entry" do
-      entry = @draft.entries.create! valid_attributes
-      entry.to_trash!
-
-      expect {
-        delete :destroy, :id => entry.id, :folder_id => @trash.title
-      }.to change(Entry, :count).by(-1)
-    end
-
-    it "redirects to the entries list" do
-      entry = @draft.entries.create! valid_attributes
-      entry.to_trash!
-
-      delete :destroy, :id => entry.id, :folder_id => @trash.title
-      response.should redirect_to(folder_entries_path(@trash))
-    end
-  end
-
   describe 'редактирование' do
     before do
       user = Fabricate(:user, :email => 'corrector@mail.com', :roles => ['corrector', 'publisher'])

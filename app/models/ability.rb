@@ -4,27 +4,35 @@ class Ability
   def initialize(user)
     user ||= User.new
 
-    can [:rss, :read, :create], Entry
+    #################
+    #  casual user  #
+    #################
+
+    can [:create, :read], Entry
 
     can :update, Entry do |entry|
-      entry.draft?
-    end
-
-    can :destroy, Entry do |entry|
-      entry.trash? && entry.initiator.id == user.id
+      entry.draft? && entry.initiator == user
     end
 
     can :create, Event do |event|
-      %w[send_to_corrector to_trash].include? event.type if event.entry.initiator.id == user.id
+      %w[send_to_corrector to_trash].include?(event.type) && event.entry.initiator == user
     end
+
+    #################
+    #   corrector   #
+    #################
 
     if user.corrector?
       can :create, Event do |event|
-        %w[to_trash].include? event.type if event.entry.awaiting_correction? || event.entry.draft?
+        %w[immediately_send_to_publisher to_trash].include?(event.type) && event.entry.initiator == user
       end
 
       can :create, Event do |event|
-        %w[correct immediately_send_to_publisher return_to_author send_to_publisher].include? event.type
+        %w[correct return_to_author to_trash].include?(event.type) && event.entry.awaiting_correction?
+      end
+
+      can :create, Event do |event|
+        %w[send_to_publisher to_trash].include?(event.type) && event.entry.correcting?
       end
 
       can :update, Entry do |entry|
@@ -32,19 +40,44 @@ class Ability
       end
     end
 
+    #################
+    #   publisher   #
+    #################
+
     if user.publisher?
       can :create, Event do |event|
-        %w[to_trash].include? event.type if event.entry.awaiting_publication? || event.entry.draft? || event.entry.published?
+        %w[publish return_to_corrector to_trash].include?(event.type) && event.entry.awaiting_publication?
       end
 
       can :create, Event do |event|
-        %w[immediately_publish publish return_to_corrector].include? event.type
+        %w[return_to_corrector to_trash].include?(event.type) && event.entry.published?
       end
 
-      can [:update, :destroy], Entry do |entry|
+      can :update, Entry do |entry|
         entry.published?
       end
     end
 
+    #######################
+    # corrector&publisher #
+    #######################
+
+    if user.corrector? && user.publisher?
+      can :create, Event do |event|
+        %w[immediately_publish].include?(event.type) && event.entry.initiator == user
+      end
+
+      can :create, Event do |event|
+        %w[return_to_author].include?(event.type) && event.entry.awaiting_correction?
+      end
+
+      can :create, Event do |event|
+        %w[publish].include?(event.type) && event.entry.correcting?
+      end
+
+      can :update, Entry do |entry|
+        entry.awaiting_publication?
+      end
+    end
   end
 end

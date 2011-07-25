@@ -68,7 +68,11 @@ class Entry
     end
 
     event :publish do
-      transition :awaiting_publication => :published
+      transition [:awaiting_publication, :correcting] => :published
+    end
+
+    event :restore do
+      transition :trash => :draft
     end
 
     event :return_to_author do
@@ -88,7 +92,7 @@ class Entry
     end
 
     event :to_trash do
-      transition [:awaiting_publication, :awaiting_correction, :draft] => :trash
+      transition [:awaiting_publication, :awaiting_correction, :correcting, :draft, :published] => :trash
     end
   end
 
@@ -110,21 +114,27 @@ class Entry
   end
 
   def state_events_for_author(user)
-    return [] if initiator.id != user.id
+    return [] if initiator != user
     state_events & [:send_to_corrector, :to_trash]
   end
 
-  def state_events_for_corrector
+  def state_events_for_corrector(user)
     result = state_events & [:return_to_author, :correct, :send_to_publisher]
-    result << :immediately_send_to_publisher if draft?
-    result << :to_trash if awaiting_correction?
+    result << :immediately_send_to_publisher if draft? && initiator == user
+    result << :to_trash if awaiting_correction? || (draft? && initiator == user) || correcting?
     result
   end
 
-  def state_events_for_publisher
-    result = state_events & [:return_to_corrector, :publish]
-    result << :immediately_publish if draft?
-    result << :to_trash if awaiting_publication?
+  def state_events_for_publisher(user)
+    result = state_events & [:return_to_corrector, :publish, :send_to_corrector]
+    result << :to_trash if awaiting_publication? || (draft? && initiator == user) || published?
+    result
+  end
+
+  def state_events_for_corrector_and_publisher(user)
+    result = state_events & [:correct, :immediately_publish, :publish, :return_to_author, :return_to_corrector, :to_trash]
+    result << :immediately_publish if draft? && initiator == user
+    result << :to_trash if draft? && initiator == user
     result
   end
 
@@ -132,12 +142,11 @@ class Entry
     return state_events_for_author(user) if !user.corrector? && !user.publisher?
 
     result = []
-    result << state_events_for_corrector if user.corrector?
-    result << state_events_for_publisher if user.publisher?
+    result << state_events_for_corrector(user) if user.corrector? && user.roles.one?
+    result << state_events_for_publisher(user) if user.publisher? && user.roles.one?
+    result << state_events_for_corrector_and_publisher(user) if user.corrector? && user.publisher?
     result.flatten.uniq.sort
   end
-
-  # TODO: разобраться с корзиной
 
   private
     def create_event
