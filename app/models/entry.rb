@@ -17,7 +17,7 @@ class Entry
 
   has_and_belongs_to_many :channels
 
-  embeds_many :events, :order => [[:created_at, :desc]]
+  embeds_many :events, :order => [[:created_at, :desc]], :validate => false
 
   attr_accessor :user_id
 
@@ -44,6 +44,11 @@ class Entry
       entry.folder = Folder.where(:title => 'published').first
       entry.save!
       entry.send_by_email
+    end
+
+    after_transition :trash => :draft do |entry, transition|
+      entry.initiator_id = entry.events.unscoped.where(:type => 'restore').last.id
+      entry.save!
     end
 
     after_transition :to => :trash do |entry, transition|
@@ -127,20 +132,20 @@ class Entry
   end
 
   def state_events_for_corrector(user)
-    result = state_events & [:return_to_author, :correct, :send_to_publisher]
+    result = state_events & [:return_to_author, :correct, :restore, :send_to_publisher]
     result << :immediately_send_to_publisher if draft? && initiator == user
     result << :to_trash if awaiting_correction? || (draft? && initiator == user) || correcting?
     result
   end
 
   def state_events_for_publisher(user)
-    result = state_events & [:return_to_corrector, :publish, :send_to_corrector]
+    result = state_events & [:return_to_corrector, :publish, :restore, :send_to_corrector]
     result << :to_trash if awaiting_publication? || (draft? && initiator == user) || published?
     result
   end
 
   def state_events_for_corrector_and_publisher(user)
-    result = state_events & [:correct, :immediately_publish, :publish, :return_to_author, :return_to_corrector, :to_trash]
+    result = state_events & [:correct, :immediately_publish, :publish, :restore, :return_to_author, :return_to_corrector, :to_trash]
     result << :immediately_publish if draft? && initiator == user
     result << :to_trash if draft? && initiator == user
     result
