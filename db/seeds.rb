@@ -1,5 +1,7 @@
-Channel.find_or_create_by :title => "tomsk.gov.ru/news"
-Channel.find_or_create_by :title => "tomsk.gov.ru/announces"
+Channel.find_or_create_by :title => "tomsk.gov.ru/ru/announces"
+Channel.find_or_create_by :title => "tomsk.gov.ru/ru/news"
+Channel.find_or_create_by :title => "mailing_lists/common"
+Channel.find_or_create_by :title => "mailing_lists/innovation"
 
 Folder.find_or_create_by :title => 'inbox'
 Folder.find_or_create_by :title => 'published'

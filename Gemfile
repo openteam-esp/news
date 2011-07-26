@@ -25,7 +25,6 @@ group :test do
   gem 'mongoid-rspec'
   gem 'rb-inotify'
   gem 'rspec-rails',            :require => false
-  gem 'ruby-growl',             :require => false
   gem 'simplecov', '>= 0.4.0'
 end
 
