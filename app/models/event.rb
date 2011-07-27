@@ -3,6 +3,7 @@ class Event
   include Mongoid::Timestamps
   field :type, :type => String
   field :text, :type => String
+  index :updated_at
 
   embedded_in :entry
 
