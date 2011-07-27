@@ -16,10 +16,16 @@
         <%= content_tag :div, msg, :id => "flash_#{name}", :class => "flash_block" %>
       </div>
     <% end %>
-    <div class='login_info'>
-      <%= current_user.name if current_user %>
-      <%= link_to t('logout'), destroy_user_session_path, :method => :delete if current_user %>
-      <%= link_to t('login'), new_user_session_path unless current_user %>
+    <div class='header'>
+      <h1><%= link_to t("News system"), root_path %></h1>
+      <div class="login_info">
+        <% if current_user %>
+          <%= current_user.name %>
+          <%= "[#{current_user.roles.join(', ')}]" if current_user.roles %>
+          <%= link_to t('logout'), destroy_user_session_path, :method => :delete %>
+        <% end %>
+        <%= link_to t('login'), new_user_session_path unless current_user %>
+      </div>
     </div>
     <div class='container'>
       <div class='sidebar'>
@@ -30,6 +36,13 @@
       <div class='content_wrapper'>
         <%= yield %>
       </div>
+    </div>
+    <div class="footer">
+      <p>Система публикации новостей, версия 1.0</p>
+      <p>
+        Сделано с любовью в <a target="_blank" href="http://www.openteam.ru">OpenTeam</a>.
+        Если случилась беда &mdash; сообщите об <a target="_blank" href="http://issues.openteam.ru/projects/show/ato-news">ошибке</a>
+      </p>
     </div>
   </body>
 </html>
