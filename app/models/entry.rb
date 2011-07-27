@@ -11,6 +11,7 @@ class Entry
   field :state,         :type => String
   field :deleted,       :type => Boolean, :default => false
   field :author,        :type => String,  :default => ::I18n.t('default_author')
+  index :updated_at
 
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
