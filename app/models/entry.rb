@@ -49,7 +49,7 @@ class Entry
     end
 
     after_transition :trash => :draft do |entry, transition|
-      entry.initiator_id = entry.events.unscoped.where(:type => 'restore').last.id
+      entry.initiator_id = entry.events.unscoped.where(:type => 'restore').last.user.id
       entry.save!
     end
 
