@@ -16,16 +16,16 @@ describe User do
     end
 
     it 'восстановить новость к которой он имеет отношение' do
-      @draft.events.create(:type => 'to_trash', :user_id => @user.id)
-      restore_event = @draft.events.new(:type => 'restore', :user_id => @user.id)
+      @draft.events.create(:kind => 'to_trash', :user_id => @user.id)
+      restore_event = @draft.events.new(:kind => 'restore', :user_id => @user.id)
       @ability.should be_able_to(:create, restore_event)
     end
 
     it 'не может восстановить новость к которой не имеет отношения' do
       another_user = Fabricate(:user)
       another_user_ability = Ability.new(another_user)
-      @draft.events.create(:type => 'to_trash', :user_id => @user.id)
-      restore_event_from_another_user = @draft.events.new(:type => 'restore', :user_id => another_user.id)
+      @draft.events.create(:kind => 'to_trash', :user_id => @user.id)
+      restore_event_from_another_user = @draft.events.new(:kind => 'restore', :user_id => another_user.id)
       @draft.reload
       another_user_ability.should_not be_able_to(:create, restore_event_from_another_user)
     end
@@ -35,12 +35,12 @@ describe User do
     end
 
     it 'отправить только свой черновик корректору' do
-      send_to_corrector_event = @draft.events.new(:type => 'send_to_corrector')
+      send_to_corrector_event = @draft.events.new(:kind => 'send_to_corrector')
       @ability.should be_able_to(:create, send_to_corrector_event)
     end
 
     it 'отправить только свой черновик в корзину' do
-      to_trash_event = @draft.events.new(:type => 'to_trash')
+      to_trash_event = @draft.events.new(:kind => 'to_trash')
       @ability.should be_able_to(:create, to_trash_event)
     end
 
@@ -56,7 +56,7 @@ describe User do
       other_user = Fabricate(:user)
       other_draft = Fabricate(:entry, :user_id => other_user.id)
       other_draft.state_events_for(@user).should be_empty
-      other_draft_event = other_draft.events.new(:type => 'send_to_corrector')
+      other_draft_event = other_draft.events.new(:kind => 'send_to_corrector')
       @ability.should_not be_able_to(:create, other_draft_event)
     end
   end
@@ -71,7 +71,7 @@ describe User do
       other_user = Fabricate(:user)
       other_draft = Fabricate(:entry, :user_id => other_user.id)
       other_draft.state_events_for(@corrector).should be_empty
-      other_draft_event = other_draft.events.new(:type => 'send_to_corrector')
+      other_draft_event = other_draft.events.new(:kind => 'send_to_corrector')
       @ability.should_not be_able_to(:create, other_draft_event)
     end
 
@@ -83,12 +83,12 @@ describe User do
       end
 
       it 'отправить в корзину' do
-        to_trash_event = draft.events.new(:type => 'to_trash')
+        to_trash_event = draft.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
       it 'отправить публикатору' do
-        send_publisher_event = draft.events.new(:type => 'immediately_send_to_publisher')
+        send_publisher_event = draft.events.new(:kind => 'immediately_send_to_publisher')
         @ability.should be_able_to(:create, send_publisher_event)
       end
 
@@ -104,7 +104,7 @@ describe User do
     describe 'новость ожидающую корректировки' do
       let :awaiting_correction_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:kind => 'send_to_corrector')
         entry
       end
 
@@ -113,17 +113,17 @@ describe User do
       end
 
       it 'вернуть инициатору' do
-        return_to_author_event = awaiting_correction_entry.events.new(:type => 'return_to_author')
+        return_to_author_event = awaiting_correction_entry.events.new(:kind => 'return_to_author')
         @ability.should be_able_to(:create, return_to_author_event)
       end
 
       it 'взять на корректировку' do
-        correct_event = awaiting_correction_entry.events.new(:type => 'correct')
+        correct_event = awaiting_correction_entry.events.new(:kind => 'correct')
         @ability.should be_able_to(:create, correct_event)
       end
 
       it 'отправить в корзину' do
-         to_trash_event = awaiting_correction_entry.events.new(:type => 'to_trash')
+         to_trash_event = awaiting_correction_entry.events.new(:kind => 'to_trash')
          @ability.should be_able_to(:create, to_trash_event)
       end
     end
@@ -131,8 +131,8 @@ describe User do
     describe 'корректируемую новость' do
       let :correcting_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
-        entry.events.create(:type => 'correct')
+        entry.events.create(:kind => 'send_to_corrector')
+        entry.events.create(:kind => 'correct')
         entry
       end
 
@@ -141,12 +141,12 @@ describe User do
       end
 
       it 'отправить в корзину' do
-        to_trash_event = correcting_entry.events.new(:type => 'to_trash')
+        to_trash_event = correcting_entry.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
       it 'отправить публикатору' do
-        send_publisher_event = correcting_entry.events.new(:type => 'send_to_publisher')
+        send_publisher_event = correcting_entry.events.new(:kind => 'send_to_publisher')
         @ability.should be_able_to(:create, send_publisher_event)
       end
 
@@ -170,12 +170,12 @@ describe User do
       end
 
       it 'отправить в корзину' do
-        to_trash_event = draft.events.new(:type => 'to_trash')
+        to_trash_event = draft.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
       it 'отправить корректору' do
-        send_to_corrector_event = draft.events.new(:type => 'send_to_corrector')
+        send_to_corrector_event = draft.events.new(:kind => 'send_to_corrector')
         @ability.should be_able_to(:create, send_to_corrector_event)
       end
 
@@ -191,9 +191,9 @@ describe User do
     describe 'новость ожидающую публикации' do
       let :awaiting_publication_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
-        entry.events.create(:type => 'correct')
-        entry.events.create(:type => 'send_to_publisher')
+        entry.events.create(:kind => 'send_to_corrector')
+        entry.events.create(:kind => 'correct')
+        entry.events.create(:kind => 'send_to_publisher')
         entry
       end
 
@@ -202,17 +202,17 @@ describe User do
       end
 
       it 'вернуть корректору' do
-        return_to_corrector_event = awaiting_publication_entry.events.new(:type => 'return_to_corrector')
+        return_to_corrector_event = awaiting_publication_entry.events.new(:kind => 'return_to_corrector')
         @ability.should be_able_to(:create, return_to_corrector_event)
       end
 
       it 'опубликовать' do
-        publish_event = awaiting_publication_entry.events.new(:type => 'publish')
+        publish_event = awaiting_publication_entry.events.new(:kind => 'publish')
         @ability.should be_able_to(:create, publish_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = awaiting_publication_entry.events.new(:type => 'to_trash')
+        to_trash_event = awaiting_publication_entry.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
     end
@@ -220,10 +220,10 @@ describe User do
     describe 'опубликованную новость' do
       let :published_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
-        entry.events.create(:type => 'correct')
-        entry.events.create(:type => 'send_to_publisher')
-        entry.events.create(:type => 'publish')
+        entry.events.create(:kind => 'send_to_corrector')
+        entry.events.create(:kind => 'correct')
+        entry.events.create(:kind => 'send_to_publisher')
+        entry.events.create(:kind => 'publish')
         entry
       end
 
@@ -232,12 +232,12 @@ describe User do
       end
 
       it 'вернуть корректору' do
-        return_to_corrector_event = published_entry.events.new(:type => 'return_to_corrector')
+        return_to_corrector_event = published_entry.events.new(:kind => 'return_to_corrector')
         @ability.should be_able_to(:create, return_to_corrector_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = published_entry.events.new(:type => 'to_trash')
+        to_trash_event = published_entry.events.new(:kind => 'to_trash')
         @ability.should  be_able_to(:create, to_trash_event)
       end
 
@@ -261,12 +261,12 @@ describe User do
       end
 
       it 'опубликовать' do
-        publish_event = draft.events.new(:type => 'immediately_publish')
+        publish_event = draft.events.new(:kind => 'immediately_publish')
         @ability.should be_able_to(:create, publish_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = draft.events.new(:type => 'to_trash')
+        to_trash_event = draft.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
@@ -282,7 +282,7 @@ describe User do
     describe 'новость ожидающую корректировки' do
       let :awaiting_correction_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
+        entry.events.create(:kind => 'send_to_corrector')
         entry
       end
 
@@ -291,17 +291,17 @@ describe User do
       end
 
       it 'вернуть инициатору' do
-        return_to_author_event =  awaiting_correction_entry.events.new(:type => 'return_to_author')
+        return_to_author_event =  awaiting_correction_entry.events.new(:kind => 'return_to_author')
         @ability.should be_able_to(:create, return_to_author_event)
       end
 
       it 'взять на корректировку' do
-        correct_event = awaiting_correction_entry.events.new(:type => 'correct')
+        correct_event = awaiting_correction_entry.events.new(:kind => 'correct')
         @ability.should be_able_to(:create, correct_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = awaiting_correction_entry.events.new(:type => 'to_trash')
+        to_trash_event = awaiting_correction_entry.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
     end
@@ -309,8 +309,8 @@ describe User do
     describe 'корректируемую новость' do
       let :correcting_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
-        entry.events.create(:type => 'correct')
+        entry.events.create(:kind => 'send_to_corrector')
+        entry.events.create(:kind => 'correct')
         entry
       end
 
@@ -319,12 +319,12 @@ describe User do
       end
 
       it 'опубликовать' do
-        publish_event = correcting_entry.events.new(:type => 'publish')
+        publish_event = correcting_entry.events.new(:kind => 'publish')
         @ability.should be_able_to(:create, publish_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = correcting_entry.events.new(:type => 'to_trash')
+        to_trash_event = correcting_entry.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
@@ -336,9 +336,9 @@ describe User do
     describe 'новость ожидающую публикации' do
       let :awaiting_publication_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
-        entry.events.create(:type => 'correct')
-        entry.events.create(:type => 'send_to_publisher')
+        entry.events.create(:kind => 'send_to_corrector')
+        entry.events.create(:kind => 'correct')
+        entry.events.create(:kind => 'send_to_publisher')
         entry
       end
 
@@ -347,17 +347,17 @@ describe User do
       end
 
       it 'вернуть корректору' do
-        return_to_corrector_event = awaiting_publication_entry.events.new(:type => 'return_to_corrector')
+        return_to_corrector_event = awaiting_publication_entry.events.new(:kind => 'return_to_corrector')
         @ability.should be_able_to(:create, return_to_corrector_event)
       end
 
       it 'опубликовать' do
-        publish_event = awaiting_publication_entry.events.new(:type => 'publish')
+        publish_event = awaiting_publication_entry.events.new(:kind => 'publish')
         @ability.should be_able_to(:create, publish_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = awaiting_publication_entry.events.new(:type => 'to_trash')
+        to_trash_event = awaiting_publication_entry.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
@@ -369,10 +369,10 @@ describe User do
     describe 'опубликованную новость' do
       let :published_entry do
         entry = Fabricate(:entry)
-        entry.events.create(:type => 'send_to_corrector')
-        entry.events.create(:type => 'correct')
-        entry.events.create(:type => 'send_to_publisher')
-        entry.events.create(:type => 'publish')
+        entry.events.create(:kind => 'send_to_corrector')
+        entry.events.create(:kind => 'correct')
+        entry.events.create(:kind => 'send_to_publisher')
+        entry.events.create(:kind => 'publish')
         entry
       end
 
@@ -381,12 +381,12 @@ describe User do
       end
 
       it 'вернуть корректору' do
-        return_to_corrector_event = published_entry.events.new(:type => 'return_to_corrector')
+        return_to_corrector_event = published_entry.events.new(:kind => 'return_to_corrector')
         @ability.should be_able_to(:create, return_to_corrector_event)
       end
 
       it 'отправить в корзину' do
-        to_trash_event = published_entry.events.new(:type => 'to_trash')
+        to_trash_event = published_entry.events.new(:kind => 'to_trash')
         @ability.should be_able_to(:create, to_trash_event)
       end
 
@@ -396,4 +396,26 @@ describe User do
     end
   end
 end
+
+
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer         not null, primary key
+#  name                   :text
+#  roles                  :text
+#  email                  :string(255)     default(""), not null
+#  encrypted_password     :string(128)     default(""), not null
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer         default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  created_at             :datetime
+#  updated_at             :datetime
+#
 

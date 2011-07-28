@@ -35,7 +35,7 @@
     <li>
       <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
         <%= form.inputs do %>
-          <%= form.input :type, :as => :hidden, :value => 'modification'%>
+          <%= form.input :kind, :as => :hidden, :value => 'modification'%>
           <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
           <%= form.input :text, :as => :text %>
         <% end %>
@@ -52,10 +52,10 @@
   <ul>
     <% @entry.state_events_for(current_user).each do |event| %>
       <li>
-        <h6><%= t "event.type.before.#{event}" %></h6>
+        <h6><%= t "event.kind.before.#{event}" %></h6>
         <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
           <%= form.inputs do %>
-            <%= form.input :type, :as => :hidden, :value => event %>
+            <%= form.input :kind, :as => :hidden, :value => event %>
             <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
             <%= form.input :text, :as => :text %>
           <% end %>
@@ -74,7 +74,7 @@
     <% @entry.events.each do |event| %>
       <li>
         <%= l event.created_at, :format => :long %>
-        <%= t "event.type.after.#{event.type}" %>
+        <%= t "event.kind.after.#{event.kind}" %>
         <%= "#{event.user}" %>
         <%= content_tag :span, event.text, :class => 'text' if event.text.present? %>
       </li>

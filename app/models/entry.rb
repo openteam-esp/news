@@ -1,19 +1,10 @@
 class Entry < ActiveRecord::Base
-  #field :title,         :type => String
-  #field :annotation,    :type => String
-  #field :body,          :type => String
-  #field :since,         :type => DateTime
-  #field :until,         :type => DateTime
-  #field :state,         :type => String
-  #field :deleted,       :type => Boolean, :default => false
-  #field :author,       :type => String,  :default => ::I18n.t('default_author')
-
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
   has_and_belongs_to_many :channels
 
-  has_many :events, :order => [[:created_at, :desc]], :validate => false
+  has_many :events, :order => 'created_at desc', :validate => false
 
   attr_accessor :user_id
 
@@ -159,7 +150,7 @@ class Entry < ActiveRecord::Base
 
   private
     def create_event
-      events.create! :type => 'created', :user_id => user_id
+      events.create! :kind => 'created', :user_id => user_id
       self.initiator_id = user_id
       self.folder = Folder.where(:title => 'draft').first
       self.save!
@@ -167,7 +158,27 @@ class Entry < ActiveRecord::Base
 
     def create_update_event
        if previous_changes.has_key?('annotation') || previous_changes.has_key?('body') || previous_changes.has_key?('title')
-         events.create! :type => 'updated', :user_id => user_id
+         events.create! :kind => 'updated', :user_id => user_id
        end
     end
 end
+
+# == Schema Information
+#
+# Table name: entries
+#
+#  id           :integer         not null, primary key
+#  title        :text
+#  annotation   :text
+#  body         :text
+#  since        :datetime
+#  until        :datetime
+#  state        :string(255)
+#  deleted      :boolean
+#  author       :string(255)
+#  initiator_id :integer
+#  folder_id    :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+

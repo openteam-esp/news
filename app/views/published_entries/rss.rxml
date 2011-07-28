@@ -19,7 +19,7 @@ xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
       xml.updated entry.updated_at.strftime "%Y-%m-%dT%H:%M:%SZ"
       xml.author  { xml.name entry.author }
       xml.summary entry.annotation
-      xml.content "type" => "html" do
+      xml.content "kind" => "html" do
         xml.text! render(:partial => "entry.html.erb", :locals => {:entry => entry})
       end
     end

@@ -15,6 +15,12 @@ GIT
       mime-types (~> 1.16)
       orm_adapter (~> 0.0.5)
 
+GIT
+  remote: git://github.com/tacid/russian
+  revision: 544a5e931a9044d941ff6f6746b10722f2fdb326
+  specs:
+    russian (0.2.8.pre)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -224,7 +230,6 @@ GEM
     ruby_parser (2.0.6)
       sexp_processor (~> 3.0)
     rubyntlm (0.1.1)
-    russian (0.2.7)
     sass (3.1.5)
     sexp_processor (3.0.5)
     simple-navigation (3.3.4)
@@ -286,7 +291,7 @@ DEPENDENCIES
   rb-inotify
   rspec-rails
   ruby-graphviz
-  russian
+  russian!
   simple-navigation
   simplecov (>= 0.4.0)
   sqlite3

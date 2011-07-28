@@ -10,7 +10,42 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110728032930) do
+ActiveRecord::Schema.define(:version => 20110728051624) do
+
+  create_table "authentications", :force => true do |t|
+    t.integer "user_id"
+    t.string  "provider"
+    t.string  "uid"
+  end
+
+  create_table "channels", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "channels_entries", :id => false, :force => true do |t|
+    t.integer "channel_id"
+    t.integer "entry_id"
+  end
+
+  create_table "ckeditor_assets", :force => true do |t|
+    t.string   "data_file_name",                                 :null => false
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.integer  "assetable_id"
+    t.string   "assetable_type",    :limit => 30
+    t.string   "type",              :limit => 25
+    t.string   "guid",              :limit => 10
+    t.integer  "locale",            :limit => 2,  :default => 0
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ckeditor_assets", ["assetable_type", "assetable_id"], :name => "fk_assetable"
+  add_index "ckeditor_assets", ["assetable_type", "type", "assetable_id"], :name => "idx_assetable_type"
+  add_index "ckeditor_assets", ["user_id"], :name => "fk_user"
 
   create_table "entries", :force => true do |t|
     t.text     "title"
@@ -21,6 +56,49 @@ ActiveRecord::Schema.define(:version => 20110728032930) do
     t.string   "state"
     t.boolean  "deleted"
     t.string   "author"
+    t.integer  "initiator_id"
+    t.integer  "folder_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", :force => true do |t|
+    t.string   "kind"
+    t.text     "text"
+    t.integer  "entry_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "folders", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "recipients", :force => true do |t|
+    t.string   "email"
+    t.text     "description"
+    t.boolean  "active"
+    t.integer  "channel_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.text     "name"
+    t.text     "roles"
+    t.string   "email"
+    t.string   "encrypted_password",     :limit => 128
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                         :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

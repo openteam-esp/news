@@ -1,8 +1,14 @@
-class Authentication
-  include Mongoid::Document
-  field :user_id,   :type => Integer
-  field :provider,  :type => String
-  field :uid,       :type => String
-
+class Authentication < ActiveRecord::Base
   belongs_to :user
 end
+
+# == Schema Information
+#
+# Table name: authentications
+#
+#  id       :integer         not null, primary key
+#  user_id  :integer
+#  provider :string(255)
+#  uid      :string(255)
+#
+

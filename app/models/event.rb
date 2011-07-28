@@ -1,16 +1,9 @@
-class Event
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  field :type, :type => String
-  field :text, :type => String
-  index :updated_at
-
-  embedded_in :entry
-
+class Event < ActiveRecord::Base
+  belongs_to :entry
   belongs_to :user
 
-  validate :ready_to_send_to_publisher, :if => lambda { |e| %w[immediately_send_to_publisher send_to_publisher].include? e.type }
-  validate :ready_publish, :if => lambda { |e| %w[immediately_publish publish].include? e.type }
+  validate :ready_to_send_to_publisher, :if => lambda { |e| %w[immediately_send_to_publisher send_to_publisher].include? e.kind }
+  validate :ready_publish, :if => lambda { |e| %w[immediately_publish publish].include? e.kind }
 
   after_create :fire_entry_event
 
@@ -27,6 +20,20 @@ class Event
 
   private
     def fire_entry_event
-      entry.fire_events type.to_sym if type != 'created' && type != 'updated'
+      entry.fire_events kind.to_sym unless %w[created updated].include?(kind)
     end
 end
+
+# == Schema Information
+#
+# Table name: events
+#
+#  id         :integer         not null, primary key
+#  type       :string(255)
+#  text       :text
+#  entry_id   :integer
+#  user_id    :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+

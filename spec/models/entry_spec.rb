@@ -23,7 +23,7 @@ describe Entry do
     before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "новость создана"' do
-      new_entry.events.first.type.should eql 'created'
+      new_entry.events.first.kind.should eql 'created'
     end
 
     it 'иметь статус "черновик"' do
@@ -38,8 +38,8 @@ describe Entry do
   describe 'после редактирования должна' do
     let :entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
-      entry.events.create(:type => 'correct')
+      entry.events.create(:kind => 'send_to_corrector')
+      entry.events.create(:kind => 'correct')
       entry
     end
     before do
@@ -48,7 +48,7 @@ describe Entry do
     end
 
     it 'иметь событие со статусом "новость изменена"' do
-      entry.events.last.type.should eql 'updated'
+      entry.events.last.kind.should eql 'updated'
     end
 
     it 'сохранять статус' do
@@ -63,13 +63,13 @@ describe Entry do
   describe 'после отправки корректору должна' do
     let :awaiting_correction_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
+      entry.events.create(:kind => 'send_to_corrector')
       entry
     end
     before do Fabricate(:folder, :title => 'inbox') end
 
     it 'иметь событие со статусом "отправлена корректору"' do
-      awaiting_correction_entry.events.last.type.should eql 'send_to_corrector'
+      awaiting_correction_entry.events.last.kind.should eql 'send_to_corrector'
     end
 
     it 'иметь статус "ожидает корректировки"' do
@@ -84,15 +84,15 @@ describe Entry do
   describe 'после отправки публикатору должна' do
     let :awaiting_publication_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
-      entry.events.create(:type => 'correct')
-      entry.events.create(:type => 'send_to_publisher')
+      entry.events.create(:kind => 'send_to_corrector')
+      entry.events.create(:kind => 'correct')
+      entry.events.create(:kind => 'send_to_publisher')
       entry
     end
     before do Fabricate(:folder, :title => 'inbox') end
 
     it 'иметь событие со статусом "отправлена публикатору"' do
-      awaiting_publication_entry.events.last.type.should eql 'send_to_publisher'
+      awaiting_publication_entry.events.last.kind.should eql 'send_to_publisher'
     end
 
     it 'иметь статус "ожидает публикации"' do
@@ -107,14 +107,14 @@ describe Entry do
   describe 'после возвращения инициатору должна' do
     let :returned_to_author_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
-      entry.events.create(:type => 'return_to_author')
+      entry.events.create(:kind => 'send_to_corrector')
+      entry.events.create(:kind => 'return_to_author')
       entry
     end
     before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "возвращена инициатору"' do
-      returned_to_author_entry.events.last.type.should eql 'return_to_author'
+      returned_to_author_entry.events.last.kind.should eql 'return_to_author'
     end
 
     it 'иметь статус "черновик"' do
@@ -129,14 +129,14 @@ describe Entry do
   describe 'после взятия на корректуру должна' do
     let :correcting_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
-      entry.events.create(:type => 'correct')
+      entry.events.create(:kind => 'send_to_corrector')
+      entry.events.create(:kind => 'correct')
       entry
     end
     before do Fabricate(:folder, :title => 'correcting') end
 
     it 'иметь событие со статусом "взята на корректуру"' do
-      correcting_entry.events.last.type.should eql 'correct'
+      correcting_entry.events.last.kind.should eql 'correct'
     end
 
     it 'иметь статус "корректируется"' do
@@ -151,16 +151,16 @@ describe Entry do
   describe 'после возвращения корректору должна' do
     let :returned_to_corrector_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
-      entry.events.create(:type => 'correct')
-      entry.events.create(:type => 'send_to_publisher')
-      entry.events.create(:type => 'return_to_corrector')
+      entry.events.create(:kind => 'send_to_corrector')
+      entry.events.create(:kind => 'correct')
+      entry.events.create(:kind => 'send_to_publisher')
+      entry.events.create(:kind => 'return_to_corrector')
       entry
     end
     before do Fabricate(:folder, :title => 'inbox') end
 
     it 'иметь событие со статусом "возвращена корректору"' do
-      returned_to_corrector_entry.events.last.type.should eql 'return_to_corrector'
+      returned_to_corrector_entry.events.last.kind.should eql 'return_to_corrector'
     end
 
     it 'иметь статус "ожидает корректировки"' do
@@ -175,16 +175,16 @@ describe Entry do
   describe 'после публикации должна' do
     let :published_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'send_to_corrector')
-      entry.events.create(:type => 'correct')
-      entry.events.create(:type => 'send_to_publisher')
-      entry.events.create(:type => 'publish')
+      entry.events.create(:kind => 'send_to_corrector')
+      entry.events.create(:kind => 'correct')
+      entry.events.create(:kind => 'send_to_publisher')
+      entry.events.create(:kind => 'publish')
       entry
     end
     before do Fabricate(:folder, :title => 'published') end
 
     it 'иметь событие со статусом "опубликована"' do
-      published_entry.events.last.type.should eql 'publish'
+      published_entry.events.last.kind.should eql 'publish'
     end
 
     it 'иметь статус "опубликована"' do
@@ -199,13 +199,13 @@ describe Entry do
   describe 'после удаления в корзину должна' do
     let :trashed_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'to_trash')
+      entry.events.create(:kind => 'to_trash')
       entry
     end
     before do Fabricate(:folder, :title => 'trash') end
 
     it 'иметь событие со статусом "помещена в корзину"' do
-      trashed_entry.events.last.type.should eql 'to_trash'
+      trashed_entry.events.last.kind.should eql 'to_trash'
     end
 
     it 'иметь статус "помещена в корзину"' do
@@ -220,14 +220,14 @@ describe Entry do
   describe 'после восстановления должна' do
     let :restored_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'to_trash')
-      entry.events.create(:type => 'restore')
+      entry.events.create(:kind => 'to_trash')
+      entry.events.create(:kind => 'restore')
       entry
     end
     before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "восстановлена"' do
-      restored_entry.events.last.type.should eql 'restore'
+      restored_entry.events.last.kind.should eql 'restore'
     end
 
     it 'иметь статус "черновик"' do
@@ -242,13 +242,13 @@ describe Entry do
   describe 'после немедленной публикации должна' do
     let :immediately_published_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'immediately_publish')
+      entry.events.create(:kind => 'immediately_publish')
       entry
     end
     before do Fabricate(:folder, :title => 'published') end
 
     it 'иметь событие со статусом "опубликована"' do
-      immediately_published_entry.events.last.type.should eql 'immediately_publish'
+      immediately_published_entry.events.last.kind.should eql 'immediately_publish'
     end
 
     it 'иметь статус "опубликована"' do
@@ -263,13 +263,13 @@ describe Entry do
   describe 'после немедленной отправки публикатору должна' do
     let :immediately_sended_to_publisher_entry do
       entry = Fabricate(:entry)
-      entry.events.create(:type => 'immediately_send_to_publisher')
+      entry.events.create(:kind => 'immediately_send_to_publisher')
       entry
     end
     before do Fabricate(:folder, :title => 'inbox') end
 
     it 'иметь событие со статусом "ожидает публикации"' do
-      immediately_sended_to_publisher_entry.events.last.type.should eql 'immediately_send_to_publisher'
+      immediately_sended_to_publisher_entry.events.last.kind.should eql 'immediately_send_to_publisher'
     end
 
     it 'иметь статус "ожидает публикации"' do
@@ -281,3 +281,23 @@ describe Entry do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: entries
+#
+#  id           :integer         not null, primary key
+#  title        :text
+#  annotation   :text
+#  body         :text
+#  since        :datetime
+#  until        :datetime
+#  state        :string(255)
+#  deleted      :boolean
+#  author       :string(255)
+#  initiator_id :integer
+#  folder_id    :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+
