@@ -280,10 +280,4 @@ describe Entry do
       immediately_sended_to_publisher_entry.folder.title.should eql 'inbox'
     end
   end
-
-  describe 'опубликованная новость должна иметь' do
-    it 'заголовок'
-    it 'аннотацию'
-    it 'текст'
-  end
 end
