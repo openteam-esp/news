@@ -1,25 +1,19 @@
-class Entry
-  include Mongoid::Document
-  include Mongoid::MultiParameterAttributes
-  include Mongoid::Timestamps
-
-  field :title,         :type => String
-  field :annotation,    :type => String
-  field :body,          :type => String
-  field :since,         :type => DateTime
-  field :until,         :type => DateTime
-  field :state,         :type => String
-  field :deleted,       :type => Boolean, :default => false
-  field :author,       :type => String,  :default => ::I18n.t('default_author')
-  index 'events.updated_at'
-  index :updated_at
+class Entry < ActiveRecord::Base
+  #field :title,         :type => String
+  #field :annotation,    :type => String
+  #field :body,          :type => String
+  #field :since,         :type => DateTime
+  #field :until,         :type => DateTime
+  #field :state,         :type => String
+  #field :deleted,       :type => Boolean, :default => false
+  #field :author,       :type => String,  :default => ::I18n.t('default_author')
 
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
   has_and_belongs_to_many :channels
 
-  embeds_many :events, :order => [[:created_at, :desc]], :validate => false
+  has_many :events, :order => [[:created_at, :desc]], :validate => false
 
   attr_accessor :user_id
 

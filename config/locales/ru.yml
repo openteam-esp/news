@@ -83,7 +83,7 @@ ru:
   Welcome: "Добро пожаловать "
   "You can confirm your account through the link below": "Вы можете подтвердить свой аккаунт по ссылке ниже"
 
-  mongoid:
+  active_record:
     errors:
       models:
         user:
