@@ -1,15 +1,15 @@
-Channel.find_or_create_by :title => "tomsk.gov.ru/ru/announces"
-Channel.find_or_create_by :title => "tomsk.gov.ru/ru/news"
-Channel.find_or_create_by :title => "mailing_lists/common"
-Channel.find_or_create_by :title => "mailing_lists/innovation"
+Channel.find_or_create_by_title('tomsk.gov.ru/ru/announces')
+Channel.find_or_create_by_title('tomsk.gov.ru/ru/news')
+Channel.find_or_create_by_title('mailing_lists/common')
+Channel.find_or_create_by_title('mailing_lists/innovation')
 
-Folder.find_or_create_by :title => 'inbox'
-Folder.find_or_create_by :title => 'published'
-Folder.find_or_create_by :title => 'correcting'
-Folder.find_or_create_by :title => 'draft'
-Folder.find_or_create_by :title => 'trash'
+Folder.find_or_create_by_title('inbox')
+Folder.find_or_create_by_title('published')
+Folder.find_or_create_by_title('correcting')
+Folder.find_or_create_by_title('draft')
+Folder.find_or_create_by_title('trash')
 
-corrector = User.find_or_create_by :email => 'corrector@demo.de'
+corrector = User.find_or_create_by_email('corrector@demo.de')
 corrector.update_attributes(
   :password => '123123',
   :password_confirmation => '123123',
@@ -17,7 +17,7 @@ corrector.update_attributes(
   :roles => ['corrector']
 )
 
-publisher = User.find_or_create_by :email => 'publisher@demo.de'
+publisher = User.find_or_create_by_email('publisher@demo.de')
 publisher.update_attributes(
   :password => '123123',
   :password_confirmation => '123123',
@@ -25,14 +25,14 @@ publisher.update_attributes(
   :roles => ['publisher']
 )
 
-user = User.find_or_create_by :email => 'user@demo.de'
+user = User.find_or_create_by_email('user@demo.de')
 user.update_attributes(
   :password => '123123',
   :password_confirmation => '123123',
   :name => 'user'
 )
 
-corrector_and_publisher = User.find_or_create_by :email => 'cp@demo.de'
+corrector_and_publisher = User.find_or_create_by_email('cp@demo.de')
 corrector_and_publisher.update_attributes(
   :password => '123123',
   :password_confirmation => '123123',

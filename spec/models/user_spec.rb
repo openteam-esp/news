@@ -109,7 +109,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_correction_entry.state_events_for(@corrector).should eql [:correct, :return_to_author, :to_trash]
+        awaiting_correction_entry.reload.state_events_for(@corrector).should eql [:correct, :return_to_author, :to_trash]
       end
 
       it 'вернуть инициатору' do
@@ -137,7 +137,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        correcting_entry.state_events_for(@corrector).should eql [:send_to_publisher, :to_trash]
+        correcting_entry.reload.state_events_for(@corrector).should eql [:send_to_publisher, :to_trash]
       end
 
       it 'отправить в корзину' do
@@ -151,7 +151,7 @@ describe User do
       end
 
       it 'редактировать' do
-        @ability.should be_able_to(:update, correcting_entry)
+        @ability.should be_able_to(:update, correcting_entry.reload)
       end
     end
   end
@@ -198,7 +198,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_publication_entry.state_events_for(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
+        awaiting_publication_entry.reload.state_events_for(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -223,12 +223,12 @@ describe User do
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry.events.create(:kind => 'send_to_publisher')
-        entry.events.create(:kind => 'publish')
+        entry.events.create!(:kind => 'publish')
         entry
       end
 
       it 'отправить только по следующим переходам' do
-        published_entry.state_events_for(@publisher).should eql [:return_to_corrector, :to_trash]
+        published_entry.reload.state_events_for(@publisher).should eql [:return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -242,7 +242,7 @@ describe User do
       end
 
       it 'редактировать' do
-        @ability.should be_able_to(:update, published_entry)
+        @ability.should be_able_to(:update, published_entry.reload)
       end
     end
   end
@@ -287,7 +287,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_correction_entry.state_events_for(@corpuber).should eql [:correct, :return_to_author, :to_trash]
+        awaiting_correction_entry.reload.state_events_for(@corpuber).should eql [:correct, :return_to_author, :to_trash]
       end
 
       it 'вернуть инициатору' do
@@ -315,7 +315,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        correcting_entry.state_events_for(@corpuber).should eql [:publish, :to_trash]
+        correcting_entry.reload.state_events_for(@corpuber).should eql [:publish, :to_trash]
       end
 
       it 'опубликовать' do
@@ -329,7 +329,7 @@ describe User do
       end
 
       it 'редактировать' do
-        @ability.should be_able_to(:update, correcting_entry)
+        @ability.should be_able_to(:update, correcting_entry.reload)
       end
     end
 
@@ -343,7 +343,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        awaiting_publication_entry.state_events_for(@corpuber).should eql [:publish, :return_to_corrector, :to_trash]
+        awaiting_publication_entry.reload.state_events_for(@corpuber).should eql [:publish, :return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -362,7 +362,7 @@ describe User do
       end
 
       it 'редактировать' do
-        @ability.should be_able_to(:update, awaiting_publication_entry)
+        @ability.should be_able_to(:update, awaiting_publication_entry.reload)
       end
     end
 
@@ -377,7 +377,7 @@ describe User do
       end
 
       it 'отправить только по следующим переходам' do
-        published_entry.state_events_for(@corpuber).should eql [:return_to_corrector, :to_trash]
+        published_entry.reload.state_events_for(@corpuber).should eql [:return_to_corrector, :to_trash]
       end
 
       it 'вернуть корректору' do
@@ -391,7 +391,7 @@ describe User do
       end
 
       it 'редактировать' do
-        @ability.should be_able_to(:update, published_entry)
+        @ability.should be_able_to(:update, published_entry.reload)
       end
     end
   end

@@ -6,6 +6,7 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, :wait => 40 do
   watch('config/environment.rb')
   watch(%r{^config/environments/.+\.rb$})
   watch(%r{^config/initializers/.+\.rb$})
+  watch(%r{^app/(.+)\.rb$})                           { |m| "spec/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')
 end
 

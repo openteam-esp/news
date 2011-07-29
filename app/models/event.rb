@@ -2,6 +2,8 @@ class Event < ActiveRecord::Base
   belongs_to :entry
   belongs_to :user
 
+  default_scope :order => 'created_at DESC'
+
   validate :ready_to_send_to_publisher, :if => lambda { |e| %w[immediately_send_to_publisher send_to_publisher].include? e.kind }
   validate :ready_publish, :if => lambda { |e| %w[immediately_publish publish].include? e.kind }
 

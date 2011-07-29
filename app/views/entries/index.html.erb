@@ -2,7 +2,7 @@
   <% @entries.each do |entry|%>
     <ul class='entries'>
       <li>
-        <% last_event = entry.events.last %>
+        <% last_event = entry.events.first %>
         <%= l last_event.created_at, :format => :long %>
         <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), folder_entry_path(@folder.title, entry) %>
         <%= t "event.kind.after.#{last_event.kind}" %>

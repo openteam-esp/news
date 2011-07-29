@@ -1,6 +1,5 @@
 class PublishedEntriesController < InheritedResources::Base
-  defaults :resource_class => Entry
-  load_resource
+  load_and_authorize_resource :class => Entry
 
   belongs_to :channel
 

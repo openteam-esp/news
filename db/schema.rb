@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20110728051624) do
     t.string   "assetable_type",    :limit => 30
     t.string   "type",              :limit => 25
     t.string   "guid",              :limit => 10
-    t.integer  "locale",            :limit => 2,  :default => 0
+    t.integer  "locale",            :limit => 1,  :default => 0
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

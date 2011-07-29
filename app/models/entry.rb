@@ -4,7 +4,7 @@ class Entry < ActiveRecord::Base
 
   has_and_belongs_to_many :channels
 
-  has_many :events, :order => 'created_at desc', :validate => false
+  has_many :events, :validate => false
 
   attr_accessor :user_id
 
@@ -34,7 +34,7 @@ class Entry < ActiveRecord::Base
     end
 
     after_transition :trash => :draft do |entry, transition|
-      entry.initiator_id = entry.events.unscoped.where(:type => 'restore').last.user.id
+      entry.initiator_id = entry.events.unscoped.where(:kind => 'restore').last.user_id
       entry.save!
     end
 
@@ -91,10 +91,9 @@ class Entry < ActiveRecord::Base
 
   def self.filter_for(user, folder)
     return where(:initiator_id => user.id) if user.roles.nil? || folder == 'draft'
-    return where('events.user_id' => user.id) if folder == 'trash'
-    all
+    return joins(:events).where('events.user_id' => user.id) if folder == 'trash'
+    return scoped
   end
-
 
   def related_to(user)
     events.where(:user_id => user.id).any?
@@ -157,9 +156,9 @@ class Entry < ActiveRecord::Base
     end
 
     def create_update_event
-       if previous_changes.has_key?('annotation') || previous_changes.has_key?('body') || previous_changes.has_key?('title')
-         events.create! :kind => 'updated', :user_id => user_id
-       end
+      events.create! :kind => 'updated', :user_id => user_id if changes.has_key?('annotation') ||
+                                                                changes.has_key?('body') ||
+                                                                changes.has_key?('title')
     end
 end
 

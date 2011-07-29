@@ -9,7 +9,7 @@ describe Event do
   describe "новость создана" do
     it "создаём событие с типом send_to_corrector" do
       entry.events.create!(:kind => :send_to_corrector, :text => 'опубликуйте, пжалтеста, а?')
-      entry.should be_awaiting_correction
+      entry.reload.should be_awaiting_correction
     end
   end
 end
