@@ -6,7 +6,7 @@
   <ul class="inputs">
     <li class="login string">
       <%= f.label :email %>
-      <%= f.email_field :email %>
+      <%= f.email_field :email, :class => "focus_first" %>
     </li>
     <li class="password">
       <%= f.label :password %>
@@ -19,7 +19,7 @@
       </li>
     <% end %>
   </ul>
-  <p class="submit"><%= f.submit t "login" %></p>
+  <p class="submit"><%= f.submit t("login"), :class => "button" %></p>
   <p class="auth_links">
     <%= render :partial => "users/shared/links" %>
   </p>
