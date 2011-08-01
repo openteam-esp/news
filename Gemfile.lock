@@ -80,6 +80,8 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fabrication (1.0.1)
+    fancy-buttons (1.1.1)
+      compass (>= 0.11)
     faraday (0.6.1)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
@@ -267,6 +269,7 @@ DEPENDENCIES
   devise
   dynamic_form
   fabrication
+  fancy-buttons
   ffi
   flay
   flog

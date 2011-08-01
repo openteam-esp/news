@@ -16,20 +16,20 @@
         <%= content_tag :div, msg, :id => "flash_#{name}", :class => "flash_block" %>
       </div>
     <% end %>
-    <div class='header'>
+    <div class="header">
       <h1><%= link_to t("News system"), root_path %></h1>
       <div class="login_info">
         <% if current_user %>
           <%= current_user.name %>
           <%= "[#{current_user.roles.join(', ')}]" if current_user.roles %>
-          <%= link_to t('logout'), destroy_user_session_path, :method => :delete %>
+          <%= link_to t("logout"), destroy_user_session_path, :method => :delete %>
         <% end %>
-        <%= link_to t('login'), new_user_session_path unless current_user %>
+        <%= link_to t("login"), new_user_session_path unless current_user %>
       </div>
     </div>
-    <div class='container'>
-      <div class='sidebar'>
-        <%= link_to t('new_entry'), new_folder_entry_path(Folder.where(:title => 'draft').first), :class => 'new_entry' %>
+    <div class="container">
+      <div class="sidebar">
+        <p class="new_entry"><%= link_to t('new_entry'), new_folder_entry_path(Folder.where(:title => 'draft').first) %></p>
         <%= render_navigation :context => :folders if current_user %>
         <%= render_navigation :context => :channels %>
       </div>
