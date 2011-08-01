@@ -4,12 +4,12 @@
   <%= @entry.annotation.present? ? raw(@entry.annotation.gsub('&quot;', '"').gilensize) : t('empty_annotation') %>
 </div>
 
-<div class='content'>
+<div class='body'>
   <%= raw @entry.body.gsub('&quot;', '"').gilensize %>
 </div>
 
 <div class='channels'>
-  <h4><%= t('channels') %></h4>
+  <h2><%= t('channels') %></h2>
   <ul>
     <% if @entry.channels.any? %>
       <% @entry.channels.each do |channel| %>
@@ -22,7 +22,7 @@
 </div>
 
 <div class='availability'>
-  <h4><%= t('availability') %></h4>
+  <h2><%= t('availability') %></h2>
   <ul>
     <li><%= @entry.since ? "#{t('since')}: #{l(@entry.since, :format => :long)}" : t('immediately_after_correcting') %></li>
     <li><%= @entry.until ? "#{t('until')}: #{l(@entry.until, :format => :long)}" : t('not_limited_in_time') %></li>
@@ -30,29 +30,25 @@
 </div>
 
 <div class='modification'>
-  <h4><%= t('i_want_to_change_the_news') %></h4>
-  <ul>
-    <li>
-      <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
-        <%= form.inputs do %>
-          <%= form.input :kind, :as => :hidden, :value => 'modification'%>
-          <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
-          <%= form.input :text, :as => :text %>
-        <% end %>
-        <%= form.buttons do %>
-          <%= form.commit_button t('modification') %>
-        <% end %>
-      <% end %>
-    </li>
-  </ul>
+  <h2><%= t('i_want_to_change_the_news') %></h2>
+  <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
+    <%= form.inputs do %>
+      <%= form.input :type, :as => :hidden, :value => 'modification'%>
+      <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
+      <%= form.input :text, :as => :text %>
+    <% end %>
+    <%= form.buttons do %>
+      <%= form.commit_button t('modification') %>
+    <% end %>
+  <% end %>
 </div>
 
 <div class='actions'>
-  <h4><%= t('actions') %></h4>
+  <h2><%= t('actions') %></h2>
   <ul>
     <% @entry.state_events_for(current_user).each do |event| %>
       <li>
-        <h6><%= t "event.kind.before.#{event}" %></h6>
+        <h3><%= t "event.type.before.#{event}" %></h3>
         <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
           <%= form.inputs do %>
             <%= form.input :kind, :as => :hidden, :value => event %>
@@ -69,7 +65,7 @@
 </div>
 
 <div class='history'>
-  <h4><%= t('history') %></h4>
+  <h2><%= t('history') %></h2>
   <ul>
     <% @entry.events.each do |event| %>
       <li>
