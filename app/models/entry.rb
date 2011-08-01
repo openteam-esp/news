@@ -91,7 +91,7 @@ class Entry < ActiveRecord::Base
 
   def self.filter_for(user, folder)
     return where(:initiator_id => user.id) if user.roles.nil? || folder == 'draft'
-    return joins(:events).where('events.user_id' => user.id) if folder == 'trash'
+    return includes(:events).where('events.user_id' => user.id) if folder == 'trash'
     return scoped
   end
 
@@ -152,7 +152,9 @@ class Entry < ActiveRecord::Base
       events.create! :kind => 'created', :user_id => user_id
       self.initiator_id = user_id
       self.folder = Folder.where(:title => 'draft').first
-      self.save!
+      self.class.skip_callback(:update, :after, :create_update_event)
+      self.save(:skip_callbacks => false)
+      self.class.set_callback(:update, :after, :create_update_event)
     end
 
     def create_update_event

@@ -50,7 +50,7 @@ describe Entry do
     end
 
     it 'иметь событие со статусом "новость изменена"' do
-      entry.events.first.kind.should eql 'updated'
+      entry.reload.events.first.kind.should eql 'updated'
     end
 
     it 'сохранять статус' do
