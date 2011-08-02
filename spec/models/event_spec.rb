@@ -7,7 +7,7 @@ describe Event do
     @initiator  = Fabricate(:user)
     @subscriber = Fabricate(:user)
     Fabricate(:folder, :title => :draft)
-    Fabricate(:folder, :title => :inbox)
+    Fabricate(:folder, :title => :awaiting_correction)
     @entry = Fabricate(:entry, :user_id => @initiator.id)
   end
 

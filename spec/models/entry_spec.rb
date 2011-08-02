@@ -68,7 +68,7 @@ describe Entry do
       entry.events.create(:kind => 'send_to_corrector')
       entry
     end
-    before do Fabricate(:folder, :title => 'inbox') end
+    before do Fabricate(:folder, :title => 'awaiting_correction') end
 
     it 'иметь событие со статусом "отправлена корректору"' do
       awaiting_correction_entry.events.first.kind.should eql 'send_to_corrector'
@@ -78,8 +78,8 @@ describe Entry do
       awaiting_correction_entry.reload.should be_awaiting_correction
     end
 
-    it 'появиться в папке "Входящие"' do
-      awaiting_correction_entry.reload.folder.title.should eql 'inbox'
+    it 'появиться в папке "Ожидающие корректировки"' do
+      awaiting_correction_entry.reload.folder.title.should eql 'awaiting_correction'
     end
   end
 
@@ -91,7 +91,10 @@ describe Entry do
       entry.events.create(:kind => 'send_to_publisher')
       entry
     end
-    before do Fabricate(:folder, :title => 'inbox') end
+    before do
+      Fabricate(:folder, :title => 'awaiting_correction')
+      Fabricate(:folder, :title => 'awaiting_publication')
+    end
 
     it 'иметь событие со статусом "отправлена публикатору"' do
       awaiting_publication_entry.events.first.kind.should eql 'send_to_publisher'
@@ -102,7 +105,7 @@ describe Entry do
     end
 
     it 'появиться в папке "Входящие"' do
-      awaiting_publication_entry.reload.folder.title.should eql 'inbox'
+      awaiting_publication_entry.reload.folder.title.should eql 'awaiting_publication'
     end
   end
 
@@ -159,7 +162,10 @@ describe Entry do
       entry.events.create(:kind => 'return_to_corrector')
       entry
     end
-    before do Fabricate(:folder, :title => 'inbox') end
+    before do
+      Fabricate(:folder, :title => 'awaiting_correction')
+      Fabricate(:folder, :title => 'awaiting_publication')
+    end
 
     it 'иметь событие со статусом "возвращена корректору"' do
       returned_to_corrector_entry.events.first.kind.should eql 'return_to_corrector'
@@ -169,8 +175,8 @@ describe Entry do
       returned_to_corrector_entry.reload.should be_awaiting_correction
     end
 
-    it 'появиться в папке "Входящие"' do
-      returned_to_corrector_entry.reload.folder.title.should eql 'inbox'
+    it 'появиться в папке "Ожидающие корректировки"' do
+      returned_to_corrector_entry.reload.folder.title.should eql 'awaiting_correction'
     end
   end
 
@@ -269,7 +275,10 @@ describe Entry do
       entry.events.create(:kind => 'immediately_send_to_publisher')
       entry
     end
-    before do Fabricate(:folder, :title => 'inbox') end
+    before do
+      Fabricate(:folder, :title => 'awaiting_correction')
+      Fabricate(:folder, :title => 'awaiting_publication')
+    end
 
     it 'иметь событие со статусом "ожидает публикации"' do
       immediately_sended_to_publisher_entry.events.first.kind.should eql 'immediately_send_to_publisher'
@@ -279,8 +288,8 @@ describe Entry do
       immediately_sended_to_publisher_entry.reload.should be_awaiting_publication
     end
 
-    it 'появиться в папке "Входящие"' do
-      immediately_sended_to_publisher_entry.reload.folder.title.should eql 'inbox'
+    it 'появиться в папке "Ожидающие публикации"' do
+      immediately_sended_to_publisher_entry.reload.folder.title.should eql 'awaiting_publication'
     end
   end
 end

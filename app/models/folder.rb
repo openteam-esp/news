@@ -10,7 +10,7 @@ class Folder < ActiveRecord::Base
     title
   end
 
-  [:inbox, :published, :correcting, :draft, :trash].each do |method_name|
+  [:awaiting_correction, :awaiting_publication, :published, :correcting, :draft, :trash].each do |method_name|
     define_method "#{method_name}?" do
       self.title == method_name.to_s
     end

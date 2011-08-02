@@ -4,7 +4,7 @@ describe EntriesController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/folders/inbox/entries").should route_to("entries#index", :folder_id => 'inbox')
+      get("/folders/awaiting_correction/entries").should route_to("entries#index", :folder_id => 'awaiting_correction')
     end
 
     it "routes to #new" do
@@ -12,7 +12,7 @@ describe EntriesController do
     end
 
     it "routes to #show" do
-      get("/folders/inbox/entries/1").should route_to("entries#show", :id => "1", :folder_id => 'inbox')
+      get("/folders/awaiting_correction/entries/1").should route_to("entries#show", :id => "1", :folder_id => 'awaiting_correction')
     end
 
     it "routes to #edit" do

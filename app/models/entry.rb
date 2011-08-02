@@ -43,8 +43,13 @@ class Entry < ActiveRecord::Base
       entry.save!
     end
 
-    after_transition :to => [:awaiting_correction, :awaiting_publication] do |entry, transition|
-      entry.folder = Folder.where(:title => 'inbox').first
+    after_transition :to => :awaiting_correction do |entry, transition|
+      entry.folder = Folder.where(:title => 'awaiting_correction').first
+      entry.save!
+    end
+
+    after_transition :to => :awaiting_publication do |entry, transition|
+      entry.folder = Folder.where(:title => 'awaiting_publication').first
       entry.save!
     end
 

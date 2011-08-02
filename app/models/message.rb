@@ -1,4 +1,7 @@
 class Message < ActiveRecord::Base
+  def self.filter_for(user)
+    return where(:user => user)
+  end
 end
 
 # == Schema Information

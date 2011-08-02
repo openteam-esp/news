@@ -8,7 +8,8 @@ describe EntriesController do
     sign_in @user
 
     @draft = Fabricate(:folder, :title => 'draft')
-    @inbox = Fabricate(:folder, :title => 'inbox')
+    @awaiting_correction = Fabricate(:folder, :title => 'awaiting_correction')
+    @awaiting_publication = Fabricate(:folder, :title => 'awaiting_publication')
   end
 
   def valid_attributes
@@ -19,8 +20,8 @@ describe EntriesController do
     it "assigns all entries as @entries" do
       entry = @draft.entries.create! valid_attributes
       entry.send_to_corrector
-      entries = @inbox.entries.all.to_a
-      get :index, :folder_id => @inbox.title
+      entries = @awaiting_correction.entries.all.to_a
+      get :index, :folder_id => @awaiting_correction.title
       assigns(:entries).should eq(entries)
     end
   end

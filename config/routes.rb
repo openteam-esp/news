@@ -8,6 +8,8 @@ News::Application.routes.draw do
 
   resources :recipients
 
+  resources :messages
+
   resources :channels, :only => [:index, :show] do
     resources :published_entries, :only => [:index, :show]
     match '/rss' => 'published_entries#rss'

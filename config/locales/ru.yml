@@ -32,6 +32,8 @@ ru:
   availability: "Когда будет доступно?"
   entry_title: "Заголовок"
   inbox: "Входящие"
+  awaiting_correction: "Ожидающие корректировки"
+  awaiting_publication: "Ожидающие публикации"
   published: "Опубликованные"
   correcting: "На корректировке"
   draft: "Черновик"

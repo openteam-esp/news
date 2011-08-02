@@ -1,7 +1,12 @@
 SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
-    primary.item :inbox, t('inbox'), folder_entries_path(Folder.where(:title => 'inbox').first),
-                 :highlights_on => lambda { @folder.inbox? if @folder.present? }
+    primary.item :inbox, t('inbox'), messages_path
+
+    primary.item :awaiting_correction, t('awaiting_correction'), folder_entries_path(Folder.where(:title => 'awaiting_correction').first),
+                 :highlights_on => lambda { @folder.awaiting_correction? if @folder.present? } if @current_user.corrector?
+
+    primary.item :awaiting_publication, t('awaiting_publication'), folder_entries_path(Folder.where(:title => 'awaiting_publication').first),
+                 :highlights_on => lambda { @folder.awaiting_publication? if @folder.present? } if @current_user.publisher?
 
     primary.item :published, t('published'), folder_entries_path(Folder.where(:title => 'published').first),
                  :highlights_on => lambda { @folder.published? if @folder.present? }

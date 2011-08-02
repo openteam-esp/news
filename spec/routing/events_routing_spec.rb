@@ -7,7 +7,7 @@ describe EventsController do
     end
 
     it "routes to #create" do
-      post("/folders/inbox/entries/#{@entry.id}/events").should route_to("events#create", :entry_id => @entry.id.to_s, :folder_id => 'inbox')
+      post("/folders/awaiting_correction/entries/#{@entry.id}/events").should route_to("events#create", :entry_id => @entry.id.to_s, :folder_id => 'awaiting_correction')
     end
   end
 end
