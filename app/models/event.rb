@@ -4,6 +4,8 @@ class Event < ActiveRecord::Base
 
   default_scope :order => 'created_at DESC'
 
+  delegate :initiator, :to => :entry
+
   validate :ready_to_send_to_publisher, :if => lambda { |e| %w[immediately_send_to_publisher send_to_publisher].include? e.kind }
   validate :ready_publish, :if => lambda { |e| %w[immediately_publish publish].include? e.kind }
 
@@ -18,6 +20,10 @@ class Event < ActiveRecord::Base
   def ready_publish
     ready_to_send_to_publisher
     errors.add(:entry_channels, ::I18n.t('Entry must have at least one channel')) if entry.channels.empty?
+  end
+
+  def subscribers
+    Subscribe.where(:initiator_id => initiator.id) | Subscribe.where(:entry_id => entry_id) | Subscribe.where(:kind => kind)
   end
 
   private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110728051624) do
+ActiveRecord::Schema.define(:version => 20110802031150) do
 
   create_table "authentications", :force => true do |t|
     t.integer "user_id"
@@ -82,6 +82,15 @@ ActiveRecord::Schema.define(:version => 20110728051624) do
     t.text     "description"
     t.boolean  "active"
     t.integer  "channel_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subscribes", :force => true do |t|
+    t.integer  "subscriber_id"
+    t.integer  "initiator_id"
+    t.integer  "entry_id"
+    t.string   "kind"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

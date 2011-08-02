@@ -41,6 +41,7 @@ gem 'fancy-buttons'
 gem 'formtastic'
 gem 'formtastic_date_as_string'
 gem 'gilenson'
+gem 'has_enum'
 gem 'has_scope'
 gem 'inherited_resources'
 gem 'jquery-rails',             :require => false

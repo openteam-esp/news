@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 
   has_one :authentication
   has_many :events
+  has_many :subscribes
 
   delegate :provider, :to => :authentication
 
