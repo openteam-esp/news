@@ -1,12 +1,19 @@
-<h2><%= t("Forgot your password?") %></h2>
+<h1><%= t("Forgot your password?") %></h1>
 
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name),
+             :html => { :method => :post, :class => "formtastic remember_password" }) do |f| %>
   <%= devise_error_messages! %>
-
-  <p><%= f.label :email %><br />
-  <%= f.email_field :email %></p>
-
-  <p><%= f.submit t("Send me reset password instructions") %></p>
+  <ul class="inputs">
+    <li class="email string">
+      <%= f.label :email %>
+      <%= f.email_field :email, :class => "focus_first" %>
+    </li>
+  <ul>
+  <ul class="buttons">
+    <li>
+      <%= f.submit t("Send me reset password instructions"), :class => "button" %>
+    </li>
+  </ul>
 <% end %>
+<p class="auth_links"><%= render :partial => "users/shared/links" %></p>
 
-<%= render :partial => "devise/shared/links" %>

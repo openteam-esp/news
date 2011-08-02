@@ -1,8 +1,10 @@
 <h1><%= t("News system") %></h1>
+
 <p><%= t("Tomsk Administration") %></p>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => "formtastic new_user" }) do |f| %>
-  <%= f.error_messages %>
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name),
+             :html => { :class => "formtastic sign_in" }) do |f| %>
+  <%= devise_error_messages! %>
   <ul class="inputs">
     <li class="login string">
       <%= f.label :email %>
@@ -19,11 +21,13 @@
       </li>
     <% end %>
   </ul>
-  <p class="submit"><%= f.submit t("login"), :class => "button" %></p>
-  <p class="auth_links">
-    <%= render :partial => "users/shared/links" %>
-  </p>
+  <ul class="buttons">
+    <li>
+      <%= f.submit t("login"), :class => "button" %>
+    </li>
+  </ul>
 <% end %>
+<p class="auth_links"><%= render :partial => "users/shared/links" %></p>
 
 <div class="social_services">
   <h2><%= t("Social authorization") %></h2>

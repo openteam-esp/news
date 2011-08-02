@@ -10,6 +10,9 @@
     <%= yield :extend_javascript %>
     <%= javascript_include_tag "jquery.ujs" %>
     <%= javascript_include_tag "application" %>
+    <!--[if IE 6]>
+    <%= stylesheet_link_tag "ie6" %>
+    <![endif]-->
   </head>
   <body>
     <% flash.each do |name, msg| %>
