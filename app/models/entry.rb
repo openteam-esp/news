@@ -16,6 +16,8 @@ class Entry < ActiveRecord::Base
 
   after_update :create_update_event
 
+  has_paper_trail
+
   state_machine :initial => :draft do
     after_transition :to => :correcting do |entry, transition|
       entry.folder = Folder.where(:title => 'correcting').first

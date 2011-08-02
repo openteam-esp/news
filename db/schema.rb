@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20110802052516) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "version_id"
   end
 
   create_table "folders", :force => true do |t|
