@@ -1,7 +1,5 @@
 <h1><%= t("News system") %></h1>
 
-<p><%= t("Tomsk Administration") %></p>
-
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),
              :html => { :class => "formtastic sign_in" }) do |f| %>
   <%= devise_error_messages! %>
@@ -29,19 +27,23 @@
 <% end %>
 <p class="auth_links"><%= render :partial => "users/shared/links" %></p>
 
+<% content_for :extend_javascript do %>
+  <%= javascript_include_tag "jquery.tipsy" %>
+<% end %>
+
 <div class="social_services">
   <h2><%= t("Social authorization") %></h2>
   <ul>
     <% Settings["omniauth"].each do | provider, app | %>
       <li class="<%= provider %>">
-        <%= link_to provider, "/auth/#{provider}" %>
+        <%= link_to provider, "/auth/#{provider}", :title => t("authorization_on.#{provider}") %>
       </li>
     <% end %>
     <li class="google">
-      <%= link_to "Google", "/auth/google" %>
+      <%= link_to "Google", "/auth/google", :title => t("authorization_on.google") %>
     </li>
     <li class="openid">
-      <%= link_to "OpenId", "/auth/open_id" %>
+      <%= link_to "OpenId", "/auth/open_id", :title => t("authorization_on.open_id") %>
     </li>
   </ul>
 </div>

@@ -95,3 +95,10 @@ ru:
       already_confirmed: "уже подтверждено"
       not_found: "не найдено"
       not_locked: "не заблокирована"
+  authorization_on:
+    twitter: "Авторизоваться через учётную запись Twitter"
+    facebook: "Авторизоваться через учётную запись Facebook"
+    vkontakte: "Авторизоваться через учётную запись ВКонтакте"
+    google: "Авторизоваться через учётную запись Google"
+    open_id: "Авторизоваться через OpenID"
+
