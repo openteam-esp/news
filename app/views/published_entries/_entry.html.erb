@@ -2,10 +2,15 @@
   <%= raw entry.title.gsub('&quot;', '"').gilensize %>
 </h2>
 
+<div class='since'>
+  <p><%= l entry.since, :format => :long %></p>
+</div>
+
 <div class='annotation'>
   <%= raw entry.annotation.gsub('&quot;', '"').gilensize %>
 </div>
 
-<div class='content'>
+<div class='body'>
   <%= raw entry.body.gsub('&quot;', '"').gilensize %>
 </div>
+

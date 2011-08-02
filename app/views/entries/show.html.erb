@@ -24,8 +24,8 @@
 <div class='availability'>
   <h2><%= t('availability') %></h2>
   <ul>
-    <li><%= @entry.since ? "#{t('since')}: #{l(@entry.since, :format => :long)}" : t('immediately_after_correcting') %></li>
-    <li><%= @entry.until ? "#{t('until')}: #{l(@entry.until, :format => :long)}" : t('not_limited_in_time') %></li>
+    <li><%= @entry.since ? "#{t('since')} #{l(@entry.since, :format => :long)}" : t('immediately_after_correcting') %></li>
+    <li><%= @entry.until ? "#{t('until')} #{l(@entry.until, :format => :long)}" : t('not_limited_in_time') %></li>
   </ul>
 </div>
 
@@ -38,7 +38,7 @@
       <%= form.input :text, :as => :text %>
     <% end %>
     <%= form.buttons do %>
-      <%= form.commit_button t('modification') %>
+      <%= form.commit_button t('modification'), :button_html => { :class => "button" } %>
     <% end %>
   <% end %>
 </div>
@@ -48,7 +48,7 @@
   <ul>
     <% @entry.state_events_for(current_user).each do |event| %>
       <li>
-        <h3><%= t "event.type.before.#{event}" %></h3>
+        <h3><%= t "event.kind.before.#{event}" %></h3>
         <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
           <%= form.inputs do %>
             <%= form.input :kind, :as => :hidden, :value => event %>
@@ -56,7 +56,7 @@
             <%= form.input :text, :as => :text %>
           <% end %>
           <%= form.buttons do %>
-            <%= form.commit_button t(event.to_s) %>
+            <%= form.commit_button t(event.to_s), :button_html => { :class => "button" } %>
           <% end %>
         <% end %>
       </li>
@@ -78,5 +78,8 @@
   </ul>
 </div>
 
-<%= link_to t('edit'), edit_folder_entry_path(@folder, @entry) %> | <%= link_to t('back'), folder_entries_path(@folder) %>
+<p class="actions">
+  <%= link_to t('edit'), edit_folder_entry_path(@folder, @entry) %>
+  <%= link_to t('back'), folder_entries_path(@folder) %>
+</p>
 

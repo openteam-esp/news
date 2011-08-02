@@ -45,6 +45,7 @@ ru:
   history: "История"
   actions: "Доступные действия"
   no_any_entries: "Нет новостей"
+  list_of_entries: "Список новостей"
   logout: "Выход"
   not_any_channels: "Нет каналов"
   empty_annotation: "Нет аннотации"
@@ -83,7 +84,7 @@ ru:
   Welcome: "Добро пожаловать "
   "You can confirm your account through the link below": "Вы можете подтвердить свой аккаунт по ссылке ниже"
 
-  active_record:
+  activerecord:
     errors:
       models:
         user:
@@ -108,7 +109,6 @@ ru:
         remember_me: "Запомнить меня"
 
       entry:
-        New_entry: "Новость"
         title: "Заголовок"
         annotation: "Аннотация"
         body: "Текст"
@@ -118,7 +118,7 @@ ru:
         creat_entry: "Создать новость"
 
   event:
-    type:
+    kind:
       before:
         created: "Создать"
         correct: "Взять на корректуру"

@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to t('Show'), [@folder,@entry] %> |
-<%= link_to t('Back'), folder_entries_path(@folder) %>
+<p class="actions"><%= link_to t('Show'), [@folder,@entry] %> <%= link_to t('Back'), folder_entries_path(@folder) %></p>
+

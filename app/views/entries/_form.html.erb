@@ -10,7 +10,7 @@
 
   <%= form.inputs do  %>
     <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
-    <%= form.input :title %>
+    <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
     <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => "150" } %>
     <%= form.input :body, :as => :ckeditor, :input_html => { :height => "300" } %>
     <%= form.input :since %>
@@ -18,7 +18,9 @@
     <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
   <% end %>
 
-  <%= form.buttons %>
+  <%= form.buttons do %>
+    <%= form.commit_button :button_html => { :class => "button" } %>
+  <% end %>
 
 <% end %>
 
