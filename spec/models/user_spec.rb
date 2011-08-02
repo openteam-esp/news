@@ -3,11 +3,6 @@
 require 'spec_helper'
 
 describe User do
-  describe '- анонимный пользователь может' do
-    it 'читать rss'
-    it 'читать опубликованные новости'
-  end
-
   describe '- обычный пользователь может' do
     before do
       @user = Fabricate(:user)
