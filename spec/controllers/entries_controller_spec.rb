@@ -139,7 +139,7 @@ describe EntriesController do
       @correcting = Fabricate(:folder, :title => 'correcting')
       @published = Fabricate(:folder, :title => 'published')
 
-      @entry = Fabricate(:entry, :folder => @draft)
+      @entry = Fabricate(:entry, :folder => @draft, :user_id => Fabricate(:user))
       @entry.send_to_corrector
       @entry.correct!
     end

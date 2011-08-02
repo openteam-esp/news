@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_one :authentication
   has_many :events
   has_many :subscribes
+  has_many :messages
 
   delegate :provider, :to => :authentication
 
@@ -22,6 +23,7 @@ class User < ActiveRecord::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: users
@@ -29,8 +31,8 @@ end
 #  id                     :integer         not null, primary key
 #  name                   :text
 #  roles                  :text
-#  email                  :string(255)     default(""), not null
-#  encrypted_password     :string(128)     default(""), not null
+#  email                  :string(255)
+#  encrypted_password     :string(128)
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime
 #  remember_created_at    :datetime

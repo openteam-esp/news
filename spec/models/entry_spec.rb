@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Entry do
   it 'должна корректно сохранять и отображать дату' do
-    entry = Fabricate(:entry)
+    entry = Fabricate(:entry, :user_id => Fabricate(:user))
     entry.since = "19.07.2011 09:20"
     entry.save!
     I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
@@ -19,7 +19,7 @@ describe Entry do
   end
 
   describe 'после создания должна' do
-    let :new_entry do Fabricate(:entry) end
+    let :new_entry do Fabricate(:entry, :user_id => Fabricate(:user)) end
 
     before do Fabricate(:folder, :title => 'draft') end
 
@@ -38,7 +38,7 @@ describe Entry do
 
   describe 'после редактирования должна' do
     let :entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create!(:kind => 'send_to_corrector')
       entry.events.create!(:kind => 'correct')
       entry
@@ -64,7 +64,7 @@ describe Entry do
 
   describe 'после отправки корректору должна' do
     let :awaiting_correction_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'send_to_corrector')
       entry
     end
@@ -85,7 +85,7 @@ describe Entry do
 
   describe 'после отправки публикатору должна' do
     let :awaiting_publication_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'send_to_corrector')
       entry.events.create(:kind => 'correct')
       entry.events.create(:kind => 'send_to_publisher')
@@ -108,7 +108,7 @@ describe Entry do
 
   describe 'после возвращения инициатору должна' do
     let :returned_to_author_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'send_to_corrector')
       entry.events.create(:kind => 'return_to_author')
       entry
@@ -130,7 +130,7 @@ describe Entry do
 
   describe 'после взятия на корректуру должна' do
     let :correcting_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'send_to_corrector')
       entry.events.create(:kind => 'correct')
       entry
@@ -152,7 +152,7 @@ describe Entry do
 
   describe 'после возвращения корректору должна' do
     let :returned_to_corrector_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'send_to_corrector')
       entry.events.create(:kind => 'correct')
       entry.events.create(:kind => 'send_to_publisher')
@@ -176,7 +176,7 @@ describe Entry do
 
   describe 'после публикации должна' do
     let :published_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'send_to_corrector')
       entry.events.create(:kind => 'correct')
       entry.events.create(:kind => 'send_to_publisher')
@@ -200,7 +200,7 @@ describe Entry do
 
   describe 'после удаления в корзину должна' do
     let :trashed_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'to_trash')
       entry
     end
@@ -221,9 +221,10 @@ describe Entry do
 
   describe 'после восстановления должна' do
     let :restored_entry do
-      entry = Fabricate(:entry)
+      user = Fabricate(:user)
+      entry = Fabricate(:entry, :user_id => user.id)
       entry.events.create(:kind => 'to_trash')
-      entry.events.create(:kind => 'restore')
+      entry.events.create(:kind => 'restore', :user => user)
       entry
     end
     before do Fabricate(:folder, :title => 'draft') end
@@ -243,7 +244,7 @@ describe Entry do
 
   describe 'после немедленной публикации должна' do
     let :immediately_published_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'immediately_publish')
       entry
     end
@@ -264,7 +265,7 @@ describe Entry do
 
   describe 'после немедленной отправки публикатору должна' do
     let :immediately_sended_to_publisher_entry do
-      entry = Fabricate(:entry)
+      entry = Fabricate(:entry, :user_id => Fabricate(:user))
       entry.events.create(:kind => 'immediately_send_to_publisher')
       entry
     end

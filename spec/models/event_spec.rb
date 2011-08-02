@@ -6,6 +6,8 @@ describe Event do
   before do
     @initiator  = Fabricate(:user)
     @subscriber = Fabricate(:user)
+    Fabricate(:folder, :title => :draft)
+    Fabricate(:folder, :title => :inbox)
     @entry = Fabricate(:entry, :user_id => @initiator.id)
   end
 
@@ -17,35 +19,39 @@ describe Event do
   describe 'после создания должна получить список подписчиков' do
     it 'для подписавшихся на новости инициатора' do
       subscribe = Fabricate(:subscribe, :subscriber => @subscriber, :initiator => @initiator)
-      @entry.events.last.subscribers.should be_one
-      @entry.events.last.subscribers.last.subscriber.should eql @subscriber
+      @entry.events.last.subscribes.should be_one
+      @entry.events.last.subscribes.last.subscriber.should eql @subscriber
     end
 
     it 'для подписавшихся на события новости ' do
       subscribe = Fabricate(:subscribe, :subscriber => @subscriber, :entry => @entry)
       @entry.events.create!(:kind => :send_to_corrector)
-      @entry.events.first.subscribers.should be_one
-      @entry.events.first.subscribers.last.subscriber.should eql @subscriber
+      @entry.events.first.subscribes.should be_one
+      @entry.events.first.subscribes.last.subscriber.should eql @subscriber
     end
 
     it 'для подписавшихся по типу события' do
       subscribe = Fabricate(:subscribe, :subscriber => @subscriber, :kind => :send_to_corrector)
       @entry.events.create!(:kind => :send_to_corrector)
-      @entry.events.first.subscribers.should be_one
-      @entry.events.first.subscribers.last.subscriber.should eql @subscriber
+      @entry.events.first.subscribes.should be_one
+      @entry.events.first.subscribes.last.subscriber.should eql @subscriber
     end
   end
 
-  it 'создать сообщения для подписчиков'
+  it 'после создания события, создать сообщения для подписчиков' do
+    subscribe = Fabricate(:subscribe, :subscriber => @subscriber, :initiator => @initiator)
+    expect { Fabricate(:entry, :user_id => @initiator.id) }.to change{@subscriber.messages.count}.by(1)
+  end
 
 end
+
 
 # == Schema Information
 #
 # Table name: events
 #
 #  id         :integer         not null, primary key
-#  type       :string(255)
+#  kind       :string(255)
 #  text       :text
 #  entry_id   :integer
 #  user_id    :integer

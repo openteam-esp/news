@@ -149,12 +149,12 @@ class Entry < ActiveRecord::Base
 
   private
     def create_event
-      events.create! :kind => 'created', :user_id => user_id
       self.initiator_id = user_id
       self.folder = Folder.where(:title => 'draft').first
       self.class.skip_callback(:update, :after, :create_update_event)
       self.save(:skip_callbacks => false)
       self.class.set_callback(:update, :after, :create_update_event)
+      events.create! :kind => 'created', :user_id => user_id
     end
 
     def create_update_event

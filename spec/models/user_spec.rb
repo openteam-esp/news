@@ -98,7 +98,7 @@ describe User do
 
     describe 'новость ожидающую корректировки' do
       let :awaiting_correction_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry
       end
@@ -125,7 +125,7 @@ describe User do
 
     describe 'корректируемую новость' do
       let :correcting_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry
@@ -185,7 +185,7 @@ describe User do
 
     describe 'новость ожидающую публикации' do
       let :awaiting_publication_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry.events.create(:kind => 'send_to_publisher')
@@ -214,7 +214,7 @@ describe User do
 
     describe 'опубликованную новость' do
       let :published_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry.events.create(:kind => 'send_to_publisher')
@@ -276,7 +276,7 @@ describe User do
 
     describe 'новость ожидающую корректировки' do
       let :awaiting_correction_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry
       end
@@ -303,7 +303,7 @@ describe User do
 
     describe 'корректируемую новость' do
       let :correcting_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry
@@ -330,7 +330,7 @@ describe User do
 
     describe 'новость ожидающую публикации' do
       let :awaiting_publication_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry.events.create(:kind => 'send_to_publisher')
@@ -363,7 +363,7 @@ describe User do
 
     describe 'опубликованную новость' do
       let :published_entry do
-        entry = Fabricate(:entry)
+        entry = Fabricate(:entry, :user_id => Fabricate(:user))
         entry.events.create(:kind => 'send_to_corrector')
         entry.events.create(:kind => 'correct')
         entry.events.create(:kind => 'send_to_publisher')
@@ -393,6 +393,7 @@ describe User do
 end
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -400,8 +401,8 @@ end
 #  id                     :integer         not null, primary key
 #  name                   :text
 #  roles                  :text
-#  email                  :string(255)     default(""), not null
-#  encrypted_password     :string(128)     default(""), not null
+#  email                  :string(255)
+#  encrypted_password     :string(128)
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime
 #  remember_created_at    :datetime
