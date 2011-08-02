@@ -41,6 +41,9 @@ module News
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
 
+    # See everything in the log (default is :info)
+    config.log_level = :warn
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 
