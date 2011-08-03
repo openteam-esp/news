@@ -1,11 +1,13 @@
 <% if @messages.any? %>
   <ul>
     <% @messages.each do |message| %>
-      <%= l message.event.created_at, :format => :long %>
-      <%= link_to strip_tags(message.event.entry.title_or_body.gsub('&quot;', '"').gilensize), folder_entry_path(message.event.entry.folder.title, message.event.entry) %>
-      <%= t "event.kind.after.#{message.event.kind}" %>
-      <%= "#{message.event.user}" %>
-      <%= link_to t('destroy_message'), message, :confirm => 'Are you sure?', :method => :delete %>
+      <li>
+        <%= l message.event.created_at, :format => :long %>
+        <%= link_to strip_tags(message.event.entry.title_or_body.gsub('&quot;', '"').gilensize), folder_entry_path(message.event.entry.folder.title, message.event.entry) %>
+        <%= t "event.kind.after.#{message.event.kind}" %>
+        <%= "#{message.event.user}" %>
+        <%= link_to t('destroy_message'), message, :confirm => 'Are you sure?', :method => :delete %>
+      </li>
     <% end %>
   </ul>
 <% else %>
