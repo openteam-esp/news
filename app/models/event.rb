@@ -34,11 +34,7 @@ class Event < ActiveRecord::Base
 
     def notify_subscribers
       subscribes.each do |subscribe|
-        subscribe.
-          subscriber.
-          messages.
-          create!(:event_id => self.id,
-                  :text => "#{self.user} #{self.kind} <a href='/folders/#{self.entry.folder.title}/entries/#{self.entry}'>news</a>")
+        subscribe.subscriber.messages.create!(:event_id => self.id)
       end
     end
 end

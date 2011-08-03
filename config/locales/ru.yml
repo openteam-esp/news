@@ -48,6 +48,8 @@ ru:
   actions: "Доступные действия"
   no_any_entries: "Нет новостей"
   list_of_entries: "Список новостей"
+  destroy_message: 'Удалить сообщение'
+  no_any_messages: "Нет новых сообщений"
   logout: "Выход"
   not_any_channels: "Нет каналов"
   empty_annotation: "Нет аннотации"

@@ -9,7 +9,7 @@ class Ability
     #################
 
     can [:create, :read], Entry
-    can :read, Message
+    can [:read, :destroy], Message
 
     can :update, Entry do |entry|
       entry.draft? && entry.initiator == user

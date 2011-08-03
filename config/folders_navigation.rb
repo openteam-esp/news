@@ -1,6 +1,6 @@
 SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
-    primary.item :inbox, t('inbox'), messages_path
+    primary.item :inbox, "#{t('inbox')} (#{@current_user.messages.count})", messages_path
 
     primary.item :awaiting_correction, t('awaiting_correction'), folder_entries_path(Folder.where(:title => 'awaiting_correction').first),
                  :highlights_on => lambda { @folder.awaiting_correction? if @folder.present? } if @current_user.corrector?
