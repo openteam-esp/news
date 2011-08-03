@@ -17,7 +17,9 @@ News::Application.routes.draw do
 
   resources :folders, :only => [] do
     resources :entries do
-      resources :events, :only => :create
+      resources :events, :only => :create do
+        resources :versions, :only => :show
+      end
     end
   end
 

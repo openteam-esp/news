@@ -1,0 +1,35 @@
+<p>
+# TODO: тут вид взят из app/views/entries/show.html.erb<br />
+# наверное надо вынести общее в шаблон
+</p>
+
+<h2 <%= 'class=empty' if @entry.title.blank? %>><%= @entry.title.present? ? raw(@entry.title.gsub('&quot;', '"').gilensize) : t('empty_title') %></h2>
+
+<div class='annotation <%= "empty" if @entry.annotation.blank? %>'>
+  <%= @entry.annotation.present? ? raw(@entry.annotation.gsub('&quot;', '"').gilensize) : t('empty_annotation') %>
+</div>
+
+<div class='body'>
+  <%= raw @entry.body.gsub('&quot;', '"').gilensize %>
+</div>
+
+<div class='channels'>
+  <h2><%= t('channels') %></h2>
+  <ul>
+    <% if @entry.channels.any? %>
+      <% @entry.channels.each do |channel| %>
+        <li><%= channel.title %></li>
+      <% end %>
+    <% else %>
+      <%= content_tag :li, t('not_any_channels'), :class => 'empty' %>
+    <% end %>
+  </ul>
+</div>
+
+<div class='availability'>
+  <h2><%= t('availability') %></h2>
+  <ul>
+    <li><%= @entry.since ? "#{t('since')}: #{l(@entry.since, :format => :long)}" : t('immediately_after_correcting') %></li>
+    <li><%= @entry.until ? "#{t('until')}: #{l(@entry.until, :format => :long)}" : t('not_limited_in_time') %></li>
+  </ul>
+</div>

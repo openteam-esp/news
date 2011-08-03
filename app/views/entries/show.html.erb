@@ -72,6 +72,7 @@
         <%= l event.created_at, :format => :long %>
         <%= t "event.kind.after.#{event.kind}" %>
         <%= "#{event.user}" %>
+        <%= link_to t('show_verison'), [@folder, @entry, event, event.version] if event.version %>
         <%= content_tag :span, event.text, :class => 'text' if event.text.present? %>
       </li>
     <% end %>

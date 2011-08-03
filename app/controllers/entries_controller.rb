@@ -8,4 +8,13 @@ class EntriesController < InheritedResources::Base
   has_scope :filters, :default => true, :type => :boolean do |controller, scope|
     scope.filter_for(controller.current_user, controller.params[:folder_id])
   end
+
+  def update
+    update! do | success, failure |
+      success.html {
+        @entry.events.first.update_attribute(:version_id, @entry.versions.last.id)
+        redirect_to [@folder, @entry]
+    }
+    end
+  end
 end
