@@ -194,6 +194,9 @@ GEM
       ruby-openid (>= 2.1.8)
     rack-test (0.5.7)
       rack (>= 1.0)
+    rack-webconsole (0.1.2)
+      json
+      rack
     rails (3.0.9)
       actionmailer (= 3.0.9)
       actionpack (= 3.0.9)
@@ -295,6 +298,7 @@ DEPENDENCIES
   paper_trail
   paperclip
   pg
+  rack-webconsole
   rails (= 3.0.9)
   rake (= 0.8.7)
   rb-inotify
