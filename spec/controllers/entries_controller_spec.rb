@@ -170,4 +170,21 @@ describe EntriesController do
       end
     end
   end
+
+  describe 'после редактирования' do
+    it 'предыдущему событию должна проставляться версия' do
+      user = Fabricate(:user)
+      entry = Fabricate(:entry, :user_id => user.id, :body => 'version 1')
+
+      sign_in user
+
+      put :update, :id => entry.id, :entry => {:body => 'version 2'}, :folder_id => @draft.title
+
+      event = entry.events.where(:kind => 'created').first
+
+      event.kind.should eql 'created'
+      event.version.should_not be_nil
+      event.version.reify.body.should eql 'version 1'
+    end
+  end
 end
