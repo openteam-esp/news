@@ -12,7 +12,7 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :body
 
-  after_create :create_event
+  after_create :create_event, :create_subscribe
 
   after_update :create_update_event
 
@@ -168,6 +168,10 @@ class Entry < ActiveRecord::Base
       events.create! :kind => 'updated', :user_id => user_id if changes.has_key?('annotation') ||
                                                                 changes.has_key?('body') ||
                                                                 changes.has_key?('title')
+    end
+
+    def create_subscribe
+      Subscribe.create!(:subscriber => initiator, :entry => self)
     end
 end
 

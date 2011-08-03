@@ -145,6 +145,7 @@ ru:
         return_to_corrector: "возвращено корректору"
         immediately_publish: "немедленно опубликовано"
         immediately_send_to_publisher: "немедленно отправлено публикатору"
+        restore: "восстановлено"
         return_to_author: "возвращено автору"
         send_to_corrector: "отправлено корректору"
         send_to_publisher: "отправлено публикатору"
