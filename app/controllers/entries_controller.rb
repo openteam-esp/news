@@ -12,7 +12,9 @@ class EntriesController < InheritedResources::Base
   def update
     update! do | success, failure |
       success.html {
-        @entry.events.first.update_attribute(:version_id, @entry.versions.last.id)
+        event = @entry.events[1]
+        event.update_attribute(:version_id, @entry.versions.last.id) if event
+
         redirect_to [@folder, @entry]
     }
     end
