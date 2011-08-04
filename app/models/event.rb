@@ -10,8 +10,7 @@ class Event < ActiveRecord::Base
   validate :ready_to_send_to_publisher, :if => lambda { |e| %w[immediately_send_to_publisher send_to_publisher].include? e.kind }
   validate :ready_publish, :if => lambda { |e| %w[immediately_publish publish].include? e.kind }
 
-  after_create :fire_entry_event
-  after_create :notify_subscribers
+  after_create :fire_entry_event, :notify_subscribers, :create_subscribe
 
   def ready_to_send_to_publisher
     errors.add(:entry_title, ::I18n.t('Entry title can\'t be blank'))           if entry.title.blank?
@@ -25,7 +24,16 @@ class Event < ActiveRecord::Base
   end
 
   def subscribes
-    Subscribe.where(:initiator_id => initiator.id) | Subscribe.where(:entry_id => entry_id) | Subscribe.where(:kind => kind)
+    Subscribe.where(:initiator_id => initiator.id) | Subscribe.where(:entry_id => entry_id)
+  end
+
+  def subscribers
+    # TODO: переписать используя роли-объекты
+    result = []
+    result << subscribes.map(&:subscriber)
+    result << User.where("roles LIKE '%corrector%'") if %w[send_to_corrector return_to_corrector].include? kind
+    result << User.where("roles LIKE '%publisher%'") if %w[send_to_publisher immediately_send_to_publisher immediately_publish publish].include? kind
+    result.flatten.uniq.compact
   end
 
   private
@@ -34,9 +42,13 @@ class Event < ActiveRecord::Base
     end
 
     def notify_subscribers
-      subscribes.each do |subscribe|
-        subscribe.subscriber.messages.create!(:event_id => self.id)
+      subscribers.each do |subscriber|
+        subscriber.messages.create!(:event_id => self.id)
       end
+    end
+
+    def create_subscribe
+      Subscribe.find_or_create_by_subscriber_id_and_entry_id(self.user_id, self.entry_id)
     end
 end
 

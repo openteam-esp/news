@@ -12,7 +12,7 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :body
 
-  after_create :create_event, :create_subscribe
+  after_create :set_initiator_and_folder, :create_subscribe, :create_event
 
   after_update :create_update_event
 
@@ -155,12 +155,15 @@ class Entry < ActiveRecord::Base
   end
 
   private
-    def create_event
+    def set_initiator_and_folder
       self.initiator_id = user_id
       self.folder = Folder.where(:title => 'draft').first
       self.class.skip_callback(:update, :after, :create_update_event)
       self.save(:skip_callbacks => false)
       self.class.set_callback(:update, :after, :create_update_event)
+    end
+
+    def create_event
       events.create! :kind => 'created', :user_id => user_id
     end
 
