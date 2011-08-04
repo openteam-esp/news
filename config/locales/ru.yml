@@ -18,6 +18,8 @@ ru:
         text: "Комментарий"
 
   send_to_corrector: "Отправить корректору"
+  subscribe_to_news_from_this_author: 'Получать сообщения о новостях этого автора'
+  unsubscribe_to_news_from_this_author: 'Не получать сообщения о новостях этого автора'
   to_trash: "В корзину"
   send_to_publisher: "Отправить публикатору"
   correct: "Взять на корректуру"

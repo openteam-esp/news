@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
       [*roles].include?(role)
     end
   end
+
+  def subscribed?(initiator)
+    Subscribe.where(:subscriber_id => self, :initiator_id => initiator).any?
+  end
 end
 
 

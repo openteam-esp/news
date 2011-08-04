@@ -15,6 +15,9 @@ News::Application.routes.draw do
     match '/rss' => 'published_entries#rss'
   end
 
+  match '/subscribe/:entry_id' => 'subscribes#create', :as => :subscribe
+  match '/subscribe/:entry_id/delete' => 'subscribes#destroy', :as => :delete_subscribe
+
   resources :folders, :only => [] do
     resources :entries do
       resources :events, :only => :create do

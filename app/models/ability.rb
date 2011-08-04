@@ -10,6 +10,7 @@ class Ability
 
     can [:create, :read], Entry
     can [:read, :destroy], Message
+    can [:create, :destroy], Subscribe
 
     can :update, Entry do |entry|
       entry.draft? && entry.initiator == user
