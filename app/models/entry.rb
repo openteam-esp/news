@@ -170,7 +170,9 @@ class Entry < ActiveRecord::Base
     def create_update_event
       events.create! :kind => 'updated', :user_id => user_id if changes.has_key?('annotation') ||
                                                                 changes.has_key?('body') ||
-                                                                changes.has_key?('title')
+                                                                changes.has_key?('title') ||
+                                                                changes.has_key?('until') ||
+                                                                changes.has_key?('since')
     end
 
     def create_subscribe
