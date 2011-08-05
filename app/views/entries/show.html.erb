@@ -6,15 +6,7 @@
   <% end %>
 <% end %>
 
-<h2 <%= 'class=empty' if @entry.title.blank? %>><%= @entry.title.present? ? raw(@entry.title.gsub('&quot;', '"').gilensize) : t('empty_title') %></h2>
-
-<div class='annotation <%= "empty" if @entry.annotation.blank? %>'>
-  <%= @entry.annotation.present? ? raw(@entry.annotation.gsub('&quot;', '"').gilensize) : t('empty_annotation') %>
-</div>
-
-<div class='body'>
-  <%= raw @entry.body.gsub('&quot;', '"').gilensize %>
-</div>
+<%= render :partial => 'entries/entry', :object => @entry %>
 
 <div class='channels'>
   <h2><%= t('channels') %></h2>
@@ -26,14 +18,6 @@
     <% else %>
       <%= content_tag :li, t('not_any_channels'), :class => 'empty' %>
     <% end %>
-  </ul>
-</div>
-
-<div class='availability'>
-  <h2><%= t('availability') %></h2>
-  <ul>
-    <li><%= @entry.since ? "#{t('since')} #{l(@entry.since, :format => :long)}" : t('immediately_after_correcting') %></li>
-    <li><%= @entry.until ? "#{t('until')} #{l(@entry.until, :format => :long)}" : t('not_limited_in_time') %></li>
   </ul>
 </div>
 
@@ -80,7 +64,9 @@
         <%= l event.created_at, :format => :long %>
         <%= t "event.kind.after.#{event.kind}" %>
         <%= "#{event.user}" %>
-        <%= link_to t('show_verison'), [@folder, @entry, event, event.version] if event.version %>
+        <% if event.version %>
+          (<%= link_to t('show_version'), [@folder, @entry, event, event.version] %>)
+        <% end %>
         <%= content_tag :span, event.text, :class => 'text' if event.text.present? %>
       </li>
     <% end %>
