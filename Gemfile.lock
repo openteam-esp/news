@@ -265,11 +265,7 @@ DEPENDENCIES
   aws-s3
   bson_ext
   cancan
-<<<<<<< HEAD
-=======
-  ckeditor!
   clockwork
->>>>>>> #8080. удалять старый новости из корзины
   compass
   configliere
   database_cleaner
