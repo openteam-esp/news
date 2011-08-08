@@ -54,6 +54,7 @@ GEM
     builder (2.1.2)
     cancan (1.6.5)
     chunky_png (1.2.0)
+    clockwork (0.2.3)
     cocaine (0.1.0)
     compass (0.11.5)
       chunky_png (~> 1.2)
@@ -264,6 +265,11 @@ DEPENDENCIES
   aws-s3
   bson_ext
   cancan
+<<<<<<< HEAD
+=======
+  ckeditor!
+  clockwork
+>>>>>>> #8080. удалять старый новости из корзины
   compass
   configliere
   database_cleaner

@@ -33,6 +33,7 @@ end
 gem 'aws-s3'
 gem 'bson_ext',                 :require => false
 gem 'cancan'
+gem 'clockwork'
 gem 'compass'
 gem 'configliere'
 gem 'delayed_job'

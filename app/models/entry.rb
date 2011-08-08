@@ -9,6 +9,7 @@ class Entry < ActiveRecord::Base
   attr_accessor :user_id
 
   scope :published, where(:state => 'published')
+  scope :trash, where(:state => 'trash')
 
   validates_presence_of :body
 
