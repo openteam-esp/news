@@ -112,7 +112,7 @@ class Entry < ActiveRecord::Base
       mailing_channels << channel if channel.recipients.any?
     end
 
-    EntryMailer.entry_mailing(self, mailing_channels).deliver if mailing_channels.any?
+    EntryMailer.delay.entry_mailing(self, mailing_channels) if mailing_channels.any?
   end
 
   def title_or_body

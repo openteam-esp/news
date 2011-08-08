@@ -1,6 +1,7 @@
 Channel.find_or_create_by_title('tomsk.gov.ru/ru/announces')
 Channel.find_or_create_by_title('tomsk.gov.ru/ru/news')
-Channel.find_or_create_by_title('mailing_lists/common')
+c = Channel.find_or_create_by_title('mailing_lists/common')
+c.recipients.find_or_create_by_email('gmyzind@gmail.com')
 Channel.find_or_create_by_title('mailing_lists/innovation')
 
 Folder.find_or_create_by_title('awaiting_correction')
