@@ -1,15 +1,19 @@
+<h1>Сообщения</h1>
 <% if @messages.any? %>
   <ul>
     <% @messages.each do |message| %>
       <li>
-        <%= l message.event.created_at, :format => :long %>
-        <%= link_to strip_tags(message.event.entry.title_or_body.gsub('&quot;', '"').gilensize), folder_entry_path(message.event.entry.folder.title, message.event.entry) %>
-        <%= t "event.kind.after.#{message.event.kind}" %>
-        <%= "#{message.event.user}" %>
-        <%= link_to t('destroy_message'), message, :confirm => 'Are you sure?', :method => :delete %>
+        <p>
+          <%= l message.event.created_at, :format => :long %>
+          <%= link_to strip_tags(message.event.entry.title_or_body.gsub('&quot;', '"').gilensize), folder_entry_path(message.event.entry.folder.title, message.event.entry) %>
+          <%= t "event.kind.after.#{message.event.kind}" %>
+          <%= "#{message.event.user}" %>
+          <%= link_to t('destroy_message'), message, :confirm => 'Are you sure?', :method => :delete %>
+        </p>
       </li>
     <% end %>
   </ul>
 <% else %>
   <%= content_tag :h4, t('no_any_messages'), :class => 'empty' %>
 <% end %>
+
