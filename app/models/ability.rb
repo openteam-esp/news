@@ -8,7 +8,7 @@ class Ability
     #  casual user  #
     #################
 
-    can [:create, :read], Entry
+    can [:create, :read, :rss], Entry
     can [:read, :destroy], Message
     can [:create, :destroy], Subscribe
 
