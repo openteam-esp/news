@@ -3,7 +3,7 @@
   <%= javascript_include_tag "jquery_ui/jquery.ui.datepicker.ru" %>
   <%= javascript_include_tag "jquery_ui/jquery.ui.timepicker" %>
   <%= javascript_include_tag "jquery_ui/jquery.ui.timepicker.ru" %>
-  <%= javascript_include_tag "ckeditor/ckeditor" %>
+  <%= javascript_include_tag "redactor/jquery.redactor" %>
 <% end %>
 
 <%= semantic_form_for([@folder, @entry]) do |form| %>
@@ -11,8 +11,8 @@
   <%= form.inputs do  %>
     <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
     <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
-    <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => "150" } %>
-    <%= form.input :body, :as => :ckeditor, :input_html => { :height => "300" } %>
+    <%= form.input :annotation %>
+    <%= form.input :body %>
     <%= form.input :since %>
     <%= form.input :until %>
     <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>

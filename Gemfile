@@ -33,7 +33,6 @@ end
 gem 'aws-s3'
 gem 'bson_ext',                 :require => false
 gem 'cancan'
-gem 'ckeditor',                 :git => 'git://github.com/lda/ckeditor', :branch => 'unreset_current_user'
 gem 'compass'
 gem 'configliere'
 gem 'delayed_job'

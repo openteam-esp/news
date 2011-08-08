@@ -7,15 +7,6 @@ GIT
       rack
 
 GIT
-  remote: git://github.com/lda/ckeditor
-  revision: 96014a852635b3719e58de1f76b2702074069c8d
-  branch: unreset_current_user
-  specs:
-    ckeditor (3.6.0.pre)
-      mime-types (~> 1.16)
-      orm_adapter (~> 0.0.5)
-
-GIT
   remote: git://github.com/tacid/russian
   revision: 544a5e931a9044d941ff6f6746b10722f2fdb326
   specs:
@@ -273,7 +264,6 @@ DEPENDENCIES
   aws-s3
   bson_ext
   cancan
-  ckeditor!
   compass
   configliere
   database_cleaner
