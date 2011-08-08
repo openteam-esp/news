@@ -122,7 +122,7 @@ class Entry < ActiveRecord::Base
 
   def state_events_for_author(user)
     return [] if initiator != user
-    state_events & [:send_to_corrector, :to_trash]
+    state_events & [:send_to_corrector, :to_trash, :restore]
   end
 
   def state_events_for_corrector(user)
