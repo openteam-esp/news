@@ -3,6 +3,11 @@
 require 'spec_helper'
 
 describe Entry do
+  before do
+    @corrector_role = Fabricate(:role, :kind => 'corrector')
+    @publisher_role = Fabricate(:role, :kind => 'publisher')
+  end
+
   it 'должна корректно сохранять и отображать дату' do
     entry = Fabricate(:entry, :user_id => Fabricate(:user))
     entry.since = "19.07.2011 09:20"
@@ -12,7 +17,9 @@ describe Entry do
 
   it 'должна знать кто к ней имеет отношение' do
     first_user = Fabricate(:user)
-    second_user = Fabricate(:user, :roles => ['corrector', 'publisher'])
+    second_user = Fabricate(:user)
+    second_user.roles << @corrector_role
+    second_user.roles << @publisher_role
     entry = Fabricate(:entry, :user_id => first_user.id)
     entry.related_to(first_user).should be_true
     entry.related_to(second_user).should be_false

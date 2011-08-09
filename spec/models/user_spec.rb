@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 describe User do
+
   describe '- обычный пользователь может' do
     before do
       @user = Fabricate(:user)
@@ -58,7 +59,9 @@ describe User do
 
   describe '- корректор может' do
     before do
-      @corrector = Fabricate(:user, :roles => ['corrector'])
+      corrector_role = Fabricate(:role, :kind => 'corrector')
+      @corrector = Fabricate(:user)
+      @corrector.roles << corrector_role
       @ability = Ability.new(@corrector)
     end
 
@@ -153,7 +156,9 @@ describe User do
 
   describe '- публикатор может' do
     before do
-      @publisher = Fabricate(:user, :roles => ['publisher'])
+      publisher_role = Fabricate(:role, :kind => 'publisher')
+      @publisher = Fabricate(:user)
+      @publisher.roles << publisher_role
       @ability = Ability.new(@publisher)
     end
 
@@ -244,7 +249,11 @@ describe User do
 
   describe '- корректор+публикатор может' do
     before do
-      @corpuber = Fabricate(:user, :roles => ['corrector','publisher'])
+      corrector_role = Fabricate(:role, :kind => 'corrector')
+      publisher_role = Fabricate(:role, :kind => 'publisher')
+      @corpuber = Fabricate(:user)
+      @corpuber.roles << corrector_role
+      @corpuber.roles << publisher_role
       @ability = Ability.new(@corpuber)
     end
 

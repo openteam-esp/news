@@ -110,6 +110,17 @@ ActiveRecord::Schema.define(:version => 20110808034747) do
     t.datetime "updated_at"
   end
 
+  create_table "roles", :force => true do |t|
+    t.string   "kind"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+  end
+
   create_table "subscribes", :force => true do |t|
     t.integer  "subscriber_id"
     t.integer  "initiator_id"
@@ -121,7 +132,6 @@ ActiveRecord::Schema.define(:version => 20110808034747) do
 
   create_table "users", :force => true do |t|
     t.text     "name"
-    t.text     "roles"
     t.string   "email"
     t.string   "encrypted_password",     :limit => 128
     t.string   "reset_password_token"

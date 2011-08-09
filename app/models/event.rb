@@ -24,16 +24,11 @@ class Event < ActiveRecord::Base
   end
 
   def subscribes
-    Subscribe.where(:initiator_id => initiator.id) | Subscribe.where(:entry_id => entry_id)
+    Subscribe.where(:initiator_id => initiator.id) | Subscribe.where(:entry_id => entry_id) | Subscribe.where(:kind => kind)
   end
 
   def subscribers
-    # TODO: переписать используя роли-объекты
-    result = []
-    result << subscribes.map(&:subscriber)
-    result << User.where("roles LIKE '%corrector%'") if %w[send_to_corrector return_to_corrector].include? kind
-    result << User.where("roles LIKE '%publisher%'") if %w[send_to_publisher immediately_send_to_publisher immediately_publish publish].include? kind
-    result.flatten.uniq.compact
+    subscribes.map(&:subscriber).uniq.compact
   end
 
   private

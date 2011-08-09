@@ -6,6 +6,8 @@ describe Event do
   before do
     @initiator  = Fabricate(:user)
     @subscriber = Fabricate(:user)
+    @corrector_role = Fabricate(:role, :kind => 'corrector')
+    @publisher_role = Fabricate(:role, :kind => 'publisher')
     Fabricate(:folder, :title => :draft)
     Fabricate(:folder, :title => :awaiting_correction)
     @entry = Fabricate(:entry, :user_id => @initiator.id)
@@ -33,7 +35,8 @@ describe Event do
     end
 
     it 'по типу события, получаем всех пользователей с определенными ролями' do
-      corrector = Fabricate(:user, :roles => ['corrector'])
+      corrector = Fabricate(:user)
+      corrector.roles << @corrector_role
       @entry.events.create!(:kind => :send_to_corrector)
       @entry.events.first.subscribers.should include corrector
     end

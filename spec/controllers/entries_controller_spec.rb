@@ -134,7 +134,11 @@ describe EntriesController do
 
   describe 'редактирование' do
     before do
-      user = Fabricate(:user, :email => 'corrector@mail.com', :roles => ['corrector', 'publisher'])
+      corrector_role = Fabricate(:role, :kind => 'corrector')
+      publisher_role = Fabricate(:role, :kind => 'publisher')
+      user = Fabricate(:user, :email => 'corrector@mail.com')
+      user.roles << corrector_role
+      user.roles << publisher_role
       sign_in user
 
       @correcting = Fabricate(:folder, :title => 'correcting')
