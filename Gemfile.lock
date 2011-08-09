@@ -121,6 +121,8 @@ GEM
       railties (~> 3.0)
       thor (~> 0.14)
     json (1.5.3)
+    kaminari (0.12.4)
+      rails (>= 3.0.0)
     kgio (2.5.0)
     libnotify (0.5.7)
     mail (2.2.19)
@@ -290,6 +292,7 @@ DEPENDENCIES
   inherited_resources
   itslog
   jquery-rails
+  kaminari
   libnotify
   omniauth
   paper_trail

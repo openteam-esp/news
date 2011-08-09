@@ -196,3 +196,10 @@ ru:
         send_to_publisher: "отправлено публикатору"
         to_trash: "удалено"
 
+  views:
+    pagination:
+      previous: "&larr;"
+      next: "&rarr;"
+      first: первая страница
+      last: последняя страница
+

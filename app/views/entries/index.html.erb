@@ -14,6 +14,7 @@
       </li>
     <% end%>
   </ul>
+  <%= paginate @entries %>
 <% else %>
   <h1><%= t('no_any_entries') %></h1>
 <% end %>

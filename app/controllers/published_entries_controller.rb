@@ -5,6 +5,8 @@ class PublishedEntriesController < InheritedResources::Base
 
   actions :only => [:index, :show, :rss]
 
+  has_scope :page, :default => 1
+
   def rss
     @channel = Channel.find(params[:channel_id])
     @published_entries = @channel.published_entries.limit(10)

@@ -47,6 +47,7 @@ gem 'has_enum'
 gem 'has_scope'
 gem 'inherited_resources'
 gem 'jquery-rails',             :require => false
+gem 'kaminari'
 gem 'omniauth'
 gem 'paper_trail'
 gem 'paperclip'

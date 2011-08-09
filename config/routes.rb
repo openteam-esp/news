@@ -8,10 +8,14 @@ News::Application.routes.draw do
 
   resources :recipients
 
-  resources :messages
+  resources :messages do
+    get 'page/:page', :action => :index, :on => :collection
+  end
 
   resources :channels, :only => [:index, :show] do
-    resources :published_entries, :only => [:index, :show]
+    resources :published_entries, :only => [:index, :show] do
+      get 'page/:page', :action => :index, :on => :collection
+    end
     match '/rss' => 'published_entries#rss'
   end
 
@@ -20,6 +24,7 @@ News::Application.routes.draw do
 
   resources :folders, :only => [] do
     resources :entries do
+      get 'page/:page', :action => :index, :on => :collection
       resources :events, :only => :create do
         resources :versions, :only => :show
       end

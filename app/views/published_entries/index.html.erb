@@ -7,6 +7,7 @@
       </li>
     </ul>
   <% end%>
+  <%= paginate collection %>
 <% else %>
   <%= content_tag :h1, t('no_any_entries'), :class => 'empty' %>
 <% end %>
