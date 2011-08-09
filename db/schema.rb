@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20110808034747) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "old_id"
   end
 
   add_index "ckeditor_assets", ["assetable_type", "assetable_id"], :name => "fk_assetable"
@@ -75,6 +76,8 @@ ActiveRecord::Schema.define(:version => 20110808034747) do
     t.integer  "folder_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "old_id"
+    t.integer  "old_channel_id"
   end
 
   create_table "events", :force => true do |t|
@@ -108,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20110808034747) do
     t.integer  "channel_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "old_id"
   end
 
   create_table "roles", :force => true do |t|
