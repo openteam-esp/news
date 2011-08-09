@@ -1,0 +1,19 @@
+<ul>
+  <% @recipients.each do | recipient | %>
+    <li>
+      <%= recipient.email %>
+      <%= recipient.description %>
+      <%= recipient.active %>
+
+      <%= link_to t('Editing'), edit_channel_recipient_path(@channel, recipient) %>
+      <%= link_to t('Destroy'), [@channel, recipient], :method => :delete   %>
+
+    <li>
+  <% end %>
+</ul>
+
+
+<p class="actions">
+  <%= link_to t('Add recipient'), new_channel_recipient_path(@channel) %>
+  <%= link_to t('Back'), channels_path %>
+</p>

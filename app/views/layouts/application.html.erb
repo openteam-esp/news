@@ -35,6 +35,7 @@
       <div class="sidebar">
         <p class="new_entry"><%= link_to t('new_entry'), new_folder_entry_path(Folder.where(:title => 'draft').first), :class => "button" %></p>
         <%= render_navigation :context => :folders, :renderer => :list_with_counters if current_user %>
+        <%= link_to t('Manage subscriptions'), channels_path %>
         <%= render_navigation :context => :channels %>
       </div>
       <div class='content'>

@@ -6,16 +6,17 @@ News::Application.routes.draw do
 
   resources :authentications, :only => [:create, :destroy]
 
-  resources :recipients
-
   resources :messages do
     get 'page/:page', :action => :index, :on => :collection
   end
 
   resources :channels, :only => [:index, :show] do
+    resources :recipients, :except => :show
+
     resources :published_entries, :only => [:index, :show] do
       get 'page/:page', :action => :index, :on => :collection
     end
+
     match '/rss' => 'published_entries#rss'
   end
 
