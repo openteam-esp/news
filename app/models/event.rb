@@ -41,6 +41,7 @@ class Event < ActiveRecord::Base
         subscriber.messages.create!(:event_id => self.id)
       end
     end
+    handle_asynchronously :notify_subscribers
 
     def create_subscribe
       Subscribe.find_or_create_by_subscriber_id_and_entry_id(self.user_id, self.entry_id)
