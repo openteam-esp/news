@@ -23,6 +23,15 @@ corrector.update_attributes(
 corrector.roles.destroy_all
 corrector.roles << corrector_role
 
+corrector1 = User.find_or_create_by_email('corrector1@demo.de')
+corrector1.update_attributes(
+  :password => '123123',
+  :password_confirmation => '123123',
+  :name => 'corrector1'
+)
+corrector1.roles.destroy_all
+corrector1.roles << corrector_role
+
 publisher = User.find_or_create_by_email('publisher@demo.de')
 publisher.update_attributes(
   :password => '123123',

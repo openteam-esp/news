@@ -1,19 +1,24 @@
-<ul>
-  <% @recipients.each do | recipient | %>
-    <li>
-      <%= recipient.email %>
-      <%= recipient.description %>
-      <%= recipient.active %>
+<h1><%= t('All recipient') %></h1>
+<% if @recipients.any? %>
+  <ul>
+  <p class="actions">
+    <%= link_to t('Add recipient'), new_channel_recipient_path(@channel) %>
+    <%= link_to t('Back'), channels_path %>
+  </p>
+    <% @recipients.each do | recipient | %>
+      <li>
+        <%= recipient.description %></br>
+        <%= recipient.email %>
+        <%= recipient.active %>
 
-      <%= link_to t('Editing'), edit_channel_recipient_path(@channel, recipient) %>
-      <%= link_to t('Destroy'), [@channel, recipient], :method => :delete   %>
+        <%= link_to t('Editing'), edit_channel_recipient_path(@channel, recipient) %>
+        <%= link_to t('Destroy'), [@channel, recipient], :method => :delete   %>
 
-    <li>
-  <% end %>
-</ul>
+      <li>
+    <% end %>
+  </ul>
+  <%= paginate @recipients %>
 
-
-<p class="actions">
-  <%= link_to t('Add recipient'), new_channel_recipient_path(@channel) %>
-  <%= link_to t('Back'), channels_path %>
-</p>
+<% else %>
+  <h4><%= t('no_any_recipient') %></h4>
+<% end %>

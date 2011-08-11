@@ -5,7 +5,7 @@ class EntryMailer < ActionMailer::Base
     @published_entry = entry
 
     channels.each do |channel|
-      channel.recipients.each do |recipient|
+      channel.recipients.active.each do |recipient|
         mail(
           :to => recipient.email,
           :subject => @published_entry.title

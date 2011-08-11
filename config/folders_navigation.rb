@@ -19,6 +19,9 @@ SimpleNavigation::Configuration.run do |navigation|
 
     primary.item :trash, t('trash'), folder_entries_path(Folder.where(:title => 'trash').first),
                  :highlights_on => lambda { @folder.trash? if @folder.present? }
+
+    primary.item :recipients, t('channels'), channels_path,
+                 :highlights_on => /^recipients/ if can? :manage, Recipient
   end
 end
 

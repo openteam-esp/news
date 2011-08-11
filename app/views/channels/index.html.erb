@@ -1,7 +1,9 @@
-<ul>
+<h1><%= t('subscribers') %></h1>
+
   <% @channels.each do | channel | %>
+  <ul>
     <li>
       <%= link_to channel.title, channel_recipients_path(channel) %>
     <li>
+  </ul>
   <% end %>
-</ul>

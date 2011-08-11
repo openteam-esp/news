@@ -62,6 +62,8 @@ class Ability
       can :update, Entry do |entry|
         entry.published?
       end
+
+      can :manage, Recipient
     end
 
     #######################
