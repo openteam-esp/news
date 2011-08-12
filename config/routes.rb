@@ -1,5 +1,7 @@
 News::Application.routes.draw do
 
+  resources :assets
+
   devise_for :users
 
   match '/auth/:provider/callback' => 'authentications#create'
