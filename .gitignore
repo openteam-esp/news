@@ -8,7 +8,7 @@ config/settings.yml
 *.swp
 *.swo
 public/stylesheets/*.css
-public/ckeditor_assets/*
+public/system/*
 .rake_tasks~
 coverage/index.html
 coverage/resultset.yml
