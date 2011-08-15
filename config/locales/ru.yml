@@ -111,6 +111,7 @@ ru:
   show_version: показать версию
   last_version: Перейти к последней версии
   version_at: Версия на момент
+  blank_entry_title: "(без заголовка)"
   "Editing entry": "Редактирование новости"
   "New entry": "Создание новости"
   "News system": "Новостная система"

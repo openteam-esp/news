@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
@@ -125,6 +127,16 @@ class Entry < ActiveRecord::Base
 
   def title_or_body
     title.present? ? title.truncate(100) : body.truncate(100)
+  end
+
+  def not_blank_title
+    (title.presence || I18n.t(:blank_entry_title))
+  end
+
+  def composed_title
+    [ not_blank_title.squish.truncate(80),
+      Sanitize.clean(body.presence).try(:squish) ].
+        compact.join(' - ').truncate(100)
   end
 
   def state_events_for_author(user)

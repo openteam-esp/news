@@ -237,6 +237,8 @@ GEM
     ruby_parser (2.0.6)
       sexp_processor (~> 3.0)
     rubyntlm (0.1.1)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
     sass (3.1.5)
     sexp_processor (3.0.5)
     shoulda-matchers (1.0.0.beta3)
@@ -306,6 +308,7 @@ DEPENDENCIES
   rspec-rails
   ruby-graphviz
   russian!
+  sanitize
   shoulda-matchers
   simple-navigation
   simplecov (>= 0.4.0)

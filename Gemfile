@@ -55,5 +55,6 @@ gem 'paperclip'
 gem 'rails',  '3.0.9',          :require => false
 gem 'rake', '0.8.7'
 gem 'russian',                  :git => 'git://github.com/tacid/russian'
+gem 'sanitize'
 gem 'simple-navigation'
 gem 'state_machine'
