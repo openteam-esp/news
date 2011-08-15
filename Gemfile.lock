@@ -239,6 +239,7 @@ GEM
     rubyntlm (0.1.1)
     sass (3.1.5)
     sexp_processor (3.0.5)
+    shoulda-matchers (1.0.0.beta3)
     simple-navigation (3.3.4)
       activesupport (>= 2.3.2)
     simplecov (0.4.2)
@@ -305,6 +306,7 @@ DEPENDENCIES
   rspec-rails
   ruby-graphviz
   russian!
+  shoulda-matchers
   simple-navigation
   simplecov (>= 0.4.0)
   sqlite3

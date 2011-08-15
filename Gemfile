@@ -26,6 +26,7 @@ group :test do
   gem 'libnotify'
   gem 'rb-inotify'
   gem 'rspec-rails',            :require => false
+  gem 'shoulda-matchers',       :require => false
   gem 'simplecov', '>= 0.4.0'
   gem 'sqlite3'
 end

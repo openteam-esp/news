@@ -3,6 +3,14 @@
 require 'spec_helper'
 
 describe Entry do
+
+  it { should have_many(:assets) }
+  it { should have_many(:images) }
+  it { should have_many(:videos) }
+  it { should have_many(:audios) }
+  it { should have_many(:attachments) }
+
+
   before do
     @corrector_role = Fabricate(:role, :kind => 'corrector')
     @publisher_role = Fabricate(:role, :kind => 'publisher')
@@ -301,22 +309,25 @@ describe Entry do
   end
 end
 
+
 # == Schema Information
 #
 # Table name: entries
 #
-#  id           :integer         not null, primary key
-#  title        :text
-#  annotation   :text
-#  body         :text
-#  since        :datetime
-#  until        :datetime
-#  state        :string(255)
-#  deleted      :boolean
-#  author       :string(255)
-#  initiator_id :integer
-#  folder_id    :integer
-#  created_at   :datetime
-#  updated_at   :datetime
+#  id             :integer         not null, primary key
+#  title          :text
+#  annotation     :text
+#  body           :text
+#  since          :datetime
+#  until          :datetime
+#  state          :string(255)
+#  deleted        :boolean
+#  author         :string(255)
+#  initiator_id   :integer
+#  folder_id      :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#  old_id         :integer
+#  old_channel_id :integer
 #
 

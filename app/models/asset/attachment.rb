@@ -1,15 +1,4 @@
-class Asset < ActiveRecord::Base
-  belongs_to :entry
-  has_attached_file :file
-
-  before_save :set_type
-
-  private
-
-    def set_type
-      mime_group = file_content_type.split('/')[0]
-      self.type = %w[audio video image].include?(mime_group) ? mime_group.classify : 'Attachment'
-    end
+class Attachment < Asset
 end
 
 

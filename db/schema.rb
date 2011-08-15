@@ -10,19 +10,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110812052443) do
+ActiveRecord::Schema.define(:version => 20110815053311) do
 
   create_table "assets", :force => true do |t|
+    t.string   "type"
+    t.integer  "entry_id"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.string   "attachment_file_name"
-    t.string   "attachment_content_type"
-    t.integer  "attachment_file_size"
-    t.datetime "attachment_updated_at"
   end
 
   create_table "authentications", :force => true do |t|
@@ -41,25 +39,6 @@ ActiveRecord::Schema.define(:version => 20110812052443) do
     t.integer "channel_id"
     t.integer "entry_id"
   end
-
-  create_table "ckeditor_assets", :force => true do |t|
-    t.string   "data_file_name",                                 :null => false
-    t.string   "data_content_type"
-    t.integer  "data_file_size"
-    t.integer  "assetable_id"
-    t.string   "assetable_type",    :limit => 30
-    t.string   "type",              :limit => 25
-    t.string   "guid",              :limit => 10
-    t.integer  "locale",            :limit => 2,  :default => 0
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "old_id"
-  end
-
-  add_index "ckeditor_assets", ["assetable_type", "assetable_id"], :name => "fk_assetable"
-  add_index "ckeditor_assets", ["assetable_type", "type", "assetable_id"], :name => "idx_assetable_type"
-  add_index "ckeditor_assets", ["user_id"], :name => "fk_user"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0

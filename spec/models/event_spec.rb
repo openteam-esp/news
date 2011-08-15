@@ -50,6 +50,7 @@ describe Event do
 end
 
 
+
 # == Schema Information
 #
 # Table name: events
@@ -61,5 +62,6 @@ end
 #  user_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
+#  version_id :integer
 #
 

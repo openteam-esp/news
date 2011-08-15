@@ -10,6 +10,7 @@ class Recipient < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: recipients
@@ -21,5 +22,6 @@ end
 #  channel_id  :integer
 #  created_at  :datetime
 #  updated_at  :datetime
+#  old_id      :integer
 #
 

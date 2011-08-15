@@ -403,13 +403,13 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
 #
 #  id                     :integer         not null, primary key
 #  name                   :text
-#  roles                  :text
 #  email                  :string(255)
 #  encrypted_password     :string(128)
 #  reset_password_token   :string(255)
