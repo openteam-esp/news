@@ -1,7 +1,5 @@
 News::Application.routes.draw do
 
-  resources :assets
-
   devise_for :users
 
   match '/auth/:provider/callback' => 'authentications#create'
@@ -26,7 +24,7 @@ News::Application.routes.draw do
   match '/subscribe/:entry_id/delete' => 'subscribes#destroy', :as => :delete_subscribe
 
   resources :folders, :only => [] do
-    resources :entries do
+    resources :entries, :except => :new do
       get 'page/:page', :action => :index, :on => :collection
       resources :events, :only => :create do
         resources :versions, :only => :show

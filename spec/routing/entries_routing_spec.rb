@@ -7,10 +7,6 @@ describe EntriesController do
       get("/folders/awaiting_correction/entries").should route_to("entries#index", :folder_id => 'awaiting_correction')
     end
 
-    it "routes to #new" do
-      get("/folders/draft/entries/new").should route_to("entries#new", :folder_id => 'draft')
-    end
-
     it "routes to #show" do
       get("/folders/awaiting_correction/entries/1").should route_to("entries#show", :id => "1", :folder_id => 'awaiting_correction')
     end

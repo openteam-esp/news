@@ -2,8 +2,8 @@ class Folder < ActiveRecord::Base
 
   has_many :entries
 
-  def self.find_by_title(folder_id)
-    where(:title => folder_id).first
+  def self.draft
+    find_by_title "draft"
   end
 
   def to_param
@@ -15,6 +15,7 @@ class Folder < ActiveRecord::Base
       self.title == method_name.to_s
     end
   end
+
 end
 
 # == Schema Information

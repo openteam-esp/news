@@ -34,13 +34,6 @@ describe EntriesController do
     end
   end
 
-  describe "GET new" do
-    it "assigns a new entry as @entry" do
-      get :new, :folder_id => @draft.title
-      assigns(:entry).should be_a_new(Entry)
-    end
-  end
-
   describe "GET edit" do
     it "assigns the requested entry as @entry" do
       entry = @draft.entries.create! valid_attributes
@@ -50,41 +43,20 @@ describe EntriesController do
   end
 
   describe "POST create" do
-    describe "with valid params" do
       it "creates a new Entry" do
-        expect {
-          post :create, :entry => valid_attributes, :folder_id => @draft.title
-        }.to change(Entry, :count).by(1)
+        expect { post :create, :folder_id => @draft.title }.to change(Entry, :count).by(1)
       end
 
       it "assigns a newly created entry as @entry" do
-        post :create, :entry => valid_attributes, :folder_id => @draft.title
+        post :create, :folder_id => @draft.title
         assigns(:entry).should be_a(Entry)
         assigns(:entry).should be_persisted
       end
 
-      it "redirects to the created entry" do
-        post :create, :entry => valid_attributes, :folder_id => @draft.title
-        response.should redirect_to([@draft, Entry.last])
+      it "redirects to the editing form of created entry" do
+        post :create, :folder_id => @draft.title
+        response.should redirect_to([:edit, @draft, Entry.last])
       end
-    end
-
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved entry as @entry" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Entry.any_instance.stub(:save).and_return(false)
-        post :create, :entry => {}, :folder_id => @draft.title
-        assigns(:entry).should be_a_new(Entry)
-      end
-
-      it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Entry.any_instance.stub(:save).and_return(false)
-        Entry.any_instance.stub(:errors).and_return [true]
-        post :create, :entry => {}, :folder_id => @draft.title
-        response.should render_template("new")
-      end
-    end
   end
 
   describe "PUT update" do

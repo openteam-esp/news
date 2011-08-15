@@ -20,8 +20,6 @@ class Entry < ActiveRecord::Base
   scope :published, where(:state => 'published')
   scope :trash, where(:state => 'trash')
 
-  validates_presence_of :title, :body
-
   after_create :set_initiator_and_folder, :create_subscribe, :create_event
 
   after_update :create_update_event
