@@ -1,10 +1,10 @@
 <h1><%= t('All recipient') %></h1>
-<% if @recipients.any? %>
-  <ul>
   <p class="actions">
     <%= link_to t('Add recipient'), new_channel_recipient_path(@channel) %>
     <%= link_to t('Back'), channels_path %>
   </p>
+<% if @recipients.any? %>
+  <ul>
     <% @recipients.each do | recipient | %>
       <li>
         <%= recipient.description %></br>
