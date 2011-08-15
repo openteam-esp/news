@@ -13,7 +13,7 @@ describe EntriesController do
   end
 
   def valid_attributes
-    {:body => 'Текст новости', :user_id => @user.id}
+    {:title => "Заголовок новости", :body => 'Текст новости', :user_id => @user.id}
   end
 
   describe "GET index" do
@@ -192,3 +192,4 @@ describe EntriesController do
     end
   end
 end
+

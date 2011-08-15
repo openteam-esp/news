@@ -8,13 +8,22 @@
 
 <%= semantic_form_for([@folder, @entry]) do |form| %>
 
-  <%= form.inputs do  %>
+  <%= form.inputs do %>
     <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
     <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
     <%= form.input :annotation %>
     <%= form.input :body %>
+  <% end %>
+
+  <%= form.inputs "Опубликовать новость в определённое время", :id => "entry_since" do %>
     <%= form.input :since %>
+  <% end %>
+
+  <%= form.inputs "Это анонс предстоящего события", :id => "entry_until" do %>
     <%= form.input :until %>
+  <% end %>
+
+  <%= form.inputs "Указать, где опубликовать новость", :id => "entry_channels" do %>
     <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
   <% end %>
 
