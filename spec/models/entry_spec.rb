@@ -10,6 +10,8 @@ describe Entry do
   it { should have_many(:audios) }
   it { should have_many(:attachments) }
 
+  it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
+  it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
 
   before do
     @corrector_role = Fabricate(:role, :kind => 'corrector')

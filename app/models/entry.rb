@@ -7,6 +7,9 @@ class Entry < ActiveRecord::Base
   has_many :events, :validate => false
 
   has_many :assets
+
+  accepts_nested_attributes_for :assets, :reject_if => :all_blank
+
   has_many :attachments
   has_many :audios
   has_many :images
