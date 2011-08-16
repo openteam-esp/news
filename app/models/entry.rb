@@ -125,18 +125,14 @@ class Entry < ActiveRecord::Base
     EntryMailer.delay.entry_mailing(self, mailing_channels) if mailing_channels.any?
   end
 
-  def title_or_body
-    title.present? ? title.truncate(100) : body.truncate(100)
-  end
-
-  def not_blank_title
-    (title.presence || I18n.t(:blank_entry_title))
+  def presented(attribute)
+    self.send(attribute).presence || I18n.t("blank_entry_#{attribute}")
   end
 
   def composed_title
-    [ not_blank_title.squish.truncate(80),
-      Sanitize.clean(body.presence).try(:squish) ].
-        compact.join(' - ').truncate(100)
+    [ presented(:title).squish.truncate(80, :omission => '…'),
+      body.presence.try(:clean) ].
+        compact.join(' – ').squish.truncate(100, :omission => '…')
   end
 
   def state_events_for_author(user)

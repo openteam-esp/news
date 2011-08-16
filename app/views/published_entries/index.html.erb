@@ -3,7 +3,7 @@
     <ul class='entries'>
       <li>
         <%= l entry.updated_at, :format => :long %>
-        <%= link_to strip_tags(entry.title_or_body.gsub('&quot;', '"').gilensize), channel_published_entry_path(@channel, entry) %>
+        <%= link_to entry.composed_title.gilensize, channel_published_entry_path(@channel, entry) %>
       </li>
     </ul>
   <% end%>

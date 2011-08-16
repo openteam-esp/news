@@ -95,13 +95,11 @@ ru:
   history: "История"
   actions: "Доступные действия"
   no_any_entries: "Нет новостей"
-  empty_title: "Нет заголовка"
   list_of_entries: "Список новостей"
   destroy_message: 'Удалить сообщение'
   no_any_messages: "Нет новых сообщений"
   logout: "Выход"
   not_any_channels: "Нет каналов"
-  empty_annotation: "Нет аннотации"
   i_want_to_change_the_news: "Я хочу изменить новость"
   since: "С"
   until: "До"
@@ -112,6 +110,8 @@ ru:
   last_version: Перейти к последней версии
   version_at: Версия на момент
   blank_entry_title: "(без заголовка)"
+  blank_entry_annotation: "(без аннотации)"
+  blank_entry_body: "(без текста)"
   "Editing entry": "Редактирование новости"
   "New entry": "Создание новости"
   "News system": "Новостная система"

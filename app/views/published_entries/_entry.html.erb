@@ -1,5 +1,5 @@
 <h1>
-  <%= raw entry.title.gsub('&quot;', '"').gilensize %>
+  <%= gilensize entry.title %>
 </h1>
 
 <div class='since'>
@@ -7,10 +7,10 @@
 </div>
 
 <div class='annotation'>
-  <%= raw entry.annotation.gsub('&quot;', '"').gilensize %>
+  <%= gilensize entry.annotation %>
 </div>
 
 <div class='body'>
-  <%= raw entry.body.gsub('&quot;', '"').gilensize %>
+  <%= gilensize entry.body %>
 </div>
 

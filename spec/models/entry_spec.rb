@@ -28,23 +28,23 @@ describe Entry do
     end
 
     it "для новости с текстом" do
-      Entry.new(:body => "текст").composed_title.should == "(без заголовка) - текст"
+      Entry.new(:body => "текст").composed_title.should == "(без заголовка) – текст"
     end
 
     it "для новости с заголовком и текстом" do
-      Entry.new(:title => "заголовок", :body => "текст").composed_title.should == "заголовок - текст"
+      Entry.new(:title => "заголовок", :body => "текст").composed_title.should == "заголовок – текст"
     end
 
     it "большой текст" do
-      Entry.new(:body => "a"*100).composed_title.should == "(без заголовка) - #{'a'*79}..."
+      Entry.new(:body => "a"*100).composed_title.should == "(без заголовка) – #{'a'*81}…"
     end
 
     it "большой заголовок" do
-      Entry.new(:title => "a"*100).composed_title.should == "#{'a'*77}..."
+      Entry.new(:title => "a"*100).composed_title.should == "#{'a'*79}…"
     end
 
     it "большой заголовок + большой текст" do
-      Entry.new(:title => "a"*100, :body => "<p>" + "a"*100 + "</p>").composed_title.should == "#{'a'*77}... - #{'a'*14}..."
+      Entry.new(:title => "a"*100, :body => "<p>" + "a"*100 + "</p>").composed_title.should == "#{'a'*79}… – #{'a'*16}…"
     end
   end
 

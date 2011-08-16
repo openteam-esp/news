@@ -1,11 +1,11 @@
-<h2 <%= 'class=empty' if entry.title.blank? %>><%= entry.title.present? ? raw(entry.title.gsub('&quot;', '"').gilensize) : t('empty_title') %></h2>
+<h2 <%= 'class=empty' if entry.title.blank? %>><%= gilensize entry.presented(:title) %></h2>
 
 <div class='annotation <%= "empty" if entry.annotation.blank? %>'>
-  <%= entry.annotation.present? ? raw(entry.annotation.gsub('&quot;', '"').gilensize) : t('empty_annotation') %>
+  <%= gilensize entry.presented(:annotation) %>
 </div>
 
 <div class='body'>
-  <%= raw entry.body.gsub('&quot;', '"').gilensize %>
+  <%= gilensize entry.presented(:body) %>
 </div>
 
 <div class='availability'>
