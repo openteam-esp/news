@@ -123,18 +123,22 @@ class Entry < ActiveRecord::Base
     self.channels.each do |channel|
       mailing_channels << channel if channel.recipients.any?
     end
-
     EntryMailer.delay.entry_mailing(self, mailing_channels) if mailing_channels.any?
   end
 
-  def presented(attribute)
-    self.send(attribute).presence || I18n.t("blank_entry_#{attribute}")
+  def presented?(attribute, options={})
+    value = self.send(attribute)
+    presented = options[:html] ? value.try(:strip_html).presence : value.presence
+  end
+
+  def presented(attribute, options={})
+    presented?(attribute, options) ? self.send(attribute) : I18n.t("blank_entry_#{attribute}")
   end
 
   def composed_title
-    [ presented(:title).squish.truncate(80, :omission => '…'),
-      body.presence.try(:clean) ].
-        compact.join(' – ').squish.truncate(100, :omission => '…')
+    [ presented(:title).truncate(80, :omission => '…'),
+      presented?(:body, :html => true) ].
+        compact.join(' – ').truncate(100, :omission => '…')
   end
 
   def state_events_for_author(user)

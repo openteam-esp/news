@@ -1,18 +1,3 @@
-<h2 <%= 'class=empty' if entry.title.blank? %>><%= gilensize entry.presented(:title) %></h2>
-
-<div class='annotation <%= "empty" if entry.annotation.blank? %>'>
-  <%= gilensize entry.presented(:annotation) %>
-</div>
-
-<div class='body'>
-  <%= gilensize entry.presented(:body) %>
-</div>
-
-<div class='availability'>
-  <h2><%= t('availability') %></h2>
-  <ul>
-    <li><%= entry.since ? "#{t('since')} #{l(entry.since, :format => :long)}" : t('immediately_after_correcting') %></li>
-    <li><%= entry.until ? "#{t('until')} #{l(entry.until, :format => :long)}" : t('not_limited_in_time') %></li>
-  </ul>
-</div>
-
+<%= presented_content_tag :h2, @entry, :title %>
+<%= presented_content_tag :div, @entry, :annotation, :html => true %>
+<%= presented_content_tag :div, @entry, :body, :html => true  %>

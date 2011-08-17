@@ -3,7 +3,7 @@
   <%= l(@version.created_at, :format => :long) %>
 </p>
 
-<%= render :partial => 'entries/entry', :object => @entry %>
+<%= render :partial => 'entries/entry' %>
 
 <p>
   <%= link_to t('last_version'), [@folder, @entry] %>
