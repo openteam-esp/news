@@ -5,6 +5,8 @@ class EntriesController < InheritedResources::Base
 
   actions :all, :except => :new
 
+  build_nested_objects_for :all
+
   load_and_authorize_resource
 
   has_scope :page, :default => 1

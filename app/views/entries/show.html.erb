@@ -1,39 +1,13 @@
 
 <%= render :partial => 'entries/actions' %>
 
-<%= render :partial => 'entries/entry', :object => @entry %>
+<%= render :partial => @entry %>
+
+<%= render_attribute_values @entry, :images, :videos, :audios, :attachments %>
 
 <%= render :partial => 'entries/availability' %>
 
-<div class='channels'>
-  <h2><%= t('channels') %></h2>
-  <ul>
-    <% if @entry.channels.any? %>
-      <% @entry.channels.each do |channel| %>
-        <li><%= channel.title %></li>
-      <% end %>
-    <% else %>
-      <%= content_tag :li, t('not_any_channels'), :class => 'empty' %>
-    <% end %>
-  </ul>
-</div>
-
-<div class='history'>
-  <h2><%= t('history') %></h2>
-  <ul>
-    <% @entry.events.each do |event| %>
-      <li>
-        <%= t "event.kind.after.#{event.kind}" %>
-        <%= time_ago_in_words(event.created_at) %> назад
-        <%= "#{event.user}" %>
-        <% if event.version %>
-          (<%= link_to t('show_version'), [@folder, @entry, event, event.version] %>)
-        <% end %>
-        <%= content_tag :span, event.text, :class => 'text' if event.text.present? %>
-      </li>
-    <% end %>
-  </ul>
-</div>
+<%= render_attribute_values @entry, :channels, :events %>
 
 <%= render :partial => 'entries/actions' %>
 

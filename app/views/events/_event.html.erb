@@ -1,0 +1,7 @@
+<%= t "event.kind.after.#{event.kind}" %>
+<%= time_ago_in_words(event.created_at) %> назад
+<%= "#{event.user}" %>
+<% if event.version %>
+  (<%= link_to t('show_version'), [@folder, @entry, event, event.version] %>)
+<% end %>
+<%= content_tag :span, event.text, :class => 'text' if event.text.present? %>

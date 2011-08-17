@@ -7,6 +7,14 @@ GIT
       rack
 
 GIT
+  remote: git://github.com/openteam/inherited_resources
+  revision: 54ef0579e4a99fef7f6b246da6cc936b1813a973
+  specs:
+    inherited_resources (1.2.2)
+      has_scope (~> 0.5.0)
+      responders (~> 0.6.0)
+
+GIT
   remote: git://github.com/tacid/russian
   revision: 544a5e931a9044d941ff6f6746b10722f2fdb326
   specs:
@@ -113,9 +121,6 @@ GEM
       activesupport
       builder
     i18n (0.5.0)
-    inherited_resources (1.2.2)
-      has_scope (~> 0.5.0)
-      responders (~> 0.6.0)
     itslog (0.5.0)
     jquery-rails (1.0.12)
       railties (~> 3.0)
@@ -292,7 +297,7 @@ DEPENDENCIES
   hassle!
   hirb
   hoptoad_notifier
-  inherited_resources
+  inherited_resources!
   itslog
   jquery-rails
   kaminari

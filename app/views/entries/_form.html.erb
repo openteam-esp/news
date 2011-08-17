@@ -6,13 +6,22 @@
   <%= javascript_include_tag "redactor/jquery.redactor" %>
 <% end %>
 
-<%= semantic_form_for([@folder, @entry]) do |form| %>
+<%= semantic_form_for([@folder, @entry], :html => {:multipart => true} ) do |form| %>
 
   <%= form.inputs do %>
     <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
     <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
     <%= form.input :annotation %>
     <%= form.input :body %>
+  <% end %>
+
+  <%= form.inputs :for => :assets do | asset_form |  %>
+    <% if asset_form.object.persisted? %>
+      <%= render :partial => asset_form.object %>
+      <%= asset_form.input :_destroy, :as => :boolean %>
+    <% else %>
+      <%= asset_form.input :file %>
+    <% end %>
   <% end %>
 
   <%= form.inputs "Опубликовать новость в определённое время", :id => "entry_since_inputs" do %>

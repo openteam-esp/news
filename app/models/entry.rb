@@ -10,7 +10,7 @@ class Entry < ActiveRecord::Base
 
   has_many :assets
 
-  accepts_nested_attributes_for :assets, :reject_if => :all_blank
+  accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
   has_many :attachments
   has_many :audios
