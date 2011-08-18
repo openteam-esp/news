@@ -35,7 +35,7 @@
       <div class="sidebar">
         <%= semantic_form_for :entry, :url => folder_entries_path(Folder.draft) do | form | %>
           <%= form.buttons do %>
-            <%= form.commit_button t('new_entry') %>
+            <%= form.commit_button t('new_entry'), :button_html => { :class => "button" } %>
           <% end %>
         <% end %>
         <%= render_navigation :context => :folders, :renderer => :list_with_counters if current_user %>
