@@ -2,6 +2,7 @@ ru:
   time:
     formats:
       datetime: "%d.%m.%Y %H:%M"
+
   default_author: "Пресс-служба администрации Томской области"
 
   errors:

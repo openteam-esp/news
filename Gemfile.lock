@@ -101,7 +101,7 @@ GEM
       actionpack (>= 2.3.7)
       activesupport (>= 2.3.7)
       i18n (~> 0.4)
-    formtastic_date_as_string (0.0.5.3)
+    formtastic_date_as_string (0.0.5.4)
       formtastic
     fssm (0.2.7)
     gilenson (1.2.2)
