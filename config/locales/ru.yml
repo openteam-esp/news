@@ -181,6 +181,8 @@ ru:
         videos: "Видеофайлы"
         audios: "Аудиофайлы"
         attachments: "Файлы"
+      asset:
+        file: "Файл"
 
       recipient:
         active: "Активен"

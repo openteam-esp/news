@@ -1,6 +1,38 @@
-<h1><%= t("Editing entry") %></h1>
+<% content_for :extend_javascript do %>
+  <%= javascript_include_tag "jquery.ui.min" %>
+  <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
+  <%= javascript_include_tag "jquery.ui.timepicker" %>
+  <%= javascript_include_tag "jquery.ui.timepicker.ru" %>
+  <%= javascript_include_tag "redactor/jquery.redactor" %>
+  <%= javascript_include_tag "jquery.tipsy" %>
+<% end %>
 
-<%= render 'form' %>
+<%= semantic_form_for([@folder, @entry], :html => {:multipart => true} ) do |form| %>
 
-<p class="actions"><%= link_to t('Show'), [@folder,@entry] %> <%= link_to t('Back'), folder_entries_path(@folder) %></p>
+  <div class="entry_fields_wrapper">
+    <%= render :partial => "edit_actions", :locals => { :form => form, :position => "top" } %>
+
+    <%= form.inputs do %>
+      <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
+      <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
+      <%= form.input :annotation %>
+      <%= form.input :body %>
+      <%= form.input :since %>
+      <%= form.input :until %>
+      <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
+    <% end %>
+
+    <%= form.inputs :for => :assets do | asset_form |  %>
+      <% if asset_form.object.persisted? %>
+        <%= render :partial => asset_form.object %>
+        <%= asset_form.input :_destroy, :as => :boolean %>
+      <% else %>
+        <%= asset_form.input :file %>
+      <% end %>
+    <% end %>
+
+    <%= render :partial => "edit_actions", :locals => { :form => form, :position => "bottom" } %>
+  </div>
+
+<% end %>
 
