@@ -19,6 +19,8 @@ class Entry < ActiveRecord::Base
 
   attr_accessor :user_id
 
+  default_scope order('created_at desc')
+
   scope :published, where(:state => 'published')
   scope :trash, where(:state => 'trash')
 
