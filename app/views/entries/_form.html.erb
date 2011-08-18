@@ -15,15 +15,15 @@
     <%= form.input :body %>
   <% end %>
 
-  <%= form.inputs "Опубликовать новость в определённое время", :id => "entry_since" do %>
+  <%= form.inputs "Опубликовать новость в определённое время", :id => "entry_since_inputs" do %>
     <%= form.input :since %>
   <% end %>
 
-  <%= form.inputs "Это анонс предстоящего события", :id => "entry_until" do %>
+  <%= form.inputs "Это анонс предстоящего события", :id => "entry_until_inputs" do %>
     <%= form.input :until %>
   <% end %>
 
-  <%= form.inputs "Указать, где опубликовать новость", :id => "entry_channels" do %>
+  <%= form.inputs "Указать, где опубликовать новость", :id => "entry_channels_inputs" do %>
     <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
   <% end %>
 
