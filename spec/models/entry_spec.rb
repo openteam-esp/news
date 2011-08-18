@@ -55,6 +55,16 @@ describe Entry do
     I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
   end
 
+  it 'сортировка должна быть по убыванию по дате-времени создания' do
+    (1..3).each do | number |
+      Fabricate(:entry, :title => "Entry-#{number}", :created_at => Time.new + number.second )
+    end
+    entries = Entry.all
+    entries[0].title.should == "Entry-3"
+    entries[1].title.should == "Entry-2"
+    entries[2].title.should == "Entry-1"
+  end
+
   it 'должна знать кто к ней имеет отношение' do
     first_user = Fabricate(:user)
     second_user = Fabricate(:user)
