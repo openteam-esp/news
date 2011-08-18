@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Message do
-  before do
+  before(:each) do
     corrector_role = Fabricate(:role, :kind => 'corrector')
     publisher_role = Fabricate(:role, :kind => 'publisher')
     @initiator = Fabricate(:user)
@@ -14,18 +14,18 @@ describe Message do
     @corrpub   = Fabricate(:user)
     @corrpub.roles << corrector_role
     @corrpub.roles << publisher_role
+    User.current = @initiator
+    @entry = Fabricate(:entry)
   end
+
   it 'после создания новости, сообщение получит только инициатор' do
-    expect {
-      Fabricate(:entry, :user_id => @initiator);
-      Delayed::Worker.new.work_off
-    }.to change{@initiator.messages.count}.by(1)
+    Delayed::Worker.new.work_off
+    @initiator.messages.count.should == 1
   end
 
   it 'после отправки корректору, сообщение получат пользователи с ролью корректора, корр+публ и инициатор' do
-    entry = Fabricate(:entry, :user_id => @initiator)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator)
     Delayed::Worker.new.work_off
 
     @initiator.messages.count.should eql 2
@@ -35,11 +35,10 @@ describe Message do
   end
 
   it 'после возврата автору, сообщение получат пользователи с ролью корректора, корр+публ и иницатор' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'return_to_author', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'return_to_author', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
     @initiator.messages.count.should eql 3
@@ -49,11 +48,10 @@ describe Message do
   end
 
   it 'после взятия на корректуру, сообщение получат пользователи с ролью корректора, корр+публ и иницатор' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'correct', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
     @initiator.messages.count.should eql 3
@@ -63,13 +61,12 @@ describe Message do
   end
 
   it 'после отправки публикатору, сообщение получат пользователи с ролью корректора, публикатора,корр+публ и иницатор' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'correct', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
     @initiator.messages.count.should eql 4
@@ -79,15 +76,14 @@ describe Message do
   end
 
   it 'после возврата корректору, сообщение получат пользователи с ролью корректора, публикатор, корр+публ и иницатор' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'correct', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'return_to_corrector', :user_id => @publisher.id)
+    @entry.events.create(:kind => 'return_to_corrector', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
 
     @initiator.messages.count.should eql 5
@@ -97,15 +93,14 @@ describe Message do
   end
 
   it 'после публикации, сообщение получат пользователи с ролью публикатора, корр+публ, иницатор и пользователи которые имею отношение к новости' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'correct', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'publish', :user_id => @publisher.id)
+    @entry.events.create(:kind => 'publish', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
 
     @initiator.messages.count.should eql 5
@@ -115,41 +110,42 @@ describe Message do
   end
 
   it 'после немедленной отправки публикатору, сообщение получат пользователи с ролью корр+публ, публикатора' do
-    entry = Fabricate(:entry, :user_id => @corrpub.id)
+    User.current = @corrpub
+    other_entry = Fabricate(:entry)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'immediately_send_to_publisher', :user_id => @corrpub.id)
+    other_entry.events.create(:kind => 'immediately_send_to_publisher', :user_id => @corrpub.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 0
+    @initiator.messages.count.should eql 1
     @corrector.messages.count.should eql 0
     @publisher.messages.count.should eql 1
     @corrpub.messages.count.should eql 2
   end
 
   it 'после немедленной публикации, сообщение получат пользователи с ролью корр+публ, публикатора' do
-    entry = Fabricate(:entry, :user_id => @corrpub.id)
+    User.current = @corrpub
+    other_entry = Fabricate(:entry)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'immediately_publish', :user_id => @corrpub.id)
+    @entry.events.create(:kind => 'immediately_publish', :user_id => @corrpub.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 0
+    @initiator.messages.count.should eql 1
     @corrector.messages.count.should eql 0
     @publisher.messages.count.should eql 1
     @corrpub.messages.count.should eql 2
   end
 
   it 'после отправки в корзину, сообщение получат пользователи имеющие отношение к новости' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'correct', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'publish', :user_id => @publisher.id)
+    @entry.events.create(:kind => 'publish', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'to_trash', :user_id => @publisher.id)
+    @entry.events.create(:kind => 'to_trash', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
 
 
@@ -160,19 +156,18 @@ describe Message do
   end
 
   it 'после восстановления из корзины, сообщение получат пользователи имеющие отношение к новости' do
-    entry = Fabricate(:entry, :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
+    @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'correct', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'publish', :user_id => @publisher.id)
+    @entry.events.create(:kind => 'publish', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'to_trash', :user_id => @publisher.id)
+    @entry.events.create(:kind => 'to_trash', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
-    entry.events.create(:kind => 'restore', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'restore', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
 

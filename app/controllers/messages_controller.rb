@@ -1,5 +1,4 @@
-class MessagesController < InheritedResources::Base
-  before_filter :authenticate_user!
+class MessagesController < AuthorizedApplicationController
 
   load_and_authorize_resource
 

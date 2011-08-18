@@ -7,8 +7,9 @@ describe User do
   describe '- обычный пользователь может' do
     before do
       @user = Fabricate(:user)
+      User.current = @user
       @ability = Ability.new(@user)
-      @draft = Fabricate(:entry, :user_id => @user.id)
+      @draft = Fabricate(:entry)
     end
 
     it 'восстановить новость к которой он имеет отношение' do
@@ -50,7 +51,8 @@ describe User do
 
     it 'выполнять действия только над своим черновиком' do
       other_user = Fabricate(:user)
-      other_draft = Fabricate(:entry, :user_id => other_user.id)
+      User.current = other_user
+      other_draft = Fabricate(:entry)
       other_draft.state_events_for(@user).should be_empty
       other_draft_event = other_draft.events.new(:kind => 'send_to_corrector')
       @ability.should_not be_able_to(:create, other_draft_event)
@@ -67,14 +69,20 @@ describe User do
 
     it 'выполнять действия только над своим черновиком' do
       other_user = Fabricate(:user)
-      other_draft = Fabricate(:entry, :user_id => other_user.id)
+      User.current = other_user
+      other_draft = Fabricate(:entry)
       other_draft.state_events_for(@corrector).should be_empty
       other_draft_event = other_draft.events.new(:kind => 'send_to_corrector')
       @ability.should_not be_able_to(:create, other_draft_event)
     end
 
     describe 'только свой черновик' do
-      let :draft do Fabricate(:entry, :user_id => @corrector.id) end
+      def draft
+        @entry ||= begin
+                      User.current = @corrector
+                      Fabricate(:entry)
+                   end
+      end
 
       it 'отправить только по следующим переходам' do
         draft.state_events_for(@corrector).should eql [:immediately_send_to_publisher, :to_trash]
@@ -100,10 +108,13 @@ describe User do
     end
 
     describe 'новость ожидающую корректировки' do
-      let :awaiting_correction_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry
+      def awaiting_correction_entry
+        @awaiting_correction_entry ||= begin
+                                         User.current = Fabricate(:user)
+                                         entry = Fabricate(:entry)
+                                         entry.events.create(:kind => 'send_to_corrector')
+                                         entry
+                                       end
       end
 
       it 'отправить только по следующим переходам' do
@@ -127,11 +138,14 @@ describe User do
     end
 
     describe 'корректируемую новость' do
-      let :correcting_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry.events.create(:kind => 'correct')
-        entry
+      def correcting_entry
+        @correcting_entry ||= begin
+                                User.current = Fabricate(:user)
+                                entry = Fabricate(:entry)
+                                entry.events.create(:kind => 'send_to_corrector')
+                                entry.events.create(:kind => 'correct')
+                                entry
+                              end
       end
 
       it 'отправить только по следующим переходам' do
@@ -163,7 +177,12 @@ describe User do
     end
 
     describe 'только свой черновик' do
-      let :draft do Fabricate(:entry, :user_id => @publisher.id) end
+      def draft
+        @draft ||= begin
+                     User.current = @publisher
+                     Fabricate(:entry)
+                   end
+      end
 
       it 'отправить только по следующим переходам' do
         draft.state_events_for(@publisher).should eql [:send_to_corrector, :to_trash]
@@ -189,12 +208,15 @@ describe User do
     end
 
     describe 'новость ожидающую публикации' do
-      let :awaiting_publication_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry.events.create(:kind => 'correct')
-        entry.events.create(:kind => 'send_to_publisher')
-        entry
+      def awaiting_publication_entry
+        @awaiting_publication_entry ||= begin
+                                          User.current = Fabricate(:user)
+                                          entry = Fabricate(:entry)
+                                          entry.events.create(:kind => 'send_to_corrector')
+                                          entry.events.create(:kind => 'correct')
+                                          entry.events.create(:kind => 'send_to_publisher')
+                                          entry
+                                        end
       end
 
       it 'отправить только по следующим переходам' do
@@ -218,13 +240,16 @@ describe User do
     end
 
     describe 'опубликованную новость' do
-      let :published_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry.events.create(:kind => 'correct')
-        entry.events.create(:kind => 'send_to_publisher')
-        entry.events.create!(:kind => 'publish')
-        entry
+      def published_entry
+        @published_entry ||= begin
+                               User.current = Fabricate(:user)
+                               entry = Fabricate(:entry)
+                               entry.events.create(:kind => 'send_to_corrector')
+                               entry.events.create(:kind => 'correct')
+                               entry.events.create(:kind => 'send_to_publisher')
+                               entry.events.create!(:kind => 'publish')
+                               entry
+                             end
       end
 
       it 'отправить только по следующим переходам' do
@@ -258,7 +283,12 @@ describe User do
     end
 
     describe 'только свой черновик' do
-      let :draft do Fabricate(:entry, :user_id => @corpuber.id) end
+      def draft
+        @draft ||= begin
+                     User.current = @corpuber
+                     Fabricate(:entry)
+                   end
+      end
 
       it 'отправить только по следующим переходам' do
        draft.state_events_for(@corpuber).should eql [:immediately_publish, :to_trash]
@@ -284,10 +314,13 @@ describe User do
     end
 
     describe 'новость ожидающую корректировки' do
-      let :awaiting_correction_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry
+       def awaiting_correction_entry
+         @awaiting_correction_entry ||= begin
+                                          User.current = Fabricate(:user)
+                                          entry = Fabricate(:entry)
+                                          entry.events.create(:kind => 'send_to_corrector')
+                                          entry
+                                        end
       end
 
       it 'отправить только по следующим переходам' do
@@ -311,11 +344,14 @@ describe User do
     end
 
     describe 'корректируемую новость' do
-      let :correcting_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry.events.create(:kind => 'correct')
-        entry
+      def correcting_entry
+        @correcting_entry ||= begin
+                                User.current = Fabricate(:user)
+                                entry = Fabricate(:entry)
+                                entry.events.create(:kind => 'send_to_corrector')
+                                entry.events.create(:kind => 'correct')
+                                entry
+                              end
       end
 
       it 'отправить только по следующим переходам' do
@@ -338,12 +374,15 @@ describe User do
     end
 
     describe 'новость ожидающую публикации' do
-      let :awaiting_publication_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry.events.create(:kind => 'correct')
-        entry.events.create(:kind => 'send_to_publisher')
-        entry
+      def awaiting_publication_entry
+        @awaiting_publication_entry ||= begin
+                                          User.current ||= Fabricate(:user)
+                                          entry = Fabricate(:entry)
+                                          entry.events.create(:kind => 'send_to_corrector')
+                                          entry.events.create(:kind => 'correct')
+                                          entry.events.create(:kind => 'send_to_publisher')
+                                          entry
+                                        end
       end
 
       it 'отправить только по следующим переходам' do
@@ -371,13 +410,16 @@ describe User do
     end
 
     describe 'опубликованную новость' do
-      let :published_entry do
-        entry = Fabricate(:entry, :user_id => Fabricate(:user))
-        entry.events.create(:kind => 'send_to_corrector')
-        entry.events.create(:kind => 'correct')
-        entry.events.create(:kind => 'send_to_publisher')
-        entry.events.create(:kind => 'publish')
-        entry
+      def published_entry
+        @published_entry ||= begin
+                               User.current = Fabricate(:user)
+                               entry = Fabricate(:entry)
+                               entry.events.create(:kind => 'send_to_corrector')
+                               entry.events.create(:kind => 'correct')
+                               entry.events.create(:kind => 'send_to_publisher')
+                               entry.events.create(:kind => 'publish')
+                               entry
+                             end
       end
 
       it 'отправить только по следующим переходам' do

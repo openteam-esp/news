@@ -13,6 +13,8 @@ describe Entry do
   it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
   it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
 
+  let(:entry) { Fabricate(:entry) }
+
   before do
     @corrector_role = Fabricate(:role, :kind => 'corrector')
     @publisher_role = Fabricate(:role, :kind => 'publisher')
@@ -48,13 +50,6 @@ describe Entry do
     end
   end
 
-  it 'должна корректно сохранять и отображать дату' do
-    entry = Fabricate(:entry, :user_id => Fabricate(:user))
-    entry.since = "19.07.2011 09:20"
-    entry.save!
-    I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
-  end
-
   it 'сортировка должна быть по убыванию по дате-времени создания' do
     (1..3).each do | number |
       Fabricate(:entry, :title => "Entry-#{number}", :created_at => Time.new + number.second )
@@ -65,18 +60,32 @@ describe Entry do
     entries[2].title.should == "Entry-1"
   end
 
+  it 'должна корректно сохранять и отображать дату' do
+    User.current = Fabricate(:user)
+    entry = Fabricate(:entry)
+    entry.since = "19.07.2011 09:20"
+    entry.save!
+    I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
+  end
+
   it 'должна знать кто к ней имеет отношение' do
     first_user = Fabricate(:user)
     second_user = Fabricate(:user)
     second_user.roles << @corrector_role
     second_user.roles << @publisher_role
-    entry = Fabricate(:entry, :user_id => first_user.id)
+    User.current = first_user
+    entry = Fabricate(:entry)
     entry.related_to(first_user).should be_true
     entry.related_to(second_user).should be_false
   end
 
   describe 'после создания должна' do
-    let :new_entry do Fabricate(:entry, :user_id => Fabricate(:user)) end
+    def new_entry
+      @new_entry ||= begin
+                       User.current = Fabricate(:user)
+                       Fabricate(:entry)
+                     end
+    end
 
     before do Fabricate(:folder, :title => 'draft') end
 
@@ -94,11 +103,14 @@ describe Entry do
   end
 
   describe 'после редактирования должна' do
-    let :entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create!(:kind => 'send_to_corrector')
-      entry.events.create!(:kind => 'correct')
-      entry
+    def entry
+      @entry ||= begin
+                       User.current = Fabricate(:user)
+                       entry = Fabricate(:entry)
+                       entry.events.create!(:kind => 'send_to_corrector')
+                       entry.events.create!(:kind => 'correct')
+                       entry
+                     end
     end
 
     before(:each) do
@@ -120,10 +132,13 @@ describe Entry do
   end
 
   describe 'после отправки корректору должна' do
-    let :awaiting_correction_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'send_to_corrector')
-      entry
+    def awaiting_correction_entry
+      @awaiting_correction_entry ||= begin
+                                       User.current = Fabricate(:user)
+                                       entry = Fabricate(:entry)
+                                       entry.events.create(:kind => 'send_to_corrector')
+                                       entry
+                                     end
     end
     before do Fabricate(:folder, :title => 'awaiting_correction') end
 
@@ -141,14 +156,17 @@ describe Entry do
   end
 
   describe 'после отправки публикатору должна' do
-    let :awaiting_publication_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'send_to_corrector')
-      entry.events.create(:kind => 'correct')
-      entry.events.create(:kind => 'send_to_publisher')
-      entry
+    def awaiting_publication_entry
+      @awaiting_publication_entry ||= begin
+                                        User.current = Fabricate(:user)
+                                        entry = Fabricate(:entry)
+                                        entry.events.create(:kind => 'send_to_corrector')
+                                        entry.events.create(:kind => 'correct')
+                                        entry.events.create(:kind => 'send_to_publisher')
+                                        entry
+                                      end
     end
-    before do
+    before (:each) do
       Fabricate(:folder, :title => 'awaiting_correction')
       Fabricate(:folder, :title => 'awaiting_publication')
     end
@@ -167,11 +185,14 @@ describe Entry do
   end
 
   describe 'после возвращения инициатору должна' do
-    let :returned_to_author_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'send_to_corrector')
-      entry.events.create(:kind => 'return_to_author')
-      entry
+    def returned_to_author_entry
+      @returned_to_author_entry ||= begin
+                                      User.current = Fabricate(:user)
+                                      entry = Fabricate(:entry)
+                                      entry.events.create(:kind => 'send_to_corrector')
+                                      entry.events.create(:kind => 'return_to_author')
+                                      entry
+                                    end
     end
     before do Fabricate(:folder, :title => 'draft') end
 
@@ -189,11 +210,14 @@ describe Entry do
   end
 
   describe 'после взятия на корректуру должна' do
-    let :correcting_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'send_to_corrector')
-      entry.events.create(:kind => 'correct')
-      entry
+    def correcting_entry
+      @correcting_entry ||= begin
+                              User.current = Fabricate(:user)
+                              entry = Fabricate(:entry)
+                              entry.events.create(:kind => 'send_to_corrector')
+                              entry.events.create(:kind => 'correct')
+                              entry
+                            end
     end
     before do Fabricate(:folder, :title => 'correcting') end
 
@@ -211,13 +235,16 @@ describe Entry do
   end
 
   describe 'после возвращения корректору должна' do
-    let :returned_to_corrector_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'send_to_corrector')
-      entry.events.create(:kind => 'correct')
-      entry.events.create(:kind => 'send_to_publisher')
-      entry.events.create(:kind => 'return_to_corrector')
-      entry
+    def returned_to_corrector_entry
+      @returned_to_corrector_entry ||= begin
+                                         User.current = Fabricate(:user)
+                                         entry = Fabricate(:entry)
+                                         entry.events.create(:kind => 'send_to_corrector')
+                                         entry.events.create(:kind => 'correct')
+                                         entry.events.create(:kind => 'send_to_publisher')
+                                         entry.events.create(:kind => 'return_to_corrector')
+                                         entry
+                                       end
     end
     before do
       Fabricate(:folder, :title => 'awaiting_correction')
@@ -238,13 +265,16 @@ describe Entry do
   end
 
   describe 'после публикации должна' do
-    let :published_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'send_to_corrector')
-      entry.events.create(:kind => 'correct')
-      entry.events.create(:kind => 'send_to_publisher')
-      entry.events.create(:kind => 'publish')
-      entry
+    def published_entry
+      @published_entry ||= begin
+                             User.current = Fabricate(:user)
+                             entry = Fabricate(:entry)
+                             entry.events.create(:kind => 'send_to_corrector')
+                             entry.events.create(:kind => 'correct')
+                             entry.events.create(:kind => 'send_to_publisher')
+                             entry.events.create(:kind => 'publish')
+                             entry
+                           end
     end
     before do Fabricate(:folder, :title => 'published') end
 
@@ -262,11 +292,6 @@ describe Entry do
   end
 
   describe 'после удаления в корзину должна' do
-    let :trashed_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'to_trash')
-      entry
-    end
     before do Fabricate(:folder, :title => 'trash') end
 
     it 'иметь событие со статусом "помещена в корзину"' do
@@ -283,13 +308,6 @@ describe Entry do
   end
 
   describe 'после восстановления должна' do
-    let :restored_entry do
-      user = Fabricate(:user)
-      entry = Fabricate(:entry, :user_id => user.id)
-      entry.events.create(:kind => 'to_trash')
-      entry.events.create(:kind => 'restore', :user => user)
-      entry
-    end
     before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "восстановлена"' do
@@ -306,11 +324,6 @@ describe Entry do
   end
 
   describe 'после немедленной публикации должна' do
-    let :immediately_published_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'immediately_publish')
-      entry
-    end
     before do Fabricate(:folder, :title => 'published') end
 
     it 'иметь событие со статусом "опубликована"' do
@@ -327,11 +340,6 @@ describe Entry do
   end
 
   describe 'после немедленной отправки публикатору должна' do
-    let :immediately_sended_to_publisher_entry do
-      entry = Fabricate(:entry, :user_id => Fabricate(:user))
-      entry.events.create(:kind => 'immediately_send_to_publisher')
-      entry
-    end
     before do
       Fabricate(:folder, :title => 'awaiting_correction')
       Fabricate(:folder, :title => 'awaiting_publication')
@@ -348,6 +356,12 @@ describe Entry do
     it 'появиться в папке "Ожидающие публикации"' do
       immediately_sended_to_publisher_entry.reload.folder.title.should eql 'awaiting_publication'
     end
+  end
+
+  describe 'версии' do
+    it { expect {entry.update_attribute :body, 'version 2'}.to change(entry.versions, :count).by(1) }
+
+    it { expect {entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)] }.to change(entry.versions, :count).by(1) }
   end
 end
 

@@ -72,6 +72,7 @@ GEM
       json
     daemons (1.1.4)
     database_cleaner (0.6.7)
+    default_value_for (1.0.5)
     delayed_job (2.1.4)
       activesupport (~> 3.0)
       daemons
@@ -279,6 +280,7 @@ DEPENDENCIES
   compass
   configliere
   database_cleaner
+  default_value_for
   delayed_job
   devise
   dynamic_form

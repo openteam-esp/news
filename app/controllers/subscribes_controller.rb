@@ -1,5 +1,4 @@
-class SubscribesController < InheritedResources::Base
-  before_filter :authenticate_user!
+class SubscribesController < AuthorizedApplicationController
 
   load_and_authorize_resource
 

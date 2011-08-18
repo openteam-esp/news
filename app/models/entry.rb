@@ -3,6 +3,7 @@
 class Entry < ActiveRecord::Base
   attr_accessor :skip_assets_serialization
 
+
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
@@ -19,18 +20,19 @@ class Entry < ActiveRecord::Base
   has_many :images
   has_many :videos
 
-  attr_accessor :user_id
-
   default_scope order('created_at desc')
 
   scope :published, where(:state => 'published')
   scope :trash, where(:state => 'trash')
 
-  after_create :set_initiator_and_folder, :create_subscribe, :create_event
+  after_create :create_subscribe, :create_event
 
-  after_update :serialize_assets, :unless => :skip_assets_serialization
+  #after_update :serialize_assets, :unless => :skip_assets_serialization
   after_update :create_update_event, :unless => :skip_assets_serialization
 
+  default_value_for :initiator_id do User.current.try(:id) end
+
+  default_value_for :folder_id do Folder.draft.try(:id) end
 
   has_paper_trail
 
@@ -52,7 +54,7 @@ class Entry < ActiveRecord::Base
     end
 
     after_transition :trash => :draft do |entry, transition|
-      entry.initiator_id = entry.events.unscoped.where(:kind => 'restore').last.user_id
+      entry.initiator_id = User.current
       entry.save!
     end
 
@@ -185,22 +187,14 @@ class Entry < ActiveRecord::Base
   end
 
   private
-    def set_initiator_and_folder
-      self.initiator_id = user_id
-      self.folder = Folder.where(:title => 'draft').first
-      self.class.skip_callback(:update, :after, :create_update_event)
-      self.save
-      self.class.set_callback(:update, :after, :create_update_event)
-    end
-
     def create_event
-      events.create! :kind => 'created', :user_id => user_id
+      events.create! :kind => 'created', :user_id => User.current
     end
 
     def create_update_event
       %w[annotation body since title until].each do |key|
         if changes.has_key?(key)
-          events.create! :kind => 'updated', :user_id => user_id and break
+          events.create! :kind => 'updated', :user_id => User.current and break
         end
       end
     end

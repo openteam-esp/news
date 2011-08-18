@@ -17,6 +17,7 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.include Devise::TestHelpers, :type => :controller
+    config.include Esp::SpecHelper
     config.mock_with :rspec
 
     config.before(:suite) do

@@ -1,4 +1,4 @@
-class VersionsController < ApplicationController
+class VersionsController < AuthorizedApplicationController
   def show
     @folder = Folder.find_by_title(params[:folder_id])
     @event = Event.find(params[:event_id])

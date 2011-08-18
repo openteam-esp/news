@@ -23,8 +23,10 @@ News::Application.routes.draw do
   match '/subscribe/:entry_id' => 'subscribes#create', :as => :subscribe
   match '/subscribe/:entry_id/delete' => 'subscribes#destroy', :as => :delete_subscribe
 
+  resources :entries, :only => :create
+
   resources :folders, :only => [] do
-    resources :entries, :except => :new do
+    resources :entries, :except => [:new, :create] do
       get 'page/:page', :action => :index, :on => :collection
       resources :events, :only => :create do
         resources :versions, :only => :show

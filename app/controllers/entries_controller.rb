@@ -1,7 +1,6 @@
-class EntriesController < InheritedResources::Base
-  before_filter :authenticate_user!
+class EntriesController < AuthorizedApplicationController
 
-  belongs_to :folder, :finder => :find_by_title
+  belongs_to :folder, :finder => :find_by_title, :optional => true
 
   actions :all, :except => :new
 
@@ -16,7 +15,7 @@ class EntriesController < InheritedResources::Base
   end
 
   def create
-    create! { edit_resource_path }
+    create! { edit_folder_entry_path(@entry.folder, @entry) }
   end
 
   def update

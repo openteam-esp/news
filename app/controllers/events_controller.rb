@@ -1,4 +1,4 @@
-class EventsController < InheritedResources::Base
+class EventsController < AuthorizedApplicationController
   load_and_authorize_resource
 
   belongs_to :entry

@@ -16,7 +16,7 @@ describe EntriesController do
     end
 
     it "routes to #create" do
-      post("/folders/draft/entries").should route_to("entries#create", :folder_id => 'draft')
+      post("/entries").should route_to("entries#create")
     end
 
     it "routes to #update" do

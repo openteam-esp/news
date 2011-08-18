@@ -3,7 +3,8 @@ require "spec_helper"
 describe EventsController do
   describe "routing" do
     before :each do
-      @entry = Fabricate(:entry, :user_id => Fabricate(:user))
+      User.current = Fabricate(:user)
+      @entry = Fabricate(:entry)
     end
 
     it "routes to #create" do

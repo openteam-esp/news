@@ -33,7 +33,7 @@
     </div>
     <div class="container">
       <div class="sidebar">
-        <%= semantic_form_for :entry, :url => folder_entries_path(Folder.draft) do | form | %>
+        <%= semantic_form_for :entry, :url => entries_path do | form | %>
           <%= form.buttons do %>
             <%= form.commit_button t('new_entry'), :button_html => { :class => "button" } %>
           <% end %>

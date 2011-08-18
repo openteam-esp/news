@@ -10,7 +10,8 @@ describe Event do
     @publisher_role = Fabricate(:role, :kind => 'publisher')
     Fabricate(:folder, :title => :draft)
     Fabricate(:folder, :title => :awaiting_correction)
-    @entry = Fabricate(:entry, :user_id => @initiator.id)
+    set_current_user(@initiator)
+    @entry = Fabricate(:entry)
   end
 
   it "после создания события с типом send_to_corrector - новость должны иметь соответствующий статус" do

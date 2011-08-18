@@ -25,6 +25,14 @@ class User < ActiveRecord::Base
     Subscribe.where(:subscriber_id => self, :initiator_id => initiator).any?
   end
 
+  def self.current
+    Thread.current[:user]
+  end
+
+  def self.current=(user)
+    Thread.current[:user] = user
+  end
+
   private
     def create_subscribe(role)
       role_events = {
