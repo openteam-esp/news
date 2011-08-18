@@ -5,6 +5,8 @@
 
 <%= render :partial => 'entries/entry' %>
 
+<%= render_attribute_values @entry, :unserialized_assets %>
+
 <p>
   <%= link_to t('last_version'), [@folder, @entry] %>
 </p>

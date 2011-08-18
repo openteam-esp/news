@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
+  attr_accessor :skip_assets_serialization
+
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
@@ -26,7 +28,9 @@ class Entry < ActiveRecord::Base
 
   after_create :set_initiator_and_folder, :create_subscribe, :create_event
 
-  after_update :create_update_event
+  after_update :serialize_assets, :unless => :skip_assets_serialization
+  after_update :create_update_event, :unless => :skip_assets_serialization
+
 
   has_paper_trail
 
@@ -176,12 +180,16 @@ class Entry < ActiveRecord::Base
     result.flatten.uniq.sort
   end
 
+  def unserialized_assets
+    YAML::load self.serialized_assets
+  end
+
   private
     def set_initiator_and_folder
       self.initiator_id = user_id
       self.folder = Folder.where(:title => 'draft').first
       self.class.skip_callback(:update, :after, :create_update_event)
-      self.save(:skip_callbacks => false)
+      self.save
       self.class.set_callback(:update, :after, :create_update_event)
     end
 
@@ -200,27 +208,35 @@ class Entry < ActiveRecord::Base
     def create_subscribe
       Subscribe.create!(:subscriber => initiator, :entry => self)
     end
+
+    def serialize_assets
+      self.skip_assets_serialization = true
+      self.update_attribute :serialized_assets, assets.to_yaml
+    end
 end
+
+
 
 
 # == Schema Information
 #
 # Table name: entries
 #
-#  id             :integer         not null, primary key
-#  title          :text
-#  annotation     :text
-#  body           :text
-#  since          :datetime
-#  until          :datetime
-#  state          :string(255)
-#  deleted        :boolean
-#  author         :string(255)
-#  initiator_id   :integer
-#  folder_id      :integer
-#  created_at     :datetime
-#  updated_at     :datetime
-#  old_id         :integer
-#  old_channel_id :integer
+#  id                :integer         not null, primary key
+#  title             :text
+#  annotation        :text
+#  body              :text
+#  since             :datetime
+#  until             :datetime
+#  state             :string(255)
+#  deleted           :boolean
+#  author            :string(255)
+#  initiator_id      :integer
+#  folder_id         :integer
+#  created_at        :datetime
+#  updated_at        :datetime
+#  old_id            :integer
+#  old_channel_id    :integer
+#  serialized_assets :text
 #
 

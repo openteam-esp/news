@@ -352,24 +352,27 @@ describe Entry do
 end
 
 
+
+
 # == Schema Information
 #
 # Table name: entries
 #
-#  id             :integer         not null, primary key
-#  title          :text
-#  annotation     :text
-#  body           :text
-#  since          :datetime
-#  until          :datetime
-#  state          :string(255)
-#  deleted        :boolean
-#  author         :string(255)
-#  initiator_id   :integer
-#  folder_id      :integer
-#  created_at     :datetime
-#  updated_at     :datetime
-#  old_id         :integer
-#  old_channel_id :integer
+#  id                :integer         not null, primary key
+#  title             :text
+#  annotation        :text
+#  body              :text
+#  since             :datetime
+#  until             :datetime
+#  state             :string(255)
+#  deleted           :boolean
+#  author            :string(255)
+#  initiator_id      :integer
+#  folder_id         :integer
+#  created_at        :datetime
+#  updated_at        :datetime
+#  old_id            :integer
+#  old_channel_id    :integer
+#  serialized_assets :text
 #
 
