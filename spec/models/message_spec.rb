@@ -18,9 +18,9 @@ describe Message do
     @entry = Fabricate(:entry)
   end
 
-  it 'после создания новости, сообщение получит только инициатор' do
+  it 'после создания новости никто не получит сообщение' do
     Delayed::Worker.new.work_off
-    @initiator.messages.count.should == 1
+    @initiator.messages.count.should == 0
   end
 
   it 'после отправки корректору, сообщение получат пользователи с ролью корректора, корр+публ и инициатор' do
@@ -28,7 +28,7 @@ describe Message do
     @entry.events.create(:kind => 'send_to_corrector', :user_id => @initiator)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 2
+    @initiator.messages.count.should eql 1
     @corrector.messages.count.should eql 1
     @publisher.messages.count.should eql 0
     @corrpub.messages.count.should eql 1
@@ -41,7 +41,7 @@ describe Message do
     @entry.events.create(:kind => 'return_to_author', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 3
+    @initiator.messages.count.should eql 2
     @corrector.messages.count.should eql 2
     @publisher.messages.count.should eql 0
     @corrpub.messages.count.should eql 2
@@ -54,7 +54,7 @@ describe Message do
     @entry.events.create(:kind => 'correct', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 3
+    @initiator.messages.count.should eql 2
     @corrector.messages.count.should eql 2
     @publisher.messages.count.should eql 0
     @corrpub.messages.count.should eql 2
@@ -69,7 +69,7 @@ describe Message do
     @entry.events.create(:kind => 'send_to_publisher', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 4
+    @initiator.messages.count.should eql 3
     @corrector.messages.count.should eql 3
     @publisher.messages.count.should eql 1
     @corrpub.messages.count.should eql 3
@@ -86,7 +86,7 @@ describe Message do
     @entry.events.create(:kind => 'return_to_corrector', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 5
+    @initiator.messages.count.should eql 4
     @corrector.messages.count.should eql 4
     @publisher.messages.count.should eql 2
     @corrpub.messages.count.should eql 4
@@ -103,7 +103,7 @@ describe Message do
     @entry.events.create(:kind => 'publish', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 5
+    @initiator.messages.count.should eql 4
     @corrector.messages.count.should eql 4
     @publisher.messages.count.should eql 2
     @corrpub.messages.count.should eql 4
@@ -116,10 +116,10 @@ describe Message do
     other_entry.events.create(:kind => 'immediately_send_to_publisher', :user_id => @corrpub.id)
     Delayed::Worker.new.work_off
 
-    @initiator.messages.count.should eql 1
+    @initiator.messages.count.should eql 0
     @corrector.messages.count.should eql 0
     @publisher.messages.count.should eql 1
-    @corrpub.messages.count.should eql 2
+    @corrpub.messages.count.should eql 1
   end
 
   it 'после немедленной публикации, сообщение получат пользователи с ролью корр+публ, публикатора' do
@@ -132,7 +132,7 @@ describe Message do
     @initiator.messages.count.should eql 1
     @corrector.messages.count.should eql 0
     @publisher.messages.count.should eql 1
-    @corrpub.messages.count.should eql 2
+    @corrpub.messages.count.should eql 1
   end
 
   it 'после отправки в корзину, сообщение получат пользователи имеющие отношение к новости' do
@@ -149,7 +149,7 @@ describe Message do
     Delayed::Worker.new.work_off
 
 
-    @initiator.messages.count.should eql 6
+    @initiator.messages.count.should eql 5
     @corrector.messages.count.should eql 5
     @publisher.messages.count.should eql 3
     @corrpub.messages.count.should eql 4
@@ -171,7 +171,7 @@ describe Message do
     Delayed::Worker.new.work_off
 
 
-    @initiator.messages.count.should eql 7
+    @initiator.messages.count.should eql 6
     @corrector.messages.count.should eql 6
     @publisher.messages.count.should eql 4
     @corrpub.messages.count.should eql 4

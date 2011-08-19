@@ -13,8 +13,6 @@ describe Entry do
   it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
   it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
 
-  let(:entry) { Fabricate(:entry) }
-
   before do
     @corrector_role = Fabricate(:role, :kind => 'corrector')
     @publisher_role = Fabricate(:role, :kind => 'publisher')
@@ -61,11 +59,7 @@ describe Entry do
   end
 
   it 'должна корректно сохранять и отображать дату' do
-    User.current = Fabricate(:user)
-    entry = Fabricate(:entry)
-    entry.since = "19.07.2011 09:20"
-    entry.save!
-    I18n.l(entry.since, :format => :datetime).should eql "19.07.2011 09:20"
+    I18n.l(draft_entry(:since => "19.07.2011 09:20").since, :format => :datetime).should == "19.07.2011 09:20"
   end
 
   it 'должна знать кто к ней имеет отношение' do
@@ -80,66 +74,37 @@ describe Entry do
   end
 
   describe 'после создания должна' do
-    def new_entry
-      @new_entry ||= begin
-                       User.current = Fabricate(:user)
-                       Fabricate(:entry)
-                     end
-    end
-
     before do Fabricate(:folder, :title => 'draft') end
 
-    it 'иметь событие со статусом "новость создана"' do
-      new_entry.events.last.kind.should eql 'created'
-    end
-
     it 'иметь статус "черновик"' do
-      new_entry.should be_draft
+      draft_entry.should be_draft
     end
 
     it 'появиться в папке "Черновики"' do
-      new_entry.folder.title.should eql 'draft'
+      draft_entry.folder.should == Folder.draft
     end
   end
 
   describe 'после редактирования должна' do
-    def entry
-      @entry ||= begin
-                       User.current = Fabricate(:user)
-                       entry = Fabricate(:entry)
-                       entry.events.create!(:kind => 'send_to_corrector')
-                       entry.events.create!(:kind => 'correct')
-                       entry
-                     end
-    end
-
     before(:each) do
       Fabricate(:folder, :title => 'correcting')
-      entry.update_attribute(:title, 'Updated!!')
+      correcting_entry.update_attribute(:title, 'Updated!!')
     end
 
     it 'иметь событие со статусом "новость изменена"' do
-      entry.reload.events.first.kind.should eql 'updated'
+      correcting_entry.reload.events.first.kind.should eql 'updated'
     end
 
     it 'сохранять статус' do
-      entry.reload.should be_correcting
+      correcting_entry.reload.should be_correcting
     end
 
     it 'оставаться в той же папке' do
-      entry.reload.folder.title.should eql 'correcting'
+      correcting_entry.reload.folder.title.should eql 'correcting'
     end
   end
 
   describe 'после отправки корректору должна' do
-    def awaiting_correction_entry
-      @awaiting_correction_entry ||= begin
-                                       User.current = Fabricate(:user)
-                                       entry = Fabricate(:entry)
-                                       entry.events.create(:kind => 'send_to_corrector')
-                                       entry
-                                     end
-    end
     before do Fabricate(:folder, :title => 'awaiting_correction') end
 
     it 'иметь событие со статусом "отправлена корректору"' do
@@ -156,16 +121,6 @@ describe Entry do
   end
 
   describe 'после отправки публикатору должна' do
-    def awaiting_publication_entry
-      @awaiting_publication_entry ||= begin
-                                        User.current = Fabricate(:user)
-                                        entry = Fabricate(:entry)
-                                        entry.events.create(:kind => 'send_to_corrector')
-                                        entry.events.create(:kind => 'correct')
-                                        entry.events.create(:kind => 'send_to_publisher')
-                                        entry
-                                      end
-    end
     before (:each) do
       Fabricate(:folder, :title => 'awaiting_correction')
       Fabricate(:folder, :title => 'awaiting_publication')
@@ -185,15 +140,6 @@ describe Entry do
   end
 
   describe 'после возвращения инициатору должна' do
-    def returned_to_author_entry
-      @returned_to_author_entry ||= begin
-                                      User.current = Fabricate(:user)
-                                      entry = Fabricate(:entry)
-                                      entry.events.create(:kind => 'send_to_corrector')
-                                      entry.events.create(:kind => 'return_to_author')
-                                      entry
-                                    end
-    end
     before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "возвращена инициатору"' do
@@ -210,15 +156,6 @@ describe Entry do
   end
 
   describe 'после взятия на корректуру должна' do
-    def correcting_entry
-      @correcting_entry ||= begin
-                              User.current = Fabricate(:user)
-                              entry = Fabricate(:entry)
-                              entry.events.create(:kind => 'send_to_corrector')
-                              entry.events.create(:kind => 'correct')
-                              entry
-                            end
-    end
     before do Fabricate(:folder, :title => 'correcting') end
 
     it 'иметь событие со статусом "взята на корректуру"' do
@@ -235,17 +172,6 @@ describe Entry do
   end
 
   describe 'после возвращения корректору должна' do
-    def returned_to_corrector_entry
-      @returned_to_corrector_entry ||= begin
-                                         User.current = Fabricate(:user)
-                                         entry = Fabricate(:entry)
-                                         entry.events.create(:kind => 'send_to_corrector')
-                                         entry.events.create(:kind => 'correct')
-                                         entry.events.create(:kind => 'send_to_publisher')
-                                         entry.events.create(:kind => 'return_to_corrector')
-                                         entry
-                                       end
-    end
     before do
       Fabricate(:folder, :title => 'awaiting_correction')
       Fabricate(:folder, :title => 'awaiting_publication')
@@ -265,17 +191,6 @@ describe Entry do
   end
 
   describe 'после публикации должна' do
-    def published_entry
-      @published_entry ||= begin
-                             User.current = Fabricate(:user)
-                             entry = Fabricate(:entry)
-                             entry.events.create(:kind => 'send_to_corrector')
-                             entry.events.create(:kind => 'correct')
-                             entry.events.create(:kind => 'send_to_publisher')
-                             entry.events.create(:kind => 'publish')
-                             entry
-                           end
-    end
     before do Fabricate(:folder, :title => 'published') end
 
     it 'иметь событие со статусом "опубликована"' do
@@ -358,12 +273,28 @@ describe Entry do
     end
   end
 
-  describe 'версии' do
-    it { expect {entry.update_attribute :body, 'version 2'}.to change(entry.versions, :count).by(1) }
+  describe 'события' do
+    it { expect {draft_entry.update_attribute :body, 'version 2'}.to change(draft_entry.events, :count).by(1) }
 
-    it { expect {entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)] }.to change(entry.versions, :count).by(1) }
+    it { expect {draft_entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]; }.to change(draft_entry.events, :count).by(1) }
+
+    it "изменение атрибутов и nested атрибутов должно приводить к созданию одного Event" do
+      expect {draft_entry.update_attributes :title => "title", :assets_attributes => [Fabricate.attributes_for(:asset)]; }.to change(draft_entry.events, :count).by(1)
+    end
+
+    it "создание новости не должно продуцировать event" do
+      expect {create_draft_entry}.to_not change(Event, :count)
+    end
+
+    it "если нет изменений в атрибутах не создавать event" do
+      entry = create_draft_entry(:title => "title")
+      expect { entry.update_attributes(:title => "title") }.to_not change(entry.events, :count)
+    end
+
   end
+
 end
+
 
 
 
@@ -372,21 +303,20 @@ end
 #
 # Table name: entries
 #
-#  id                :integer         not null, primary key
-#  title             :text
-#  annotation        :text
-#  body              :text
-#  since             :datetime
-#  until             :datetime
-#  state             :string(255)
-#  deleted           :boolean
-#  author            :string(255)
-#  initiator_id      :integer
-#  folder_id         :integer
-#  created_at        :datetime
-#  updated_at        :datetime
-#  old_id            :integer
-#  old_channel_id    :integer
-#  serialized_assets :text
+#  id             :integer         not null, primary key
+#  title          :text
+#  annotation     :text
+#  body           :text
+#  since          :datetime
+#  until          :datetime
+#  state          :string(255)
+#  deleted        :boolean
+#  author         :string(255)
+#  initiator_id   :integer
+#  folder_id      :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#  old_id         :integer
+#  old_channel_id :integer
 #
 

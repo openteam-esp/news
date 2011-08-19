@@ -18,14 +18,4 @@ class EntriesController < AuthorizedApplicationController
     create! { edit_folder_entry_path(@entry.folder, @entry) }
   end
 
-  def update
-    update! do | success, failure |
-      success.html {
-        event = @entry.events[1]
-        event.update_attribute(:version_id, @entry.versions.last.id) if event
-
-        redirect_to [@folder, @entry]
-    }
-    end
-  end
 end

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
-  attr_accessor :skip_assets_serialization
 
+  attr_accessor :dirty
 
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
@@ -11,7 +11,7 @@ class Entry < ActiveRecord::Base
 
   has_many :events, :validate => false
 
-  has_many :assets
+  has_many :assets, :after_add => :make_dirty
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -25,10 +25,9 @@ class Entry < ActiveRecord::Base
   scope :published, where(:state => 'published')
   scope :trash, where(:state => 'trash')
 
-  after_create :create_subscribe, :create_event
+  after_create :create_subscribe
 
-  #after_update :serialize_assets, :unless => :skip_assets_serialization
-  after_update :create_update_event, :unless => :skip_assets_serialization
+  after_update :create_update_event
 
   default_value_for :initiator_id do User.current.try(:id) end
 
@@ -121,7 +120,7 @@ class Entry < ActiveRecord::Base
   end
 
   def related_to(user)
-    events.where(:user_id => user.id).any?
+    events.where(:user_id => user.id).any? || initiator == user
   end
 
   def send_by_email
@@ -182,32 +181,29 @@ class Entry < ActiveRecord::Base
     result.flatten.uniq.sort
   end
 
-  def unserialized_assets
-    YAML::load self.serialized_assets
+  def changed?
+    dirty || super
   end
 
   private
-    def create_event
-      events.create! :kind => 'created', :user_id => User.current
-    end
 
     def create_update_event
-      %w[annotation body since title until].each do |key|
-        if changes.has_key?(key)
-          events.create! :kind => 'updated', :user_id => User.current and break
-        end
-      end
+      events.create! :kind => 'updated', :user_id => User.current if content_attributes_changed?
+    end
+
+    def content_attributes_changed?
+      dirty || (changes.keys - %w[state updated_at folder_id]).any?
+    end
+
+    def make_dirty(*args)
+      self.dirty = true
     end
 
     def create_subscribe
       Subscribe.create!(:subscriber => initiator, :entry => self)
     end
-
-    def serialize_assets
-      self.skip_assets_serialization = true
-      self.update_attribute :serialized_assets, assets.to_yaml
-    end
 end
+
 
 
 
@@ -216,21 +212,20 @@ end
 #
 # Table name: entries
 #
-#  id                :integer         not null, primary key
-#  title             :text
-#  annotation        :text
-#  body              :text
-#  since             :datetime
-#  until             :datetime
-#  state             :string(255)
-#  deleted           :boolean
-#  author            :string(255)
-#  initiator_id      :integer
-#  folder_id         :integer
-#  created_at        :datetime
-#  updated_at        :datetime
-#  old_id            :integer
-#  old_channel_id    :integer
-#  serialized_assets :text
+#  id             :integer         not null, primary key
+#  title          :text
+#  annotation     :text
+#  body           :text
+#  since          :datetime
+#  until          :datetime
+#  state          :string(255)
+#  deleted        :boolean
+#  author         :string(255)
+#  initiator_id   :integer
+#  folder_id      :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#  old_id         :integer
+#  old_channel_id :integer
 #
 
