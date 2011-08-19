@@ -7,11 +7,11 @@ class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
-  has_and_belongs_to_many :channels
+  has_and_belongs_to_many :channels, :after_add => :make_dirty, :after_remove => :make_dirty
 
   has_many :events, :validate => false
 
-  has_many :assets, :after_add => :make_dirty
+  has_many :assets, :after_add => :make_dirty, :after_remove => :make_dirty
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -187,10 +187,11 @@ class Entry < ActiveRecord::Base
 
     def create_update_event
       events.create! :kind => 'updated'  if content_attributes_changed?
+      self.dirty = false
     end
 
     def content_attributes_changed?
-      dirty || (changes.keys - %w[state updated_at folder_id]).any?
+      self.dirty || (changes.keys - %w[state updated_at folder_id]).any?
     end
 
     def make_dirty(*args)

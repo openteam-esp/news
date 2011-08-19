@@ -13,6 +13,12 @@ describe Event do
       draft_entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]
       draft_entry.events.last.versioned_entry.images.should == draft_entry.images
     end
+
+    it "должен сохранять каналы" do
+      draft_entry.channels << [Fabricate(:channel), Fabricate(:channel)]
+      draft_entry.save
+      draft_entry.events.last.versioned_entry.channels.should == draft_entry.channels
+    end
   end
   #before do
     #@initiator  = Fabricate(:user)

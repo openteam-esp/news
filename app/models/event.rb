@@ -57,7 +57,7 @@ class Event < ActiveRecord::Base
     end
 
     def make_serialized_entry
-      self.serialized_entry = entry.to_json(:methods => %w[image_ids video_ids audio_ids attachment_ids])
+      self.serialized_entry = entry.to_json(:methods => %w[image_ids video_ids audio_ids attachment_ids channel_ids])
     end
 end
 

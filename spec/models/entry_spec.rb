@@ -288,7 +288,7 @@ describe Entry do
 
     it "если нет изменений в атрибутах не создавать event" do
       entry = create_draft_entry(:title => "title")
-      expect { entry.update_attributes(:title => "title") }.to_not change(entry.events, :count)
+      expect { Entry.find(entry.id).update_attributes(:title => "title") }.to_not change(entry.events, :count)
     end
 
   end
