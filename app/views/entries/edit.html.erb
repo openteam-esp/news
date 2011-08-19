@@ -13,7 +13,6 @@
     <%= render :partial => "edit_actions", :locals => { :form => form, :position => "top" } %>
 
     <%= form.inputs do %>
-      <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
       <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
       <%= form.input :annotation %>
       <%= form.input :body %>

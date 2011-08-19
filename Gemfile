@@ -51,7 +51,6 @@ gem 'inherited_resources',      :git => 'git://github.com/openteam/inherited_res
 gem 'jquery-rails',             :require => false
 gem 'kaminari'
 gem 'omniauth'
-gem 'paper_trail'
 gem 'paperclip'
 gem 'rails',  '3.0.9',          :require => false
 gem 'rake', '0.8.7'

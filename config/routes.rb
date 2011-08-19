@@ -28,9 +28,7 @@ News::Application.routes.draw do
   resources :folders, :only => [] do
     resources :entries, :except => [:new, :create] do
       get 'page/:page', :action => :index, :on => :collection
-      resources :events, :only => :create do
-        resources :versions, :only => :show
-      end
+      resources :events, :only => [:create, :show]
     end
   end
 

@@ -29,11 +29,9 @@ class Entry < ActiveRecord::Base
 
   after_update :create_update_event
 
-  default_value_for :initiator_id do User.current.try(:id) end
+  default_value_for :initiator_id do User.current_id end
 
   default_value_for :folder_id do Folder.draft.try(:id) end
-
-  has_paper_trail
 
   state_machine :initial => :draft do
     after_transition :to => :correcting do |entry, transition|
@@ -188,7 +186,7 @@ class Entry < ActiveRecord::Base
   private
 
     def create_update_event
-      events.create! :kind => 'updated', :user_id => User.current if content_attributes_changed?
+      events.create! :kind => 'updated'  if content_attributes_changed?
     end
 
     def content_attributes_changed?

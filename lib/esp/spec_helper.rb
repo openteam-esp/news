@@ -1,7 +1,16 @@
 module Esp::SpecHelper
+
   def set_current_user(user=nil)
-    user ||= Fabricate(:user)
+    user ||= create_initiator
     User.current = user
+  end
+
+  def initiator
+    @initiator ||= create_initiator
+  end
+
+  def create_initiator
+    Fabricate(:user)
   end
 
   def draft_entry(options = {})

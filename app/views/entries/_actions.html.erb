@@ -15,7 +15,6 @@
       <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
         <%= form.inputs do %>
           <%= form.input :kind, :as => :hidden, :value => event %>
-          <%= form.input :user_id, :as => :hidden, :value => current_user.id %>
           <%#= form.input :text, :as => :text %>
         <% end %>
         <%= form.buttons do %>
