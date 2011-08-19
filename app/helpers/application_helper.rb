@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module ApplicationHelper
   def gilensize(text, options={})
     text = text.sanitize.html_safe if options[:html]
@@ -26,4 +28,25 @@ module ApplicationHelper
     content
   end
 
+  def render_statistic(entry)
+    result  = "Состояние: "
+    result += ::I18n.t("entry.state.#{entry.state}")
+    result += ". "
+    if entry.events.first
+      result += entry.events.first.created_human
+    else
+      result += entry.created_human
+    end
+    result += ". "
+    result += "Пользователь: "
+    if entry.events.first
+      result += entry.events.first.user.name
+    else
+      result += entry.initiator.name
+    end
+    result += "."
+    content_tag :span, result, :class => "entry_statistic"
+  end
+
 end
+

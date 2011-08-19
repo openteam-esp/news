@@ -111,6 +111,11 @@ class Entry < ActiveRecord::Base
     end
   end
 
+  def created_human
+    result = "Создано "
+    result += ::I18n.l(self.created_at, :format => :long)
+  end
+
   def self.filter_for(user, folder)
     return where(:initiator_id => user.id) if user.roles.nil? || folder == 'draft'
     return includes(:events).where('events.user_id' => user.id) if folder == 'trash'

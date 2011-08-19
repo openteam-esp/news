@@ -188,6 +188,15 @@ ru:
         active: "Активен"
         description: "Примечание"
 
+  entry:
+    state:
+      draft: "черновик"
+      awaiting_correction: "ожидает корректировки"
+      correcting: "на корректировке"
+      awaiting_publication: "ожидает публикации"
+      published: "опубликован"
+      trash: "в корзине"
+
   event:
     kind:
       before:

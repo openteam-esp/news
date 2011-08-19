@@ -38,6 +38,12 @@ class Event < ActiveRecord::Base
     Entry.new.from_json(serialized_entry)
   end
 
+  def created_human
+    result = ::I18n.t("event.kind.after.#{self.kind}").mb_chars.capitalize
+    result += " "
+    result += ::I18n.l(self.created_at, :format => :long)
+  end
+
   private
 
     def fire_entry_event
