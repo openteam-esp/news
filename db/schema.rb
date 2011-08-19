@@ -76,10 +76,10 @@ ActiveRecord::Schema.define(:version => 20110819043158) do
     t.string   "kind"
     t.text     "text"
     t.integer  "entry_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "serialized_entry"
-    t.integer  "user_id"
   end
 
   create_table "folders", :force => true do |t|
