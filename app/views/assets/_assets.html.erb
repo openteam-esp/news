@@ -1,0 +1,11 @@
+<div class="assets_with_form">
+  <ul>
+    <% @entry.reload.assets.each do |asset| %>
+      <li><%= render :partial => asset %></li>
+    <% end %>
+  </ul>
+  <%= semantic_form_for Asset.new, :url => folder_entry_assets_path(@folder, @entry), :html => {:multipart => true} do |form| %>
+    <%= form.input :file %>
+  <% end %>
+</div>
+

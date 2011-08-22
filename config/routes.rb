@@ -29,8 +29,10 @@ News::Application.routes.draw do
     resources :entries, :except => [:new, :create] do
       get 'page/:page', :action => :index, :on => :collection
       resources :events, :only => [:create, :show]
+      resources :assets, :only => [:create, :destroy]
     end
   end
 
   root :to => 'roots#index'
 end
+

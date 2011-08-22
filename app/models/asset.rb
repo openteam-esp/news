@@ -11,7 +11,7 @@ class Asset < ActiveRecord::Base
   private
 
     def set_type
-      mime_group = file_content_type.split('/')[0]
+      mime_group = file_content_type.to_s.split('/')[0]
       self.type = %w[audio video image].include?(mime_group) ? mime_group.classify : 'Attachment'
     end
 end

@@ -9,11 +9,11 @@
   <%= javascript_include_tag "jquery.fileupload" %>
 <% end %>
 
-<%= semantic_form_for([@folder, @entry], :html => {:multipart => true} ) do |form| %>
 
-  <div class="entry_fields_wrapper">
-    <%= render :partial => "edit_actions", :locals => { :form => form, :position => "top" } %>
+<div class="entry_fields_wrapper">
+  <%= render :partial => "edit_actions", :locals => { :position => "top" } %>
 
+  <%= semantic_form_for([@folder, @entry], :html => {:multipart => true} ) do |form| %>
     <%= form.inputs do %>
       <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
       <%= form.input :annotation %>
@@ -22,18 +22,10 @@
       <%= form.input :until %>
       <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
     <% end %>
+  <% end %>
 
-    <%= form.inputs :for => :assets, :class => "inputs asset_form" do | asset_form |  %>
-      <% if asset_form.object.persisted? %>
-        <%= render :partial => asset_form.object %>
-        <%= asset_form.input :_destroy, :as => :boolean %>
-      <% else %>
-        <%= asset_form.input :file, :input_html => { :class => "asset_file_input" } %>
-      <% end %>
-    <% end %>
+  <%= render :partial => "assets/assets" %>
 
-    <%= render :partial => "edit_actions", :locals => { :form => form, :position => "bottom" } %>
-  </div>
-
-<% end %>
+  <%= render :partial => "edit_actions", :locals => { :position => "bottom" } %>
+</div>
 

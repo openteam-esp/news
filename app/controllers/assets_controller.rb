@@ -1,0 +1,17 @@
+class AssetsController < AuthorizedApplicationController
+  belongs_to :folder, :finder => :find_by_title
+  belongs_to :entry
+
+  load_and_authorize_resource
+
+  actions :create, :destroy
+
+  def create
+    create! do |success, failure|
+      success.html do
+        render :partial => "assets"
+      end
+    end
+  end
+end
+
