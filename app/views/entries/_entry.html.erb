@@ -1,3 +1,10 @@
-<%= presented_content_tag :h2, @entry, :title %>
-<%= presented_content_tag :div, @entry, :annotation, :html => true %>
-<%= presented_content_tag :div, @entry, :body, :html => true  %>
+<%= presented_content_tag :h2, entry, :title %>
+<%= presented_content_tag :div, entry, :annotation, :html => true %>
+<%= presented_content_tag :div, entry, :body, :html => true  %>
+
+<%= render_attribute_values entry, :images, :videos, :audios, :attachments %>
+<hr />
+
+<%= render :partial => 'entries/availability', :locals => { :entry => entry }  %>
+
+<%= render_attribute_values entry, :channels, :events %>

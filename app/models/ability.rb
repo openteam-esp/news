@@ -88,5 +88,9 @@ class Ability
         entry.awaiting_publication?
       end
     end
+
+    can :read, Event do | event |
+      can :read, event.entry
+    end
   end
 end

@@ -1,10 +1,8 @@
 <div class="entry_fields_wrapper">
   <%= render :partial => 'entries/show_actions', :locals => { :position => "top" } %>
+
   <%= render :partial => @entry %>
-  <%= render_attribute_values @entry, :images, :videos, :audios, :attachments %>
-  <hr />
-  <%= render :partial => 'entries/availability' %>
-  <%= render_attribute_values @entry, :channels, :events %>
+
   <%= render :partial => 'entries/show_actions', :locals => { :position => "bottom" } %>
 </div>
 

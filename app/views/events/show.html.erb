@@ -1,0 +1,10 @@
+<p>
+  <%= t('version_at') %>
+  <%= l(@event.created_at, :format => :long) %>
+</p>
+
+<%= render :partial => @event.versioned_entry %>
+
+<p>
+  <%= link_to t('last_version'), [@folder, @event.entry] %>
+</p>
