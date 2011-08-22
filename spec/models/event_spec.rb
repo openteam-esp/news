@@ -3,20 +3,29 @@
 require 'spec_helper'
 
 describe Event do
+
+  describe "должен сохранять entry" do
+    it "должен сохранять каналы" do
+      channel_ids = [Fabricate(:channel), Fabricate(:channel)].map(&:id)
+      draft_entry.events.create(:kind => :store, :entry_attributes => draft_entry.attributes.merge(:channel_ids => channel_ids))
+      draft_entry.reload.channel_ids.should == channel_ids
+    end
+  end
+
   describe "сохраняемые версии новости" do
-    it "должен сохраниться заголовок новости на текущий момент" do
-      draft_entry.update_attribute :title, "title"
-      draft_entry.events.last.versioned_entry.title.should == "title"
+    it "event не должен создаваться после сохранения новости" do
+      expect {draft_entry.update_attribute :title, "title"}.to_not change(Event, :count)
     end
 
     it "должны сохраняться images" do
+      draft_entry_with_asset.events.create(:kind => :store)
       draft_entry_with_asset.events.last.versioned_entry.images.should == draft_entry_with_asset.images
     end
 
     it "должен сохранять каналы" do
-      draft_entry.channels << [Fabricate(:channel), Fabricate(:channel)]
-      draft_entry.save
-      draft_entry.events.last.versioned_entry.channels.should == draft_entry.channels
+      channel_ids = [Fabricate(:channel), Fabricate(:channel)].map(&:id)
+      draft_entry.events.create(:kind => :store, :entry_attributes => draft_entry.attributes.merge(:channel_ids => channel_ids))
+      draft_entry.events.last.versioned_entry.channel_ids.should == channel_ids
     end
   end
   #before do

@@ -7,11 +7,11 @@ class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
-  has_and_belongs_to_many :channels, :after_add => :make_dirty, :after_remove => :make_dirty
+  has_and_belongs_to_many :channels
 
   has_many :events, :validate => false
 
-  has_many :assets, :after_add => :make_dirty, :after_remove => :make_dirty
+  has_many :assets
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -26,8 +26,6 @@ class Entry < ActiveRecord::Base
   scope :trash, where(:state => 'trash')
 
   after_create :create_subscribe
-
-  after_update :create_update_event
 
   default_value_for :initiator_id do User.current_id end
 
@@ -69,6 +67,8 @@ class Entry < ActiveRecord::Base
       entry.folder = Folder.where(:title => 'awaiting_publication').first
       entry.save!
     end
+
+    event :store
 
     event :correct do
       transition :awaiting_correction => :correcting

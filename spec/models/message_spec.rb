@@ -170,9 +170,9 @@ describe Message do
     Delayed::Worker.new.work_off
 
 
-    initiator.messages.count.should eql 7
-    @corrector.messages.count.should eql 7
-    @publisher.messages.count.should eql 5
+    initiator.messages.count.should eql 6
+    @corrector.messages.count.should eql 6
+    @publisher.messages.count.should eql 4
     @corrpub.messages.count.should eql 4
   end
 end

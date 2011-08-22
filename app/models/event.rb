@@ -11,9 +11,11 @@ class Event < ActiveRecord::Base
 
   after_create :fire_entry_event, :notify_subscribers, :create_subscribe
 
-  before_create :make_serialized_entry
+  before_create :save_and_serialize_entry
 
   default_value_for :user_id do User.current_id end
+
+  attr_accessor :entry_attributes
 
   def ready_to_send_to_publisher
     errors.add(:entry_title, ::I18n.t('Entry title can\'t be blank'))           if entry.title.blank?
@@ -62,7 +64,8 @@ class Event < ActiveRecord::Base
       Subscribe.find_or_create_by_subscriber_id_and_entry_id(self.user_id, self.entry_id)
     end
 
-    def make_serialized_entry
+    def save_and_serialize_entry
+      self.entry.update_attributes(self.entry_attributes)
       self.serialized_entry = entry.to_json(:methods => %w[image_ids video_ids audio_ids attachment_ids channel_ids])
     end
 end

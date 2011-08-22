@@ -85,25 +85,6 @@ describe Entry do
     end
   end
 
-  describe 'после редактирования должна' do
-    before(:each) do
-      Fabricate(:folder, :title => 'correcting')
-      correcting_entry.update_attribute(:title, 'Updated!!')
-    end
-
-    it 'иметь событие со статусом "новость изменена"' do
-      correcting_entry.reload.events.first.kind.should eql 'updated'
-    end
-
-    it 'сохранять статус' do
-      correcting_entry.reload.should be_correcting
-    end
-
-    it 'оставаться в той же папке' do
-      correcting_entry.reload.folder.title.should eql 'correcting'
-    end
-  end
-
   describe 'после отправки корректору должна' do
     before do Fabricate(:folder, :title => 'awaiting_correction') end
 
@@ -271,28 +252,6 @@ describe Entry do
     it 'появиться в папке "Ожидающие публикации"' do
       immediately_sended_to_publisher_entry.reload.folder.title.should eql 'awaiting_publication'
     end
-  end
-
-  describe 'события' do
-    it { expect {draft_entry.update_attribute :body, 'version 2'}.to change(draft_entry.events, :count).by(1) }
-
-    it { expect {draft_entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]; }.to change(draft_entry.events, :count).by(1) }
-
-    it # { expect {draft_entry_with_asset.assets.first.destroy }.to change(draft_entry_with_asset.events, :count).by(1) }
-
-    it "изменение атрибутов и nested атрибутов должно приводить к созданию одного Event" do
-      expect {draft_entry.update_attributes :title => "title", :assets_attributes => [Fabricate.attributes_for(:asset)]; }.to change(draft_entry.events, :count).by(1)
-    end
-
-    it "создание новости не должно продуцировать event" do
-      expect {create_draft_entry}.to_not change(Event, :count)
-    end
-
-    it "если нет изменений в атрибутах не создавать event" do
-      entry = create_draft_entry(:title => "title")
-      expect { Entry.find(entry.id).update_attributes(:title => "title") }.to_not change(entry.events, :count)
-    end
-
   end
 
   describe "удаление" do
