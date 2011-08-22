@@ -293,6 +293,13 @@ describe Entry do
 
   end
 
+  describe "удаление новости" do
+    it "физическое удаление новости должно приводить к удалению всех assets и events" do
+      pending
+      draft_entry_with_assets
+    end
+  end
+
 end
 
 
