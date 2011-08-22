@@ -49,7 +49,7 @@ class Event < ActiveRecord::Base
   private
 
     def fire_entry_event
-      entry.fire_events kind.to_sym unless %w[created updated].include?(kind)
+      entry.send kind # fire_events kind.to_sym
     end
 
     def notify_subscribers

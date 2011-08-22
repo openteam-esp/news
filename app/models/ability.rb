@@ -22,7 +22,7 @@ class Ability
     end
 
     can :create, Event do |event|
-      %w[restore].include?(event.kind) && event.entry.related_to(user) && event.entry.trash?
+      %w[untrash].include?(event.kind) && event.entry.related_to(user) && event.entry.trash?
     end
 
     #################

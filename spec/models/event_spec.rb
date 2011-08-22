@@ -23,11 +23,33 @@ describe Event do
     end
 
     it "должен сохранять каналы" do
-      channel_ids = [Fabricate(:channel), Fabricate(:channel)].map(&:id)
+      channels = [Fabricate(:channel), Fabricate(:channel)]
+      channel_ids = channels.map(&:id)
       draft_entry.events.create(:kind => :store, :entry_attributes => draft_entry.attributes.merge(:channel_ids => channel_ids))
-      draft_entry.events.last.versioned_entry.channel_ids.should == channel_ids
+      channels.last.destroy
+      draft_entry.events.last.versioned_entry.channels.should == channels
+    end
+
+  end
+
+  describe "отмена изменений" do
+    it "когда была пустая новость" do
+      channel_ids = [Fabricate(:channel).id]
+      draft_entry.update_attributes(:title => "title", :channel_ids => channel_ids)
+      asset = Fabricate(:asset, :entry => draft_entry)
+      draft_entry.events.create(:kind => :restore)
+      restore_entry_version = draft_entry.events.first.versioned_entry
+      restore_entry_version.title.should == "title"
+      restore_entry_version.channel_ids.should == channel_ids
+      restore_entry_version.image_ids.should == [asset.id]
+      restore_entry_version.images.first.file_file_name.should_not be_nil
+      draft_entry.reload
+      draft_entry.title.should be_nil
+      draft_entry.channel_ids.should == []
+      draft_entry.image_ids.should == []
     end
   end
+
   #before do
     #@initiator  = Fabricate(:user)
     #@subscriber = Fabricate(:user)

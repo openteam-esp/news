@@ -166,7 +166,7 @@ describe Message do
     Delayed::Worker.new.work_off
     @entry.events.create(:kind => 'to_trash', :user_id => @publisher.id)
     Delayed::Worker.new.work_off
-    @entry.events.create(:kind => 'restore', :user_id => @corrector.id)
+    @entry.events.create(:kind => 'untrash', :user_id => @corrector.id)
     Delayed::Worker.new.work_off
 
 

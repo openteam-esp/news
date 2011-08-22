@@ -102,12 +102,12 @@ module Esp::SpecHelper
 
   end
 
-  def restored_entry
-    @restored_entry ||= begin
+  def untrashed_entry
+    @untrashed_entry ||= begin
                           set_current_user
                           entry = Fabricate(:entry)
                           entry.events.create(:kind => 'to_trash')
-                          entry.events.create(:kind => 'restore', :user => User.current)
+                          entry.events.create(:kind => 'untrash', :user => User.current)
                           entry
                         end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110822031812) do
+ActiveRecord::Schema.define(:version => 20110822105133) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20110822031812) do
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
 
   create_table "channels_entries", :id => false, :force => true do |t|

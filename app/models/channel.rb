@@ -7,6 +7,7 @@ class Channel < ActiveRecord::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: channels
@@ -15,5 +16,6 @@ end
 #  title      :string(255)
 #  created_at :datetime
 #  updated_at :datetime
+#  deleted_at :datetime
 #
 

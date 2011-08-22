@@ -1,8 +1,12 @@
 class Asset < ActiveRecord::Base
   belongs_to :entry
+
+  def self.before_destroy(*args) # disable destroy_attached_files
+  end
+
   has_attached_file :file
 
-  before_save :set_type
+  before_create :set_type
 
   private
 

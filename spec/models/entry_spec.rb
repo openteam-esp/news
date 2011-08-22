@@ -207,15 +207,15 @@ describe Entry do
     before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "восстановлена"' do
-      restored_entry.events.first.kind.should eql 'restore'
+      untrashed_entry.events.first.kind.should eql 'untrash'
     end
 
     it 'иметь статус "черновик"' do
-      restored_entry.should be_draft
+      untrashed_entry.should be_draft
     end
 
     it 'появиться в папке "Черновики"' do
-      restored_entry.reload.folder.title.should eql 'draft'
+      untrashed_entry.reload.folder.title.should eql 'draft'
     end
   end
 

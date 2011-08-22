@@ -204,7 +204,7 @@ ru:
         correct: "Взять на корректуру"
         publish: "Опубликовать"
         updated: "Изменить"
-        restore: "Восстановить из корзины"
+        untrash: "Восстановить из корзины"
         to_trash: "Поместить в корзину"
         return_to_corrector: "Вернуть корректору"
         immediately_publish: "Немедленно опубликовать"

@@ -2,23 +2,19 @@
 
 class Entry < ActiveRecord::Base
 
-  attr_accessor :dirty
-
   belongs_to :initiator, :class_name => 'User'
   belongs_to :folder
 
-  has_and_belongs_to_many :channels
+  has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
   has_many :events, :validate => false
 
-  has_many :assets
+  has_many :assets, :conditions => {:deleted_at => nil}
 
-  accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
-
-  has_many :attachments
-  has_many :audios
-  has_many :images
-  has_many :videos
+  has_many :attachments, :conditions => {:deleted_at => nil}
+  has_many :audios, :conditions => {:deleted_at => nil}
+  has_many :images, :conditions => {:deleted_at => nil}
+  has_many :videos, :conditions => {:deleted_at => nil}
 
   default_scope order('created_at desc')
 
@@ -26,6 +22,8 @@ class Entry < ActiveRecord::Base
   scope :trash, where(:state => 'trash')
 
   after_create :create_subscribe
+
+  accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
   default_value_for :initiator_id do User.current_id end
 
@@ -70,6 +68,8 @@ class Entry < ActiveRecord::Base
 
     event :store
 
+    event :restore
+
     event :correct do
       transition :awaiting_correction => :correcting
     end
@@ -86,7 +86,7 @@ class Entry < ActiveRecord::Base
       transition [:awaiting_publication, :correcting] => :published
     end
 
-    event :restore do
+    event :untrash do
       transition :trash => :draft
     end
 
@@ -114,6 +114,12 @@ class Entry < ActiveRecord::Base
   def created_human
     result = "Создано "
     result += ::I18n.l(self.created_at, :format => :long)
+  end
+
+  def restore(*args)
+    super
+    self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
+    self.assets.destroy_all
   end
 
   def self.filter_for(user, folder)
@@ -151,24 +157,24 @@ class Entry < ActiveRecord::Base
 
   def state_events_for_author(user)
     return [] if initiator != user
-    state_events & [:send_to_corrector, :to_trash, :restore]
+    state_events & [:send_to_corrector, :to_trash, :untrash]
   end
 
   def state_events_for_corrector(user)
-    result = state_events & [:return_to_author, :correct, :restore, :send_to_publisher]
+    result = state_events & [:return_to_author, :correct, :untrash, :send_to_publisher]
     result << :immediately_send_to_publisher if draft? && initiator == user
     result << :to_trash if awaiting_correction? || (draft? && initiator == user) || correcting?
     result
   end
 
   def state_events_for_publisher(user)
-    result = state_events & [:return_to_corrector, :publish, :restore, :send_to_corrector]
+    result = state_events & [:return_to_corrector, :publish, :untrash, :send_to_corrector]
     result << :to_trash if awaiting_publication? || (draft? && initiator == user) || published?
     result
   end
 
   def state_events_for_corrector_and_publisher(user)
-    result = state_events & [:correct, :immediately_publish, :publish, :restore, :return_to_author, :return_to_corrector, :to_trash]
+    result = state_events & [:correct, :immediately_publish, :publish, :untrash, :return_to_author, :return_to_corrector, :to_trash]
     result << :immediately_publish if draft? && initiator == user
     result << :to_trash if draft? && initiator == user
     result
@@ -184,24 +190,7 @@ class Entry < ActiveRecord::Base
     result.flatten.uniq.sort
   end
 
-  def changed?
-    dirty || super
-  end
-
   private
-
-    def create_update_event
-      events.create! :kind => 'updated'  if content_attributes_changed?
-      self.dirty = false
-    end
-
-    def content_attributes_changed?
-      self.dirty || (changes.keys - %w[state updated_at folder_id]).any?
-    end
-
-    def make_dirty(*args)
-      self.dirty = true
-    end
 
     def create_subscribe
       Subscribe.create!(:subscriber => initiator, :entry => self)

@@ -14,17 +14,17 @@ describe User do
 
     it 'восстановить новость к которой он имеет отношение' do
       @draft.events.create(:kind => 'to_trash', :user_id => @user.id)
-      restore_event = @draft.events.new(:kind => 'restore', :user_id => @user.id)
-      @ability.should be_able_to(:create, restore_event)
+      untrash_event = @draft.events.new(:kind => 'untrash', :user_id => @user.id)
+      @ability.should be_able_to(:create, untrash_event)
     end
 
     it 'не может восстановить новость к которой не имеет отношения' do
       another_user = Fabricate(:user)
       another_user_ability = Ability.new(another_user)
       @draft.events.create(:kind => 'to_trash', :user_id => @user.id)
-      restore_event_from_another_user = @draft.events.new(:kind => 'restore', :user_id => another_user.id)
+      untrash_event_from_another_user = @draft.events.new(:kind => 'untrash', :user_id => another_user.id)
       @draft.reload
-      another_user_ability.should_not be_able_to(:create, restore_event_from_another_user)
+      another_user_ability.should_not be_able_to(:create, untrash_event_from_another_user)
     end
 
     it 'отправить только по следующим переходам' do
