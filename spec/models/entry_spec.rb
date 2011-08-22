@@ -273,6 +273,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -284,7 +285,6 @@ end
 #  since          :datetime
 #  until          :datetime
 #  state          :string(255)
-#  deleted        :boolean
 #  author         :string(255)
 #  initiator_id   :integer
 #  folder_id      :integer

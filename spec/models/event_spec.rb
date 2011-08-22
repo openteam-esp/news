@@ -82,6 +82,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: events
@@ -90,9 +91,9 @@ end
 #  kind             :string(255)
 #  text             :text
 #  entry_id         :integer
+#  user_id          :integer
 #  created_at       :datetime
 #  updated_at       :datetime
 #  serialized_entry :text
-#  user_id          :integer
 #
 

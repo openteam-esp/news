@@ -2,6 +2,7 @@ class Image < Asset
 end
 
 
+
 # == Schema Information
 #
 # Table name: assets
@@ -15,5 +16,6 @@ end
 #  file_updated_at   :datetime
 #  created_at        :datetime
 #  updated_at        :datetime
+#  deleted_at        :datetime
 #
 
