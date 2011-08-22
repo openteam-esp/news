@@ -5,6 +5,8 @@
   <%= javascript_include_tag "jquery.ui.timepicker.ru" %>
   <%= javascript_include_tag "redactor/jquery.redactor" %>
   <%= javascript_include_tag "jquery.tipsy" %>
+  <%= javascript_include_tag "jquery.iframe.transport" %>
+  <%= javascript_include_tag "jquery.fileupload" %>
 <% end %>
 
 <%= semantic_form_for([@folder, @entry], :html => {:multipart => true} ) do |form| %>
@@ -21,12 +23,12 @@
       <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
     <% end %>
 
-    <%= form.inputs :for => :assets do | asset_form |  %>
+    <%= form.inputs :for => :assets, :class => "inputs asset_form" do | asset_form |  %>
       <% if asset_form.object.persisted? %>
         <%= render :partial => asset_form.object %>
         <%= asset_form.input :_destroy, :as => :boolean %>
       <% else %>
-        <%= asset_form.input :file %>
+        <%= asset_form.input :file, :input_html => { :class => "asset_file_input" } %>
       <% end %>
     <% end %>
 
