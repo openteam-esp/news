@@ -22,6 +22,16 @@ module Esp::SpecHelper
     Fabricate(:entry, options)
   end
 
+  def draft_entry_with_asset(options = {})
+    @draft_entry_with_asset ||= create_draft_entry_with_asset(options)
+  end
+
+  def create_draft_entry_with_asset(options = {})
+    entry = create_draft_entry(options)
+    entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]
+    entry
+  end
+
   def awaiting_correction_entry
     @awaiting_correction_entry ||= create_awaiting_correction_entry
   end

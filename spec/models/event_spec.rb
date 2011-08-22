@@ -10,8 +10,7 @@ describe Event do
     end
 
     it "должны сохраняться images" do
-      draft_entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]
-      draft_entry.events.last.versioned_entry.images.should == draft_entry.images
+      draft_entry_with_asset.events.last.versioned_entry.images.should == draft_entry_with_asset.images
     end
 
     it "должен сохранять каналы" do
