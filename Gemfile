@@ -52,6 +52,7 @@ gem 'jquery-rails',             :require => false
 gem 'kaminari'
 gem 'omniauth'
 gem 'paperclip'
+gem 'permanent_records'
 gem 'rails',  '3.0.9',          :require => false
 gem 'rake', '0.8.7'
 gem 'russian',                  :git => 'git://github.com/tacid/russian'

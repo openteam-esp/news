@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110819043158) do
+ActiveRecord::Schema.define(:version => 20110822031812) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20110819043158) do
     t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
 
   create_table "authentications", :force => true do |t|
@@ -62,7 +63,6 @@ ActiveRecord::Schema.define(:version => 20110819043158) do
     t.datetime "since"
     t.datetime "until"
     t.string   "state"
-    t.boolean  "deleted"
     t.string   "author"
     t.integer  "initiator_id"
     t.integer  "folder_id"
@@ -76,10 +76,10 @@ ActiveRecord::Schema.define(:version => 20110819043158) do
     t.string   "kind"
     t.text     "text"
     t.integer  "entry_id"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "serialized_entry"
+    t.integer  "user_id"
   end
 
   create_table "folders", :force => true do |t|

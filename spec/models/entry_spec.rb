@@ -278,6 +278,8 @@ describe Entry do
 
     it { expect {draft_entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]; }.to change(draft_entry.events, :count).by(1) }
 
+    it # { expect {draft_entry_with_asset.assets.first.destroy }.to change(draft_entry_with_asset.events, :count).by(1) }
+
     it "изменение атрибутов и nested атрибутов должно приводить к созданию одного Event" do
       expect {draft_entry.update_attributes :title => "title", :assets_attributes => [Fabricate.attributes_for(:asset)]; }.to change(draft_entry.events, :count).by(1)
     end
@@ -293,10 +295,16 @@ describe Entry do
 
   end
 
-  describe "удаление новости" do
+  describe "удаление" do
+    it "аттача" do
+      pending
+      draft_entry_with_asset.assets.first.destroy
+      draft_entry_with_asset.events.first.versioned_entry.assets.count.should == 0
+    end
+
     it "физическое удаление новости должно приводить к удалению всех assets и events" do
       pending
-      draft_entry_with_assets
+      draft_entry_with_asset
     end
   end
 
