@@ -9,12 +9,12 @@
     <% end %>
 
     <li>
-      <%= link_to t('edit'), edit_folder_entry_path(@folder, @entry), :class => "button" %>
+      <%= link_to t('edit'), edit_entry_path(@entry), :class => "button" %>
     </li>
 
     <% @entry.state_events_for(current_user).each do |event| %>
       <li>
-        <%= semantic_form_for :event, :url => folder_entry_events_path(@folder, @entry) do |form| %>
+        <%= semantic_form_for :event, :url => entry_events_path(@entry) do |form| %>
           <%= form.inputs do %>
             <%= form.input :kind, :as => :hidden, :value => event %>
             <%= form.input :text, :as => :text %>

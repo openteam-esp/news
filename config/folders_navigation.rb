@@ -2,23 +2,13 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
     primary.item :inbox, "#{t('inbox')}", messages_path, :counter => @current_user.messages.count
 
-    primary.item :awaiting_correction, t('awaiting_correction'), folder_entries_path(Folder.where(:title => 'awaiting_correction').first),
-                 :highlights_on => lambda { @folder.awaiting_correction? if @folder.present? } if @current_user.corrector?
+    primary.item :awaiting_correction, t('awaiting_correction'), entries_path(:state => 'awaiting_correction'),
+                 :highlights_on => lambda { params[:state] == :awaiting_correction } if @current_user.corrector?
 
-    primary.item :awaiting_publication, t('awaiting_publication'), folder_entries_path(Folder.where(:title => 'awaiting_publication').first),
-                 :highlights_on => lambda { @folder.awaiting_publication? if @folder.present? } if @current_user.publisher?
-
-    primary.item :published, t('published'), folder_entries_path(Folder.where(:title => 'published').first),
-                 :highlights_on => lambda { @folder.published? if @folder.present? }
-
-    primary.item :correcting, t('correcting'), folder_entries_path(Folder.where(:title => 'correcting').first),
-                 :highlights_on => lambda { @folder.correcting? if @folder.present? }
-
-    primary.item :draft, t('draft'), folder_entries_path(Folder.where(:title => 'draft').first),
-                 :highlights_on => lambda { @folder.draft? if @folder.present? }
-
-    primary.item :trash, t('trash'), folder_entries_path(Folder.where(:title => 'trash').first),
-                 :highlights_on => lambda { @folder.trash? if @folder.present? }
+    %w[draft awaiting_correction correcting awaiting_publication published trash].each do | state |
+      primary.item state, t(state), "/#{state}#{entries_path}",
+                   :highlights_on => lambda { params[:state] == state || (params[:controller] == 'entries' && @entry.try(:state) == state) } #  if @current_user.corrector?
+    end
 
     primary.item :recipients, t('channels'), channels_path,
                  :highlights_on => /^recipients/ if can? :manage, Recipient

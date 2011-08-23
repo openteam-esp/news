@@ -4,165 +4,47 @@ require 'spec_helper'
 
 describe EntriesController do
   before :each do
-    @user = Fabricate(:user)
-    sign_in @user
-
-    @draft = Fabricate(:folder, :title => 'draft')
-    @awaiting_correction = Fabricate(:folder, :title => 'awaiting_correction')
-    @awaiting_publication = Fabricate(:folder, :title => 'awaiting_publication')
-  end
-
-  def valid_attributes
-    {:title => "Заголовок новости", :body => 'Текст новости'}
+    sign_in Fabricate(:user)
   end
 
   describe "GET index" do
     it "assigns all entries as @entries" do
-      entry = @draft.entries.create! valid_attributes
-      entry.send_to_corrector
-      entries = @awaiting_correction.entries.all.to_a
-      get :index, :folder_id => @awaiting_correction.title
-      assigns(:entries).should eq(entries)
+      entry = create_draft_entry
+      get :index, 'state' => 'draft'
+      assigns(:entries).should eq([entry])
     end
   end
 
   describe "GET show" do
     it "assigns the requested entry as @entry" do
-      entry = @draft.entries.create! valid_attributes
-      get :show, :id => entry.id, :folder_id => @draft.title
-      assigns(:entry).should eq(entry)
+      get :show, :id => draft_entry.id
+      assigns(:entry).should eq(draft_entry)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested entry as @entry" do
-      entry = @draft.entries.create! valid_attributes
-      get :edit, :id => entry.id, :folder_id => @draft.title
-      assigns(:entry).should eq(entry)
+      get :edit, :id => draft_entry.id
+      assigns(:entry).should eq(draft_entry)
     end
   end
 
   describe "POST create" do
       it "creates a new Entry" do
-        expect { post :create, :folder_id => @draft.title }.to change(Entry, :count).by(1)
+        expect { post :create }.to change(Entry, :count).by(1)
       end
 
       it "assigns a newly created entry as @entry" do
-        post :create, :folder_id => @draft.title
+        post :create
         assigns(:entry).should be_a(Entry)
         assigns(:entry).should be_persisted
       end
 
       it "redirects to the editing form of created entry" do
-        post :create, :folder_id => @draft.title
-        response.should redirect_to([:edit, @draft, Entry.last])
+        post :create
+        response.should redirect_to([:edit, Entry.last])
       end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested entry" do
-        entry = @draft.entries.create! valid_attributes
-        # Assuming there are no other entries in the database, this
-        # specifies that the Entry created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Entry.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => entry.id, :entry => {'these' => 'params'}, :folder_id => @draft.title
-      end
-
-      it "assigns the requested entry as @entry" do
-        entry = @draft.entries.create! valid_attributes
-        put :update, :id => entry.id, :entry => valid_attributes, :folder_id => @draft.title
-        assigns(:entry).should eq(entry)
-      end
-
-      it "redirects to the entry" do
-        entry = @draft.entries.create! valid_attributes
-        put :update, :id => entry.id, :entry => valid_attributes, :folder_id => @draft.title
-        response.should redirect_to([@draft, entry])
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns the entry as @entry" do
-        entry = @draft.entries.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Entry.any_instance.stub(:save).and_return(false)
-        put :update, :id => entry.id, :entry => {}, :folder_id => @draft.title
-        assigns(:entry).should eq(entry)
-      end
-
-      it "re-renders the 'edit' template" do
-        entry = @draft.entries.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Entry.any_instance.stub(:errors).and_return [true]
-        Entry.any_instance.stub(:save).and_return(false)
-        put :update, :id => entry.id, :entry => {}, :folder_id => @draft.title
-        response.should render_template("edit")
-      end
-    end
-  end
-
-  describe 'редактирование' do
-    before do
-      corrector_role = Fabricate(:role, :kind => 'corrector')
-      publisher_role = Fabricate(:role, :kind => 'publisher')
-      user = Fabricate(:user, :email => 'corrector@mail.com')
-      user.roles << corrector_role
-      user.roles << publisher_role
-      sign_in user
-
-      @correcting = Fabricate(:folder, :title => 'correcting')
-      @published = Fabricate(:folder, :title => 'published')
-
-      @entry = Fabricate(:entry, :folder => @draft)
-      @entry.send_to_corrector
-      @entry.correct!
-    end
-
-    describe 'корректор' do
-      it "assigns the requested entry as @entry" do
-        get :edit, :id => @entry.id, :folder_id => @correcting.title
-      end
-
-      it "updates the requested entry" do
-        put :update, :id => @entry.id, :entry => valid_attributes, :folder_id => @correcting.title
-      end
-    end
-
-    describe 'публикатор' do
-      before do
-        @entry.send_to_publisher!
-        @entry.publish!
-      end
-
-      it "assigns the requested entry as @entry" do
-        get :edit, :id => @entry.id, :folder_id => @published.title
-      end
-
-      it "updates the requested entry" do
-        put :update, :id => @entry.id, :entry => valid_attributes, :folder_id => @published.title
-      end
-    end
-  end
-
-  describe 'после редактирования' do
-    it 'предыдущему событию должна проставляться версия'
-    #do
-      #user = Fabricate(:user)
-      #entry = Fabricate(:entry, :user_id => user.id, :body => 'version 1')
-
-      #sign_in user
-
-      #put :update, :id => entry.id, :entry => {:body => 'version 2'}, :folder_id => @draft.title
-
-      #event = entry.events.where(:kind => 'created').first
-
-      #event.kind.should eql 'created'
-      #event.version.should_not be_nil
-      #event.version.reify.body.should eql 'version 1'
-    #end
-  end
 end
 

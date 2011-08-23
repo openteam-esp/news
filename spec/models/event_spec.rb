@@ -76,8 +76,6 @@ describe Event do
     #@subscriber = Fabricate(:user)
     #@corrector_role = Fabricate(:role, :kind => 'corrector')
     #@publisher_role = Fabricate(:role, :kind => 'publisher')
-    #Fabricate(:folder, :title => :draft)
-    #Fabricate(:folder, :title => :awaiting_correction)
     #set_current_user(@initiator)
     #@entry = Fabricate(:entry)
   #end

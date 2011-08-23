@@ -5,7 +5,7 @@
       <li>
         <p>
           <%= l message.event.created_at, :format => :long %>
-          <%= link_to message.event.entry.composed_title.gilensize, folder_entry_path(message.event.entry.folder.title, message.event.entry) %>
+          <%= link_to message.event.entry.composed_title.gilensize, entry_path(message.event.entry) %>
           <%= t "event.kind.after.#{message.event.kind}" %>
           <%= "#{message.event.user}" %>
           <%= link_to t('destroy_message'), message, :confirm => 'Are you sure?', :method => :delete %>

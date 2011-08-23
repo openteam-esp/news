@@ -3,7 +3,6 @@
 class Entry < ActiveRecord::Base
 
   belongs_to :initiator, :class_name => 'User'
-  belongs_to :folder
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
@@ -18,8 +17,7 @@ class Entry < ActiveRecord::Base
 
   default_scope order('created_at desc')
 
-  scope :published, where(:state => 'published')
-  scope :trash, where(:state => 'trash')
+  scope :state, lambda {|state| where(:state => state)}
 
   after_create :create_subscribe
 
@@ -27,42 +25,9 @@ class Entry < ActiveRecord::Base
 
   default_value_for :initiator_id do User.current_id end
 
-  default_value_for :folder_id do Folder.draft.try(:id) end
-
   state_machine :initial => :draft do
-    after_transition :to => :correcting do |entry, transition|
-      entry.folder = Folder.where(:title => 'correcting').first
-      entry.save!
-    end
-
-    after_transition :to => :draft do |entry, transition|
-      entry.folder = Folder.where(:title => 'draft').first
-      entry.save!
-    end
-
     after_transition :to => :published do |entry, transition|
-      entry.folder = Folder.where(:title => 'published').first
-      entry.save!
       entry.send_by_email
-    end
-
-    after_transition :trash => :draft do |entry, transition|
-      entry.save!
-    end
-
-    after_transition :to => :trash do |entry, transition|
-      entry.folder = Folder.where(:title => 'trash').first
-      entry.save!
-    end
-
-    after_transition :to => :awaiting_correction do |entry, transition|
-      entry.folder = Folder.where(:title => 'awaiting_correction').first
-      entry.save!
-    end
-
-    after_transition :to => :awaiting_publication do |entry, transition|
-      entry.folder = Folder.where(:title => 'awaiting_publication').first
-      entry.save!
     end
 
     event :store
@@ -124,12 +89,6 @@ class Entry < ActiveRecord::Base
     else
       self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
     end
-  end
-
-  def self.filter_for(user, folder)
-    return where(:initiator_id => user.id) if user.roles.nil? || folder == 'draft'
-    return includes(:events).where('events.user_id' => user.id) if folder == 'trash'
-    return scoped
   end
 
   def related_to(user)
@@ -206,6 +165,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -219,7 +179,6 @@ end
 #  state          :string(255)
 #  author         :string(255)
 #  initiator_id   :integer
-#  folder_id      :integer
 #  created_at     :datetime
 #  updated_at     :datetime
 #  old_id         :integer

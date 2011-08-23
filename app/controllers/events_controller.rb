@@ -1,6 +1,5 @@
 class EventsController < AuthorizedApplicationController
 
-  belongs_to :folder, :finder => :find_by_title
   belongs_to :entry
 
   load_and_authorize_resource

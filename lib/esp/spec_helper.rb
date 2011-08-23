@@ -1,8 +1,7 @@
 module Esp::SpecHelper
 
-  def set_current_user(user=nil)
-    user ||= create_initiator
-    User.current = user
+  def set_current_user
+    User.current ||= initiator
   end
 
   def initiator

@@ -74,19 +74,12 @@ describe Entry do
   end
 
   describe 'после создания должна' do
-    before do Fabricate(:folder, :title => 'draft') end
-
     it 'иметь статус "черновик"' do
       draft_entry.should be_draft
-    end
-
-    it 'появиться в папке "Черновики"' do
-      draft_entry.folder.should == Folder.draft
     end
   end
 
   describe 'после отправки корректору должна' do
-    before do Fabricate(:folder, :title => 'awaiting_correction') end
 
     it 'иметь событие со статусом "отправлена корректору"' do
       awaiting_correction_entry.events.first.kind.should eql 'send_to_corrector'
@@ -95,18 +88,9 @@ describe Entry do
     it 'иметь статус "ожидает корректировки"' do
       awaiting_correction_entry.reload.should be_awaiting_correction
     end
-
-    it 'появиться в папке "Ожидающие корректировки"' do
-      awaiting_correction_entry.reload.folder.title.should eql 'awaiting_correction'
-    end
   end
 
   describe 'после отправки публикатору должна' do
-    before (:each) do
-      Fabricate(:folder, :title => 'awaiting_correction')
-      Fabricate(:folder, :title => 'awaiting_publication')
-    end
-
     it 'иметь событие со статусом "отправлена публикатору"' do
       awaiting_publication_entry.events.first.kind.should eql 'send_to_publisher'
     end
@@ -114,14 +98,9 @@ describe Entry do
     it 'иметь статус "ожидает публикации"' do
       awaiting_publication_entry.reload.should be_awaiting_publication
     end
-
-    it 'появиться в папке "Входящие"' do
-      awaiting_publication_entry.reload.folder.title.should eql 'awaiting_publication'
-    end
   end
 
   describe 'после возвращения инициатору должна' do
-    before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "возвращена инициатору"' do
       returned_to_author_entry.events.first.kind.should eql 'return_to_author'
@@ -130,14 +109,9 @@ describe Entry do
     it 'иметь статус "черновик"' do
       returned_to_author_entry.should be_draft
     end
-
-    it 'появиться в папке "Черновики"' do
-      returned_to_author_entry.reload.folder.title.should eql 'draft'
-    end
   end
 
   describe 'после взятия на корректуру должна' do
-    before do Fabricate(:folder, :title => 'correcting') end
 
     it 'иметь событие со статусом "взята на корректуру"' do
       correcting_entry.events.first.kind.should eql 'correct'
@@ -146,16 +120,10 @@ describe Entry do
     it 'иметь статус "корректируется"' do
       correcting_entry.reload.should be_correcting
     end
-
-    it 'появиться в папке "На корректуре"' do
-      correcting_entry.reload.folder.title.should eql 'correcting'
-    end
   end
 
   describe 'после возвращения корректору должна' do
     before do
-      Fabricate(:folder, :title => 'awaiting_correction')
-      Fabricate(:folder, :title => 'awaiting_publication')
     end
 
     it 'иметь событие со статусом "возвращена корректору"' do
@@ -165,14 +133,9 @@ describe Entry do
     it 'иметь статус "ожидает корректировки"' do
       returned_to_corrector_entry.reload.should be_awaiting_correction
     end
-
-    it 'появиться в папке "Ожидающие корректировки"' do
-      returned_to_corrector_entry.reload.folder.title.should eql 'awaiting_correction'
-    end
   end
 
   describe 'после публикации должна' do
-    before do Fabricate(:folder, :title => 'published') end
 
     it 'иметь событие со статусом "опубликована"' do
       published_entry.reload.events.first.kind.should eql 'publish'
@@ -181,14 +144,9 @@ describe Entry do
     it 'иметь статус "опубликована"' do
       published_entry.reload.should be_published
     end
-
-    it 'появиться в папке "Опубликованные"' do
-      published_entry.reload.folder.title.should eql 'published'
-    end
   end
 
   describe 'после удаления в корзину должна' do
-    before do Fabricate(:folder, :title => 'trash') end
 
     it 'иметь событие со статусом "помещена в корзину"' do
       trashed_entry.events.first.kind.should eql 'to_trash'
@@ -197,14 +155,9 @@ describe Entry do
     it 'иметь статус "помещена в корзину"' do
       trashed_entry.reload.should be_trash
     end
-
-    it 'появиться в папке "Корзина"' do
-      trashed_entry.reload.folder.title.should eql 'trash'
-    end
   end
 
   describe 'после восстановления должна' do
-    before do Fabricate(:folder, :title => 'draft') end
 
     it 'иметь событие со статусом "восстановлена"' do
       untrashed_entry.events.first.kind.should eql 'untrash'
@@ -213,15 +166,9 @@ describe Entry do
     it 'иметь статус "черновик"' do
       untrashed_entry.should be_draft
     end
-
-    it 'появиться в папке "Черновики"' do
-      untrashed_entry.reload.folder.title.should eql 'draft'
-    end
   end
 
   describe 'после немедленной публикации должна' do
-    before do Fabricate(:folder, :title => 'published') end
-
     it 'иметь событие со статусом "опубликована"' do
       immediately_published_entry.events.first.kind.should eql 'immediately_publish'
     end
@@ -229,28 +176,15 @@ describe Entry do
     it 'иметь статус "опубликована"' do
       immediately_published_entry.reload.should be_published
     end
-
-    it 'появиться в папке "Опубликованные"' do
-      immediately_published_entry.reload.folder.title.should eql 'published'
-    end
   end
 
   describe 'после немедленной отправки публикатору должна' do
-    before do
-      Fabricate(:folder, :title => 'awaiting_correction')
-      Fabricate(:folder, :title => 'awaiting_publication')
-    end
-
     it 'иметь событие со статусом "ожидает публикации"' do
       immediately_sended_to_publisher_entry.events.first.kind.should eql 'immediately_send_to_publisher'
     end
 
     it 'иметь статус "ожидает публикации"' do
       immediately_sended_to_publisher_entry.reload.should be_awaiting_publication
-    end
-
-    it 'появиться в папке "Ожидающие публикации"' do
-      immediately_sended_to_publisher_entry.reload.folder.title.should eql 'awaiting_publication'
     end
   end
 
@@ -274,6 +208,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -287,7 +222,6 @@ end
 #  state          :string(255)
 #  author         :string(255)
 #  initiator_id   :integer
-#  folder_id      :integer
 #  created_at     :datetime
 #  updated_at     :datetime
 #  old_id         :integer

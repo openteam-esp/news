@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110823025059) do
+ActiveRecord::Schema.define(:version => 20110823042142) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -66,7 +66,6 @@ ActiveRecord::Schema.define(:version => 20110823025059) do
     t.string   "state"
     t.string   "author"
     t.integer  "initiator_id"
-    t.integer  "folder_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "old_id"
@@ -81,12 +80,6 @@ ActiveRecord::Schema.define(:version => 20110823025059) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "serialized_entry"
-  end
-
-  create_table "folders", :force => true do |t|
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "messages", :force => true do |t|
