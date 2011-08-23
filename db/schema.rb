@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110822105133) do
+ActiveRecord::Schema.define(:version => 20110823025059) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -77,10 +77,10 @@ ActiveRecord::Schema.define(:version => 20110822105133) do
     t.string   "kind"
     t.text     "text"
     t.integer  "entry_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "serialized_entry"
-    t.integer  "user_id"
   end
 
   create_table "folders", :force => true do |t|
