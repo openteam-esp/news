@@ -118,8 +118,13 @@ class Entry < ActiveRecord::Base
 
   def restore(*args)
     super
-    self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
     self.assets.destroy_all
+    if entry = events.offset(1).first.try(:versioned_entry)
+      self.update_attributes entry.attributes.merge(:channel_ids => entry.channel_ids)
+      self.assets.unscoped.where(:id => entry.image_ids + entry.video_ids + entry.audio_ids + entry.attachment_ids).update_all(:deleted_at => nil)
+    else
+      self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
+    end
   end
 
   def self.filter_for(user, folder)
