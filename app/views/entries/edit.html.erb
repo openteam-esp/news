@@ -12,7 +12,7 @@
 <div class="entry_fields_wrapper">
   <%= render :partial => "edit_actions", :locals => { :position => "top" } %>
 
-  <%= semantic_form_for @folder do |form| %>
+  <%= semantic_form_for @entry do |form| %>
     <%= form.inputs do %>
       <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
       <%= form.input :annotation %>

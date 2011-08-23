@@ -104,7 +104,7 @@ ru:
   until: "До"
   not_limited_in_time: "Не ограниченно во времени"
   Show: "Просмотреть"
-  restore: "Восстановить"
+  untrash: "Восстановить"
   show_version: показать версию
   last_version: Перейти к последней версии
   version_at: Версия на момент
