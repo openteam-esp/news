@@ -47,7 +47,6 @@ class Entry < ActiveRecord::Base
     end
 
     after_transition :trash => :draft do |entry, transition|
-      entry.initiator_id = User.current
       entry.save!
     end
 
