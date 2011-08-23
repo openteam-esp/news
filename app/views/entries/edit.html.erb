@@ -9,7 +9,6 @@
   <%= javascript_include_tag "jquery.fileupload" %>
 <% end %>
 
-
 <div class="entry_fields_wrapper">
   <%= render :partial => "edit_actions", :locals => { :position => "top" } %>
 
@@ -21,6 +20,9 @@
       <%= form.input :since %>
       <%= form.input :until %>
       <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
+    <% end %>
+    <%= form.buttons do %>
+      <%= form.commit_button :button_html => { :class => "button" } %>
     <% end %>
   <% end %>
 

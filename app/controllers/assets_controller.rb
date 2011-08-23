@@ -13,5 +13,14 @@ class AssetsController < AuthorizedApplicationController
       end
     end
   end
+
+  def destroy
+    destroy! do |success, failure|
+      success.html do
+        render :partial => "assets"
+      end
+    end
+  end
+
 end
 

@@ -11,7 +11,7 @@ class Ability
     can [:create, :read, :rss], Entry
     can [:read, :destroy], Message
     can [:create, :destroy], Subscribe
-    can [:create, :read], Asset
+    can [:create, :read, :destroy], Asset
 
     can :update, Entry do |entry|
       entry.draft? && entry.initiator == user
@@ -94,3 +94,4 @@ class Ability
     end
   end
 end
+

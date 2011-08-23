@@ -1,11 +1,19 @@
-<div class="assets_with_form">
+<fieldset class="assets_with_form">
+  <legend><span>Прикреплённые файлы</span></legend>
+  <% unless @entry.reload.assets.empty? %>
   <ul>
     <% @entry.reload.assets.each do |asset| %>
-      <li><%= render :partial => asset %></li>
+      <li>
+        <%= render :partial => asset %>
+        <%= link_to "удалить", folder_entry_asset_path(@folder, @entry, asset), :class => "remove" %>
+      </li>
     <% end %>
   </ul>
-  <%= semantic_form_for Asset.new, :url => folder_entry_assets_path(@folder, @entry), :html => {:multipart => true} do |form| %>
-    <%= form.input :file %>
   <% end %>
-</div>
+  <%= semantic_form_for Asset.new, :url => folder_entry_assets_path(@folder, @entry), :html => {:multipart => true} do |form| %>
+    <%= form.inputs do %>
+      <%= form.input :file %>
+    <% end %>
+  <% end %>
+</fieldset>
 
