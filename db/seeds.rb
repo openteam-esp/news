@@ -4,13 +4,6 @@ c = Channel.find_or_create_by_title('mailing_lists/common')
 c.recipients.find_or_create_by_email('gmyzind@gmail.com')
 Channel.find_or_create_by_title('mailing_lists/innovation')
 
-Folder.find_or_create_by_title('awaiting_correction')
-Folder.find_or_create_by_title('awaiting_publication')
-Folder.find_or_create_by_title('published')
-Folder.find_or_create_by_title('correcting')
-Folder.find_or_create_by_title('draft')
-Folder.find_or_create_by_title('trash')
-
 corrector_role = Role.find_or_create_by_kind('corrector')
 publisher_role = Role.find_or_create_by_kind('publisher')
 
@@ -57,3 +50,4 @@ corrector_and_publisher.update_attributes(
 corrector_and_publisher.roles.destroy_all
 corrector_and_publisher.roles << corrector_role
 corrector_and_publisher.roles << publisher_role
+
