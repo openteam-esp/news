@@ -25,12 +25,12 @@ class Entry < ActiveRecord::Base
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
 
   scope :state, lambda { |state|
-                          if User.current.roles.empty? || %w[draft trash published].include?(state.to_s)
-                            by_state(state).self_initiated
-                          else
-                            by_state(state)
-                          end
-                       }
+    if User.current.roles.empty? || %w[draft trash published].include?(state.to_s)
+      by_state(state).self_initiated
+    else
+      by_state(state)
+    end
+  }
 
 
   after_create :create_subscribe
@@ -48,44 +48,36 @@ class Entry < ActiveRecord::Base
 
     event :restore
 
-    event :correct do
-      transition :awaiting_correction => :correcting
+    event :request_correcting do
+      transition [:draft, :awaiting_publication, :publicating, :published] => :awaiting_correction
     end
 
-    event :immediately_publish do
-      transition :draft => :published
+    event :accept_correcting do
+      transition [:trash, :awaiting_correction] => :correcting
     end
 
-    event :immediately_send_to_publisher do
-      transition :draft => :awaiting_publication
+    event :request_reworking do
+      transition [:awaiting_correction, :correcting] => :draft
+    end
+
+    event :request_publicating do
+      transition [:correcting, :draft] => :awaiting_publication
+    end
+
+    event :accept_publicating do
+      transition [:trash, :awaiting_publication] => :publicating
     end
 
     event :publish do
-      transition [:awaiting_publication, :correcting] => :published
+      transition [:draft, :correcting, :publicating] => :published
+    end
+
+    event :to_trash do
+      transition all - [:trash] => :trash
     end
 
     event :untrash do
       transition :trash => :draft
-    end
-
-    event :return_to_author do
-      transition :awaiting_correction => :draft
-    end
-
-    event :return_to_corrector do
-      transition [:awaiting_publication, :published] => :awaiting_correction
-    end
-
-    event :send_to_corrector do
-      transition :draft => :awaiting_correction
-    end
-
-    event :send_to_publisher do
-      transition :correcting => :awaiting_publication
-    end
-
-    event :to_trash do
-      transition [:awaiting_publication, :awaiting_correction, :correcting, :draft, :published] => :trash
     end
   end
 
@@ -99,6 +91,10 @@ class Entry < ActiveRecord::Base
 
   def self.shared_states
     all_states - owned_states
+  end
+
+  def self.all_events
+    Entry.state_machines[:state].events.map(&:name)
   end
 
   def created_human
@@ -142,9 +138,8 @@ class Entry < ActiveRecord::Base
   end
 
   def composed_title
-    [ presented(:title).truncate(80, :omission => '…'),
-      presented?(:body, :html => true) ].
-        compact.join(' – ').truncate(100, :omission => '…')
+    [ presented(:title).truncate(80, :omission => '…'), presented?(:body, :html => true) ].
+      compact.join(' – ').truncate(100, :omission => '…')
   end
 
   def state_events_for_author(user)

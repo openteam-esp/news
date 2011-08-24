@@ -3,7 +3,7 @@ class Subscribe < ActiveRecord::Base
 
   belongs_to :entry
   belongs_to :initiator, :class_name => 'User'
-  has_enum :kind, Entry.state_machine.events.map(&:name)
+  has_enum :kind, Entry.all_events
 end
 
 # == Schema Information

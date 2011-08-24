@@ -82,7 +82,7 @@ describe Entry do
   describe 'после отправки корректору должна' do
 
     it 'иметь событие со статусом "отправлена корректору"' do
-      awaiting_correction_entry.events.first.kind.should eql 'send_to_corrector'
+      awaiting_correction_entry.events.first.kind.should eql 'request_correcting'
     end
 
     it 'иметь статус "ожидает корректировки"' do
@@ -91,100 +91,44 @@ describe Entry do
   end
 
   describe 'после отправки публикатору должна' do
-    it 'иметь событие со статусом "отправлена публикатору"' do
-      awaiting_publication_entry.events.first.kind.should eql 'send_to_publisher'
-    end
-
     it 'иметь статус "ожидает публикации"' do
       awaiting_publication_entry.reload.should be_awaiting_publication
     end
   end
 
   describe 'после возвращения инициатору должна' do
-
-    it 'иметь событие со статусом "возвращена инициатору"' do
-      returned_to_author_entry.events.first.kind.should eql 'return_to_author'
-    end
-
     it 'иметь статус "черновик"' do
       returned_to_author_entry.should be_draft
     end
   end
 
   describe 'после взятия на корректуру должна' do
-
-    it 'иметь событие со статусом "взята на корректуру"' do
-      correcting_entry.events.first.kind.should eql 'correct'
-    end
-
     it 'иметь статус "корректируется"' do
       correcting_entry.reload.should be_correcting
     end
   end
 
   describe 'после возвращения корректору должна' do
-    before do
-    end
-
-    it 'иметь событие со статусом "возвращена корректору"' do
-      returned_to_corrector_entry.events.first.kind.should eql 'return_to_corrector'
-    end
-
     it 'иметь статус "ожидает корректировки"' do
       returned_to_corrector_entry.reload.should be_awaiting_correction
     end
   end
 
   describe 'после публикации должна' do
-
-    it 'иметь событие со статусом "опубликована"' do
-      published_entry.reload.events.first.kind.should eql 'publish'
-    end
-
     it 'иметь статус "опубликована"' do
       published_entry.reload.should be_published
     end
   end
 
   describe 'после удаления в корзину должна' do
-
-    it 'иметь событие со статусом "помещена в корзину"' do
-      trashed_entry.events.first.kind.should eql 'to_trash'
-    end
-
     it 'иметь статус "помещена в корзину"' do
       trashed_entry.reload.should be_trash
     end
   end
 
   describe 'после восстановления должна' do
-
-    it 'иметь событие со статусом "восстановлена"' do
-      untrashed_entry.events.first.kind.should eql 'untrash'
-    end
-
     it 'иметь статус "черновик"' do
       untrashed_entry.should be_draft
-    end
-  end
-
-  describe 'после немедленной публикации должна' do
-    it 'иметь событие со статусом "опубликована"' do
-      immediately_published_entry.events.first.kind.should eql 'immediately_publish'
-    end
-
-    it 'иметь статус "опубликована"' do
-      immediately_published_entry.reload.should be_published
-    end
-  end
-
-  describe 'после немедленной отправки публикатору должна' do
-    it 'иметь событие со статусом "ожидает публикации"' do
-      immediately_sended_to_publisher_entry.events.first.kind.should eql 'immediately_send_to_publisher'
-    end
-
-    it 'иметь статус "ожидает публикации"' do
-      immediately_sended_to_publisher_entry.reload.should be_awaiting_publication
     end
   end
 

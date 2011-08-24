@@ -39,14 +39,9 @@ class User < ActiveRecord::Base
 
   private
     def create_subscribe(role)
-      role_events = {
-                      :corrector => %w[correct return_to_corrector return_to_author send_to_corrector],
-                      :publisher => %w[immediately_send_to_publisher immediately_publish publish return_to_corrector send_to_publisher]
-                    }
-
-      role_events[role.kind.to_sym].each do |event|
-        self.subscribes.create!(:kind => event)
-      end
+      #role_events[role.kind.to_sym].each do |event|
+        #self.subscribes.create!(:kind => event)
+      #end
     end
 end
 

@@ -58,7 +58,7 @@ module Esp::SpecHelper
 
   def create_awaiting_correction_entry(options = {})
     entry = create_draft_entry(options)
-    entry.events.create(:kind => 'send_to_corrector')
+    entry.events.create!(:kind => :request_correcting)
     entry
   end
 
@@ -68,7 +68,7 @@ module Esp::SpecHelper
 
   def create_returned_to_author_entry(options = {})
     entry = create_awaiting_correction_entry(options)
-    entry.events.create(:kind => 'return_to_author')
+    entry.events.create!(:kind => :request_reworking)
     entry
   end
 
@@ -78,7 +78,7 @@ module Esp::SpecHelper
 
   def create_correcting_entry(options = {})
     entry = create_awaiting_correction_entry(options)
-    entry.events.create :kind => 'correct'
+    entry.events.create! :kind => :accept_correcting
     entry
   end
 
@@ -88,7 +88,7 @@ module Esp::SpecHelper
 
   def create_awaiting_publication_entry(options = {})
     entry = create_correcting_entry(options)
-    entry.events.create(:kind => 'send_to_publisher')
+    entry.events.create!(:kind => :request_publicating)
     entry
   end
 
@@ -98,7 +98,17 @@ module Esp::SpecHelper
 
   def create_returned_to_corrector_entry(options = {})
     entry = create_awaiting_publication_entry(options)
-    entry.events.create(:kind => 'return_to_corrector')
+    entry.events.create!(:kind => :request_correcting)
+    entry
+  end
+
+  def publicating_entry(options = {})
+    @published_entry ||= create_publicating_entry(options)
+  end
+
+  def create_publicating_entry(options = {})
+    entry = create_awaiting_publication_entry(options)
+    entry.events.create!(:kind => :accept_publicating)
     entry
   end
 
@@ -107,8 +117,8 @@ module Esp::SpecHelper
   end
 
   def create_published_entry(options = {})
-    entry = create_awaiting_publication_entry(options)
-    entry.events.create(:kind => 'publish')
+    entry = create_publicating_entry(options)
+    entry.events.create!(:kind => :publish)
     entry
   end
 
@@ -118,7 +128,7 @@ module Esp::SpecHelper
 
   def create_trashed_entry(options = {})
     entry = create_draft_entry(options)
-    entry.events.create(:kind => 'to_trash')
+    entry.events.create!(:kind => 'to_trash')
     entry
   end
 
@@ -129,27 +139,7 @@ module Esp::SpecHelper
 
   def create_untrashed_entry(options = {})
     entry = create_trashed_entry(options)
-    entry.events.create(:kind => 'untrash')
-    entry
-  end
-
-  def immediately_published_entry(options = {})
-    @immediately_published_entry ||= create_immediately_published_entry(options)
-  end
-
-  def create_immediately_published_entry(options = {})
-    entry = create_draft_entry(options)
-    entry.events.create(:kind => 'immediately_publish')
-    entry
-  end
-
-  def immediately_sended_to_publisher_entry(options = {})
-    @immediately_sended_to_publisher_entry ||= create_immediately_sended_to_publisher_entry(options)
-  end
-
-  def create_immediately_sended_to_publisher_entry(options = {})
-    entry = create_draft_entry(options)
-    entry.events.create(:kind => 'immediately_send_to_publisher')
+    entry.events.create!(:kind => 'untrash')
     entry
   end
 

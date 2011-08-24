@@ -21,6 +21,8 @@ class Event < ActiveRecord::Base
 
   attr_accessor :entry_attributes
 
+  has_enum :kind, Entry.all_events
+
   def ready_to_send_to_publisher
     errors.add(:entry_title, ::I18n.t('Entry title can\'t be blank'))           if entry.title.blank?
     errors.add(:entry_annotation, ::I18n.t('Entry annotation can\'t be blank')) if entry.annotation.blank?

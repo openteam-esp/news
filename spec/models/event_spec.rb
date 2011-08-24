@@ -51,23 +51,23 @@ describe Event do
 
     it "уже были события" do
       channels = [Fabricate(:channel), Fabricate(:channel)]
-      draft_entry.update_attributes(:title => "title", :channel_ids => channels.map(&:id), :asset_ids => [Fabricate(:asset).id])
-      draft_entry.events.create(:kind => :send_to_corrector)
-      draft_entry.assets.destroy_all
-      Fabricate(:asset, :entry => draft_entry, :file_content_type => "video/ogg")
-      draft_entry.channels.last.destroy
-      draft_entry.update_attributes(:title => "new title")
-      draft_entry.events.create(:kind => :restore)
-      restored_entry = draft_entry.events.first.versioned_entry
+      awaiting_correction_entry(:title => "title", :channel_ids => channels.map(&:id), :asset_ids => [Fabricate(:asset).id])
+      awaiting_correction_entry.assets.destroy_all
+      Fabricate(:asset, :entry => awaiting_correction_entry, :file_content_type => "video/ogg")
+      awaiting_correction_entry.channels.last.destroy
+      awaiting_correction_entry.update_attributes(:title => "new title")
+      awaiting_correction_entry.events.create!(:kind => :restore)
+      restored_entry = awaiting_correction_entry.events.first.versioned_entry
       restored_entry.images.should be_empty
       restored_entry.videos.should be_one
       restored_entry.channels.should == [channels.first]
       restored_entry.title.should == "new title"
-      draft_entry.reload
-      draft_entry.title.should == "title"
-      draft_entry.channels.should == [channels.first]
-      draft_entry.assets.should be_one
-      draft_entry.images.should be_one
+      awaiting_correction_entry.reload
+
+      awaiting_correction_entry.title.should == "title"
+      awaiting_correction_entry.channels.should == [channels.first]
+      awaiting_correction_entry.assets.should be_one
+      awaiting_correction_entry.images.should be_one
     end
   end
 
