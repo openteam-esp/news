@@ -21,7 +21,7 @@ class Entry < ActiveRecord::Base
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
 
   scope :state, lambda { |state|
-                          if User.current.roles.empty? || %w[draft trash published].include?(state.to_s)
+                          if (User.current && User.current.roles.empty?) || %w[draft trash published].include?(state.to_s)
                             by_state(state).self_initiated
                           else
                             by_state(state)
