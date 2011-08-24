@@ -4,7 +4,8 @@ require 'spec_helper'
 
 describe EntriesController do
   before :each do
-    sign_in Fabricate(:user)
+    sign_in initiator
+    set_current_user initiator
   end
 
   describe "GET index" do

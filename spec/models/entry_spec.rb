@@ -188,6 +188,35 @@ describe Entry do
     end
   end
 
+  describe "папки новостей" do
+
+    it "инициатору показываются только его новости" do
+      set_current_user(initiator)
+      Entry.all_states.each do |state|
+        Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => initiator.id}
+      end
+    end
+
+    it "личные папки для корректора и публикатора" do
+      [corrector, publisher].each do |user|
+        set_current_user(user)
+        Entry.owned_states.each do |state|
+          Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => user.id}
+        end
+      end
+    end
+
+    it "папки корректора и публикатора для новостей в процесса" do
+      [corrector, publisher].each do |user|
+        set_current_user(user)
+        Entry.shared_states.each do |state|
+          Entry.state(state).where_values_hash.should == {:state => state}
+        end
+      end
+    end
+
+  end
+
   describe "удаление" do
     it "аттача" do
       pending

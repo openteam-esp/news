@@ -17,7 +17,17 @@ class Entry < ActiveRecord::Base
 
   default_scope order('created_at desc')
 
-  scope :state, lambda {|state| where(:state => state)}
+  scope :by_state, lambda { |state| where(:state => state) }
+  scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
+
+  scope :state, lambda { |state|
+                          if User.current.roles.empty? || %w[draft trash published].include?(state.to_s)
+                            by_state(state).self_initiated
+                          else
+                            by_state(state)
+                          end
+                       }
+
 
   after_create :create_subscribe
 
@@ -73,6 +83,18 @@ class Entry < ActiveRecord::Base
     event :to_trash do
       transition [:awaiting_publication, :awaiting_correction, :correcting, :draft, :published] => :trash
     end
+  end
+
+  def self.all_states
+    self.state_machines[:state].states.map(&:name)
+  end
+
+  def self.owned_states
+    [:draft, :trash, :published]
+  end
+
+  def self.shared_states
+    all_states - owned_states
   end
 
   def created_human

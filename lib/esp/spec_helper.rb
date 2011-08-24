@@ -1,7 +1,8 @@
 module Esp::SpecHelper
 
-  def set_current_user
-    User.current ||= initiator
+  def set_current_user(user = nil)
+    user ||= initiator
+    User.current = user
   end
 
   def initiator
@@ -12,12 +13,32 @@ module Esp::SpecHelper
     Fabricate(:user)
   end
 
+  def corrector
+    @corrector ||= create_corrector
+  end
+
+  def create_corrector
+    user = Fabricate(:user)
+    user.roles << Role.corrector || Fabricate(:role, :kind => :corrector)
+    user
+  end
+
+  def publisher
+    @publisher ||= create_publisher
+  end
+
+  def create_publisher
+    user = Fabricate(:user)
+    user.roles << Role.publisher || Fabricate(:role, :kind => :publisher)
+    user
+  end
+
   def draft_entry(options = {})
     @draft_entry ||= create_draft_entry(options)
   end
 
   def create_draft_entry(options = {})
-    set_current_user
+    set_current_user(User.current)
     Fabricate(:entry, options)
   end
 
@@ -31,102 +52,105 @@ module Esp::SpecHelper
     entry
   end
 
-  def awaiting_correction_entry
-    @awaiting_correction_entry ||= create_awaiting_correction_entry
+  def awaiting_correction_entry(options = {})
+    @awaiting_correction_entry ||= create_awaiting_correction_entry(options)
   end
 
-  def create_awaiting_correction_entry
-    entry = create_draft_entry
+  def create_awaiting_correction_entry(options = {})
+    entry = create_draft_entry(options)
     entry.events.create(:kind => 'send_to_corrector')
     entry
   end
 
-  def returned_to_author_entry
-    @returned_to_author_entry ||= create_returned_to_author_entry
+  def returned_to_author_entry(options = {})
+    @returned_to_author_entry ||= create_returned_to_author_entry(options)
   end
 
-  def create_returned_to_author_entry
-    entry = create_awaiting_correction_entry
+  def create_returned_to_author_entry(options = {})
+    entry = create_awaiting_correction_entry(options)
     entry.events.create(:kind => 'return_to_author')
     entry
   end
 
-  def correcting_entry
-    @correcting_entry ||= create_correcting_entry
+  def correcting_entry(options = {})
+    @correcting_entry ||= create_correcting_entry(options)
   end
 
-  def create_correcting_entry
-    entry = create_awaiting_correction_entry
+  def create_correcting_entry(options = {})
+    entry = create_awaiting_correction_entry(options)
     entry.events.create :kind => 'correct'
     entry
   end
 
-  def awaiting_publication_entry
-    @awaiting_publication_entry ||= create_awaiting_publication_entry
+  def awaiting_publication_entry(options = {})
+    @awaiting_publication_entry ||= create_awaiting_publication_entry(options)
   end
 
-  def create_awaiting_publication_entry
-    entry = create_correcting_entry
+  def create_awaiting_publication_entry(options = {})
+    entry = create_correcting_entry(options)
     entry.events.create(:kind => 'send_to_publisher')
     entry
   end
 
-  def returned_to_corrector_entry
-    @returned_to_corrector_entry ||= create_returned_to_corrector_entry
+  def returned_to_corrector_entry(options = {})
+    @returned_to_corrector_entry ||= create_returned_to_corrector_entry(options)
   end
 
-  def create_returned_to_corrector_entry
-    entry = create_awaiting_publication_entry
+  def create_returned_to_corrector_entry(options = {})
+    entry = create_awaiting_publication_entry(options)
     entry.events.create(:kind => 'return_to_corrector')
     entry
   end
 
-  def published_entry
-    @published_entry ||= create_published_entry
+  def published_entry(options = {})
+    @published_entry ||= create_published_entry(options)
   end
 
-  def create_published_entry
-    entry = create_awaiting_publication_entry
+  def create_published_entry(options = {})
+    entry = create_awaiting_publication_entry(options)
     entry.events.create(:kind => 'publish')
     entry
   end
 
-  def trashed_entry
-    @trashed_entry ||= begin
-                         set_current_user
-                         entry = Fabricate(:entry)
-                         entry.events.create(:kind => 'to_trash')
-                         entry
-                       end
-
+  def trashed_entry(options = {})
+    @trashed_entry ||= create_trashed_entry(options)
   end
 
-  def untrashed_entry
-    @untrashed_entry ||= begin
-                          set_current_user
-                          entry = Fabricate(:entry)
-                          entry.events.create(:kind => 'to_trash')
-                          entry.events.create(:kind => 'untrash', :user => User.current)
-                          entry
-                        end
+  def create_trashed_entry(options = {})
+    entry = create_draft_entry(options)
+    entry.events.create(:kind => 'to_trash')
+    entry
   end
 
-  def immediately_published_entry
-    @immediately_published_entry ||= begin
-                                       set_current_user
-                                       entry = Fabricate(:entry)
-                                       entry.events.create(:kind => 'immediately_publish')
-                                       entry
-                                     end
+
+  def untrashed_entry(options = {})
+    @untrashed_entry ||= create_untrashed_entry(options)
   end
 
-  def immediately_sended_to_publisher_entry
-    @immediately_sended_to_publisher_entry ||= begin
-                                                 set_current_user
-                                                 entry = Fabricate(:entry)
-                                                 entry.events.create(:kind => 'immediately_send_to_publisher')
-                                                 entry
-                                               end
+  def create_untrashed_entry(options = {})
+    entry = create_trashed_entry(options)
+    entry.events.create(:kind => 'untrash')
+    entry
+  end
+
+  def immediately_published_entry(options = {})
+    @immediately_published_entry ||= create_immediately_published_entry(options)
+  end
+
+  def create_immediately_published_entry(options = {})
+    entry = create_draft_entry(options)
+    entry.events.create(:kind => 'immediately_publish')
+    entry
+  end
+
+  def immediately_sended_to_publisher_entry(options = {})
+    @immediately_sended_to_publisher_entry ||= create_immediately_sended_to_publisher_entry(options)
+  end
+
+  def create_immediately_sended_to_publisher_entry(options = {})
+    entry = create_draft_entry(options)
+    entry.events.create(:kind => 'immediately_send_to_publisher')
+    entry
   end
 
 end
