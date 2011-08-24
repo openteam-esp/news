@@ -1,3 +1,7 @@
+# encoding: utf-8
+
+include ActionView::Helpers::DateHelper
+
 class Event < ActiveRecord::Base
   belongs_to :entry
   belongs_to :user
@@ -44,6 +48,9 @@ class Event < ActiveRecord::Base
     result = ::I18n.t("event.kind.after.#{self.kind}").mb_chars.capitalize
     result += " "
     result += ::I18n.l(self.created_at, :format => :long)
+    result += " ("
+    result += time_ago_in_words(self.created_at)
+    result += " назад)"
   end
 
   private

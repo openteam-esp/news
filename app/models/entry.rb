@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+include ActionView::Helpers::DateHelper
+
 class Entry < ActiveRecord::Base
 
   belongs_to :initiator, :class_name => 'User'
@@ -102,6 +104,9 @@ class Entry < ActiveRecord::Base
   def created_human
     result = "Создано "
     result += ::I18n.l(self.created_at, :format => :long)
+    result += " ("
+    result += time_ago_in_words(self.created_at)
+    result += " назад)"
   end
 
   def restore(*args)
