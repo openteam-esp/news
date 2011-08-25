@@ -13,14 +13,22 @@ module Esp::SpecHelper
     Fabricate(:user)
   end
 
+  def corrector_role
+    @corrector_role ||= (Role.corrector || Fabricate(:role, :kind => :corrector))
+  end
+
   def corrector
     @corrector ||= create_corrector
   end
 
   def create_corrector
     user = Fabricate(:user)
-    user.roles << Role.corrector || Fabricate(:role, :kind => :corrector)
+    user.roles << corrector_role
     user
+  end
+
+  def publisher_role
+    @publisher_role ||= (Role.publisher || Fabricate(:role, :kind => :publisher))
   end
 
   def publisher
@@ -29,8 +37,25 @@ module Esp::SpecHelper
 
   def create_publisher
     user = Fabricate(:user)
-    user.roles << Role.publisher || Fabricate(:role, :kind => :publisher)
+    user.roles << publisher_role
     user
+  end
+
+  def channel
+    @channel ||= Fabricate(:channel)
+  end
+
+  def create_entry(previous_state, event, options, user=nil)
+    current_user = User.current
+    set_current_user(user) if user
+
+    entry = self.send("#{previous_state}_entry").clone
+    entry.attributes = options
+    entry.save
+
+    entry.events.create! :kind => event
+    set_current_user(current_user)
+    entry.reload
   end
 
   def draft_entry(options = {})
@@ -49,98 +74,32 @@ module Esp::SpecHelper
   def create_draft_entry_with_asset(options = {})
     entry = create_draft_entry(options)
     entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]
-    entry
+    entry.reload
   end
 
   def awaiting_correction_entry(options = {})
-    @awaiting_correction_entry ||= create_awaiting_correction_entry(options)
-  end
-
-  def create_awaiting_correction_entry(options = {})
-    entry = create_draft_entry(options)
-    entry.events.create!(:kind => :request_correcting)
-    entry
-  end
-
-  def returned_to_author_entry(options = {})
-    @returned_to_author_entry ||= create_returned_to_author_entry(options)
-  end
-
-  def create_returned_to_author_entry(options = {})
-    entry = create_awaiting_correction_entry(options)
-    entry.events.create!(:kind => :request_reworking)
-    entry
+    @awaiting_correction_entry ||= create_entry :draft, :request_correcting, options
   end
 
   def correcting_entry(options = {})
-    @correcting_entry ||= create_correcting_entry(options)
-  end
-
-  def create_correcting_entry(options = {})
-    entry = create_awaiting_correction_entry(options)
-    entry.events.create! :kind => :accept_correcting
-    entry
+    @correcting_entry ||= create_entry :awaiting_correction, :accept_correcting, options, corrector
   end
 
   def awaiting_publication_entry(options = {})
-    @awaiting_publication_entry ||= create_awaiting_publication_entry(options)
-  end
-
-  def create_awaiting_publication_entry(options = {})
-    entry = create_correcting_entry(options)
-    entry.events.create!(:kind => :request_publicating)
-    entry
-  end
-
-  def returned_to_corrector_entry(options = {})
-    @returned_to_corrector_entry ||= create_returned_to_corrector_entry(options)
-  end
-
-  def create_returned_to_corrector_entry(options = {})
-    entry = create_awaiting_publication_entry(options)
-    entry.events.create!(:kind => :request_correcting)
-    entry
+    @awaiting_publication_entry ||= create_entry :correcting, :request_publicating, options, corrector
   end
 
   def publicating_entry(options = {})
-    @published_entry ||= create_publicating_entry(options)
-  end
-
-  def create_publicating_entry(options = {})
-    entry = create_awaiting_publication_entry(options)
-    entry.events.create!(:kind => :accept_publicating)
-    entry
+    @publicating_entry ||= create_entry :awaiting_publication, :accept_publicating, options, publisher
   end
 
   def published_entry(options = {})
-    @published_entry ||= create_published_entry(options)
+    entry = create_entry :publicating, :publish, options.merge(:channel_ids => [channel.id]), publisher
+    @published_entry ||= create_entry :publicating, :publish, options.merge(:channel_ids => [channel.id]), publisher
   end
 
-  def create_published_entry(options = {})
-    entry = create_publicating_entry(options)
-    entry.events.create!(:kind => :publish)
-    entry
-  end
-
-  def trashed_entry(options = {})
-    @trashed_entry ||= create_trashed_entry(options)
-  end
-
-  def create_trashed_entry(options = {})
-    entry = create_draft_entry(options)
-    entry.events.create!(:kind => 'to_trash')
-    entry
-  end
-
-
-  def untrashed_entry(options = {})
-    @untrashed_entry ||= create_untrashed_entry(options)
-  end
-
-  def create_untrashed_entry(options = {})
-    entry = create_trashed_entry(options)
-    entry.events.create!(:kind => 'untrash')
-    entry
+  def trash_entry(options = {})
+    @trash_entry ||= create_entry :draft, :to_trash, options, initiator
   end
 
 end

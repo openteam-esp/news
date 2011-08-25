@@ -50,6 +50,7 @@ describe Event do
     end
 
     it "уже были события" do
+      set_current_user initiator
       channels = [Fabricate(:channel), Fabricate(:channel)]
       awaiting_correction_entry(:title => "title", :channel_ids => channels.map(&:id), :asset_ids => [Fabricate(:asset).id])
       awaiting_correction_entry.assets.destroy_all

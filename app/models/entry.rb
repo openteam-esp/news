@@ -19,7 +19,7 @@ class Entry < ActiveRecord::Base
 
   default_scope order('created_at desc')
 
-  scope :published, where(:state => 'published')
+  scope :published, where(:state => :published)
 
   scope :by_state, lambda { |state| where(:state => state) }
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
@@ -39,50 +39,81 @@ class Entry < ActiveRecord::Base
 
   default_value_for :initiator_id do User.current_id end
 
+  def current_user
+    User.current
+  end
+
+  delegate :publisher?, :corrector?, :to => :current_user, :prefix => true
+
+  def current_user_initiator?
+    initiator == current_user
+  end
+
   state_machine :initial => :draft do
     after_transition :to => :published do |entry, transition|
       entry.send_by_email
     end
 
-    event :store
-
-    event :restore
-
-    event :request_correcting do
-      transition [:draft, :awaiting_publication, :publicating, :published] => :awaiting_correction
-    end
-
-    event :accept_correcting do
-      transition [:trash, :awaiting_correction] => :correcting
-    end
-
-    event :request_reworking do
-      transition [:awaiting_correction, :correcting] => :draft
-    end
-
-    event :request_publicating do
-      transition [:correcting, :draft] => :awaiting_publication
-    end
-
-    event :accept_publicating do
-      transition [:trash, :awaiting_publication] => :publicating
-    end
-
-    event :publish do
-      transition [:draft, :correcting, :publicating] => :published
-    end
-
-    event :to_trash do
-      transition all - [:trash] => :trash
-    end
-
     event :untrash do
       transition :trash => :draft
     end
+
+    event :publish do
+      transition [:draft, :correcting, :publicating] => :published, :if => :current_user_publisher?
+    end
+
+    event :request_publicating do
+      transition [:correcting, :draft] => :awaiting_publication, :if => :current_user_corrector?
+    end
+
+    event :accept_publicating do
+      transition [:trash, :awaiting_publication] => :publicating, :if => :current_user_publisher?
+    end
+
+    event :request_correcting do
+      transition :draft => :awaiting_correction, :if => :current_user_initiator?
+    end
+
+    event :store do
+      transition :draft => :draft
+      transition :correcting => :correcting, :if => :current_user_corrector?
+      transition :publicating => :publicating, :if => :current_user_publisher?
+      transition :published => :published, :if => :current_user_publisher?
+    end
+
+    event :request_correcting do
+      transition [:awaiting_publication, :publicating] => :awaiting_correction, :if => :current_user_publisher?
+    end
+
+    event :restore
+
+    event :accept_correcting do
+      transition [:trash, :awaiting_correction] => :correcting, :if => :current_user_corrector?
+    end
+
+    event :request_reworking do
+      transition :awaiting_correction => :draft, :if => :current_user_initiator?
+      transition :correcting => :draft, :if => :current_user_corrector?
+    end
+
+    event :to_trash do
+      transition [:draft, :awaiting_correction] => :trash, :if => :current_user_initiator?
+      transition [:awaiting_correction, :correcting, :awaiting_publication] => :trash, :if => :current_user_corrector?
+      transition [:awaiting_publication, :publicating, :published] => :trash, :if => :current_user_publisher?
+    end
+
+  end
+
+  def permitted_events
+    events = []
+    state_events.each do |event|
+      events << event if self.class.state_machine.events[event.to_sym].can_fire?(self)
+    end
+    events
   end
 
   def self.all_states
-    self.state_machines[:state].states.map(&:name)
+    state_machine.states.map(&:name)
   end
 
   def self.owned_states
@@ -94,7 +125,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.all_events
-    Entry.state_machines[:state].events.map(&:name)
+    state_machine.events.map(&:name)
   end
 
   def created_human

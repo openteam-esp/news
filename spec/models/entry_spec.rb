@@ -13,11 +13,6 @@ describe Entry do
   it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
   it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
 
-  before do
-    @corrector_role = Fabricate(:role, :kind => 'corrector')
-    @publisher_role = Fabricate(:role, :kind => 'publisher')
-  end
-
   describe "composed_title" do
     it "для пустой новости" do
       Entry.new.composed_title.should == "(без заголовка)"
@@ -49,13 +44,7 @@ describe Entry do
   end
 
   it 'сортировка должна быть по убыванию по дате-времени создания' do
-    (1..3).each do | number |
-      Fabricate(:entry, :title => "Entry-#{number}", :created_at => Time.new + number.second )
-    end
-    entries = Entry.all
-    entries[0].title.should == "Entry-3"
-    entries[1].title.should == "Entry-2"
-    entries[2].title.should == "Entry-1"
+    Entry.scoped.to_sql.should == Entry.unscoped.order('created_at desc').to_sql
   end
 
   it 'должна корректно сохранять и отображать дату' do
@@ -65,75 +54,22 @@ describe Entry do
   it 'должна знать кто к ней имеет отношение' do
     first_user = Fabricate(:user)
     second_user = Fabricate(:user)
-    second_user.roles << @corrector_role
-    second_user.roles << @publisher_role
+    second_user.roles << corrector_role
+    second_user.roles << publisher_role
     User.current = first_user
     entry = Fabricate(:entry)
     entry.related_to(first_user).should be_true
     entry.related_to(second_user).should be_false
   end
 
-  describe 'после создания должна' do
-    it 'иметь статус "черновик"' do
-      draft_entry.should be_draft
-    end
-  end
-
-  describe 'после отправки корректору должна' do
-
-    it 'иметь событие со статусом "отправлена корректору"' do
-      awaiting_correction_entry.events.first.kind.should eql 'request_correcting'
-    end
-
-    it 'иметь статус "ожидает корректировки"' do
-      awaiting_correction_entry.reload.should be_awaiting_correction
-    end
-  end
-
-  describe 'после отправки публикатору должна' do
-    it 'иметь статус "ожидает публикации"' do
-      awaiting_publication_entry.reload.should be_awaiting_publication
-    end
-  end
-
-  describe 'после возвращения инициатору должна' do
-    it 'иметь статус "черновик"' do
-      returned_to_author_entry.should be_draft
-    end
-  end
-
-  describe 'после взятия на корректуру должна' do
-    it 'иметь статус "корректируется"' do
-      correcting_entry.reload.should be_correcting
-    end
-  end
-
-  describe 'после возвращения корректору должна' do
-    it 'иметь статус "ожидает корректировки"' do
-      returned_to_corrector_entry.reload.should be_awaiting_correction
-    end
-  end
-
-  describe 'после публикации должна' do
-    it 'иметь статус "опубликована"' do
-      published_entry.reload.should be_published
-    end
-  end
-
-  describe 'после удаления в корзину должна' do
-    it 'иметь статус "помещена в корзину"' do
-      trashed_entry.reload.should be_trash
-    end
-  end
-
-  describe 'после восстановления должна' do
-    it 'иметь статус "черновик"' do
-      untrashed_entry.should be_draft
+  it 'переходы по состояниям' do
+    set_current_user
+    %w[draft awaiting_correction correcting awaiting_publication publicating published trash].each do | state |
+      self.send("#{state}_entry").state.should == state.to_s
     end
   end
 
   describe "папки новостей" do
-
     it "инициатору показываются только его новости" do
       set_current_user(initiator)
       Entry.all_states.each do |state|
@@ -174,6 +110,45 @@ describe Entry do
     end
   end
 
+  describe "возможные действия для" do
+    describe "пользователя" do
+      before(:each) do
+        set_current_user(initiator)
+      end
+      it { draft_entry.permitted_events.should == [:request_correcting, :store, :to_trash ] }
+      it { awaiting_correction_entry.permitted_events.should == [:request_reworking, :to_trash] }
+      it { correcting_entry.permitted_events.should == [] }
+      it { awaiting_publication_entry.permitted_events.should == [] }
+      it { publicating_entry.permitted_events.should == [] }
+      it { published_entry.permitted_events.should == [] }
+      it { trash_entry.permitted_events.should == [ :untrash ] }
+    end
+
+    describe "редактора" do
+      before(:each) do
+        set_current_user(corrector)
+      end
+      it { draft_entry.permitted_events.should == [:request_publicating, :request_correcting, :store, :to_trash] }
+      it { awaiting_correction_entry.permitted_events.should == [:accept_correcting, :request_reworking, :to_trash] }
+      it { correcting_entry.permitted_events.should == [:request_publicating, :store, :request_reworking, :to_trash] }
+      it { awaiting_publication_entry.permitted_events.should == [:to_trash] }
+      it { publicating_entry.permitted_events.should == [] }
+      it { published_entry.permitted_events.should == [] }
+      it { trash_entry.permitted_events.should == [:untrash, :accept_correcting] }
+    end
+
+    describe "публикатора" do
+      before(:each) do
+        set_current_user(publisher)
+      end
+      it { draft_entry.permitted_events.should == [:publish, :request_correcting, :store, :to_trash]}
+      it { awaiting_correction_entry.permitted_events.should == [:request_reworking, :to_trash]}
+      it { correcting_entry.permitted_events.should == [:publish]}
+      it { awaiting_publication_entry.permitted_events.should == [:accept_publicating, :request_correcting, :to_trash]}
+      it { publicating_entry.permitted_events.should == [:publish, :request_correcting, :store, :to_trash] }
+      it { published_entry.permitted_events.should == [:store, :to_trash] }
+    end
+  end
 end
 
 

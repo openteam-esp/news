@@ -58,7 +58,7 @@ class Event < ActiveRecord::Base
   private
 
     def fire_entry_event
-      entry.send kind # fire_events kind.to_sym
+      entry.send "#{kind}!" # fire_events kind.to_sym
     end
 
     def notify_subscribers
