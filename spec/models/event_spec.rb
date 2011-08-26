@@ -4,6 +4,10 @@ require 'spec_helper'
 
 describe Event do
 
+  before(:each) do
+    set_current_user(initiator)
+  end
+
   describe "должен сохранять entry" do
     it "должен сохранять каналы" do
       channel_ids = [Fabricate(:channel), Fabricate(:channel)].map(&:id)
@@ -72,20 +76,22 @@ describe Event do
     end
   end
 
-  #before do
-    #@initiator  = Fabricate(:user)
-    #@subscriber = Fabricate(:user)
-    #@corrector_role = Fabricate(:role, :kind => 'corrector')
-    #@publisher_role = Fabricate(:role, :kind => 'publisher')
-    #set_current_user(@initiator)
-    #@entry = Fabricate(:entry)
-  #end
+  describe "полномочия действий" do
+    let(:ability) { Ability.new }
+    describe "инициатора" do
+      before(:each) do
+        set_current_user initiator
+      end
+      it { ability.should be_able_to :create, stored_draft.events.build(:kind => :store) }
+    end
 
-  #it "после создания события с типом send_to_corrector - новость должны иметь соответствующий статус" do
-    #@entry.events.create!(:kind => :send_to_corrector, :text => 'опубликуйте, пжалтеста, а?')
-    #@entry.reload.should be_awaiting_correction
-  #end
-
+    describe "другой инициатор" do
+      before(:each) do
+        set_current_user another_initiator
+      end
+      it { ability.should_not be_able_to :create, stored_draft.events.build(:kind => :store) }
+    end
+  end
   #it 'после создания события с типом create, инициатор должен иметь подписку на созданную новость' do
     #@initiator.subscribes.should be_one
   #end

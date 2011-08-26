@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110823042142) do
+ActiveRecord::Schema.define(:version => 20110826042646) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -100,17 +100,6 @@ ActiveRecord::Schema.define(:version => 20110823042142) do
     t.integer  "old_id"
   end
 
-  create_table "roles", :force => true do |t|
-    t.string   "kind"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "roles_users", :id => false, :force => true do |t|
-    t.integer "role_id"
-    t.integer "user_id"
-  end
-
   create_table "subscribes", :force => true do |t|
     t.integer  "subscriber_id"
     t.integer  "initiator_id"
@@ -134,6 +123,7 @@ ActiveRecord::Schema.define(:version => 20110823042142) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "roles"
   end
 
 end

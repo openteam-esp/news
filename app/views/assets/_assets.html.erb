@@ -5,7 +5,7 @@
     <% @entry.reload.assets.each do |asset| %>
       <li>
         <%= render :partial => asset %>
-        <%= link_to "удалить", entry_asset_path(@entry, asset), :class => "remove" %>
+        <%= link_to "удалить", entry_asset_path(@entry, asset), :class => "discard" %>
       </li>
     <% end %>
   </ul>

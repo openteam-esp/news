@@ -7,9 +7,10 @@ class User < ActiveRecord::Base
   has_many :events
   has_many :subscribes, :foreign_key => :subscriber_id
   has_many :messages
-  has_and_belongs_to_many :roles, :after_add => :create_subscribe
 
   delegate :provider, :to => :authentication
+
+  has_enums
 
   def to_s
     name
@@ -17,12 +18,8 @@ class User < ActiveRecord::Base
 
   %w[corrector publisher].each do |role|
     define_method "#{role}?" do
-      roles.map(&:kind).include?(role)
+      roles.map(&:to_s).include?(role)
     end
-  end
-
-  def subscribed?(initiator)
-    Subscribe.where(:subscriber_id => self, :initiator_id => initiator).any?
   end
 
   def self.current
@@ -37,12 +34,6 @@ class User < ActiveRecord::Base
     Thread.current[:user] = user
   end
 
-  private
-    def create_subscribe(role)
-      #role_events[role.kind.to_sym].each do |event|
-        #self.subscribes.create!(:kind => event)
-      #end
-    end
 end
 
 

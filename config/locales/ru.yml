@@ -167,6 +167,10 @@ ru:
         password: "Пароль"
         password_confirmation: "Подтвердите пароль"
         remember_me: "Запомнить меня"
+        roles: "Роли"
+        roles_enum:
+          corrector: Корректор
+          publisher: Публикатор
 
       entry:
         title: "Заголовок"
@@ -180,6 +184,7 @@ ru:
         images: "Изображения"
         videos: "Видеофайлы"
         audios: "Аудиофайлы"
+
         attachments: "Файлы"
       asset:
         file: "Файл"

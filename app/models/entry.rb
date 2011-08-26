@@ -49,25 +49,37 @@ class Entry < ActiveRecord::Base
     initiator == current_user
   end
 
+  def current_user_participant?
+    current_user_initiator? || events.where(:user_id => current_user.id).any?
+  end
+
+  def current_user_is_a?(*args)
+    args.map{|role| self.send("current_user_#{role}?")}.uniq.compact == [true]
+  end
+
   state_machine :initial => :draft do
     after_transition :to => :published do |entry, transition|
       entry.send_by_email
     end
 
-    event :untrash do
-      transition :trash => :draft
+    event :recover do
+      transition :trash => :draft, :if => :current_user_participant?
     end
 
     event :publish do
-      transition [:draft, :correcting, :publicating] => :published, :if => :current_user_publisher?
+      transition :draft => :published, :if => ->(entry) { entry.current_user_is_a? :initiator, :publisher}
+      transition :correcting => :published, :if => ->(entry) { entry.current_user_is_a? :initiator, :corrector, :publisher }
+      transition :publicating => :published, :if => :current_user_publisher?
     end
 
     event :request_publicating do
-      transition [:correcting, :draft] => :awaiting_publication, :if => :current_user_corrector?
+      transition :draft => :awaiting_publication, :if => ->(entry) { entry.current_user_is_a? :initiator, :corrector}
+      transition :correcting => :awaiting_publication, :if => :current_user_corrector?
     end
 
     event :accept_publicating do
-      transition [:trash, :awaiting_publication] => :publicating, :if => :current_user_publisher?
+      transition :trash => :publicating, :if => ->(entry) { entry.current_user_is_a? :participant, :publisher  }
+      transition :awaiting_publication => :publicating, :if => :current_user_publisher?
     end
 
     event :request_correcting do
@@ -75,7 +87,7 @@ class Entry < ActiveRecord::Base
     end
 
     event :store do
-      transition :draft => :draft
+      transition :draft => :draft, :if => :current_user_initiator?
       transition :correcting => :correcting, :if => :current_user_corrector?
       transition :publicating => :publicating, :if => :current_user_publisher?
       transition :published => :published, :if => :current_user_publisher?
@@ -88,15 +100,16 @@ class Entry < ActiveRecord::Base
     event :restore
 
     event :accept_correcting do
-      transition [:trash, :awaiting_correction] => :correcting, :if => :current_user_corrector?
+      transition :trash => :correcting, :if => ->(entry) { entry.current_user_is_a? :corrector, :participant }
+      transition [:awaiting_correction, :awaiting_publication] => :correcting, :if => :current_user_corrector?
     end
 
     event :request_reworking do
-      transition :awaiting_correction => :draft, :if => :current_user_initiator?
+      transition :awaiting_correction => :draft, :if => ->(entry) {entry.current_user_initiator? || entry.current_user_corrector?}
       transition :correcting => :draft, :if => :current_user_corrector?
     end
 
-    event :to_trash do
+    event :discard do
       transition [:draft, :awaiting_correction] => :trash, :if => :current_user_initiator?
       transition [:awaiting_correction, :correcting, :awaiting_publication] => :trash, :if => :current_user_corrector?
       transition [:awaiting_publication, :publicating, :published] => :trash, :if => :current_user_publisher?
@@ -105,11 +118,7 @@ class Entry < ActiveRecord::Base
   end
 
   def permitted_events
-    events = []
-    state_events.each do |event|
-      events << event if self.class.state_machine.events[event.to_sym].can_fire?(self)
-    end
-    events
+    state_events.select{ |event| self.class.state_machine.events[event.to_sym].can_fire?(self) }
   end
 
   def self.all_states
@@ -147,10 +156,6 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  def related_to(user)
-    events.where(:user_id => user.id).any? || initiator == user
-  end
-
   def send_by_email
     mailing_channels = []
     self.channels.each do |channel|
@@ -171,41 +176,6 @@ class Entry < ActiveRecord::Base
   def composed_title
     [ presented(:title).truncate(80, :omission => '…'), presented?(:body, :html => true) ].
       compact.join(' – ').truncate(100, :omission => '…')
-  end
-
-  def state_events_for_author(user)
-    return [] if initiator != user
-    state_events & [:send_to_corrector, :to_trash, :untrash]
-  end
-
-  def state_events_for_corrector(user)
-    result = state_events & [:return_to_author, :correct, :untrash, :send_to_publisher]
-    result << :immediately_send_to_publisher if draft? && initiator == user
-    result << :to_trash if awaiting_correction? || (draft? && initiator == user) || correcting?
-    result
-  end
-
-  def state_events_for_publisher(user)
-    result = state_events & [:return_to_corrector, :publish, :untrash, :send_to_corrector]
-    result << :to_trash if awaiting_publication? || (draft? && initiator == user) || published?
-    result
-  end
-
-  def state_events_for_corrector_and_publisher(user)
-    result = state_events & [:correct, :immediately_publish, :publish, :untrash, :return_to_author, :return_to_corrector, :to_trash]
-    result << :immediately_publish if draft? && initiator == user
-    result << :to_trash if draft? && initiator == user
-    result
-  end
-
-  def state_events_for(user)
-    return state_events_for_author(user) if !user.corrector? && !user.publisher?
-
-    result = []
-    result << state_events_for_corrector(user) if user.corrector? && user.roles.one?
-    result << state_events_for_publisher(user) if user.publisher? && user.roles.one?
-    result << state_events_for_corrector_and_publisher(user) if user.corrector? && user.publisher?
-    result.flatten.uniq.sort
   end
 
   private

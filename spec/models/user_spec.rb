@@ -13,22 +13,22 @@
     #end
 
     #it 'восстановить новость к которой он имеет отношение' do
-      #@draft.events.create(:kind => 'to_trash', :user_id => @user.id)
-      #untrash_event = @draft.events.new(:kind => 'untrash', :user_id => @user.id)
-      #@ability.should be_able_to(:create, untrash_event)
+      #@draft.events.create(:kind => 'discard', :user_id => @user.id)
+      #recover_event = @draft.events.new(:kind => 'recover', :user_id => @user.id)
+      #@ability.should be_able_to(:create, recover_event)
     #end
 
     #it 'не может восстановить новость к которой не имеет отношения' do
       #another_user = Fabricate(:user)
       #another_user_ability = Ability.new(another_user)
-      #@draft.events.create(:kind => 'to_trash', :user_id => @user.id)
-      #untrash_event_from_another_user = @draft.events.new(:kind => 'untrash', :user_id => another_user.id)
+      #@draft.events.create(:kind => 'discard', :user_id => @user.id)
+      #recover_event_from_another_user = @draft.events.new(:kind => 'recover', :user_id => another_user.id)
       #@draft.reload
-      #another_user_ability.should_not be_able_to(:create, untrash_event_from_another_user)
+      #another_user_ability.should_not be_able_to(:create, recover_event_from_another_user)
     #end
 
     #it 'отправить только по следующим переходам' do
-      #@draft.state_events_for(@user).should eql [:send_to_corrector, :to_trash]
+      #@draft.state_events_for(@user).should eql [:send_to_corrector, :discard]
     #end
 
     #it 'отправить только свой черновик корректору' do
@@ -37,8 +37,8 @@
     #end
 
     #it 'отправить только свой черновик в корзину' do
-      #to_trash_event = @draft.events.new(:kind => 'to_trash')
-      #@ability.should be_able_to(:create, to_trash_event)
+      #discard_event = @draft.events.new(:kind => 'discard')
+      #@ability.should be_able_to(:create, discard_event)
     #end
 
     #it 'редактировать только свой черновик' do
@@ -85,12 +85,12 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #draft.state_events_for(@corrector).should eql [:immediately_send_to_publisher, :to_trash]
+        #draft.state_events_for(@corrector).should eql [:immediately_send_to_publisher, :discard]
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = draft.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = draft.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'отправить публикатору' do
@@ -118,7 +118,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #awaiting_correction_entry.reload.state_events_for(@corrector).should eql [:correct, :return_to_author, :to_trash]
+        #awaiting_correction_entry.reload.state_events_for(@corrector).should eql [:correct, :return_to_author, :discard]
       #end
 
       #it 'вернуть инициатору' do
@@ -132,8 +132,8 @@
       #end
 
       #it 'отправить в корзину' do
-         #to_trash_event = awaiting_correction_entry.events.new(:kind => 'to_trash')
-         #@ability.should be_able_to(:create, to_trash_event)
+         #discard_event = awaiting_correction_entry.events.new(:kind => 'discard')
+         #@ability.should be_able_to(:create, discard_event)
       #end
     #end
 
@@ -149,12 +149,12 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #correcting_entry.reload.state_events_for(@corrector).should eql [:send_to_publisher, :to_trash]
+        #correcting_entry.reload.state_events_for(@corrector).should eql [:send_to_publisher, :discard]
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = correcting_entry.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = correcting_entry.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'отправить публикатору' do
@@ -185,12 +185,12 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #draft.state_events_for(@publisher).should eql [:send_to_corrector, :to_trash]
+        #draft.state_events_for(@publisher).should eql [:send_to_corrector, :discard]
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = draft.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = draft.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'отправить корректору' do
@@ -220,7 +220,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #awaiting_publication_entry.reload.state_events_for(@publisher).should eql [:publish, :return_to_corrector, :to_trash]
+        #awaiting_publication_entry.reload.state_events_for(@publisher).should eql [:publish, :return_to_corrector, :discard]
       #end
 
       #it 'вернуть корректору' do
@@ -234,8 +234,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = awaiting_publication_entry.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = awaiting_publication_entry.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
     #end
 
@@ -253,7 +253,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #published_entry.reload.state_events_for(@publisher).should eql [:return_to_corrector, :to_trash]
+        #published_entry.reload.state_events_for(@publisher).should eql [:return_to_corrector, :discard]
       #end
 
       #it 'вернуть корректору' do
@@ -262,8 +262,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = published_entry.events.new(:kind => 'to_trash')
-        #@ability.should  be_able_to(:create, to_trash_event)
+        #discard_event = published_entry.events.new(:kind => 'discard')
+        #@ability.should  be_able_to(:create, discard_event)
       #end
 
       #it 'редактировать' do
@@ -291,7 +291,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-       #draft.state_events_for(@corpuber).should eql [:immediately_publish, :to_trash]
+       #draft.state_events_for(@corpuber).should eql [:immediately_publish, :discard]
       #end
 
       #it 'опубликовать' do
@@ -300,8 +300,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = draft.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = draft.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'редактировать' do
@@ -324,7 +324,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #awaiting_correction_entry.reload.state_events_for(@corpuber).should eql [:correct, :return_to_author, :to_trash]
+        #awaiting_correction_entry.reload.state_events_for(@corpuber).should eql [:correct, :return_to_author, :discard]
       #end
 
       #it 'вернуть инициатору' do
@@ -338,8 +338,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = awaiting_correction_entry.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = awaiting_correction_entry.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
     #end
 
@@ -355,7 +355,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #correcting_entry.reload.state_events_for(@corpuber).should eql [:publish, :to_trash]
+        #correcting_entry.reload.state_events_for(@corpuber).should eql [:publish, :discard]
       #end
 
       #it 'опубликовать' do
@@ -364,8 +364,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = correcting_entry.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = correcting_entry.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'редактировать' do
@@ -386,7 +386,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #awaiting_publication_entry.reload.state_events_for(@corpuber).should eql [:publish, :return_to_corrector, :to_trash]
+        #awaiting_publication_entry.reload.state_events_for(@corpuber).should eql [:publish, :return_to_corrector, :discard]
       #end
 
       #it 'вернуть корректору' do
@@ -400,8 +400,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = awaiting_publication_entry.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = awaiting_publication_entry.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'редактировать' do
@@ -423,7 +423,7 @@
       #end
 
       #it 'отправить только по следующим переходам' do
-        #published_entry.reload.state_events_for(@corpuber).should eql [:return_to_corrector, :to_trash]
+        #published_entry.reload.state_events_for(@corpuber).should eql [:return_to_corrector, :discard]
       #end
 
       #it 'вернуть корректору' do
@@ -432,8 +432,8 @@
       #end
 
       #it 'отправить в корзину' do
-        #to_trash_event = published_entry.events.new(:kind => 'to_trash')
-        #@ability.should be_able_to(:create, to_trash_event)
+        #discard_event = published_entry.events.new(:kind => 'discard')
+        #@ability.should be_able_to(:create, discard_event)
       #end
 
       #it 'редактировать' do
