@@ -8,7 +8,8 @@ class Ability
     #  casual user  #
     #################
 
-    can [:create, :rss], Entry
+    can [:create], Entry
+
     can :read, Entry do | entry |
       entry.published? || entry.current_user_participant? || (!(entry.draft? || entry.trash?) && (entry.current_user_corrector? || entry.current_user_publisher?))
     end
@@ -21,9 +22,20 @@ class Ability
       event.entry.permitted_events.include? event.kind.to_sym
     end
 
+    can :read, Asset do | asset |
+      if asset.deleted_at?
+        asset.entry.current_user_participant?
+      else
+        can? :read, asset.entry
+      end
+    end
+
+    can [:create, :destroy], Asset do | asset |
+      can? :edit, asset.entry
+    end
+
     can [:read, :destroy], Message
     can [:create, :destroy], Subscribe
-    can [:create, :read, :destroy], Asset
 
   end
 end
