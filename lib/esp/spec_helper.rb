@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Esp::SpecHelper
 
   def set_current_user(user = nil)
@@ -95,6 +97,17 @@ module Esp::SpecHelper
     entry.events.create! :kind => :discard
     entry.reload
   end
+
+  def my_trash
+    if User.current.roles.map(&:to_sym).include? :corrector
+      discard(awaiting_correction)
+    elsif User.current.roles.map(&:to_sym).include? :publisher
+      discard(awaiting_publication)
+    else
+      throw "my_trash предназначен только для корректора и/или публикатора"
+    end
+  end
+
 
   def draft_entry_with_asset(options = {})
     @draft_entry_with_asset ||= create_draft_entry_with_asset(options)

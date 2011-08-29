@@ -158,7 +158,7 @@ describe Entry do
       it { publicating.permitted_events.should == [] }
       it { published.permitted_events.should == [] }
       it { trash.permitted_events.should == [] }
-      it { discard(awaiting_correction).permitted_events.should == [:recover, :accept_correcting] }
+      it { my_trash.permitted_events.should == [:recover, :accept_correcting] }
     end
 
     describe "публикатора" do
@@ -172,7 +172,7 @@ describe Entry do
       it { publicating.permitted_events.should == [:publish, :request_correcting, :store, :discard] }
       it { published.permitted_events.should == [:store, :discard] }
       it { trash.permitted_events.should == [] }
-      it { discard(awaiting_publication).permitted_events.should == [:recover, :accept_publicating] }
+      it { my_trash.permitted_events.should == [:recover, :accept_publicating] }
     end
 
     describe "публикатора и корректора" do
@@ -186,7 +186,7 @@ describe Entry do
       it { publicating.permitted_events.should == [:publish, :request_correcting, :store, :discard] }
       it { published.permitted_events.should == [:store, :discard] }
       it { trash.permitted_events.should == [] }
-      it { discard(awaiting_publication).permitted_events.should == [:recover, :accept_publicating, :accept_correcting] }
+      it { my_trash.permitted_events.should == [:recover, :accept_publicating, :accept_correcting] }
     end
   end
 end
