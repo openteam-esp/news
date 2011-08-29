@@ -21,9 +21,6 @@
       <%= form.input :until %>
       <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a %>
     <% end %>
-    <%= form.buttons do %>
-      <%= form.commit_button :button_html => { :class => "button" } %>
-    <% end %>
   <% end %>
 
   <%= render :partial => "assets/assets" %>

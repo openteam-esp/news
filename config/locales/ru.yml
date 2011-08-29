@@ -184,10 +184,23 @@ ru:
         images: "Изображения"
         videos: "Видеофайлы"
         audios: "Аудиофайлы"
-
         attachments: "Файлы"
+
       asset:
         file: "Файл"
+
+      event:
+        kind_enum:
+          accept_correcting:    Принять на корректуру
+          accept_publicating:   Принять на публикацию
+          discard:              Удалить
+          publish:              Опубликовать
+          recover:              Восстановить
+          request_correcting:   Отправить на корректуру
+          request_publicating:  Отправить на публикацию
+          request_reworking:    Отправить на доработку
+          restore:              Отменить изменения
+          store:                Сохранить
 
       recipient:
         active: "Активен"

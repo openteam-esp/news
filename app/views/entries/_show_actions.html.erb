@@ -9,20 +9,12 @@
     <% end %>
 
     <li>
-      <%= link_to t('edit'), edit_entry_path(@entry), :class => "button" %>
+      <%= link_to t('edit'), edit_entry_path(@entry), :class => "button" if can?(:edit, @entry)  %>
     </li>
 
-    <% @entry.state_events_for(current_user).each do |event| %>
+    <% (@entry.permitted_events - [:store]).each do |kind| %>
       <li>
-        <%= semantic_form_for :event, :url => entry_events_path(@entry) do |form| %>
-          <%= form.inputs do %>
-            <%= form.input :kind, :as => :hidden, :value => event %>
-            <%= form.input :text, :as => :text %>
-          <% end %>
-          <%= form.buttons do %>
-            <%= form.commit_button t(event.to_s), :button_html => { :class => "button" } %>
-          <% end %>
-        <% end %>
+        <%= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
       </li>
     <% end %>
     <li class="clear_left">

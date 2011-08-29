@@ -1,0 +1,9 @@
+<%= semantic_form_for [event.entry, event] do |form| %>
+  <%= form.inputs do %>
+    <%= form.input :kind, :as => :hidden %>
+    <%= form.input :text, :as => :text %>
+  <% end %>
+  <%= form.buttons do %>
+    <%= form.commit_button event.human_kind, :button_html => { :class => "button #{event.kind}" } %>
+  <% end %>
+<% end %>

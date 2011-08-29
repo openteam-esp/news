@@ -1,6 +1,10 @@
 <div class="edit_form_actions_wrapper <%= position %>">
   <ul class="edit_form_actions">
-    <%#= form.commit_button :button_html => { :class => "button green" } %>
+    <% @entry.permitted_events.each do |kind| %>
+      <li>
+        <%= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
+      </li>
+    <% end %>
     <li>
       <a rel="tipsy" class="since" href="#"
          title="Можно указать дату и время, когда новость должна быть опубликована">Когда опубликовать?</a>
