@@ -214,7 +214,6 @@ ru:
       awaiting_publication: "ожидает публикации"
       published: "опубликован"
       trash: "в корзине"
-
   event:
     kind:
       before:
@@ -232,9 +231,10 @@ ru:
         send_to_publisher: "Отправить публикатору"
       after:
         created: "создано"
+        store: "изменено"
+        request_correcting: "отправлено на корректуру"
         correct: "взято на корректуру"
         publish: "опубликовано"
-        updated: "изменено"
         to_trash: "помещено в корзину"
         return_to_corrector: "возвращено корректору"
         immediately_publish: "немедленно опубликовано"
