@@ -1,4 +1,4 @@
-<div class="show_actions_wrapper <%= position %>">
+<div class="entry_actions_wrapper <%= position %>">
   <ul class="entry_actions">
     <% if @current_user != @entry.initiator %>
       <% if @current_user.subscribed?(@entry.initiator) %>

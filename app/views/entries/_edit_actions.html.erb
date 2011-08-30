@@ -1,5 +1,5 @@
-<div class="edit_form_actions_wrapper <%= position %>">
-  <ul class="edit_form_actions">
+<div class="entry_actions_wrapper <%= position %>">
+  <ul class="entry_actions">
     <% @entry.permitted_events.each do |kind| %>
       <li>
         <%= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
