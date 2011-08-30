@@ -4,7 +4,9 @@ class ImagesController < AssetsController
 
   def show
     show! do
-      redirect_to @image.file.thumb(params[:size]).url
+      width = [params[:width].to_i, @image.file_width].min
+      height = [params[:height].to_i, @image.file_height].min
+      redirect_to @image.file.thumb("#{width}x#{height}").url
       return
     end
   end

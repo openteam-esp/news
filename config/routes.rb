@@ -27,7 +27,7 @@ News::Application.routes.draw do
     get 'page/:page', :action => :index, :on => :collection
     resources :events, :only => [:create, :show]
     resources :assets, :only => [:create, :destroy, :show]
-    get 'images/:size/:id' => 'images#show', :as => :image
+    get 'images/:width/:height/:id/:filename' => 'images#show', :as => :image, :constraints => { :filename => /.+/ }
   end
 
   match '/:state/entries' => 'entries#index', :as => :entries_path

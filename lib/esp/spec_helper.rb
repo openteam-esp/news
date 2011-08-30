@@ -69,7 +69,8 @@ module Esp::SpecHelper
 
   def create_draft_entry(options = {})
     set_current_user(User.current)
-    Fabricate(:entry, options)
+    draft.save
+    draft
   end
 
   Entry.all_states.each do | state |

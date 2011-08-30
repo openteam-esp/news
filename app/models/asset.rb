@@ -5,7 +5,7 @@ class Asset < ActiveRecord::Base
   end
 
   file_accessor :file do
-    storage_path { "#{I18n.l entry.created_at, :format => "%Y/%m/%d"}/#{entry_id}-#{file_name}"}
+    storage_path { "#{I18n.l entry.created_at, :format => "%Y/%m/%d"}/#{entry_id}/#{Time.now.to_i}-#{file_name}"}
   end
 
   before_create :set_type
