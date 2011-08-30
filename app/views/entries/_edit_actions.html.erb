@@ -5,20 +5,6 @@
         <%= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
       </li>
     <% end %>
-    <%#= form.commit_button :button_html => { :class => "button green" } %>
-    <!--
-    <li>
-      <a rel="tipsy" class="since" href="#"
-         title="Можно указать дату и время, когда новость должна быть опубликована">Когда опубликовать?</a>
-    </li>
-    <li>
-      <a rel="tipsy" class="until" href="#"
-         title="Если это анонс, то можно указать дату и время, когда новость будет перемещена в архив">Когда спрятать?</a></li>
-    <li>
-      <a rel="tipsy" class="channels" href="#"
-         title="Можно указать на каких сайтах и в каких разделах будет отображаться опубликованная новость">Где опубликовать?</a>
-    </li>
-    -->
     <li class="clear_left">
       <%= render_statistic @entry %>
     </li>

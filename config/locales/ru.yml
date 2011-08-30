@@ -198,7 +198,7 @@ ru:
           recover:              Восстановить
           request_correcting:   Отправить на корректуру
           request_publicating:  Отправить на публикацию
-          request_reworking:    Отправить на доработку
+          request_reworking:    Вернуть на доработку
           restore:              Отменить изменения
           store:                Сохранить
 
@@ -233,9 +233,11 @@ ru:
         created: "создано"
         store: "изменено"
         request_correcting: "отправлено на корректуру"
+        request_reworking: "отправлено на доработку"
         correct: "взято на корректуру"
         publish: "опубликовано"
         to_trash: "помещено в корзину"
+        recover: "восстановлено из корзины"
         return_to_corrector: "возвращено корректору"
         immediately_publish: "немедленно опубликовано"
         immediately_send_to_publisher: "немедленно отправлено публикатору"
