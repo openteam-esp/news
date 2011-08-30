@@ -10,18 +10,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110826042646) do
+ActiveRecord::Schema.define(:version => 20110829105108) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
     t.integer  "entry_id"
-    t.string   "file_file_name"
-    t.string   "file_content_type"
-    t.integer  "file_file_size"
+    t.string   "file_name"
+    t.string   "file_mime_type"
+    t.integer  "file_size"
     t.datetime "file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.string   "file_uid"
+    t.integer  "file_width"
+    t.integer  "file_height"
   end
 
   create_table "authentications", :force => true do |t|

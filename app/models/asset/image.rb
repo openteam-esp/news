@@ -3,19 +3,23 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: assets
 #
-#  id                :integer         not null, primary key
-#  type              :string(255)
-#  entry_id          :integer
-#  file_file_name    :string(255)
-#  file_content_type :string(255)
-#  file_file_size    :integer
-#  file_updated_at   :datetime
-#  created_at        :datetime
-#  updated_at        :datetime
-#  deleted_at        :datetime
+#  id              :integer         not null, primary key
+#  type            :string(255)
+#  entry_id        :integer
+#  file_name       :string(255)
+#  file_mime_type  :string(255)
+#  file_size       :integer
+#  file_updated_at :datetime
+#  created_at      :datetime
+#  updated_at      :datetime
+#  deleted_at      :datetime
+#  file_uid        :string(255)
+#  file_width      :integer
+#  file_height     :integer
 #
 

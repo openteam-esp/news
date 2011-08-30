@@ -2,18 +2,18 @@
   <legend><span>Прикреплённые файлы</span></legend>
   <div class="inner">
     <% if @entry.reload.assets.any? %>
-    <ul>
-      <% @entry.reload.assets.each do |asset| %>
-        <li>
-          <%= render :partial => asset %>
-          <%= link_to "удалить", entry_asset_path(@entry, asset), :class => "remove" %>
-        </li>
-      <% end %>
-    </ul>
+      <ul>
+        <% @entry.reload.assets.each do |asset| %>
+          <li>
+            <%= render :partial => asset %>
+            <%= link_to "удалить", entry_asset_path(@entry, asset), :class => "remove" %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
     <%= semantic_form_for Asset.new, :url => entry_assets_path(@entry), :html => {:multipart => true} do |form| %>
       <%= form.inputs do %>
-        <%= form.input :file %>
+        <%= form.input :file, :as => :file %>
       <% end %>
     <% end %>
   </div>

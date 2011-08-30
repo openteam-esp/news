@@ -52,6 +52,13 @@ module News
       generators.test_framework       :rspec, :fixture => true
       generators.fixture_replacement  :fabrication
     end
+
+    config.middleware.insert 0, 'Dragonfly::Middleware', :images
+    config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
+      :verbose     => true,
+      :metastore   => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/meta"),
+      :entitystore => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/body")
+    }
   end
 end
 

@@ -46,7 +46,7 @@ describe Event do
       restore_entry_version.title.should == "title"
       restore_entry_version.channel_ids.should == channel_ids
       restore_entry_version.image_ids.should == [asset.id]
-      restore_entry_version.images.first.file_file_name.should_not be_nil
+      restore_entry_version.images.first.file_name.should_not be_nil
       draft_entry.reload
       draft_entry.title.should be_nil
       draft_entry.channel_ids.should == []
@@ -58,7 +58,7 @@ describe Event do
       channels = [Fabricate(:channel), Fabricate(:channel)]
       awaiting_correction_entry(:title => "title", :channel_ids => channels.map(&:id), :asset_ids => [Fabricate(:asset).id])
       awaiting_correction_entry.assets.destroy_all
-      Fabricate(:asset, :entry => awaiting_correction_entry, :file_content_type => "video/ogg")
+      Fabricate(:asset, :entry => awaiting_correction_entry, :file_mime_type => "video/ogg")
       awaiting_correction_entry.channels.last.destroy
       awaiting_correction_entry.update_attributes(:title => "new title")
       awaiting_correction_entry.events.create!(:kind => :restore)

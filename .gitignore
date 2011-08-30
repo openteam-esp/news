@@ -10,6 +10,7 @@ config/settings.yml
 *.swo
 public/stylesheets/*.css
 public/system/*
+assets/*
 .rake_tasks~
 coverage/index.html
 coverage/resultset.yml
