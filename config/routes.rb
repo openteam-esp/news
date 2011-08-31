@@ -26,17 +26,21 @@ News::Application.routes.draw do
   resources :entries, :only => [:show, :create, :edit] do
     get 'page/:page', :action => :index, :on => :collection
     resources :events, :only => [:create, :show]
-    resources :assets, :only => [:create, :destroy, :show]
+    resources :assets, :only => [:create, :destroy]
   end
 
-  get '/assets/:id/:width/:height/:filename' => Dragonfly[:images].endpoint { |params, app|
-    Image.find(params[:id]).file.thumb("#{params[:width]}x#{params[:height]}")
-  }
+  get '/assets/:id/:width-:height/:filename' => Dragonfly[:images].endpoint { |params, app|
+    image = Image.find(params[:id])
+    width = [params[:width].to_i, image.file_width].min
+    height = [params[:height].to_i, image.file_height].min
+    image.file.thumb("#{width}x#{height}")
+  }, :as => :image, :constraints => { :filename => /.+?/ }
+
   get '/assets/:id/:filename' => Dragonfly[:images].endpoint { |params, app|
     app.fetch(Asset.find(params[:id]).file_uid)
-  }
+  }, :as => :asset, :constraints => { :filename => /.+?/ }
 
-  match '/:state/entries' => 'entries#index', :as => :entries_path
+  get '/:state/entries' => 'entries#index', :as => :entries_path
 
   root :to => 'roots#index'
 end

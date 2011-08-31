@@ -57,7 +57,7 @@ module ApplicationHelper
       width = image.file_width
       height = image.file_height
     end
-    image_tag entry_image_path(image.entry_id, width, height, image.id, image.file_name), :alt => "", :size => "#{width}x#{height}"
+    image_tag image_path(image, width, height, image.file_name), :alt => "", :size => "#{width}x#{height}"
   end
 end
 
