@@ -238,6 +238,7 @@ ru:
         publish: "опубликовано"
         to_trash: "помещено в корзину"
         recover: "восстановлено из корзины"
+        discard: "удалено"
         return_to_corrector: "возвращено корректору"
         immediately_publish: "немедленно опубликовано"
         immediately_send_to_publisher: "немедленно отправлено публикатору"
