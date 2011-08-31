@@ -19,6 +19,7 @@ describe Ability do
       it { ability.should_not be_able_to(:destroy, Asset.new(:entry => trash)) }
       it { ability.should be_able_to(:create, Asset.new(:entry => draft)) }
       it { ability.should be_able_to(:read, Asset.new(:entry => published, :deleted_at => Time.now)) }
+      it { ability.should be_able_to(:read, Image.new(:entry => published, :deleted_at => Time.now)) }
     end
     describe "корректором" do
       before(:each) do

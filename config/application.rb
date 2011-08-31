@@ -10,6 +10,22 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
+class CloneMiddleware
+
+  def initialize(app, options={})
+    @app = app
+  end
+
+  def call(env)
+    User.current = env['warden'].user
+    if env['PATH_INFO'] =~ /^\/assets\/(\d+)\/.*/
+      throw(:warden) unless Ability.new.can? :read, Asset.find_by_id($1)
+    end
+    @app.call(env)
+  end
+
+end
+
 module News
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -53,7 +69,8 @@ module News
       generators.fixture_replacement  :fabrication
     end
 
-    config.middleware.insert 0, 'Dragonfly::Middleware', :images
+    config.middleware.insert_after 'Warden::Manager', '::CloneMiddleware'
+    config.middleware.insert_after '::CloneMiddleware', 'Dragonfly::Middleware', :images
     config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
       :verbose     => true,
       :metastore   => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/meta"),

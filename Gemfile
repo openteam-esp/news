@@ -7,9 +7,8 @@ group :development do
   gem 'guard-rspec'
   gem 'hirb',                   :require => false
   gem 'itslog'
-  gem 'rack-webconsole'
   gem 'ruby-graphviz',          :require => false
-  gem 'unicorn'
+  gem 'unicorn',                :require => false
 end
 
 group :production do

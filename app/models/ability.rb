@@ -2,7 +2,6 @@ class Ability
   include CanCan::Ability
 
   def initialize(user=nil)
-    user = user || User.current || User.new
 
     #################
     #  casual user  #

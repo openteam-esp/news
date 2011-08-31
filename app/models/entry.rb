@@ -50,7 +50,7 @@ class Entry < ActiveRecord::Base
   end
 
   def current_user_participant?
-    current_user_initiator? || events.where(:user_id => current_user.id).any?
+    current_user_initiator? || events.where(:user_id => current_user).any?
   end
 
   def current_user_is_a?(*args)
