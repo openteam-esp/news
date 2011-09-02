@@ -29,13 +29,11 @@ group :test do
   gem 'sqlite3'
 end
 
-group :migration, :test do
+group :development, :test do
   gem 'rdiscount'
   gem 'paperclip'
 end
 
-gem 'aws-s3'
-gem 'bson_ext',                 :require => false
 gem 'cancan'
 gem 'clockwork'
 gem 'compass'

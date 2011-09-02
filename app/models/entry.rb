@@ -137,6 +137,29 @@ class Entry < ActiveRecord::Base
     state_machine.events.map(&:name)
   end
 
+  def add_asset_links_to_body
+    if false
+      %w[videos audios images attachments].each do | kind |
+        self.send
+      end
+
+      description = attachment_file.description.squish
+      body << "<p><a target='_blank' href='#{url}'>#{description}</a></p>\n"
+      event.pictures.each do | picture |
+        url = Ckeditor::Picture.where(:old_id => picture).to_a.first.data.url
+        thumb_url = Ckeditor::Picture.where(:old_id => picture).to_a.first.data.url(:thumb)
+        description = picture.description.squish
+        body << <<-END
+          <div style='display: block; height: 200px; width: 200px; float: left; margin: 0px 10px 10px 0px;'>
+            <a target='_blank' href=#{url}>
+              <img src="#{thumb_url}" alt="#{description}" />
+            </a>
+          </div>
+        END
+      end
+    end
+  end
+
   def created_human
     result = "Создано "
     result += ::I18n.l(self.created_at, :format => :long)

@@ -8,7 +8,11 @@ describe Migrator::Entry do
     @legacy ||= begin
                   asset = options.delete(:asset)
                   entry = Fabricate('legacy/entry', options)
-                  entry.assets.create! :file => File.open(Rails.root.join "spec", "fixtures", asset.to_s) if asset
+                  if asset
+                    entry.assets.create! :file => File.open(Rails.root.join "spec", "fixtures", asset.to_s),
+                                         :description => "Файл #{asset}",
+                                         :type => 'AttachmentFile'
+                  end
                   entry
                 end
   end
@@ -86,17 +90,22 @@ describe Migrator::Entry do
         migrated(legacy(:asset => :attachment)).attachments.first.file_name.should == 'attachment'
       end
       it "размеры картинок" do
-        entry = migrated(legacy(:asset => :image)).images.first.file_width.should > 0
+        migrated(legacy(:asset => :image)).images.first.file_width.should > 0
+      end
+      it "описания" do
+        migrated(legacy(:asset => :image)).images.first.description.should == "Файл image"
       end
     end
 
-    describe "должны проставляться ссылки" do
-      #it "на картинки" do
-        #@entry.body.should =~ /<a.*?>\s*<img .*?>\s*<\/a>/
-      #end
-      #it "на аттачи" do
-        #@entry.body.should =~ /<a.*?>#{rich_legacy.attachment_files.first.description.squish}<\/a>/
-      #end
+    describe "в новостях должны проставляться ссылки" do
+      it "на картинки" do
+        pending
+        migrated(legacy(:asset => :image)).body.should =~ /<li><a.*?>\s*<img .*?>\s*<\/a><\/li>/
+      end
+      it "на аттачи" do
+        pending
+        migrated(legacy(:asset => :attachment)).body.should =~ /<li><a.*?>Файл attachment<\/a><\/li>/
+      end
     end
   end
 

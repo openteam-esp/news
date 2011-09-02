@@ -1,4 +1,6 @@
 class Legacy::Asset < ActiveRecord::Base
+  set_inheritance_column :_type
+
   establish_connection "legacy_#{Rails.env}"
   set_table_name "attachments"
 
