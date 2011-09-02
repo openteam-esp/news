@@ -18,7 +18,6 @@ group :production do
 end
 
 group :test do
-  gem 'database_cleaner'
   gem 'fabrication'
   gem 'ffi'
   gem 'guard-spork'
@@ -28,6 +27,11 @@ group :test do
   gem 'shoulda-matchers',       :require => false
   gem 'simplecov', '>= 0.4.0'
   gem 'sqlite3'
+end
+
+group :migration, :test do
+  gem 'rdiscount'
+  gem 'paperclip'
 end
 
 gem 'aws-s3'

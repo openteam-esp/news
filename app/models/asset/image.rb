@@ -4,6 +4,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: assets
@@ -21,5 +22,6 @@ end
 #  file_uid        :string(255)
 #  file_width      :integer
 #  file_height     :integer
+#  legacy_id       :integer
 #
 

@@ -20,18 +20,10 @@ Spork.prefork do
     config.include Esp::SpecHelper
     config.mock_with :rspec
 
-    config.before(:suite) do
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with(:truncation)
-    end
-
-    config.before(:each) do
-      DatabaseCleaner.start
-    end
-
     config.after(:each) do
-      DatabaseCleaner.clean
+      ActiveRecord::Base.descendants.each do | klass |
+        klass.delete_all unless klass.abstract_class?
+      end
     end
   end
-
 end

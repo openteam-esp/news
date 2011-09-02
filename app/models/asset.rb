@@ -4,7 +4,7 @@ class Asset < ActiveRecord::Base
   def self.before_destroy(*args) # disable destroy_attached_files
   end
 
-  file_accessor :file do
+  asset_accessor :file do
     storage_path { "#{I18n.l entry.created_at, :format => "%Y/%m/%d"}/#{entry_id}/#{Time.now.to_i}-#{file_name}"}
   end
 
@@ -17,6 +17,7 @@ class Asset < ActiveRecord::Base
       self.type = %w[audio video image].include?(mime_group) ? mime_group.classify : 'Attachment'
     end
 end
+
 
 
 
@@ -39,5 +40,6 @@ end
 #  file_uid        :string(255)
 #  file_width      :integer
 #  file_height     :integer
+#  legacy_id       :integer
 #
 
