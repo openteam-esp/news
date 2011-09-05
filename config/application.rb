@@ -55,7 +55,7 @@ module News
 
     config.middleware.insert_after 'Warden::Manager', 'Esp::Middleware::SetCurrentUser'
     config.middleware.insert_after 'Esp::Middleware::SetCurrentUser', 'Esp::Middleware::AuthorizeAssets'
-    config.middleware.insert_after 'Esp::Middleware::AuthorizeAssets', 'Dragonfly::Middleware', :images
+    config.middleware.insert_after 'Esp::Middleware::AuthorizeAssets', 'Dragonfly::Middleware', :assets
     config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
       :verbose     => true,
       :metastore   => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/meta"),
