@@ -1,0 +1,3 @@
+class Publish < Issue
+end
+

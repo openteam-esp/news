@@ -5,6 +5,25 @@ class Issue < ActiveRecord::Base
   belongs_to :executor, :class_name => 'User'
   default_scope order(:id)
 
+  default_value_for :initiator do User.current end
+
+  state_machine :initial => :pending do
+    state :processing
+    state :completed
+    state :fresh
+    state :pending
+
+    event :complete do
+      transition :processing => :completed
+    end
+    event :accept do
+      transition :fresh => :processing
+    end
+    event :cancel do
+      transition :processing => :fresh
+    end
+  end
+
 end
 
 # == Schema Information

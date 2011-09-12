@@ -73,7 +73,7 @@ module Esp::SpecHelper
     draft
   end
 
-  Entry.all_states.each do | state |
+  Entry.enums[:state].each do | state |
     define_method "build_#{state}" do | *args |
       options = (args.last || Hash.new).merge :state => state.to_s, :initiator_id => initiator.id
       Fabricate.build(:entry, options)
@@ -86,29 +86,12 @@ module Esp::SpecHelper
     define_method "stored_#{state}" do | *args |
       instance_variable_get("@stored_#{state}") || begin
                                                       entry = self.send(state, *args)
-                                                      entry.save :validate => false
+                                                      entry.save!
                                                       entry.reload
                                                       instance_variable_set("@stored_#{state}", entry)
                                                     end
     end
   end
-
-  def discard(entry)
-    entry.save! :validate => false
-    entry.events.create! :kind => :discard
-    entry.reload
-  end
-
-  def my_trash
-    if User.current.roles.map(&:to_sym).include? :corrector
-      discard(awaiting_correction)
-    elsif User.current.roles.map(&:to_sym).include? :publisher
-      discard(awaiting_publication)
-    else
-      throw "my_trash предназначен только для корректора и/или публикатора"
-    end
-  end
-
 
   def draft_entry_with_asset(options = {})
     @draft_entry_with_asset ||= create_draft_entry_with_asset(options)
@@ -118,31 +101,6 @@ module Esp::SpecHelper
     entry = create_draft_entry(options)
     entry.update_attribute :assets_attributes, [Fabricate.attributes_for(:asset)]
     entry.reload
-  end
-
-  def awaiting_correction_entry(options = {})
-    @awaiting_correction_entry ||= create_entry :draft, :request_correcting, options
-  end
-
-  def correcting_entry(options = {})
-    @correcting_entry ||= create_entry :awaiting_correction, :accept_correcting, options, corrector
-  end
-
-  def awaiting_publication_entry(options = {})
-    @awaiting_publication_entry ||= create_entry :correcting, :request_publicating, options, corrector
-  end
-
-  def publicating_entry(options = {})
-    @publicating_entry ||= create_entry :awaiting_publication, :accept_publicating, options, publisher
-  end
-
-  def published_entry(options = {})
-    entry = create_entry :publicating, :publish, options.merge(:channel_ids => [channel.id]), publisher
-    @published_entry ||= create_entry :publicating, :publish, options.merge(:channel_ids => [channel.id]), publisher
-  end
-
-  def trash_entry(options = {})
-    @trash_entry ||= create_entry :draft, :discard, options, initiator
   end
 
 end

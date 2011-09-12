@@ -5,7 +5,7 @@ class CreateIssues < ActiveRecord::Migration
       t.belongs_to :initiator
       t.belongs_to :executor
       t.string :state
-      t.string :kind
+      t.string :type
       t.text :comment
 
       t.timestamps

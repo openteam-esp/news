@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(:version => 20110912051835) do
     t.integer  "initiator_id"
     t.integer  "executor_id"
     t.string   "state"
-    t.string   "kind"
+    t.string   "type"
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"

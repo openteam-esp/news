@@ -55,7 +55,7 @@ describe Entry do
   describe "папки новостей" do
     it "инициатору показываются только его новости" do
       set_current_user(initiator)
-      Entry.all_states.each do |state|
+      Entry.enums[:state].each do |state|
         Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => initiator.id}
       end
     end
@@ -63,9 +63,7 @@ describe Entry do
     it "личные папки для корректора и публикатора" do
       [corrector, publisher].each do |user|
         set_current_user(user)
-        Entry.owned_states.each do |state|
-          Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => user.id}
-        end
+        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => user.id}
       end
     end
 
@@ -80,140 +78,31 @@ describe Entry do
 
   end
 
-  describe "собственные новости" do
-    describe "инициатора" do
-      before(:each) do
-        set_current_user initiator
-      end
-      it { draft.permitted_events.should == [:request_correcting, :store, :discard ] }
-      it { awaiting_correction.permitted_events.should == [:request_reworking, :discard] }
-      it { correcting.permitted_events.should == [] }
-      it { awaiting_publication.permitted_events.should == [] }
-      it { publicating.permitted_events.should == [] }
-      it { published.permitted_events.should == [] }
-      it { trash.permitted_events.should == [:recover] }
-    end
-
-    describe "корректора и инициатора" do
-      before(:each) do
-        set_current_user initiator(:roles => [:corrector])
-      end
-      it { draft.permitted_events.should == [:request_publicating, :request_correcting, :store, :discard] }
-      it { awaiting_correction.permitted_events.should == [:accept_correcting, :request_reworking, :discard] }
-      it { correcting.permitted_events.should == [:request_publicating, :store, :request_reworking, :discard] }
-      it { awaiting_publication.permitted_events.should == [:accept_correcting, :discard] }
-      it { publicating.permitted_events.should == [] }
-      it { published.permitted_events.should == [] }
-      it { trash.permitted_events.should == [:recover, :accept_correcting] }
-    end
-
-    describe "публикатора и инициатора" do
-      before(:each) do
-        set_current_user initiator(:roles => [:publisher])
-      end
-      it { draft.permitted_events.should == [:publish, :request_correcting, :store, :discard]}
-      it { awaiting_correction.permitted_events.should == [:request_reworking, :discard]}
-      it { correcting.permitted_events.should == []}
-      it { awaiting_publication.permitted_events.should == [:accept_publicating, :request_correcting, :discard]}
-      it { publicating.permitted_events.should == [:publish, :request_correcting, :store, :discard] }
-      it { published.permitted_events.should == [:store, :discard] }
-      it { trash.permitted_events.should == [:recover, :accept_publicating] }
-    end
-
-    describe "инициатора корректора и публикатора" do
-      before(:each) do
-        set_current_user initiator(:roles => [:corrector, :publisher])
-      end
-      it { draft.permitted_events.should == [:publish, :request_publicating, :request_correcting, :store, :discard]}
-      it { awaiting_correction.permitted_events.should == [:accept_correcting, :request_reworking, :discard]}
-      it { correcting.permitted_events.should == [:publish, :request_publicating, :store, :request_reworking, :discard]}
-      it { awaiting_publication.permitted_events.should == [:accept_publicating, :request_correcting, :accept_correcting, :discard]}
-      it { publicating.permitted_events.should == [:publish, :request_correcting, :store, :discard] }
-      it { published.permitted_events.should == [:store, :discard] }
-      it { trash.permitted_events.should == [:recover, :accept_publicating, :accept_correcting] }
-    end
-  end
-
-  describe "чужие новости" do
-    describe "другого пользователя" do
-      before(:each) do
-        set_current_user another_initiator
-      end
-      it { draft.permitted_events.should == [] }
-      it { awaiting_correction.permitted_events.should == [] }
-      it { correcting.permitted_events.should == [] }
-      it { awaiting_publication.permitted_events.should == [] }
-      it { publicating.permitted_events.should == [] }
-      it { published.permitted_events.should == [] }
-      it { trash.permitted_events.should == [] }
-    end
-
-    describe "корректора" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:corrector])
-      end
-      it { draft.permitted_events.should == [] }
-      it { awaiting_correction.permitted_events.should == [:accept_correcting, :request_reworking, :discard] }
-      it { correcting.permitted_events.should == [:request_publicating, :store, :request_reworking, :discard] }
-      it { awaiting_publication.permitted_events.should == [:accept_correcting, :discard] }
-      it { publicating.permitted_events.should == [] }
-      it { published.permitted_events.should == [] }
-      it { trash.permitted_events.should == [] }
-      it { my_trash.permitted_events.should == [:recover, :accept_correcting] }
-    end
-
-    describe "публикатора" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:publisher])
-      end
-      it { draft.permitted_events.should == []}
-      it { awaiting_correction.permitted_events.should == []}
-      it { correcting.permitted_events.should == []}
-      it { awaiting_publication.permitted_events.should == [:accept_publicating, :request_correcting, :discard]}
-      it { publicating.permitted_events.should == [:publish, :request_correcting, :store, :discard] }
-      it { published.permitted_events.should == [:store, :discard] }
-      it { trash.permitted_events.should == [] }
-      it { my_trash.permitted_events.should == [:recover, :accept_publicating] }
-    end
-
-    describe "публикатора и корректора" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:corrector, :publisher])
-      end
-      it { draft.permitted_events.should == []}
-      it { awaiting_correction.permitted_events.should == [:accept_correcting, :request_reworking, :discard]}
-      it { correcting.permitted_events.should == [:request_publicating, :store, :request_reworking, :discard]}
-      it { awaiting_publication.permitted_events.should == [:accept_publicating, :request_correcting, :accept_correcting, :discard]}
-      it { publicating.permitted_events.should == [:publish, :request_correcting, :store, :discard] }
-      it { published.permitted_events.should == [:store, :discard] }
-      it { trash.permitted_events.should == [] }
-      it { my_trash.permitted_events.should == [:recover, :accept_publicating, :accept_correcting] }
-    end
-
-  end
-
   describe "после сохранения" do
-    let (:prepare_issue) { stored_draft.prepare_issue }
-    let (:review_issue) { stored_draft.review_issue }
-    let (:publish_issue) { stored_draft.publish_issue }
-    it { stored_draft.issues.should == [prepare_issue, review_issue, publish_issue] }
+    before(:each) do
+      set_current_user initiator
+    end
+    let (:prepare) { stored_draft.prepare.reload }
+    let (:review) { stored_draft.review.reload }
+    let (:publish) { stored_draft.publish.reload }
+    it { stored_draft.issues.should == [prepare, review, publish] }
 
     describe "задача подготовки" do
-      it { prepare_issue.initiator.should == initiator }
-      it { prepare_issue.executor.should == initiator }
-      it { prepare_issue.state.should == 'processing' }
+      it { prepare.initiator.should == initiator }
+      it { prepare.executor.should == initiator }
+      it { prepare.state.should == 'processing' }
     end
 
     describe "задача корретировки" do
-      it { review_issue.initiator.should == initiator }
-      it { review_issue.executor.should == nil }
-      it { review_issue.state.should == 'pending' }
+      it { review.initiator.should == initiator }
+      it { review.executor.should == nil }
+      it { review.state.should == 'pending' }
     end
 
     describe "задача публикации" do
-      it { publish_issue.initiator.should == initiator }
-      it { publish_issue.executor.should == nil }
-      it { publish_issue.state.should == 'pending' }
+      it { publish.initiator.should == initiator }
+      it { publish.executor.should == nil }
+      it { publish.state.should == 'pending' }
     end
   end
 end

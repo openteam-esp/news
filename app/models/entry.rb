@@ -16,18 +16,20 @@ class Entry < ActiveRecord::Base
   has_many :videos, :conditions => {:deleted_at => nil}
   has_many :issues
 
-  has_one :prepare_issue, :class_name => 'Issue', :conditions => { :kind => :prepare }
-  has_one :review_issue, :class_name => 'Issue', :conditions => { :kind => :review }
-  has_one :publish_issue, :class_name => 'Issue', :conditions => { :kind => :publish }
+  has_one :prepare
+  has_one :review
+  has_one :publish
+
+  has_enum :state, %w[draft correcting publishing published]
 
   default_scope order('created_at desc')
 
-  scope :published, where(:state => :published)
-  scope :by_state, lambda { |state| where(:state => state) }
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
 
+  scope :by_state, lambda { |state| where(:state => state) }
+
   scope :state, lambda { |state|
-    if User.current.roles.empty? || %w[draft trash published].include?(state.to_s)
+    if User.current.roles.empty? || state.to_s == 'draft'
       by_state(state).self_initiated
     else
       by_state(state)
@@ -40,9 +42,22 @@ class Entry < ActiveRecord::Base
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
   default_value_for :initiator_id do User.current_id end
+  default_value_for :state, :draft
 
   def current_user
     User.current
+  end
+
+  def self.all_states
+    enums[:state]
+  end
+
+  def self.shared_states
+    all_states - owned_states
+  end
+
+  def self.owned_states
+    ['draft']
   end
 
   delegate :publisher?, :corrector?, :to => :current_user, :prefix => true
@@ -57,109 +72,6 @@ class Entry < ActiveRecord::Base
 
   def current_user_is_a?(*args)
     args.map{|role| self.send("current_user_#{role}?")}.uniq.compact == [true]
-  end
-
-  state_machine :initial => :draft do
-    after_transition :to => :published do |entry, transition|
-      entry.send_by_email
-    end
-
-    event :recover do
-      transition :trash => :draft, :if => :current_user_participant?
-    end
-
-    event :publish do
-      transition :draft => :published, :if => ->(entry) { entry.current_user_is_a? :initiator, :publisher}
-      transition :correcting => :published, :if => ->(entry) { entry.current_user_is_a? :initiator, :corrector, :publisher }
-      transition :publicating => :published, :if => :current_user_publisher?
-    end
-
-    event :request_publicating do
-      transition :draft => :awaiting_publication, :if => ->(entry) { entry.current_user_is_a? :initiator, :corrector}
-      transition :correcting => :awaiting_publication, :if => :current_user_corrector?
-    end
-
-    event :accept_publicating do
-      transition :trash => :publicating, :if => ->(entry) { entry.current_user_is_a? :participant, :publisher  }
-      transition :awaiting_publication => :publicating, :if => :current_user_publisher?
-    end
-
-    event :request_correcting do
-      transition :draft => :awaiting_correction, :if => :current_user_initiator?
-    end
-
-    event :store do
-      transition :draft => :draft, :if => :current_user_initiator?
-      transition :correcting => :correcting, :if => :current_user_corrector?
-      transition :publicating => :publicating, :if => :current_user_publisher?
-      transition :published => :published, :if => :current_user_publisher?
-    end
-
-    event :request_correcting do
-      transition [:awaiting_publication, :publicating] => :awaiting_correction, :if => :current_user_publisher?
-    end
-
-    event :restore
-
-    event :accept_correcting do
-      transition :trash => :correcting, :if => ->(entry) { entry.current_user_is_a? :corrector, :participant }
-      transition [:awaiting_correction, :awaiting_publication] => :correcting, :if => :current_user_corrector?
-    end
-
-    event :request_reworking do
-      transition :awaiting_correction => :draft, :if => ->(entry) {entry.current_user_initiator? || entry.current_user_corrector?}
-      transition :correcting => :draft, :if => :current_user_corrector?
-    end
-
-    event :discard do
-      transition [:draft, :awaiting_correction] => :trash, :if => :current_user_initiator?
-      transition [:awaiting_correction, :correcting, :awaiting_publication] => :trash, :if => :current_user_corrector?
-      transition [:awaiting_publication, :publicating, :published] => :trash, :if => :current_user_publisher?
-    end
-
-  end
-
-  def permitted_events
-    state_events.select{ |event| self.class.state_machine.events[event.to_sym].can_fire?(self) }
-  end
-
-  def self.all_states
-    state_machine.states.map(&:name)
-  end
-
-  def self.owned_states
-    [:draft, :trash, :published]
-  end
-
-  def self.shared_states
-    all_states - owned_states
-  end
-
-  def self.all_events
-    state_machine.events.map(&:name)
-  end
-
-  def add_asset_links_to_body
-    if false
-      %w[videos audios images attachments].each do | kind |
-        self.send
-      end
-
-      description = attachment_file.description.squish
-      body << "<p><a target='_blank' href='#{url}'>#{description}</a></p>\n"
-      event.pictures.each do | picture |
-        url = Ckeditor::Picture.where(:old_id => picture).to_a.first.data.url
-        thumb_url = Ckeditor::Picture.where(:old_id => picture).to_a.first.data.url(:thumb)
-        description = picture.description.squish
-        body << <<-END
-          <div style='display: block; height: 200px; width: 200px; float: left; margin: 0px 10px 10px 0px;'>
-            <a target='_blank' href=#{url}>
-              <img src="#{thumb_url}" alt="#{description}" />
-            </a>
-          </div>
-        END
-      end
-    end
   end
 
   def created_human
@@ -210,9 +122,9 @@ class Entry < ActiveRecord::Base
     end
 
     def create_issues
-      issues.create! :kind => :prepare, :initiator => initiator, :executor => initiator, :state => :processing
-      issues.create! :kind => :review, :initiator => initiator, :state => :pending
-      issues.create! :kind => :publish, :initiator => initiator, :state => :pending
+      create_prepare :executor => User.current
+      create_review
+      create_publish
     end
 end
 

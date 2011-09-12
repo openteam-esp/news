@@ -5,7 +5,7 @@ group :development do
   gem 'guard-spork',                              :require => false
   gem 'hirb',                                     :require => false
   gem 'libnotify',                                :require => false
-  gem 'rb-inotify',                               :require => false
+  gem 'rb-inotify'
   gem 'ruby-graphviz',                            :require => false
   gem 'simplecov'
   gem 'spork',                  '>= 0.9.0.rc9'

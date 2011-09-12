@@ -27,7 +27,6 @@ class Migrator::Entry
           asset.description = legacy_asset.description
           asset.save :validate => false
         end
-        entry.add_asset_links_to_body
       end
     end
   end
