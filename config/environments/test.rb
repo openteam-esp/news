@@ -33,7 +33,3 @@ News::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 end
-
-SimpleCov.start do
-    add_filter "/.bundle/"
-end

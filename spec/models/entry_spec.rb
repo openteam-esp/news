@@ -9,6 +9,7 @@ describe Entry do
   it { should have_many(:videos) }
   it { should have_many(:audios) }
   it { should have_many(:attachments) }
+  it { should have_many(:issues) }
 
   it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
   it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
@@ -187,6 +188,32 @@ describe Entry do
       it { published.permitted_events.should == [:store, :discard] }
       it { trash.permitted_events.should == [] }
       it { my_trash.permitted_events.should == [:recover, :accept_publicating, :accept_correcting] }
+    end
+
+  end
+
+  describe "после сохранения" do
+    let (:prepare_issue) { stored_draft.prepare_issue }
+    let (:review_issue) { stored_draft.review_issue }
+    let (:publish_issue) { stored_draft.publish_issue }
+    it { stored_draft.issues.should == [prepare_issue, review_issue, publish_issue] }
+
+    describe "задача подготовки" do
+      it { prepare_issue.initiator.should == initiator }
+      it { prepare_issue.executor.should == initiator }
+      it { prepare_issue.state.should == 'processing' }
+    end
+
+    describe "задача корретировки" do
+      it { review_issue.initiator.should == initiator }
+      it { review_issue.executor.should == nil }
+      it { review_issue.state.should == 'pending' }
+    end
+
+    describe "задача публикации" do
+      it { publish_issue.initiator.should == initiator }
+      it { publish_issue.executor.should == nil }
+      it { publish_issue.state.should == 'pending' }
     end
   end
 end

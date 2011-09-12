@@ -1,6 +1,3 @@
-require 'simplecov'
-SimpleCov.start 'rails'
-
 require 'spork'
 
 Spork.prefork do
@@ -19,6 +16,10 @@ Spork.prefork do
     config.include Devise::TestHelpers, :type => :controller
     config.include Esp::SpecHelper
     config.mock_with :rspec
+
+    config.before(:each) do
+      require 'fabrication'
+    end
 
     config.after(:each) do
       ActiveRecord::Base.descendants.each do | klass |

@@ -9,18 +9,20 @@ class Entry < ActiveRecord::Base
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
   has_many :events, :validate => false
-
   has_many :assets, :conditions => {:deleted_at => nil}
-
   has_many :attachments, :conditions => {:deleted_at => nil}
   has_many :audios, :conditions => {:deleted_at => nil}
   has_many :images, :conditions => {:deleted_at => nil}
   has_many :videos, :conditions => {:deleted_at => nil}
+  has_many :issues
+
+  has_one :prepare_issue, :class_name => 'Issue', :conditions => { :kind => :prepare }
+  has_one :review_issue, :class_name => 'Issue', :conditions => { :kind => :review }
+  has_one :publish_issue, :class_name => 'Issue', :conditions => { :kind => :publish }
 
   default_scope order('created_at desc')
 
   scope :published, where(:state => :published)
-
   scope :by_state, lambda { |state| where(:state => state) }
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
 
@@ -33,7 +35,7 @@ class Entry < ActiveRecord::Base
   }
 
 
-  after_create :create_subscribe
+  after_create :create_subscribe, :create_issues
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -205,6 +207,12 @@ class Entry < ActiveRecord::Base
 
     def create_subscribe
       Subscribe.create!(:subscriber => initiator, :entry => self)
+    end
+
+    def create_issues
+      issues.create! :kind => :prepare, :initiator => initiator, :executor => initiator, :state => :processing
+      issues.create! :kind => :review, :initiator => initiator, :state => :pending
+      issues.create! :kind => :publish, :initiator => initiator, :state => :pending
     end
 end
 
