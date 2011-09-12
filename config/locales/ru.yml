@@ -140,6 +140,25 @@ ru:
   Welcome: "Добро пожаловать "
   "You can confirm your account through the link below": "Вы можете подтвердить свой аккаунт по ссылке ниже"
 
+  sidebar:
+    notifications: Уведомления
+
+    issues: Задачи
+    new_issues: Новые
+    my_issues: Мои
+    other_issues: Остальные
+
+    entries: Новости
+    draft: Черновики
+    in_process: В работе
+    trash: Корзина
+
+    archive: Архив
+    day: За день
+    week: За неделю
+    month: За месяц
+    search: Поиск...
+
   activerecord:
     errors:
       messages:
