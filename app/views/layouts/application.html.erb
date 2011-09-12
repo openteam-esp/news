@@ -41,7 +41,7 @@
             <%= form.commit_button t('new_entry'), :button_html => { :class => "button" } %>
           <% end %>
         <% end %>
-        <p class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></p>
+        <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
         <div class="issues">
           <h1><%= t("sidebar.issues") %></h1>
           <ul>
@@ -72,15 +72,96 @@
         </div>
       </div>
       <div class='content'>
-        <%= yield %>
+        <%#= yield %>
+        <ul class="entry_filter">
+          <li class="selected"><a href="#">Все</a></li>
+          <li><a href="#">Корректура</a></li>
+          <li><a href="#">Публикация</a></li>
+        </ul>
+        <div class="last_entry_list">
+          <ul>
+          	<li>
+              <a class="more" href="#">Подробнее</a>
+              <div class="title">
+                В Томской области проверено более 13 тысяч объектов пребывания, проживания и трудовой деятельности иностранных граждан &ndash;
+                <span>Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+              </div>
+              <div class="details">
+                <div class="entry_state draft">Черновик</div>
+                <div class="author">Иванов И. И.</div>
+                <div class="time_ago">3 часа назад</div>
+              </div>
+            </li>
+            <li class="selected">
+              <a class="more" href="#">Подробнее</a>
+              <div class="title">
+                В «Губернской аптеке» работает консультативный центр &ndash;
+                <span>Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+              </div>
+              <div class="details">
+                <div class="entry_state correcting">Корректура</div>
+                <div class="author">Петров П. П.</div>
+                <div class="time_ago">18 минут назад</div>
+              </div>
+            </li>
+            <li>
+              <a class="more" href="#">Подробнее</a>
+              <div class="title">
+                Открытое первенство работников лесного хозяйства пройдет в Томской области &ndash;
+                <span>Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+              </div>
+              <div class="details">
+                <div class="entry_state publishing">Публикация</div>
+                <div class="author">Сидоров С. С.</div>
+                <div class="time_ago">40 минут назад</div>
+              </div>
+            </li>
+            <li>
+              <a class="more" href="#">Подробнее</a>
+              <div class="title">
+                13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
+                <span>Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+              </div>
+              <div class="details">
+                <div class="entry_state published">Опубликован</div>
+                <div class="author">Михайлов М. М.</div>
+                <div class="time_ago">10 минут назад</div>
+              </div>
+          	</li>
+            <li>
+              <a class="more" href="#">Подробнее</a>
+              <div class="title">
+                13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
+                <span>Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+              </div>
+              <div class="details">
+                <div class="entry_state published">Опубликован</div>
+                <div class="author">Михайлов М. М.</div>
+                <div class="time_ago">10 минут назад</div>
+              </div>
+          	</li>
+            <li>
+              <a class="more" href="#">Подробнее</a>
+              <div class="title">
+                13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
+                <span>Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+              </div>
+              <div class="details">
+                <div class="entry_state published">Опубликован</div>
+                <div class="author">Михайлов М. М.</div>
+                <div class="time_ago">10 минут назад</div>
+              </div>
+          	</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="footer">
-      <p>Система публикации новостей, версия 1.0</p>
-      <p>
+      <p class="float_right">
         Сделано с любовью в <a target="_blank" href="http://www.openteam.ru">OpenTeam</a>.
         Если случилась беда &mdash; <a target="_blank" href="http://issues.openteam.ru/projects/esp-news/issues/new">сообщите об ошибке</a>
       </p>
+      <p class="float_left">Система публикации новостей, версия 1.0</p>
     </div>
   </body>
 </html>
