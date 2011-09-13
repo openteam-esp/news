@@ -3,10 +3,6 @@ class Prepare < Issue
     state :processing
     state :completed
 
-    after_transition :to => :processing do |issue, transition|
-      issue.send(:switch_entry_to_previous_state)
-    end
-
     event :complete do
       transition :processing => :completed
     end

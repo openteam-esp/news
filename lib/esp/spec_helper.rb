@@ -125,6 +125,14 @@ module Esp::SpecHelper
                           end
   end
 
+  def fresh_publishing
+    @fresh_publishing ||= stored_draft.tap do | entry |
+                            entry.prepare.complete!
+                            entry.review.accept!
+                            entry.review.complete!
+                          end
+  end
+
   def draft_entry_with_asset(options = {})
     @draft_entry_with_asset ||= create_draft_entry_with_asset(options)
   end

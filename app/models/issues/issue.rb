@@ -13,8 +13,12 @@ class Issue < ActiveRecord::Base
     state :processing
     state :completed
 
-    after_transition :to => :completed do |issue, transition|
+    after_transition :on => :complete do |issue, transition|
       issue.send(:switch_entry_to_next_state)
+    end
+
+    after_transition :on => :restore do |issue, transition|
+      issue.send(:switch_entry_to_previous_state)
     end
 
     event :clear do
@@ -32,18 +36,21 @@ class Issue < ActiveRecord::Base
     event :suspend do
       transition :fresh => :pending
     end
+    event :restore do
+      transition :completed => :processing
+    end
   end
 
   protected
 
     def switch_entry_to_next_state
       entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) + 1]
-      entry.issues.with_states(:pending).first.try :clear!
+      entry.next_issue(self).try :clear!
     end
 
     def switch_entry_to_previous_state
       entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) - 1]
-      entry.issues.with_states(:fresh).first.try :suspend!
+      entry.next_issue(self).try :suspend!
     end
 
 end

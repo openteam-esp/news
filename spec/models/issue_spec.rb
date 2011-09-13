@@ -40,10 +40,18 @@ describe Issue do
     end
   end
 
-  describe "восстановление задачи prepare" do
-    before { fresh_correcting.prepare.restore! }
-    it { fresh_correcting.reload.should be_state_draft }
-    it { fresh_correcting.review.should be_pending }
+  describe "восстановление задачи" do
+    describe "prepare" do
+      before { fresh_correcting.prepare.restore! }
+      it { fresh_correcting.reload.should be_state_draft }
+      it { fresh_correcting.review.should be_pending }
+    end
+
+    describe "review" do
+      before { fresh_publishing.review.restore! }
+      it { fresh_publishing.reload.should be_state_correcting }
+      it { fresh_publishing.publish.should be_pending }
+    end
   end
 end
 
