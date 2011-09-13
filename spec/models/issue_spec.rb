@@ -25,6 +25,20 @@ describe Issue do
      it { processing_publishing.reload.should be_state_published }
    end
   end
+
+  describe 'отказ от выполнения' do
+    describe "review" do
+      before { processing_correcting.review.cancel! }
+      it { processing_correcting.review.should be_fresh }
+      it { processing_correcting.reload.should be_state_correcting }
+    end
+
+    describe "publish" do
+      before { processing_publishing.publish.cancel! }
+      it { processing_publishing.publish.should be_fresh }
+      it { processing_publishing.reload.should be_state_publishing }
+    end
+  end
 end
 
 # == Schema Information
