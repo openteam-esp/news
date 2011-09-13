@@ -4,10 +4,6 @@ class Prepare < Issue
     state :completed
     state :pending
 
-    after_transition :to => :completed do |prepare, transition|
-      prepare.entry.update_attribute(:state, :correcting)
-    end
-
     event :complete do
       transition :processing => :completed
     end

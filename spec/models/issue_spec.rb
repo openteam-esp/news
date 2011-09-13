@@ -8,13 +8,23 @@ describe Issue do
   it { Issue.scoped.to_sql.should == Issue.unscoped.order('id').to_sql }
 
   describe "закрытие задачи" do
-   it "должно приводить к переходу новости в следующее состояние" do
-     stored_draft.prepare.complete
-     stored_draft.reload.should be_state_correcting
+    describe "prepare должно" do
+      before { stored_draft.prepare.complete! }
+      it { stored_draft.reload.should be_state_correcting }
+      it { stored_draft.review.should be_fresh }
+    end
+
+   describe "review должно" do
+     before { processing_correcting.review.complete! }
+     it { processing_correcting.reload.should be_state_publishing }
+     it { processing_correcting.publish.should be_fresh }
+   end
+
+   describe "publish должно" do
+     before { processing_publishing.publish.complete! }
+     it { processing_publishing.reload.should be_state_published }
    end
   end
-
-
 end
 
 # == Schema Information

@@ -84,13 +84,26 @@ module Esp::SpecHelper
     end
 
     define_method "stored_#{state}" do | *args |
-      instance_variable_get("@stored_#{state}") || begin
-                                                      entry = self.send(state, *args)
+      instance_variable_get("@stored_#{state}") ||  self.send(state, *args).tap do | entry |
                                                       entry.save!
                                                       entry.reload
                                                       instance_variable_set("@stored_#{state}", entry)
                                                     end
     end
+  end
+
+  def processing_correcting
+    @processing_correcting ||= stored_draft.tap do | entry |
+                                 entry.prepare.complete!
+                                 entry.review.accept!
+                               end
+  end
+
+  def processing_publishing
+    @processing_publishing ||= processing_correcting.tap do | entry |
+                                 entry.review.complete!
+                                 entry.publish.accept!
+                               end
   end
 
   def draft_entry_with_asset(options = {})

@@ -8,22 +8,35 @@ class Issue < ActiveRecord::Base
   default_value_for :initiator do User.current end
 
   state_machine :initial => :pending do
+    state :pending
+    state :fresh
     state :processing
     state :completed
-    state :fresh
-    state :pending
 
-    event :complete do
-      transition :processing => :completed
+    after_transition :to => :completed do |issue, transition|
+      issue.send(:switch_entry_to_next_state)
+    end
+
+    event :clear do
+      transition :pending => :fresh
     end
     event :accept do
       transition :fresh => :processing
+    end
+    event :complete do
+      transition :processing => :completed
     end
     event :cancel do
       transition :processing => :fresh
     end
   end
 
+  protected
+
+    def switch_entry_to_next_state
+      entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) + 1]
+      entry.issues.with_states(:pending).first.try :clear!
+    end
 end
 
 # == Schema Information
