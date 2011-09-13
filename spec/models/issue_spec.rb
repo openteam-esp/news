@@ -52,6 +52,12 @@ describe Issue do
       it { fresh_publishing.reload.should be_state_correcting }
       it { fresh_publishing.publish.should be_pending }
     end
+
+    describe "publish" do
+      before { completed_publishing.publish.restore! }
+      it { completed_publishing.reload.should be_state_publishing }
+      it { completed_publishing.publish.should be_processing }
+    end
   end
 end
 

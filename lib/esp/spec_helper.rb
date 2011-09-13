@@ -133,6 +133,12 @@ module Esp::SpecHelper
                           end
   end
 
+  def completed_publishing
+    @completed_publishing ||= processing_publishing.tap  do | entry|
+                                entry.publish.complete!
+                              end
+  end
+
   def draft_entry_with_asset(options = {})
     @draft_entry_with_asset ||= create_draft_entry_with_asset(options)
   end
