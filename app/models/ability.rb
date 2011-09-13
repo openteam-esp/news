@@ -8,6 +8,10 @@ class Ability
       issue.executor == user && issue.processing?
     end
 
+    can [:restore], Issue do |issue|
+      issue.executor == user && issue.completed? && (issue.entry.next_issue(issue).nil? || issue.entry.next_issue(issue).fresh?)
+    end
+
 
     #################
     #  casual user  #

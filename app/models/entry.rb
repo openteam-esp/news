@@ -82,6 +82,10 @@ class Entry < ActiveRecord::Base
     result += " назад)"
   end
 
+  def next_issue(issue)
+    issues[issues.index(issue) + 1]
+  end
+
   def restore(*args)
     super
     self.assets.destroy_all
