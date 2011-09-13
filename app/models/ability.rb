@@ -12,6 +12,14 @@ class Ability
       issue.executor == user && issue.completed? && (issue.entry.next_issue(issue).nil? || issue.entry.next_issue(issue).fresh?)
     end
 
+    if user.corrector?
+      can [:accept], Review
+    end
+
+    if user.publisher?
+      can [:accept], Publish
+    end
+
 
     #################
     #  casual user  #

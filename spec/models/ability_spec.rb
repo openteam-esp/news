@@ -7,6 +7,34 @@ describe Ability do
   let(:ability) { Ability.new }
 
   describe "задачy" do
+    describe 'review' do
+      let(:fresh_review) {Review.new(:state => 'fresh')}
+
+      it "может принять пользователь с ролью корректор" do
+        set_current_user corrector
+        ability.should be_able_to(:accept, fresh_review)
+      end
+
+      it "не может принять пользователь без роли корректора" do
+        set_current_user publisher
+        ability.should_not be_able_to(:accept, fresh_review)
+      end
+    end
+
+    describe 'publish' do
+      let(:fresh_publish) {Publish.new(:state => 'fresh')}
+
+      it "может принять пользователь с ролью публикатора" do
+        set_current_user publisher
+        ability.should be_able_to(:accept, fresh_publish)
+      end
+
+      it "не может принять пользователь без роли публикатора" do
+        set_current_user corrector
+          ability.should_not be_able_to(:accept, fresh_publish)
+      end
+    end
+
     describe "закрыть" do
       let(:processing_prepare_issue) { Prepare.new(:state => 'processing', :executor => initiator) }
       let(:processing_review_issue)  { Review.new(:state => 'processing', :executor => initiator) }
