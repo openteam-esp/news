@@ -2,22 +2,29 @@ class Ability
   include CanCan::Ability
 
   def initialize(user=nil)
-    user = User.current
+    user ||= User.current
 
-    can [:complete], Issue do |issue|
-      issue.executor == user && issue.processing?
+    can :complete, Issue do |issue|
+      issue.executor == user
     end
 
-    can [:restore], Issue do |issue|
-      issue.executor == user && issue.completed? && (issue.entry.next_issue(issue).nil? || issue.entry.next_issue(issue).fresh?)
+    can :restore, Issue do |issue|
+      issue.executor == user && (issue.entry.next_issue(issue).nil? || issue.entry.next_issue(issue).fresh?)
     end
 
     if user.corrector?
-      can [:accept], Review
+      can :accept, Review
+      can :restore, Review do |issue|
+        issue.entry.next_issue(issue).nil? || issue.entry.next_issue(issue).fresh?
+      end
+
     end
 
     if user.publisher?
-      can [:accept], Publish
+      can :accept, Publish
+      can :restore, Publish do |issue|
+        issue.entry.next_issue(issue).nil? || issue.entry.next_issue(issue).fresh?
+      end
     end
 
 
