@@ -1,8 +1,81 @@
 # encoding: utf-8
 
-#require 'spec_helper'
+require 'spec_helper'
 
-#describe User do
+describe User do
+  describe "инициатор должен получить список" do
+    before { set_current_user initiator }
+
+    it "новых задач" do
+      initiator.fresh_tasks.should be_empty
+    end
+
+    it "моих задач" do
+      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
+      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    end
+
+    it "остальных задач" do
+      initiator.other_tasks.should be_empty
+    end
+  end
+
+  describe "корректор должен получить список" do
+    before { set_current_user initiator(:roles => :corrector) }
+
+    it "новых задач" do
+      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Review']}
+    end
+
+    it "моих задач" do
+      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
+      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    end
+
+    it "остальных задач" do
+      initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
+      initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
+      initiator.other_tasks.where_values_hash.should == { :state => :processing }
+    end
+  end
+
+  describe "публикатор должен получить список" do
+    before { set_current_user initiator(:roles => :publisher) }
+
+    it "новых задач" do
+      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Publish']}
+    end
+
+    it "моих задач" do
+      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
+      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    end
+
+    it "остальных задач" do
+      initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
+      initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
+      initiator.other_tasks.where_values_hash.should == { :state => :processing }
+    end
+  end
+
+  describe "корректор+публикатор должен получить список" do
+    before { set_current_user initiator(:roles => [:publisher, :corrector]) }
+
+    it "новых задач" do
+      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Review', 'Publish']}
+    end
+
+    it "моих задач" do
+      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
+      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    end
+
+    it "остальных задач" do
+      initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
+      initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
+      initiator.other_tasks.where_values_hash.should == { :state => :processing }
+    end
+  end
 
   #describe '- обычный пользователь может' do
     #before do
@@ -441,7 +514,7 @@
       #end
     #end
   #end
-#end
+end
 
 
 

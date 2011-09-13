@@ -34,6 +34,22 @@ class User < ActiveRecord::Base
     Thread.current[:user] = user
   end
 
+  def fresh_tasks
+    return [] if roles.empty?
+    types = []
+    types << 'Review' if corrector?
+    types << 'Publish' if publisher?
+    Issue.where(:type => types).where(:state => :fresh)
+  end
+
+  def my_tasks
+    Issue.where(:state => :processing).where(["initiator_id = ? OR executor_id = ?", self, self])
+  end
+
+  def other_tasks
+    Issue.where(:state => :processing).where(["initiator_id <> ?", self]).where(["executor_id <> ?", self])
+  end
+
 end
 
 
