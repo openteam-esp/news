@@ -2,6 +2,12 @@ class Ability
   include CanCan::Ability
 
   def initialize(user=nil)
+    user = User.current
+
+    can [:complete], Issue do |issue|
+      issue.executor == user && issue.processing?
+    end
+
 
     #################
     #  casual user  #

@@ -2,10 +2,37 @@
 
 require "spec_helper"
 
-if false
 
 describe Ability do
   let(:ability) { Ability.new }
+
+  describe "задачи" do
+    let(:processing_prepare_issue) { Prepare.new(:state => 'processing', :executor => initiator) }
+    let(:processing_review_issue)  { Review.new(:state => 'processing', :executor => initiator) }
+    let(:processing_publish_issue) { Publish.new(:state => 'processing', :executor => initiator) }
+
+    before { set_current_user initiator }
+
+    describe "может закрывать исполнитель" do
+      it { ability.should be_able_to(:complete, processing_prepare_issue) }
+      it { ability.should be_able_to(:complete, processing_review_issue) }
+      it { ability.should be_able_to(:complete, processing_publish_issue) }
+    end
+
+    describe "не может закрывать другой пользователь" do
+      before { set_current_user corrector }
+
+      it { ability.should_not be_able_to(:complete, processing_prepare_issue) }
+      it { ability.should_not be_able_to(:complete, processing_review_issue) }
+      it { ability.should_not be_able_to(:complete, processing_publish_issue) }
+    end
+
+    it { ability.should_not be_able_to(:complete, Issue.new(:state => :pending)) }
+    it { ability.should_not be_able_to(:complete, Issue.new(:state => :fresh)) }
+    it { ability.should_not be_able_to(:complete, Issue.new(:state => :completed, :executor => initiator)) }
+  end
+
+if false
   describe "просмотр новости" do
     describe "инициатором" do
       before(:each) do
