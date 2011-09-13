@@ -29,6 +29,9 @@ class Issue < ActiveRecord::Base
     event :cancel do
       transition :processing => :fresh
     end
+    event :suspend do
+      transition :fresh => :pending
+    end
   end
 
   protected
@@ -37,6 +40,12 @@ class Issue < ActiveRecord::Base
       entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) + 1]
       entry.issues.with_states(:pending).first.try :clear!
     end
+
+    def switch_entry_to_previous_state
+      entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) - 1]
+      entry.issues.with_states(:fresh).first.try :suspend!
+    end
+
 end
 
 # == Schema Information

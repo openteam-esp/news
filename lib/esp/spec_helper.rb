@@ -106,6 +106,12 @@ module Esp::SpecHelper
                                end
   end
 
+  def fresh_correcting
+    @fresh_correcting ||= stored_draft.tap do | entry |
+                            entry.prepare.complete!
+                          end
+  end
+
   def draft_entry_with_asset(options = {})
     @draft_entry_with_asset ||= create_draft_entry_with_asset(options)
   end

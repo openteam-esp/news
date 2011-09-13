@@ -39,6 +39,12 @@ describe Issue do
       it { processing_publishing.reload.should be_state_publishing }
     end
   end
+
+  describe "восстановление задачи prepare" do
+    before { fresh_correcting.prepare.restore! }
+    it { fresh_correcting.reload.should be_state_draft }
+    it { fresh_correcting.review.should be_pending }
+  end
 end
 
 # == Schema Information
