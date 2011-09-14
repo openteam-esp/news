@@ -178,6 +178,10 @@ ru:
     models:
       entry: "новость"
       recipient: "подписчика"
+      task: Задача
+      prepare: Подготовка
+      review: Корректировка
+      publish: Публикация
 
     attributes:
       user:
@@ -190,6 +194,7 @@ ru:
         roles_enum:
           corrector: Корректор
           publisher: Публикатор
+
 
       entry:
         annotation: "Аннотация"
@@ -230,6 +235,14 @@ ru:
         active: "Активен"
         description: "Примечание"
 
+  state_machine:
+    task:
+      state:
+        completed: 'Завершена'
+        fresh: 'Новая'
+        pending: 'Ожидает выполнения предыдущей задачи'
+        processing: 'В работе'
+
   entry:
     state:
       draft: "черновик"
@@ -238,6 +251,7 @@ ru:
       awaiting_publication: "ожидает публикации"
       published: "опубликован"
       trash: "в корзине"
+
   event:
     kind:
       before:

@@ -1,1 +1,32 @@
-<%= collection.inspect %>
+<div class="last_entry_list">
+  <ul>
+    <% if collection.any? %>
+      <% collection.each do | task | %>
+        <li>
+          <a class="more" href="#">Подробнее</a>
+          <div class='title'>
+            <%= task.entry.composed_title %>
+          </div>
+          <div class="details">
+            <div class="task_type">
+              <%= task.class.model_name.human %>
+            </div>
+            <div class="entry_state <%= task.state %>">
+              <%= I18n.t "state_machine.task.state.#{task.state}" %>
+            </div>
+
+            <div class="author">
+              <%= task.initiator %>
+            </div>
+
+            <div class="time_ago">
+              <%= distance_of_time_in_words_to_now(task.created_at) %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    <% else %>
+      <li class='empty'>Нет задач</li>
+    <% end %>
+  </ul>
+</div>
