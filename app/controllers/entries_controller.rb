@@ -1,10 +1,10 @@
 class EntriesController < AuthorizedApplicationController
-
   actions :index, :show, :create, :edit
 
   has_scope :state
-
   has_scope :page, :default => 1
+
+  has_searcher
 
   load_and_authorize_resource
 
@@ -24,6 +24,5 @@ class EntriesController < AuthorizedApplicationController
       }
     end
   end
-
 end
 

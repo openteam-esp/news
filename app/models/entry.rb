@@ -43,11 +43,12 @@ class Entry < ActiveRecord::Base
   default_value_for :state, :draft
 
   searchable do
-    text :annotation
-    text :body
-    text :title
-    time :since
-    time :until
+    text   :annotation
+    text   :body
+    text   :title
+    date   :since
+    date   :until
+    string :state
   end
 
   def current_user

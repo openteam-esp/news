@@ -1,3 +1,12 @@
+<%= semantic_search_form_for :entry, :url => entries_path(:state => 'published') do | form | %>
+  <%= form.inputs :annotation, :body, :title %>
+  <%= form.inputs do %>
+    <%= form.input :since, :as => :datetime %>
+    <%= form.input :until, :as => :datetime %>
+  <% end %>
+  <%= form.buttons %>
+<% end %>
+
 <% if @entries.any? %>
   <h1><%= t('list_of_entries') %></h1>
   <ul class='entries'>

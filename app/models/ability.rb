@@ -12,7 +12,7 @@ class Ability
       task.executor == user && (task.entry.next_task(task).nil? || task.entry.next_task(task).fresh?)
     end
 
-    if user.corrector?
+    if user && user.corrector?
       can :accept, Review
       can :restore, Review do |task|
         task.entry.next_task(task).nil? || task.entry.next_task(task).fresh?
@@ -20,7 +20,7 @@ class Ability
 
     end
 
-    if user.publisher?
+    if user && user.publisher?
       can :accept, Publish
       can :restore, Publish do |task|
         task.entry.next_task(task).nil? || task.entry.next_task(task).fresh?
