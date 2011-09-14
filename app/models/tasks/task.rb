@@ -15,6 +15,10 @@ class Task < ActiveRecord::Base
     state :processing
     state :completed
 
+    after_transition :on => :accept do | task, transition |
+      task.update_attributes! :executor => User.current
+    end
+
     after_transition :on => :complete do |task, transition|
       task.send(:switch_entry_to_next_state)
     end

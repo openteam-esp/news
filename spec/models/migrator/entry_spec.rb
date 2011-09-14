@@ -51,15 +51,28 @@ describe Migrator::Entry do
     end
   end
 
-  describe "должен проставляться state в зависимости от status" do
-    it "publish => published" do
-      migrated(legacy(:status => :publish)).state.should == "published"
+  describe "должен в зависимости от status" do
+    let (:prepare) { @entry.prepare.reload }
+    let (:review) { @entry.review.reload }
+    let (:publish) { @entry.publish.reload }
+
+    describe "blank" do
+      before { @entry = migrated(legacy(:status => :blank)) }
+      it { @entry.state.should == "correcting" }
+      it { prepare.should be_completed }
+      it { prepare.executor_id.should_not be_nil }
     end
-    it "ready_to_publish => awaiting_publication" do
-      migrated(legacy(:status => :ready_to_publish)).state.should == "publicating"
+    describe "ready_to_publish" do
+      before { @entry = migrated(legacy(:status => :ready_to_publish)) }
+      it { @entry.state.should == 'publishing' }
+      it { review.should be_completed }
+      it { review.executor_id.should_not be_nil }
     end
-    it "blank => draft" do
-      migrated(legacy(:status => :blank)).state.should == "draft"
+    describe "publish" do
+      before { @entry = migrated(legacy(:status => :publish)) }
+      it { @entry.state.should == "published" }
+      it { publish.should be_completed }
+      it { publish.executor_id.should_not be_nil }
     end
   end
 

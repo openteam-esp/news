@@ -7,18 +7,8 @@ class Legacy::Entry < ActiveRecord::Base
 
   default_scope order('id desc')
 
-  STATUS_TO_STATE = {
-    :blank => :draft,
-    :ready_to_publish => :publicating,
-    :publish => :published
-  }
-
   def body_as_html
     RDiscount.new(body.chomp).to_html
-  end
-
-  def state
-    STATUS_TO_STATE[status.to_sym]
   end
 
   def channel_ids
@@ -30,19 +20,26 @@ class Legacy::Entry < ActiveRecord::Base
   end
 
   def migrate
-    User.current = self.class.initiator
+    User.current = initiator
     entry = ::Entry.find_or_initialize_by_legacy_id(id)
     entry.title         = title.squish
     entry.annotation    = annotation.squish
     entry.body          = body_as_html
-    entry.created_at    = created_at
-    entry.updated_at    = updated_at
     entry.since         = date_time
     entry.until         = end_date_time
-    entry.state         = state
-    entry.initiator     = self.class.initiator
+    entry.created_at    = created_at
     entry.save :validate => false
     entry.channel_ids   = channel_ids
+    entry.prepare.complete!
+    if status != 'blank'
+      entry.review.reload.accept!
+      entry.review.reload.complete!
+    end
+    if status == 'publish'
+      entry.publish.reload.accept!
+      entry.publish.reload.complete!
+    end
+    entry.update_attribute :updated_at, updated_at
     assets.each do | legacy_asset |
       asset = entry.assets.find_or_initialize_by_legacy_id legacy_asset.id
       asset.file = File.open(legacy_asset.file.path)
@@ -51,13 +48,14 @@ class Legacy::Entry < ActiveRecord::Base
     end
   end
 
-  def self.initiator
-    @initiator ||= User.find_or_initialize_by_email('migrator@pressa.tomsk.gov.ru').tap do | user |
-                      user.name = 'Мигратор'
-                      user.roles = %w[corrector publisher]
-                      user.save :validate => false
-                    end
-  end
+  private
+    def initiator
+      @initiator ||= User.find_or_initialize_by_email('migrator@pressa.tomsk.gov.ru').tap do | user |
+                        user.name = 'Мигратор'
+                        user.roles = %w[corrector publisher]
+                        user.save! :validate => false
+                      end
+    end
 end
 
 # == Schema Information
