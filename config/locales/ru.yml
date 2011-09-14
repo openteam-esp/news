@@ -144,9 +144,9 @@ ru:
     notifications: Уведомления
 
     issues: Задачи
-    new_issues: Новые
-    my_issues: Мои
-    other_issues: Остальные
+    fresh_tasks: Новые
+    my_tasks: Мои
+    other_tasks: Остальные
 
     entries: Новости
     draft: Черновики

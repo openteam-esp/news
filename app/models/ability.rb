@@ -32,6 +32,8 @@ class Ability
     #  casual user  #
     #################
 
+    can :read, Issue
+
     can [:create], Entry
 
     can :read, Entry do | entry |

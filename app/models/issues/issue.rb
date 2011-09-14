@@ -7,6 +7,8 @@ class Issue < ActiveRecord::Base
 
   default_value_for :initiator do User.current end
 
+  scope :kind, lambda {|kind| User.current.send(kind)}
+
   state_machine :initial => :pending do
     state :pending
     state :fresh

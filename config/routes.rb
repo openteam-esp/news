@@ -42,6 +42,8 @@ News::Application.routes.draw do
 
   get '/:state/entries' => 'entries#index', :as => :entries_path
 
+  get '/:kind/issues' => 'issues#index', :as => :issues
+
   root :to => 'roots#index'
 end
 

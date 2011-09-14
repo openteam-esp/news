@@ -63,9 +63,9 @@
         <div class="issues">
           <h1><%= t("sidebar.issues") %></h1>
           <ul>
-            <li><%= link_to(t("sidebar.new_issues"), "#") %></li>
-            <li><%= link_to(t("sidebar.my_issues"), "#") %></li>
-            <li><%= link_to(t("sidebar.other_issues"), "#") %></li>
+            <li><%= link_to(t("sidebar.fresh_tasks"), issues_path(:kind => :fresh_tasks)) %></li>
+            <li><%= link_to(t("sidebar.my_tasks"), issues_path(:kind => :my_tasks)) %></li>
+            <li><%= link_to(t("sidebar.other_tasks"), issues_path(:kind => :other_tasks)) %></li>
           </ul>
         </div>
         <div class="enties">
@@ -96,7 +96,7 @@
         </div>
       </div>
       <div class='content'>
-        <%#= yield %>
+        <%= yield %>
         <ul class="entry_filter">
           <li class="selected"><a href="#">Все</a></li>
           <li><a href="#">Корректура</a></li>

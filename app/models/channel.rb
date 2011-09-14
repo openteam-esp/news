@@ -3,7 +3,8 @@ class Channel < ActiveRecord::Base
   has_and_belongs_to_many :entries
 
   def published_entries
-    entries.published.order 'updated_at desc'
+    #entries.published.order 'updated_at desc'
+    []
   end
 end
 

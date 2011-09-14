@@ -35,7 +35,6 @@ class User < ActiveRecord::Base
   end
 
   def fresh_tasks
-    return [] if roles.empty?
     types = []
     types << 'Review' if corrector?
     types << 'Publish' if publisher?
