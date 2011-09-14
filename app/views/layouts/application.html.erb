@@ -37,61 +37,7 @@
       <% end %>
     </div>
     <div class="container">
-      <div class="right_sidebar">
-        <%= javascript_include_tag "jquery.ui.min" %>
-        <h1 class="title">В «Губернской аптеке» работает консультативный центр</h1>
-        <p class="locked">Заблакированно: Петров П. П. 3 минуты назад</p>
-        <div class="entry_states">
-          <ul>
-            <li class="draft completed"><a href="#draft_issue">Черновик</a></li>
-            <li class="correcting open selected"><a href="#correcting_issue">Корректура</a></li>
-            <li class="publising pending"><a href="#publishing_issue">Публикация</a></li>
-          </ul>
-          <div class="issue_description">
-            <div class="line">
-              <div class="author">Сидоров С. С.</div>
-              <div class="time_ago">18 минут назад</div>
-            </div>
-            <div class="title">
-              <span class="state">ожидание</span>
-              Откорректировать новость и расставить прикреплённуые файлы в тело новости
-            </div>
-          </div>
-          <div class="activities">
-            <div class="task">
-              <div class="line">
-                <div class="author">Сидоров С. С.</div>
-                <div class="time_ago">18 минут назад</div>
-              </div>
-              <div class="title">
-                <span class="state">закрыта</span>
-                Откорректировать новость и расставить прикреплённуые файлы в тело новости
-              </div>
-            </div>
-            <div class="task">
-              <div class="line">
-                <div class="author">Сидоров С. С. &rarr; Иванов И. И.</div>
-                <div class="time_ago">18 минут назад</div>
-              </div>
-              <div class="title">
-                <span class="state">новая</span>
-                Откорректировать новость и расставить прикреплённуые файлы в тело новости
-              </div>
-            </div>
-            <div class="task">
-              <div class="line">
-                <div class="author">Сидоров С. С. &rarr; Иванов Иван Иванович</div>
-                <div class="time_ago">18 минут назад</div>
-              </div>
-              <div class="title">
-                <span class="state">новая</span>
-                Откорректировать новость и расставить прикреплённуые файлы в тело новости
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="left_sidebar">
+      <div class="sidebar">
         <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
         <div class="tasks">
           <h1><%= t("sidebar.tasks") %></h1>
@@ -105,15 +51,15 @@
           <h1><%= t("sidebar.entries") %></h1>
           <ul>
             <li class="selected">
-              <%= link_to(t("sidebar.draft"), "#") %>
+              <%= link_to(t("sidebar.draft"), scoped_entries_path(:draft)) %>
               <span class="counter">2</span>
             </li>
             <li>
-              <%= link_to(t("sidebar.in_process"), "#") %>
+              <%= link_to(t("sidebar.in_process"), scoped_entries_path(:processing)) %>
               <span class="counter">3</span>
             </li>
             <li>
-              <%= link_to(t("sidebar.trash"), "#") %>
+              <%= link_to(t("sidebar.trash"), scoped_entries_path(:trashed)) %>
               <span class="counter">13</span>
             </li>
           </ul>
@@ -135,88 +81,6 @@
           <li><a href="#">Корректура</a></li>
           <li><a href="#">Публикация</a></li>
         </ul>
-        <div class="last_entry_list">
-          <ul>
-            <li>
-              <a class="more" href="#">Подробнее</a>
-              <div class="title">
-                В Томской области проверено более 13 тысяч объектов пребывания, проживания и трудовой деятельности иностранных граждан &ndash;
-                <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-                <a class="view" href="#">подробнее...</a>
-              </div>
-              <div class="details">
-                <div class="entry_state draft">Черновик</div>
-                <div class="author">Иванов И. И.</div>
-                <div class="time_ago">3 часа назад</div>
-              </div>
-            </li>
-            <li class="selected">
-              <a class="more" href="#">Подробнее</a>
-              <div class="title">
-                В «Губернской аптеке» работает консультативный центр &ndash;
-                <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-                <a class="view" href="#">подробнее...</a>
-              </div>
-              <div class="details">
-                <div class="entry_state correcting">Корректура</div>
-                <div class="author">Петров П. П.</div>
-                <div class="time_ago">18 минут назад</div>
-              </div>
-            </li>
-            <li>
-              <a class="more" href="#">Подробнее</a>
-              <div class="title">
-                Открытое первенство работников лесного хозяйства пройдет в Томской области &ndash;
-                <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-                <a class="view" href="#">подробнее...</a>
-              </div>
-              <div class="details">
-                <div class="entry_state publishing">Публикация</div>
-                <div class="author">Сидоров С. С.</div>
-                <div class="time_ago">40 минут назад</div>
-              </div>
-            </li>
-            <li>
-              <a class="more" href="#">Подробнее</a>
-              <div class="title">
-                13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
-                <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-                <a class="view" href="#">подробнее...</a>
-              </div>
-              <div class="details">
-                <div class="entry_state published">Опубликован</div>
-                <div class="author">Михайлов М. М.</div>
-                <div class="time_ago">10 минут назад</div>
-              </div>
-          	</li>
-            <li>
-              <a class="more" href="#">Подробнее</a>
-              <div class="title">
-                13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
-                <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-                <a class="view" href="#">подробнее...</a>
-              </div>
-              <div class="details">
-                <div class="entry_state published">Опубликован</div>
-                <div class="author">Михайлов М. М.</div>
-                <div class="time_ago">10 минут назад</div>
-              </div>
-          	</li>
-            <li>
-              <a class="more" href="#">Подробнее</a>
-              <div class="title">
-                13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
-                <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-                <a class="view" href="#">подробнее...</a>
-              </div>
-              <div class="details">
-                <div class="entry_state published">Опубликован</div>
-                <div class="author">Михайлов М. М.</div>
-                <div class="time_ago">10 минут назад</div>
-              </div>
-          	</li>
-          </ul>
-        </div>
       </div>
     </div>
     <div class="footer">

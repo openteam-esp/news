@@ -23,11 +23,11 @@ News::Application.routes.draw do
   match '/subscribe/:entry_id' => 'subscribes#create', :as => :subscribe
   match '/subscribe/:entry_id/delete' => 'subscribes#destroy', :as => :delete_subscribe
 
-  resources :entries, :only => [:show, :create, :edit, :index] do
-    get 'page/:page', :action => :index, :on => :collection
-    resources :events, :only => [:create, :show]
+  resources :entries, :only => [:show, :create, :edit] do
     resources :assets, :only => [:create, :destroy]
   end
+
+  get '/:state/entries' => 'entries#index', :as => :scoped_entries, :constraints => {:state => /(draft|processing|trashed)/}
 
   get '/assets/:id/:width-:height/:filename' => Dragonfly[:images].endpoint { |params, app|
     image = Image.find(params[:id])
@@ -40,7 +40,6 @@ News::Application.routes.draw do
     app.fetch(Asset.find(params[:id]).file_uid)
   }, :as => :asset, :constraints => { :filename => /.+?/ }
 
-  get '/:state/entries' => 'entries#index', :as => :entries_path
 
   get '/:kind/tasks' => 'tasks#index', :as => :tasks, :constraints => { :kind => /(fresh|my|other)/ }
 
