@@ -1,3 +1,17 @@
+# encoding: utf-8
+
+class ActiveRecord::Relation
+  def sample
+    first(:offset => rand(count))
+  end
+end
+
+class ActiveRecord::Base
+  class << self
+    delegate :sample, :to => :scoped
+  end
+end
+
 Channel.find_or_create_by_title('tomsk.gov.ru/ru/announces')
 Channel.find_or_create_by_title('tomsk.gov.ru/ru/news')
 c = Channel.find_or_create_by_title('mailing_lists/common')
@@ -11,7 +25,6 @@ corrector.update_attributes(
   :name => 'corrector',
   :roles => [:corrector]
 )
-
 
 publisher = User.find_or_create_by_email('publisher@demo.de')
 publisher.update_attributes(
@@ -35,3 +48,6 @@ corrector_and_publisher.update_attributes(
   :name => 'corrector_and_publisher',
   :roles => [:corrector, :publisher],
 )
+
+Entry.destroy_all
+10.times { legacy = Legacy::Entry.sample; legacy.migrate if legacy.assets.empty? }

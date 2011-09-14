@@ -26,6 +26,9 @@ describe Migrator::Entry do
     before(:each) do
       @entry = migrated(legacy)
     end
+    it "должен установить инициатора" do
+      @entry.initiator.name.should == "Мигратор"
+    end
     it "должен упрощать title" do
       @entry.title.should == legacy.title.squish
     end
@@ -53,24 +56,20 @@ describe Migrator::Entry do
       migrated(legacy(:status => :publish)).state.should == "published"
     end
     it "ready_to_publish => awaiting_publication" do
-      migrated(legacy(:status => :ready_to_publish)).state.should == "awaiting_publication"
+      migrated(legacy(:status => :ready_to_publish)).state.should == "publicating"
     end
-
     it "blank => draft" do
       migrated(legacy(:status => :blank)).state.should == "draft"
     end
   end
 
-
   describe "должны проставляться каналы в зависимости от target_id" do
     it "nil => []" do
       migrated(legacy(:target_id => nil)).channels.should be_empty
     end
-
     it "1 => 'Анонсы'" do
       migrated(legacy(:target_id => 1)).channels.map(&:title).should == ['tomsk.gov.ru/ru/announces']
     end
-
     it "2 => 'Новости'" do
       migrated(legacy(:target_id => 2)).channels.map(&:title).should == ['tomsk.gov.ru/ru/news']
     end

@@ -41,7 +41,7 @@ class Entry < ActiveRecord::Base
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
-  default_value_for :initiator_id do User.current_id end
+  default_value_for :initiator do User.current end
   default_value_for :state, :draft
 
   def current_user
