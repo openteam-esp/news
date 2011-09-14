@@ -17,18 +17,88 @@
 <% end %>
 
 <% if collection.any? %>
-  <h1><%= t('list_of_entries') %></h1>
-  <ul class='entries'>
-    <% collection.each do |entry|%>
+  <div class="last_entry_list">
+    <ul>
       <li>
-        <p class="title"><%= link_to entry.composed_title.gilensize, entry_path(entry) %></p>
-        <% last_event = entry.events.first %>
-        <p><%= content_tag :span, last_event.text.truncate(150), :class => 'text' if last_event && last_event.text.present? %></p>
-        <p><%= render_statistic(entry) %></p>
+        <a class="more" href="#">Подробнее</a>
+        <div class="title">
+          В Томской области проверено более 13 тысяч объектов пребывания, проживания и трудовой деятельности иностранных граждан &ndash;
+          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <a class="view" href="#">подробнее...</a>
+        </div>
+        <div class="details">
+          <div class="entry_state draft">Черновик</div>
+          <div class="author">Иванов И. И.</div>
+          <div class="time_ago">3 часа назад</div>
+        </div>
       </li>
-    <% end %>
-  </ul>
-  <%= paginate collection %>
+      <li class="selected">
+        <a class="more" href="#">Подробнее</a>
+        <div class="title">
+          В «Губернской аптеке» работает консультативный центр &ndash;
+          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <a class="view" href="#">подробнее...</a>
+        </div>
+        <div class="details">
+          <div class="entry_state correcting">Корректура</div>
+          <div class="author">Петров П. П.</div>
+          <div class="time_ago">18 минут назад</div>
+        </div>
+      </li>
+      <li>
+        <a class="more" href="#">Подробнее</a>
+        <div class="title">
+          Открытое первенство работников лесного хозяйства пройдет в Томской области &ndash;
+          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <a class="view" href="#">подробнее...</a>
+        </div>
+        <div class="details">
+          <div class="entry_state publishing">Публикация</div>
+          <div class="author">Сидоров С. С.</div>
+          <div class="time_ago">40 минут назад</div>
+        </div>
+      </li>
+      <li>
+        <a class="more" href="#">Подробнее</a>
+        <div class="title">
+          13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
+          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <a class="view" href="#">подробнее...</a>
+        </div>
+        <div class="details">
+          <div class="entry_state published">Опубликован</div>
+          <div class="author">Михайлов М. М.</div>
+          <div class="time_ago">10 минут назад</div>
+        </div>
+      </li>
+      <li>
+        <a class="more" href="#">Подробнее</a>
+        <div class="title">
+          13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
+          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <a class="view" href="#">подробнее...</a>
+        </div>
+        <div class="details">
+          <div class="entry_state published">Опубликован</div>
+          <div class="author">Михайлов М. М.</div>
+          <div class="time_ago">10 минут назад</div>
+        </div>
+      </li>
+      <li>
+        <a class="more" href="#">Подробнее</a>
+        <div class="title">
+          13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
+          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <a class="view" href="#">подробнее...</a>
+        </div>
+        <div class="details">
+          <div class="entry_state published">Опубликован</div>
+          <div class="author">Михайлов М. М.</div>
+          <div class="time_ago">10 минут назад</div>
+        </div>
+      </li>
+    </ul>
+  </div>
 <% else %>
   <h1><%= t('no_any_entries') %></h1>
 <% end %>

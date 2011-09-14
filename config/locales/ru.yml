@@ -150,8 +150,8 @@ ru:
 
     entries: Новости
     draft: Черновики
-    in_process: В работе
-    trash: Корзина
+    processing: В работе
+    trashed: Корзина
 
     archive: Архив
     day: За день

@@ -142,13 +142,6 @@ class Entry < ActiveRecord::Base
     end
 end
 
-
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: entries
@@ -166,4 +159,3 @@ end
 #  updated_at   :datetime
 #  legacy_id    :integer
 #
-

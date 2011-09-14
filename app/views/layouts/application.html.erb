@@ -41,6 +41,7 @@
         <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
         <div class="tasks">
           <h1><%= t("sidebar.tasks") %></h1>
+          <%= render_navigation :context => :tasks, :renderer => :list_with_counters %>
           <ul>
             <li><%= link_to(t("sidebar.fresh_tasks"), tasks_path(:fresh)) %></li>
             <li><%= link_to(t("sidebar.my_tasks"), tasks_path(:my)) %></li>
@@ -49,20 +50,7 @@
         </div>
         <div class="enties">
           <h1><%= t("sidebar.entries") %></h1>
-          <ul>
-            <li class="selected">
-              <%= link_to(t("sidebar.draft"), scoped_entries_path(:draft)) %>
-              <span class="counter">2</span>
-            </li>
-            <li>
-              <%= link_to(t("sidebar.in_process"), scoped_entries_path(:processing)) %>
-              <span class="counter">3</span>
-            </li>
-            <li>
-              <%= link_to(t("sidebar.trash"), scoped_entries_path(:trashed)) %>
-              <span class="counter">13</span>
-            </li>
-          </ul>
+          <%= render_navigation :context => :entries, :renderer => :list_with_counters %>
         </div>
         <div class="archive">
           <h1><%= t("sidebar.archive") %></h1>
