@@ -43,9 +43,9 @@ class Entry < ActiveRecord::Base
   default_value_for :state, :draft
 
   searchable do
-    text   :annotation
-    text   :body
-    text   :title
+    text   :annotation, :boost => 2.0
+    text   :body, :boost => 1.0
+    text   :title, :boost => 3.0
     date   :since
     date   :until
     string :state

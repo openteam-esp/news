@@ -23,7 +23,7 @@ Spork.prefork do
 
     config.after(:each) do
       ActiveRecord::Base.descendants.each do | klass |
-        klass.delete_all unless klass.abstract_class?
+        klass.delete_all unless klass.abstract_class? || klass.name.underscore =~ /search/
       end
     end
   end

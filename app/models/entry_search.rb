@@ -1,7 +1,17 @@
 class EntrySearch < Search
-  column :annotation, :text
-  column :body,       :text
-  column :title,      :text
-  column :since,      :date
-  column :until,      :date
+  column :content, :text
+  column :since,   :date
+  column :until,   :date
+  column :keywords, :text
 end
+
+
+# == Schema Information
+#
+# Table name: searches
+#
+#  content :text
+#  since   :date
+#  until   :date
+#
+
