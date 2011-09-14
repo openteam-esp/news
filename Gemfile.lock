@@ -79,6 +79,7 @@ GEM
     dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    escape (0.0.4)
     fabrication (1.0.1)
     fancy-buttons (1.1.1)
       compass (>= 0.11)
@@ -106,6 +107,7 @@ GEM
     has_enum (0.9.2)
       rails (~> 3.0.0)
     has_scope (0.5.0)
+    has_searcher (0.0.7.2)
     hirb (0.4.5)
     hoptoad_notifier (2.4.11)
       activesupport
@@ -177,6 +179,7 @@ GEM
       activerecord
     pg (0.11.0)
     polyglot (0.3.1)
+    pr_geohash (1.0.0)
     pyu-ruby-sasl (0.0.3.3)
     rack (1.2.3)
     rack-cache (1.0.3)
@@ -211,6 +214,8 @@ GEM
     responders (0.6.4)
     rest-client (1.6.3)
       mime-types (>= 1.16)
+    rsolr (0.12.1)
+      builder (>= 2.1.2)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -241,6 +246,13 @@ GEM
     spork (0.9.0.rc9)
     sqlite3 (1.3.4)
     state_machine (1.0.1)
+    sunspot (1.2.1)
+      escape (= 0.0.4)
+      pr_geohash (~> 1.0)
+      rsolr (= 0.12.1)
+    sunspot_rails (1.2.1)
+      nokogiri
+      sunspot (= 1.2.1)
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
@@ -274,6 +286,7 @@ DEPENDENCIES
   guard-spork
   has_enum
   has_scope
+  has_searcher
   hassle!
   hirb
   hoptoad_notifier
@@ -300,4 +313,5 @@ DEPENDENCIES
   spork (>= 0.9.0.rc9)
   sqlite3
   state_machine
+  sunspot_rails
   unicorn

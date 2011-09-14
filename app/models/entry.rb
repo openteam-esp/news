@@ -3,7 +3,6 @@
 include ActionView::Helpers::DateHelper
 
 class Entry < ActiveRecord::Base
-
   belongs_to :initiator, :class_name => 'User'
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
@@ -36,13 +35,20 @@ class Entry < ActiveRecord::Base
     end
   }
 
-
   after_create :create_subscribe, :create_tasks
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
   default_value_for :initiator do User.current end
   default_value_for :state, :draft
+
+  searchable do
+    text :annotation
+    text :body
+    text :title
+    time :since
+    time :until
+  end
 
   def current_user
     User.current
@@ -120,7 +126,6 @@ class Entry < ActiveRecord::Base
   end
 
   private
-
     def create_subscribe
       Subscribe.create!(:subscriber => initiator, :entry => self)
     end

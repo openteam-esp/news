@@ -45,6 +45,7 @@ gem 'formtastic_date_as_string'
 gem 'gilenson'
 gem 'has_enum'
 gem 'has_scope'
+gem 'has_searcher'
 gem 'inherited_resources',                                                  :git => 'git://github.com/openteam/inherited_resources'
 gem 'jquery-rails',                              :require => false
 gem 'kaminari'
@@ -57,3 +58,4 @@ gem 'russian',                                                              :git
 gem 'sanitize'
 gem 'simple-navigation'
 gem 'state_machine'
+gem 'sunspot_rails'

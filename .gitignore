@@ -14,3 +14,4 @@ assets/*
 .rake_tasks~
 coverage/index.html
 coverage/resultset.yml
+solr/data
