@@ -1,3 +1,0 @@
-class Publish < Issue
-end
-

@@ -42,7 +42,7 @@ News::Application.routes.draw do
 
   get '/:state/entries' => 'entries#index', :as => :entries_path
 
-  get '/:kind/issues' => 'issues#index', :as => :issues
+  get '/:kind/tasks' => 'tasks#index', :as => :tasks, :constraints => { :kind => /(fresh|my|other)/ }
 
   root :to => 'roots#index'
 end

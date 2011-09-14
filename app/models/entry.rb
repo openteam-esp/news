@@ -14,7 +14,7 @@ class Entry < ActiveRecord::Base
   has_many :audios, :conditions => {:deleted_at => nil}
   has_many :images, :conditions => {:deleted_at => nil}
   has_many :videos, :conditions => {:deleted_at => nil}
-  has_many :issues
+  has_many :tasks
 
   has_one :prepare
   has_one :review
@@ -37,7 +37,7 @@ class Entry < ActiveRecord::Base
   }
 
 
-  after_create :create_subscribe, :create_issues
+  after_create :create_subscribe, :create_tasks
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -82,8 +82,8 @@ class Entry < ActiveRecord::Base
     result += " назад)"
   end
 
-  def next_issue(issue)
-    issues[issues.index(issue) + 1]
+  def next_task(task)
+    tasks[tasks.index(task) + 1]
   end
 
   def restore(*args)
@@ -125,7 +125,7 @@ class Entry < ActiveRecord::Base
       Subscribe.create!(:subscriber => initiator, :entry => self)
     end
 
-    def create_issues
+    def create_tasks
       create_prepare :executor => User.current
       create_review
       create_publish

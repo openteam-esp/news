@@ -51,8 +51,8 @@ gem 'kaminari'
 gem 'omniauth'
 gem 'permanent_records'
 gem 'rack-cache',                                :require => 'rack/cache'
-gem 'rails',  '3.0.9',                           :require => false
-gem 'rake', '0.8.7'
+gem 'rails',                    '3.0.9',         :require => false
+gem 'rake',                     '0.8.7',         :require => false
 gem 'russian',                                                              :git => 'git://github.com/tacid/russian'
 gem 'sanitize'
 gem 'simple-navigation'

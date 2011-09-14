@@ -1,11 +1,11 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Issue do
+describe Task do
   it { should belong_to :entry }
   it { should belong_to(:initiator) }
   it { should belong_to(:executor) }
-  it { Issue.scoped.to_sql.should == Issue.unscoped.order('id').to_sql }
+  it { Task.scoped.to_sql.should == Task.unscoped.order('id').to_sql }
 
   describe "закрытие задачи" do
     describe "prepare должно" do
@@ -61,15 +61,17 @@ describe Issue do
   end
 end
 
+
 # == Schema Information
 #
-# Table name: issues
+# Table name: tasks
 #
 #  id           :integer         not null, primary key
 #  entry_id     :integer
 #  initiator_id :integer
 #  executor_id  :integer
 #  state        :string(255)
+#  type         :string(255)
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime

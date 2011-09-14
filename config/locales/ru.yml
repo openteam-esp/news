@@ -143,7 +143,7 @@ ru:
   sidebar:
     notifications: Уведомления
 
-    issues: Задачи
+    tasks: Задачи
     fresh_tasks: Новые
     my_tasks: Мои
     other_tasks: Остальные

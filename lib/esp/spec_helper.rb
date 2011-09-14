@@ -79,17 +79,17 @@ module Esp::SpecHelper
       Fabricate.build(:entry, options)
     end
 
-    define_method "build_#{state}_with_issues" do | *args |
+    define_method "build_#{state}_with_tasks" do | *args |
       entry = self.send "build_#{state}"
       entry.build_prepare(:initiator => initiator, :executor => initiator, :state => 'processing').entry = entry
       entry.build_review(:initiator => initiator).entry = entry
       entry.build_publish(:initiator => initiator).entry = entry
-      entry.issues = [entry.prepare, entry.review, entry.publish]
+      entry.tasks = [entry.prepare, entry.review, entry.publish]
       entry
     end
 
-    define_method "#{state}_with_issues" do | *args |
-      instance_variable_get("@#{state}_with_issues") || instance_variable_set("@#{state}_with_issues", self.send("build_#{state}_with_issues", *args))
+    define_method "#{state}_with_tasks" do | *args |
+      instance_variable_get("@#{state}_with_tasks") || instance_variable_set("@#{state}_with_tasks", self.send("build_#{state}_with_tasks", *args))
     end
 
     define_method "#{state}" do | *args |

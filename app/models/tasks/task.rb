@@ -1,4 +1,4 @@
-class Issue < ActiveRecord::Base
+class Task < ActiveRecord::Base
 
   belongs_to :entry
   belongs_to :initiator, :class_name => 'User'
@@ -7,7 +7,7 @@ class Issue < ActiveRecord::Base
 
   default_value_for :initiator do User.current end
 
-  scope :kind, lambda {|kind| User.current.send(kind)}
+  scope :kind, lambda {|kind| User.current.send("#{kind}_tasks")}
 
   state_machine :initial => :pending do
     state :pending
@@ -15,12 +15,12 @@ class Issue < ActiveRecord::Base
     state :processing
     state :completed
 
-    after_transition :on => :complete do |issue, transition|
-      issue.send(:switch_entry_to_next_state)
+    after_transition :on => :complete do |task, transition|
+      task.send(:switch_entry_to_next_state)
     end
 
-    after_transition :on => :restore do |issue, transition|
-      issue.send(:switch_entry_to_previous_state)
+    after_transition :on => :restore do |task, transition|
+      task.send(:switch_entry_to_previous_state)
     end
 
     event :clear do
@@ -47,25 +47,27 @@ class Issue < ActiveRecord::Base
 
     def switch_entry_to_next_state
       entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) + 1]
-      entry.next_issue(self).try :clear!
+      entry.next_task(self).try :clear!
     end
 
     def switch_entry_to_previous_state
       entry.update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(entry.state) - 1]
-      entry.next_issue(self).try :suspend!
+      entry.next_task(self).try :suspend!
     end
 
 end
 
+
 # == Schema Information
 #
-# Table name: issues
+# Table name: tasks
 #
 #  id           :integer         not null, primary key
 #  entry_id     :integer
 #  initiator_id :integer
 #  executor_id  :integer
 #  state        :string(255)
+#  type         :string(255)
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime

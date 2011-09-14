@@ -43,29 +43,29 @@
         <p class="locked">Заблакированно: Петров П. П. 3 минуты назад</p>
         <div class="entry_states">
           <ul>
-            <li><a href="#draft_issue">Черновик</a></li>
-            <li><a href="#correcting_issue">Корректура</a></li>
-            <li><a href="#publishing_issue">Публикация</a></li>
+            <li><a href="#draft_task">Черновик</a></li>
+            <li><a href="#correcting_task">Корректура</a></li>
+            <li><a href="#publishing_task">Публикация</a></li>
           </ul>
-          <div id="draft_issue">
-            Draft issue
+          <div id="draft_task">
+            Draft task
           </div>
-          <div id="correcting_issue">
-            Correcting issue
+          <div id="correcting_task">
+            Correcting task
           </div>
-          <div id="publishing_issue">
-            Publishing issue
+          <div id="publishing_task">
+            Publishing task
           </div>
         </div>
       </div>
       <div class="left_sidebar">
         <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
-        <div class="issues">
-          <h1><%= t("sidebar.issues") %></h1>
+        <div class="tasks">
+          <h1><%= t("sidebar.tasks") %></h1>
           <ul>
-            <li><%= link_to(t("sidebar.fresh_tasks"), issues_path(:kind => :fresh_tasks)) %></li>
-            <li><%= link_to(t("sidebar.my_tasks"), issues_path(:kind => :my_tasks)) %></li>
-            <li><%= link_to(t("sidebar.other_tasks"), issues_path(:kind => :other_tasks)) %></li>
+            <li><%= link_to(t("sidebar.fresh_tasks"), tasks_path(:fresh)) %></li>
+            <li><%= link_to(t("sidebar.my_tasks"), tasks_path(:my)) %></li>
+            <li><%= link_to(t("sidebar.other_tasks"), tasks_path(:other)) %></li>
           </ul>
         </div>
         <div class="enties">
@@ -183,7 +183,7 @@
     <div class="footer">
       <p class="float_right">
         Сделано с любовью в <a target="_blank" href="http://www.openteam.ru">OpenTeam</a>.
-        Если случилась беда &mdash; <a target="_blank" href="http://issues.openteam.ru/projects/esp-news/issues/new">сообщите об ошибке</a>
+        Если случилась беда &mdash; <a target="_blank" href="http://tasks.openteam.ru/projects/esp-news/tasks/new">сообщите об ошибке</a>
       </p>
       <p class="float_left">Система публикации новостей, версия 1.0</p>
     </div>

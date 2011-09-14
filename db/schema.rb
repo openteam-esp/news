@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110912051835) do
+ActiveRecord::Schema.define(:version => 20110914021525) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -86,17 +86,6 @@ ActiveRecord::Schema.define(:version => 20110912051835) do
     t.text     "serialized_entry"
   end
 
-  create_table "issues", :force => true do |t|
-    t.integer  "entry_id"
-    t.integer  "initiator_id"
-    t.integer  "executor_id"
-    t.string   "state"
-    t.string   "type"
-    t.text     "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "messages", :force => true do |t|
     t.integer  "event_id"
     t.integer  "user_id"
@@ -119,6 +108,17 @@ ActiveRecord::Schema.define(:version => 20110912051835) do
     t.integer  "initiator_id"
     t.integer  "entry_id"
     t.string   "kind"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.integer  "entry_id"
+    t.integer  "initiator_id"
+    t.integer  "executor_id"
+    t.string   "state"
+    t.string   "type"
+    t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -22,7 +22,7 @@ module News
     config.autoload_paths += %W(
                                 #{config.root}/app/navigation_renderers
                                 #{config.root}/app/models/asset
-                                #{config.root}/app/models/issues
+                                #{config.root}/app/models/tasks
                                 #{config.root}/lib
                                )
 

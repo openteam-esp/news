@@ -9,7 +9,7 @@ describe Entry do
   it { should have_many(:videos) }
   it { should have_many(:audios) }
   it { should have_many(:attachments) }
-  it { should have_many(:issues) }
+  it { should have_many(:tasks) }
 
   it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
   it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
@@ -85,7 +85,7 @@ describe Entry do
     let (:prepare) { stored_draft.prepare.reload }
     let (:review) { stored_draft.review.reload }
     let (:publish) { stored_draft.publish.reload }
-    it { stored_draft.issues.should == [prepare, review, publish] }
+    it { stored_draft.tasks.should == [prepare, review, publish] }
 
     describe "задача подготовки" do
       it { prepare.initiator.should == initiator }
