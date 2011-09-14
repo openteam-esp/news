@@ -43,12 +43,16 @@ class Entry < ActiveRecord::Base
   default_value_for :state, :draft
 
   searchable do
+    text   :title,      :boost => 3.0
     text   :annotation, :boost => 2.0
-    text   :body, :boost => 1.0
-    text   :title, :boost => 3.0
+    text   :body,       :boost => 1.0
     date   :since
     date   :until
     string :state
+
+    integer :channel_ids, :multiple => true do
+      channel_ids
+    end
   end
 
   def current_user
