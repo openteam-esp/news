@@ -40,25 +40,20 @@
       <div class="sidebar">
         <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
         <div class="tasks">
-          <h1><%= t("sidebar.tasks") %></h1>
+          <h1><%= t("sidebar.tasks.title") %></h1>
           <%= render_navigation :context => :tasks, :renderer => :list_with_counters %>
-          <ul>
-            <li><%= link_to(t("sidebar.fresh_tasks"), tasks_path(:fresh)) %></li>
-            <li><%= link_to(t("sidebar.my_tasks"), tasks_path(:my)) %></li>
-            <li><%= link_to(t("sidebar.other_tasks"), tasks_path(:other)) %></li>
-          </ul>
         </div>
         <div class="enties">
-          <h1><%= t("sidebar.entries") %></h1>
+          <h1><%= t("sidebar.entries.title") %></h1>
           <%= render_navigation :context => :entries, :renderer => :list_with_counters %>
         </div>
         <div class="archive">
-          <h1><%= t("sidebar.archive") %></h1>
+          <h1><%= t("sidebar.archive.title") %></h1>
           <ul>
-            <li><%= link_to(t("sidebar.day"), "#") %></li>
-            <li><%= link_to(t("sidebar.week"), "#") %></li>
-            <li><%= link_to(t("sidebar.month"), "#") %></li>
-            <li><%= link_to(t("sidebar.search"), "#t") %></li>
+            <li><%= link_to(t("sidebar.archive.last_day"), "#") %></li>
+            <li><%= link_to(t("sidebar.archive.last_week"), "#") %></li>
+            <li><%= link_to(t("sidebar.archive.last_month"), "#") %></li>
+            <li><%= link_to(t("sidebar.archive.search"), "#t") %></li>
           </ul>
         </div>
       </div>
@@ -80,3 +75,4 @@
     </div>
   </body>
 </html>
+

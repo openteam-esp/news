@@ -25,7 +25,13 @@ class Entry < ActiveRecord::Base
 
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
 
-  scope :by_state, lambda { |state| where(:state => state) }
+  scope :by_state, lambda { |state|
+    if state.to_s == 'processing'
+      where(:state => processing_states)
+    else
+      where(:state => state)
+    end
+  }
 
   scope :state, lambda { |state|
     if User.current.roles.empty? || state.to_s == 'draft'
@@ -69,6 +75,10 @@ class Entry < ActiveRecord::Base
 
   def self.owned_states
     ['draft']
+  end
+
+  def self.processing_states
+    %w[correcting publishing]
   end
 
   delegate :publisher?, :corrector?, :to => :current_user, :prefix => true
@@ -159,3 +169,4 @@ end
 #  updated_at   :datetime
 #  legacy_id    :integer
 #
+

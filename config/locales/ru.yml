@@ -143,21 +143,24 @@ ru:
   sidebar:
     notifications: Уведомления
 
-    tasks: Задачи
-    fresh_tasks: Новые
-    my_tasks: Мои
-    other_tasks: Остальные
+    tasks:
+      title: Задачи
+      fresh: Новые
+      my: Мои
+      other: Остальные
 
-    entries: Новости
-    draft: Черновики
-    processing: В работе
-    trashed: Корзина
+    entries:
+      title: Новости
+      draft: Черновики
+      processing: В работе
+      trashed: Корзина
 
-    archive: Архив
-    day: За день
-    week: За неделю
-    month: За месяц
-    search: Поиск...
+    archive:
+      title: Архив
+      last_day: За день
+      last_week: За неделю
+      last_month: За месяц
+      search: Поиск...
 
   activerecord:
     errors:

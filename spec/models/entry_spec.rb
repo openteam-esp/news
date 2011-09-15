@@ -70,9 +70,7 @@ describe Entry do
     it "папки корректора и публикатора для новостей в процесса" do
       [corrector, publisher].each do |user|
         set_current_user(user)
-        Entry.shared_states.each do |state|
-          Entry.state(state).where_values_hash.should == {:state => state}
-        end
+        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states}
       end
     end
 
