@@ -4,10 +4,10 @@
       <%= javascript_include_tag "jquery.ui.min" %>
       <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
     <% end %>
-    <%= semantic_search_form_for :entry, :url => entries_path do | form | %>
+    <%= semantic_search_form_for :entry, :url => scoped_entries_path('published') do | form | %>
       <%= form.inputs do %>
         <%= form.input :keywords %>
-        <%= form.input :channel_ids, :as => :select, :collection => Channel.all, :include_blank => false %>
+        <%= form.input :channel_ids, :as => :check_boxes, :collection => Channel.all %>
         <%= form.input :order_by, :required => false, :include_blank => false %>
       <% end %>
       <%= form.inputs :since_details, :class => "inputs bordered" do %>
@@ -20,7 +20,7 @@
       <% end %>
       <%= form.buttons do %>
         <%= form.commit_button :button_html => { :class => "button" } %>
-        <li><%= link_to t("back"), :back %></li>
+        <li><%= link_to t("back"), root_path %></li>
       <% end %>
     <% end %>
   </div>
