@@ -17,87 +17,21 @@
 <% end %>
 
 <% if collection.any? %>
-  <div class="last_entry_list">
-    <ul>
-      <li>
+  <div class="list">
+    <% collection.each do | entry |%>
+      <div class="entry">
         <a class="more" href="#">Подробнее</a>
         <div class="title">
-          В Томской области проверено более 13 тысяч объектов пребывания, проживания и трудовой деятельности иностранных граждан &ndash;
-          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
+          <%= link_to entry.composed_title.gilensize, entry_path(entry) %>
           <a class="view" href="#">подробнее...</a>
         </div>
         <div class="details">
-          <div class="entry_state draft">Черновик</div>
-          <div class="author">Иванов И. И.</div>
-          <div class="time_ago">3 часа назад</div>
+          <div class="entry_state <%= entry.state %>"><%= entry.human_state %></div>
+          <div class="author"><%= entry.initiator %></div>
+          <div class="time_ago"><%= time_ago_in_words(entry.updated_at) %> назад</div>
         </div>
-      </li>
-      <li class="selected">
-        <a class="more" href="#">Подробнее</a>
-        <div class="title">
-          В «Губернской аптеке» работает консультативный центр &ndash;
-          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-          <a class="view" href="#">подробнее...</a>
-        </div>
-        <div class="details">
-          <div class="entry_state correcting">Корректура</div>
-          <div class="author">Петров П. П.</div>
-          <div class="time_ago">18 минут назад</div>
-        </div>
-      </li>
-      <li>
-        <a class="more" href="#">Подробнее</a>
-        <div class="title">
-          Открытое первенство работников лесного хозяйства пройдет в Томской области &ndash;
-          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-          <a class="view" href="#">подробнее...</a>
-        </div>
-        <div class="details">
-          <div class="entry_state publishing">Публикация</div>
-          <div class="author">Сидоров С. С.</div>
-          <div class="time_ago">40 минут назад</div>
-        </div>
-      </li>
-      <li>
-        <a class="more" href="#">Подробнее</a>
-        <div class="title">
-          13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
-          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-          <a class="view" href="#">подробнее...</a>
-        </div>
-        <div class="details">
-          <div class="entry_state published">Опубликован</div>
-          <div class="author">Михайлов М. М.</div>
-          <div class="time_ago">10 минут назад</div>
-        </div>
-      </li>
-      <li>
-        <a class="more" href="#">Подробнее</a>
-        <div class="title">
-          13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
-          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-          <a class="view" href="#">подробнее...</a>
-        </div>
-        <div class="details">
-          <div class="entry_state published">Опубликован</div>
-          <div class="author">Михайлов М. М.</div>
-          <div class="time_ago">10 минут назад</div>
-        </div>
-      </li>
-      <li>
-        <a class="more" href="#">Подробнее</a>
-        <div class="title">
-          13 сентября Томскую область посетит глава Росатома Сергей Кириенко &ndash;
-          <span class="annotate">Вопросы противодействия незаконной миграции обсудили&hellip;</span>
-          <a class="view" href="#">подробнее...</a>
-        </div>
-        <div class="details">
-          <div class="entry_state published">Опубликован</div>
-          <div class="author">Михайлов М. М.</div>
-          <div class="time_ago">10 минут назад</div>
-        </div>
-      </li>
-    </ul>
+      </div>
+    <% end %>
   </div>
 <% else %>
   <h1><%= t('no_any_entries') %></h1>
