@@ -28,6 +28,7 @@ end
 group :development, :test do
   gem 'rdiscount'
   gem 'paperclip'
+  gem 'sunspot_solr',             '~> 1.3.0.rc4'
 end
 
 gem 'cancan'
@@ -58,4 +59,4 @@ gem 'russian',                                                              :git
 gem 'sanitize'
 gem 'simple-navigation'
 gem 'state_machine'
-gem 'sunspot_rails'
+gem 'sunspot_rails',            '~> 1.3.0.rc4'

@@ -3,9 +3,11 @@ bin/*
 db/*.sqlite3
 db/*.sqlite3-journal
 log/*.log
+log/*.log.*
 tmp/
 config/database.yml
 config/settings.yml
+config/sunspot.yml
 *.swp
 *.swo
 public/stylesheets/*.css
@@ -15,3 +17,4 @@ assets/*
 coverage/index.html
 coverage/resultset.yml
 solr/data
+solr/pids

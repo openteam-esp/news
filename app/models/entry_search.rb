@@ -10,6 +10,10 @@ class EntrySearch < Search
   default_value_for :order_by, 'since desc'
 
   has_enum :order_by, ['since asc', 'since desc']
+
+  def state
+    'published'
+  end
 end
 
 

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 News::Application.routes.draw do
 
   devise_for :users
@@ -23,11 +25,35 @@ News::Application.routes.draw do
   match '/subscribe/:entry_id' => 'subscribes#create', :as => :subscribe
   match '/subscribe/:entry_id/delete' => 'subscribes#destroy', :as => :delete_subscribe
 
-  resources :entries, :only => [:show, :create, :edit] do
+  resources :entries, :only => [:show, :create, :edit, :index] do
     resources :assets, :only => [:create, :destroy]
   end
 
   get '/:state/entries' => 'entries#index', :as => :scoped_entries, :constraints => {:state => /(draft|processing|trashed)/}
+
+  get '/last_day/entries' => 'entries#index',
+      :as => :last_day_entries,
+      :defaults => {
+                     'utf8' => '✓',
+                     'entry_search[since_lt]' => I18n.l(Date.today),
+                     'entry_search[since_gt]' => I18n.l(Date.today - 1)
+                   }
+
+  get '/last_week/entries' => 'entries#index',
+      :as => :last_week_entries,
+      :defaults => {
+                     'utf8' => '✓',
+                     'entry_search[since_lt]' => I18n.l(Date.today),
+                     'entry_search[since_gt]' => I18n.l(Date.today - 1.week)
+                   }
+
+  get '/last_month/entries' => 'entries#index',
+      :as => :last_month_entries,
+      :defaults => {
+                     'utf8' => '✓',
+                     'entry_search[since_lt]' => I18n.l(Date.today),
+                     'entry_search[since_gt]' => I18n.l(Date.today - 1.month)
+                   }
 
   get '/assets/:id/:width-:height/:filename' => Dragonfly[:images].endpoint { |params, app|
     image = Image.find(params[:id])

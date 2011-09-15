@@ -49,12 +49,7 @@
         </div>
         <div class="archive">
           <h1><%= t("sidebar.archive.title") %></h1>
-          <ul>
-            <li><%= link_to(t("sidebar.archive.last_day"), "#") %></li>
-            <li><%= link_to(t("sidebar.archive.last_week"), "#") %></li>
-            <li><%= link_to(t("sidebar.archive.last_month"), "#") %></li>
-            <li><%= link_to(t("sidebar.archive.search"), "#t") %></li>
-          </ul>
+          <%= render_navigation :context => :archive %>
         </div>
       </div>
       <div class='content'>
