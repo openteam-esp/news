@@ -4,7 +4,7 @@ class EntrySearch < Search
   column :since_gt,        :date
   column :until_lt,        :date
   column :until_gt,        :date
-  column :channel_ids,     :integer
+  column :channel_ids,     :string
   column :order_by,        :string
 
   default_value_for :order_by, 'since desc'

@@ -55,6 +55,13 @@ News::Application.routes.draw do
                      'entry_search[since_gt]' => I18n.l(Date.today - 1.month)
                    }
 
+  namespace :public do
+    resources :entries, :only => [:index, :show]
+
+    match 'channels/:channel_id/entries' => 'entries#index'
+    match 'channels/:channel_id/entries/:id' => 'entries#show'
+  end
+
   get '/assets/:id/:width-:height/:filename' => Dragonfly[:images].endpoint { |params, app|
     image = Image.find(params[:id])
     width = [params[:width].to_i, image.file_width].min

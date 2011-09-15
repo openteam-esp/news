@@ -1,0 +1,35 @@
+<% content_for :extend_javascript do %>
+  <%= javascript_include_tag "jquery.ui.min" %>
+  <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
+<% end %>
+
+<%= semantic_search_form_for :entry, :url => public_entries_path do | form | %>
+  <%= form.inputs do %>
+    <%= form.input :keywords %>
+    <%= form.input :channel_ids, :as => :select, :collection => Channel.all %>
+    <%= form.input :order_by %>
+    <%= form.input :since_lt, :as => :date %>
+    <%= form.input :since_gt, :as => :date %>
+    <%= form.input :until_lt, :as => :date %>
+    <%= form.input :until_gt, :as => :date %>
+  <% end %>
+  <%= form.buttons %>
+<% end %>
+
+<% if collection.any? %>
+  <h1><%= t('list_of_entries') %></h1>
+  <ul class='entries'>
+    <% collection.each do |entry|%>
+      <li>
+        <p class="title"><%= link_to entry.composed_title.gilensize, public_entry_path(entry) %></p>
+        <% last_event = entry.events.first %>
+        <p><%= content_tag :span, last_event.text.truncate(150), :class => 'text' if last_event && last_event.text.present? %></p>
+        <p><%= render_statistic(entry) %></p>
+      </li>
+    <% end %>
+  </ul>
+  <%= paginate collection %>
+<% else %>
+  <h1><%= t('no_any_entries') %></h1>
+<% end %>
+
