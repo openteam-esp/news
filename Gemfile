@@ -26,7 +26,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'paperclip'
   gem 'rdiscount'
   gem 'sunspot_solr',           '~> 1.3.0.rc4'
   gem 'ya2yaml'

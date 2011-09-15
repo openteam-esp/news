@@ -9,7 +9,8 @@ describe Migrator::Entry do
                   asset = options.delete(:asset)
                   entry = Fabricate('legacy/entry', options)
                   if asset
-                    entry.assets.create! :file => File.open(Rails.root.join "spec", "fixtures", asset.to_s),
+                    file = File.open(Rails.root.join "spec", "fixtures", asset.to_s)
+                    entry.assets.create! :file_file_name => asset.to_s,
                                          :description => "Файл #{asset}",
                                          :type => 'AttachmentFile'
                   end
