@@ -1,6 +1,8 @@
 class EntriesController < AuthorizedApplicationController
   actions :index, :show, :create, :edit
 
+  layout :sidebar_or_archive_layout
+
   has_scope :state
   has_scope :page, :default => 1
 
@@ -44,6 +46,11 @@ class EntriesController < AuthorizedApplicationController
         :page       => params[:page],
         :per_page   => 10
       }.merge(options)
+    end
+
+    def sidebar_or_archive_layout
+      return 'archive' if current_scopes[:state] == 'published'
+      'list'
     end
 end
 

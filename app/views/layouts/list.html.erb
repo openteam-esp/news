@@ -1,0 +1,26 @@
+<% content_for :sidebar do %>
+  <div class="sidebar">
+    <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
+    <div class="tasks">
+      <h1><%= t("sidebar.tasks.title") %></h1>
+      <%= render_navigation :context => :tasks, :renderer => :list_with_counters %>
+    </div>
+    <div class="enties">
+      <h1><%= t("sidebar.entries.title") %></h1>
+      <%= render_navigation :context => :entries, :renderer => :list_with_counters %>
+    </div>
+    <div class="archive">
+      <h1><%= t("sidebar.archive.title") %></h1>
+      <%= render_navigation :context => :archive %>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :content do %>
+  <div class='content'>
+    <%= yield %>
+  </div>
+<% end %>
+
+<%= render :template => 'layouts/application' %>
+

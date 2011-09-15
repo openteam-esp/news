@@ -29,7 +29,7 @@ News::Application.routes.draw do
     resources :assets, :only => [:create, :destroy]
   end
 
-  get '/:state/entries' => 'entries#index', :as => :scoped_entries, :constraints => {:state => /(draft|processing|trashed)/}
+  get '/:state/entries' => 'entries#index', :as => :scoped_entries, :constraints => {:state => /(draft|processing|trashed|published)/}
 
   get '/last_day/entries' => 'entries#index',
       :as => :last_day_entries,

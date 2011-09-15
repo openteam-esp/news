@@ -37,29 +37,8 @@
       <% end %>
     </div>
     <div class="container">
-      <div class="sidebar">
-        <div class="notifications"><%= link_to(t("sidebar.notifications"), "#") %></a></div>
-        <div class="tasks">
-          <h1><%= t("sidebar.tasks.title") %></h1>
-          <%= render_navigation :context => :tasks, :renderer => :list_with_counters %>
-        </div>
-        <div class="enties">
-          <h1><%= t("sidebar.entries.title") %></h1>
-          <%= render_navigation :context => :entries, :renderer => :list_with_counters %>
-        </div>
-        <div class="archive">
-          <h1><%= t("sidebar.archive.title") %></h1>
-          <%= render_navigation :context => :archive %>
-        </div>
-      </div>
-      <div class='content'>
-        <ul class="entry_filter">
-          <li class="selected"><a href="#">Все</a></li>
-          <li><a href="#">Корректура</a></li>
-          <li><a href="#">Публикация</a></li>
-        </ul>
-        <%= yield %>
-      </div>
+      <%= yield :sidebar %>
+      <%= content_for?(:content) ? yield(:content) : yield %>
     </div>
     <div class="footer">
       <p class="float_right">
