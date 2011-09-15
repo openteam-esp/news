@@ -1,7 +1,7 @@
 class Legacy::Asset < ActiveRecord::Base
   set_inheritance_column :_type
 
-  establish_connection "legacy_#{Rails.env}"
+  establish_connection "legacy_#{Rails.env}" unless Rails.env.production?
   set_table_name "attachments"
 
   default_scope order(:id)

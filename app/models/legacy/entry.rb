@@ -3,7 +3,7 @@ class Legacy::Entry < ActiveRecord::Base
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper
 
-  establish_connection "legacy_#{Rails.env}"
+  establish_connection "legacy_#{Rails.env}" unless Rails.env.production?
   set_table_name "events"
 
   has_many :assets, :foreign_key => 'event_id'
