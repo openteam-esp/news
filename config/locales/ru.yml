@@ -46,6 +46,7 @@ ru:
           notice: "Администратор, Вы создали новый адрес близкий к <b>{{reference}}</b>."
 
   formtastic:
+    search: поиск
     required: "обязательное поле"
     actions:
       create: "Создать %{model}"
@@ -217,6 +218,19 @@ ru:
         title: "Заголовок"
         until: "Публиковать до"
         videos: "Видеофайлы"
+
+      entry_search:
+        keywords: Ключевые слова
+        channel_ids: Каналы
+        order_by: Сортировка
+        since_lt: Дата публикации до
+        since_gt: Дата публикации с
+        until_lt: Актуально до
+        until_gt: Актуально с
+
+        order_by_enum:
+          "since desc": дате публикации
+          "until asc": дате актуальности
 
       asset:
         file: "Файл"

@@ -7,12 +7,17 @@ class EntrySearch < Search
   column :channel_ids,     :string
   column :order_by,        :string
 
-  default_value_for :order_by, 'since desc'
+  has_enum :order_by
 
-  has_enum :order_by, ['since asc', 'since desc']
+  default_value_for :order_by, 'since desc'
+  default_value_for :channel_ids, do Channel.all.map(&:id) end
 
   def state
     'published'
+  end
+
+  def channel_ids
+    self[:channel_ids].map(&:to_i) if self[:channel_ids]
   end
 end
 
