@@ -29,7 +29,9 @@ News::Application.routes.draw do
     resources :assets, :only => [:create, :destroy]
   end
 
-  get '/:state/entries' => 'entries#index', :as => :scoped_entries, :constraints => {:state => /(draft|processing|trashed|published)/}
+  get '/:state/entries' => 'entries#index',
+      :as => :scoped_entries,
+      :constraints => { :state => /(draft|processing|trashed|published)/ }
 
   get '/last_day/entries' => 'entries#index',
       :as => :last_day_entries,
@@ -74,7 +76,9 @@ News::Application.routes.draw do
   }, :as => :asset, :constraints => { :filename => /.+?/ }
 
 
-  get '/:kind/tasks' => 'tasks#index', :as => :tasks, :constraints => { :kind => /(fresh|processed_by_me|initiated_by_me)/ }
+  get '/:kind/tasks' => 'tasks#index',
+      :as => :tasks,
+      :constraints => { :kind => /(fresh|processed_by_me|initiated_by_me)/ }
 
   root :to => 'roots#index'
 end
