@@ -46,11 +46,12 @@ ru:
           notice: "Администратор, Вы создали новый адрес близкий к <b>{{reference}}</b>."
 
   formtastic:
-    search: поиск
     required: "обязательное поле"
     actions:
       create: "Создать %{model}"
       update: "Сохранить"
+      entry_search:
+        create: Поиск
     labels:
       event:
         text: "Комментарий"
@@ -223,10 +224,10 @@ ru:
         keywords: Ключевые слова
         channel_ids: Каналы
         order_by: Сортировка
-        since_lt: Дата публикации до
-        since_gt: Дата публикации с
-        until_lt: Актуально до
-        until_gt: Актуально с
+        since_gt: с
+        since_lt: до
+        until_gt: с
+        until_lt: до
 
         order_by_enum:
           "since desc": дате публикации
