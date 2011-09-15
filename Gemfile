@@ -26,9 +26,12 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rdiscount'
+  gem 'forgery'
   gem 'paperclip'
-  gem 'sunspot_solr',             '~> 1.3.0.rc4'
+  gem 'rdiscount'
+  gem 'ryba'
+  gem 'sunspot_solr',           '~> 1.3.0.rc4'
+  gem 'ya2yaml'
 end
 
 gem 'cancan'

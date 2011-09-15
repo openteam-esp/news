@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user=nil)
-    user ||= User.current
+    user ||= (User.current || User.new)
 
     can :complete, Task do |task|
       task.executor == user

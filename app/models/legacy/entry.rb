@@ -1,5 +1,8 @@
 # encoding: utf-8
 class Legacy::Entry < ActiveRecord::Base
+  include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::TagHelper
+
   establish_connection "legacy_#{Rails.env}"
   set_table_name "events"
 
@@ -7,8 +10,12 @@ class Legacy::Entry < ActiveRecord::Base
 
   default_scope order('id desc')
 
-  def body_as_html
-    RDiscount.new(body.chomp).to_html
+  def body
+    RDiscount.new(self[:body].chomp).to_html
+  end
+
+  def annotation
+    simple_format self[:annotation]
   end
 
   def channel_ids
@@ -21,30 +28,31 @@ class Legacy::Entry < ActiveRecord::Base
 
   def migrate
     User.current = initiator
-    entry = ::Entry.find_or_initialize_by_legacy_id(id)
-    entry.title         = title.squish
-    entry.annotation    = annotation.squish
-    entry.body          = body_as_html
-    entry.since         = date_time
-    entry.until         = end_date_time
-    entry.created_at    = created_at
-    entry.save :validate => false
-    entry.channel_ids   = channel_ids
-    entry.prepare.complete!
-    if status != 'blank'
-      entry.review.reload.accept!
-      entry.review.reload.complete!
-    end
-    if status == 'publish'
-      entry.publish.reload.accept!
-      entry.publish.reload.complete!
-    end
-    entry.update_attribute :updated_at, updated_at
-    assets.each do | legacy_asset |
-      asset = entry.assets.find_or_initialize_by_legacy_id legacy_asset.id
-      asset.file = File.open(legacy_asset.file.path)
-      asset.description = legacy_asset.description
-      asset.save :validate => false
+    ::Entry.find_or_initialize_by_legacy_id(id).tap do |entry|
+      entry.title         = title
+      entry.annotation    = annotation
+      entry.body          = body
+      entry.created_at    = created_at
+      entry.since         = date_time
+      entry.until         = end_date_time
+      entry.save :validate => false
+      entry.channel_ids   = channel_ids
+      assets.each do | legacy_asset |
+        asset = entry.assets.find_or_initialize_by_legacy_id legacy_asset.id
+        asset.file = File.open(legacy_asset.file.path)
+        asset.description = legacy_asset.description
+        asset.save :validate => false
+      end
+      entry.prepare.complete!
+      if status != 'blank'
+        entry.review.reload.accept!
+        entry.review.reload.complete!
+      end
+      if status == 'publish'
+        entry.publish.reload.accept!
+        entry.publish.reload.complete!
+      end
+      entry.update_attribute :updated_at, updated_at
     end
   end
 

@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   end
 
   def other_tasks
-    Task.where(:state => :processing).where(["initiator_id <> ?", self]).where(["executor_id <> ?", self])
+    Task.where(:state => :processing).where(["initiator_id <> ?", self]).where(["executor_id <> ?", self]).where(:type => ['Review', 'Publish'])
   end
 
 end

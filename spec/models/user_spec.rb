@@ -35,7 +35,7 @@ describe User do
     it "остальных задач" do
       initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
       initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
-      initiator.other_tasks.where_values_hash.should == { :state => :processing }
+      initiator.other_tasks.where_values_hash.should == { :state => :processing, :type => ['Review', 'Publish'] }
     end
   end
 
@@ -54,7 +54,7 @@ describe User do
     it "остальных задач" do
       initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
       initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
-      initiator.other_tasks.where_values_hash.should == { :state => :processing }
+      initiator.other_tasks.where_values_hash.should == { :state => :processing, :type => ['Review', 'Publish'] }
     end
   end
 
@@ -73,7 +73,7 @@ describe User do
     it "остальных задач" do
       initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
       initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
-      initiator.other_tasks.where_values_hash.should == { :state => :processing }
+      initiator.other_tasks.where_values_hash.should == { :state => :processing, :type => ['Review', 'Publish'] }
     end
   end
 
