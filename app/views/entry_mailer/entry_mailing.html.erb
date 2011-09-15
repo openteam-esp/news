@@ -1,9 +1,0 @@
-<p>
-  <b>Пресс-служба администрации Томской области</b>
-</p>
-
-<p>
-  <b>Пресс-релиз <%= l Date.today, :format => :long %></b>
-</p>
-
-<%= render(:partial => "published_entries/entry.html.erb", :locals => {:entry => @published_entry}) %>
