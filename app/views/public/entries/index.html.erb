@@ -1,21 +1,3 @@
-<% content_for :extend_javascript do %>
-  <%= javascript_include_tag "jquery.ui.min" %>
-  <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
-<% end %>
-
-<%= semantic_search_form_for :entry, :url => public_entries_path do | form | %>
-  <%= form.inputs do %>
-    <%= form.input :keywords %>
-    <%= form.input :channel_ids, :as => :check_boxes, :collection => Channel.all %>
-    <%= form.input :order_by, :required => false %>
-    <%= form.input :since_gt, :as => :date %>
-    <%= form.input :since_lt, :as => :date %>
-    <%= form.input :until_gt, :as => :date %>
-    <%= form.input :until_lt, :as => :date %>
-  <% end %>
-  <%= form.buttons %>
-<% end %>
-
 <% if collection.any? %>
   <h1><%= t('list_of_entries') %></h1>
   <ul class='entries'>

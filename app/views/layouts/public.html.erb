@@ -1,3 +1,29 @@
+<% content_for :sidebar do %>
+  <div class="sidebar">
+    <% content_for :extend_javascript do %>
+      <%= javascript_include_tag "jquery.ui.min" %>
+      <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
+    <% end %>
+    <%= semantic_search_form_for :entry, :url => public_entries_path do | form | %>
+      <%= form.inputs do %>
+        <%= form.input :keywords %>
+        <%= form.input :channel_ids, :as => :check_boxes, :collection => Channel.all %>
+        <%= form.input :order_by, :required => false, :include_blank => false %>
+      <% end %>
+      <%= form.inputs :since_details, :class => "inputs bordered" do %>
+        <%= form.input :since_gt, :as => :date %>
+        <%= form.input :since_lt, :as => :date %>
+      <% end %>
+      <%= form.inputs :until_details, :class => "inputs bordered" do %>
+        <%= form.input :until_gt, :as => :date %>
+        <%= form.input :until_lt, :as => :date %>
+      <% end %>
+      <%= form.buttons do %>
+        <%= form.commit_button :button_html => { :class => "button" } %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
 
 <% content_for :content do %>
   <div class='content'>

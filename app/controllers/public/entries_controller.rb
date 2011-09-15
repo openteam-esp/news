@@ -3,8 +3,6 @@ class Public::EntriesController < ApplicationController
 
   actions :index, :show
 
-  has_searcher
-
   protected
     def collection
       get_collection_ivar || set_collection_ivar(search_and_paginate_collection)
