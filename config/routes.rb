@@ -74,7 +74,7 @@ News::Application.routes.draw do
   }, :as => :asset, :constraints => { :filename => /.+?/ }
 
 
-  get '/:kind/tasks' => 'tasks#index', :as => :tasks, :constraints => { :kind => /(fresh|my|other)/ }
+  get '/:kind/tasks' => 'tasks#index', :as => :tasks, :constraints => { :kind => /(fresh|processed_by_me|initiated_by_me)/ }
 
   root :to => 'roots#index'
 end

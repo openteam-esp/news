@@ -147,8 +147,8 @@ ru:
     tasks:
       title: Задачи
       fresh: Новые
-      my: Мои
-      other: Остальные
+      processed_by_me: Я выполняю
+      initiated_by_me: Я создал
 
     entries:
       title: Новости

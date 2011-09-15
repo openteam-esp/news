@@ -41,12 +41,12 @@ class User < ActiveRecord::Base
     Task.where(:type => types).where(:state => :fresh)
   end
 
-  def my_tasks
-    Task.where(:state => :processing).where(["initiator_id = ? OR executor_id = ?", self, self])
+  def processed_by_me_tasks
+    Task.where(:state => :processing).where(:executor_id => self)
   end
 
-  def other_tasks
-    Task.where(:state => :processing).where(["initiator_id <> ?", self]).where(["executor_id <> ?", self]).where(:type => ['Review', 'Publish'])
+  def initiated_by_me_tasks
+    Task.where(:initiator_id => self).where("state <> 'pending'")
   end
 
 end

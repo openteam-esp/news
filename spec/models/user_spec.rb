@@ -7,16 +7,16 @@ describe User do
     before { set_current_user initiator }
 
     it "новых задач" do
-      initiator.fresh_tasks.should be_empty
+      initiator.fresh_tasks.where_values_hash.should == { :state => :fresh, :type => []}
     end
 
-    it "моих задач" do
-      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
-      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    it "выполняемых мною задач" do
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
     end
 
-    it "остальных задач" do
-      initiator.other_tasks.should be_empty
+    it "созданных мною задач" do
+      initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
     end
   end
 
@@ -27,15 +27,13 @@ describe User do
       initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Review']}
     end
 
-    it "моих задач" do
-      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
-      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    it "выполняемых мною задач" do
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
     end
 
-    it "остальных задач" do
-      initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
-      initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
-      initiator.other_tasks.where_values_hash.should == { :state => :processing, :type => ['Review', 'Publish'] }
+    it "созданных мною задач" do
+      initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
     end
   end
 
@@ -46,15 +44,13 @@ describe User do
       initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Publish']}
     end
 
-    it "моих задач" do
-      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
-      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    it "выполняемых мною задач" do
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
     end
 
-    it "остальных задач" do
-      initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
-      initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
-      initiator.other_tasks.where_values_hash.should == { :state => :processing, :type => ['Review', 'Publish'] }
+    it "созданных мною задач" do
+      initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
     end
   end
 
@@ -65,15 +61,13 @@ describe User do
       initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Review', 'Publish']}
     end
 
-    it "моих задач" do
-      initiator.my_tasks.to_sql.should =~ /\(initiator_id = #{initiator.id} OR executor_id = #{initiator.id}\)/
-      initiator.my_tasks.where_values_hash.should == {:state => :processing}
+    it "выполняемых мною задач" do
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
     end
 
-    it "остальных задач" do
-      initiator.other_tasks.to_sql.should =~ /initiator_id <> #{initiator.id}/
-      initiator.other_tasks.to_sql.should =~ /executor_id <> #{initiator.id}/
-      initiator.other_tasks.where_values_hash.should == { :state => :processing, :type => ['Review', 'Publish'] }
+    it "созданных мною задач" do
+      initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
     end
   end
 
