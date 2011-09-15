@@ -10,8 +10,8 @@ namespace :legacy do
         file << Legacy::Entry.unscoped.order("id desc").limit(100).all.inject({}) { | hash, legacy_entry |
           hash[legacy_entry.id] = {
               'title' => legacy_entry.title,
-              'annotation' => legacy_entry.annotation,
-              'body' => legacy_entry.body,
+              'annotation' => legacy_entry.migrated_annotation,
+              'body' => legacy_entry.migrated_body,
               'created_at' => legacy_entry.created_at
           }
           hash

@@ -29,11 +29,11 @@ describe Migrator::Entry do
     it "должен установить инициатора" do
       @entry.initiator.name.should == "Мигратор"
     end
-    it "должен упрощать title" do
-      @entry.title.should == legacy.title.squish
+    it "должен установить title" do
+      @entry.title.should == legacy.title
     end
     it "должен упрощать annotation" do
-      @entry.annotation.should == legacy.annotation.squish
+      @entry.annotation.should =~ /^<p>В конце минувшей/
     end
     it "должен форматировать body" do
       @entry.body.should == RDiscount.new(legacy.body).to_html

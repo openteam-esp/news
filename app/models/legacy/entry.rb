@@ -10,12 +10,12 @@ class Legacy::Entry < ActiveRecord::Base
 
   default_scope order('id desc')
 
-  def body
-    RDiscount.new(self[:body].chomp).to_html
+  def migrated_body
+    RDiscount.new(body.chomp).to_html
   end
 
-  def annotation
-    simple_format self[:annotation]
+  def migrated_annotation
+    simple_format annotation
   end
 
   def channel_ids
@@ -30,8 +30,8 @@ class Legacy::Entry < ActiveRecord::Base
     User.current = initiator
     ::Entry.find_or_initialize_by_legacy_id(id).tap do |entry|
       entry.title         = title
-      entry.annotation    = annotation
-      entry.body          = body
+      entry.annotation    = migrated_annotation
+      entry.body          = migrated_body
       entry.created_at    = created_at
       entry.since         = date_time
       entry.until         = end_date_time
