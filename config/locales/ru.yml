@@ -47,6 +47,9 @@ ru:
 
   formtastic:
     required: "обязательное поле"
+    titles:
+      since_details: "Дата публикации"
+      until_details: "Актуально"
     actions:
       create: "Создать %{model}"
       update: "Сохранить"
@@ -230,8 +233,8 @@ ru:
         until_lt: до
 
         order_by_enum:
-          "since desc": дате публикации
-          "until asc": дате актуальности
+          "since desc": по дате публикации
+          "until asc": по дате актуальности
 
       asset:
         file: "Файл"

@@ -8,7 +8,7 @@ group :development do
   gem 'rb-inotify'
   gem 'ruby-graphviz',                           :require => false
   gem 'simplecov'
-  gem 'spork',                    '>= 0.9.0.rc9'
+  gem 'spork',                  '>= 0.9.0.rc9'
   gem 'unicorn',                                 :require => false
 end
 
