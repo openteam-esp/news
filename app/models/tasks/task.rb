@@ -7,7 +7,7 @@ class Task < ActiveRecord::Base
 
   default_value_for :initiator do User.current end
 
-  scope :kind, lambda {|kind| User.current.send("#{kind}_tasks")}
+  scope :kind, lambda {|kind| User.current.try "#{kind}_tasks" }
 
   state_machine :initial => :pending do
     state :pending

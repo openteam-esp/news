@@ -1,7 +1,7 @@
 class RootsController < ApplicationController
   def index
-    redirect_to messages_path and return if current_user
-    redirect_to channel_published_entries_path(Channel.first) and return
+    redirect_to tasks_path(:fresh) and return if current_user
+    redirect_to public_entries_path
   end
 end
 
