@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'ryba'
+require 'forgery'
+
 class ActiveRecord::Relation
   def sample
     first(:offset => rand(count))

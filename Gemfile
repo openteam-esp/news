@@ -1,35 +1,33 @@
 source :rubygems
 
 group :development do
-  gem 'guard-rspec',                              :require => false
-  gem 'guard-spork',                              :require => false
-  gem 'hirb',                                     :require => false
-  gem 'libnotify',                                :require => false
+  gem 'guard-rspec',                             :require => false
+  gem 'guard-spork',                             :require => false
+  gem 'hirb',                                    :require => false
+  gem 'libnotify',                               :require => false
   gem 'rb-inotify'
-  gem 'ruby-graphviz',                            :require => false
+  gem 'ruby-graphviz',                           :require => false
   gem 'simplecov'
   gem 'spork',                    '>= 0.9.0.rc9'
-  gem 'unicorn',                                  :require => false
+  gem 'unicorn',                                 :require => false
 end
 
 group :production do
-  gem 'hassle',                                                             :git => 'git://github.com/koppen/hassle'
+  gem 'hassle',                                                               :git => 'git://github.com/koppen/hassle'
   gem 'hoptoad_notifier'
-  gem 'pg',                                        :require => false
+  gem 'pg',                                       :require => false
 end
 
 group :test do
-  gem 'fabrication',                               :require => false
-  gem 'rspec-rails',                               :require => false
-  gem 'shoulda-matchers',                          :require => false
-  gem 'sqlite3',                                   :require => false
+  gem 'fabrication',                              :require => false
+  gem 'rspec-rails',                              :require => false
+  gem 'shoulda-matchers',                         :require => false
+  gem 'sqlite3',                                  :require => false
 end
 
 group :development, :test do
-  gem 'forgery'
   gem 'paperclip'
   gem 'rdiscount'
-  gem 'ryba'
   gem 'sunspot_solr',           '~> 1.3.0.rc4'
   gem 'ya2yaml'
 end
@@ -44,21 +42,23 @@ gem 'devise'
 gem 'dragonfly'
 gem 'dynamic_form'
 gem 'fancy-buttons'
+gem 'forgery',                                    :require => false
 gem 'formtastic'
 gem 'formtastic_date_as_string'
 gem 'gilenson'
 gem 'has_enum'
 gem 'has_scope'
 gem 'has_searcher'
-gem 'inherited_resources',                                                  :git => 'git://github.com/openteam/inherited_resources'
-gem 'jquery-rails',                              :require => false
+gem 'inherited_resources',                                                    :git => 'git://github.com/openteam/inherited_resources'
+gem 'jquery-rails',                               :require => false
 gem 'kaminari'
 gem 'omniauth'
 gem 'permanent_records'
-gem 'rack-cache',                                :require => 'rack/cache'
-gem 'rails',                    '3.0.9',         :require => false
-gem 'rake',                     '0.8.7',         :require => false
-gem 'russian',                                                              :git => 'git://github.com/tacid/russian'
+gem 'rack-cache',                                 :require => 'rack/cache'
+gem 'rails',                    '3.0.9',          :require => false
+gem 'rake',                     '0.8.7',          :require => false
+gem 'russian',                                                                :git => 'git://github.com/tacid/russian'
+gem 'ryba',                                       :require => false
 gem 'sanitize'
 gem 'simple-navigation'
 gem 'state_machine'
