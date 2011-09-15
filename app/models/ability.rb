@@ -8,14 +8,19 @@ class Ability
       task.executor == user
     end
 
-    can :restore, Task do |task|
-      task.executor == user && (task.entry.next_task(task).nil? || task.entry.next_task(task).fresh?)
+    can [:clear, :cancel, :suspend], Task do | task |
+      task.initiator == user
     end
+
+    can :restore, Task do |task|
+      task.executor == user && (task.next_task.nil? || task.next_task.fresh?)
+    end
+
 
     if user && user.corrector?
       can :accept, Review
       can :restore, Review do |task|
-        task.entry.next_task(task).nil? || task.entry.next_task(task).fresh?
+        task.next_task.nil? || task.next_task.fresh?
       end
 
     end
@@ -23,7 +28,7 @@ class Ability
     if user && user.publisher?
       can :accept, Publish
       can :restore, Publish do |task|
-        task.entry.next_task(task).nil? || task.entry.next_task(task).fresh?
+        task.next_task.nil? || task.next_task.fresh?
       end
     end
 

@@ -1,4 +1,7 @@
 class Review < Task
+  def next_task
+    entry.publish
+  end
 end
 
 

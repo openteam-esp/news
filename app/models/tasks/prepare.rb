@@ -11,6 +11,10 @@ class Prepare < Task
       transition :completed => :processing
     end
   end
+
+  def next_task
+    entry.review
+  end
 end
 
 # == Schema Information

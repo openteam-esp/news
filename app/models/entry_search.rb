@@ -22,12 +22,17 @@ class EntrySearch < Search
 end
 
 
+
 # == Schema Information
 #
 # Table name: searches
 #
-#  content :text
-#  since   :date
-#  until   :date
+#  keywords    :text
+#  since_lt    :date
+#  since_gt    :date
+#  until_lt    :date
+#  until_gt    :date
+#  channel_ids :string
+#  order_by    :string
 #
 

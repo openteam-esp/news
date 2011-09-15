@@ -103,10 +103,6 @@ class Entry < ActiveRecord::Base
     result += " назад)"
   end
 
-  def next_task(task)
-    tasks[tasks.index(task) + 1]
-  end
-
   def restore(*args)
     super
     self.assets.destroy_all
@@ -118,12 +114,12 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  def send_by_email
-    mailing_channels = []
-    self.channels.each do |channel|
-      mailing_channels << channel if channel.recipients.any?
-    end
-    EntryMailer.delay.entry_mailing(self, mailing_channels) if mailing_channels.any?
+  def switch_to_next_state
+    update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(state) + 1]
+  end
+
+  def switch_to_previous_state
+    update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(state) - 1]
   end
 
   def presented?(attribute, options={})
