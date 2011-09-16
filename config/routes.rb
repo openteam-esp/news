@@ -43,8 +43,7 @@ News::Application.routes.draw do
   namespace :public do
     resources :entries, :only => [:index, :show]
 
-    match 'channels/:channel_id/entries' => 'entries#index'
-    match 'channels/:channel_id/entries/:id' => 'entries#show'
+    get '/channels/:channel_id/entries/:id' => "entries#show"
   end
 
   get '/assets/:id/:width-:height/:filename' => Dragonfly[:images].endpoint { |params, app|
