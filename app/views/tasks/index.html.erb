@@ -1,11 +1,12 @@
+
 <% if collection.any? %>
 <div class="list">
   <% collection.each do | task | %>
     <div class="task">
       <div class="line">
-        <div class="time_ago"><%= distance_of_time_in_words_to_now(task.created_at) %> назад</div>
+        <div class="time_ago"><%= time_ago_in_words(task.created_at) %> назад</div>
         <div class="title">
-          <%= link_to task.class.model_name.human, entry_path(task.entry), :class => "entry_state  #{task.entry.state}" %>
+          <%= link_to task.class.model_name.human, entry_path(task.entry), :class => "entry_state #{task.entry.state}" %>
           <span class="task_state <%= task.state %>"><%= I18n.t "state_machine.task.state.#{task.state}" %></span>
           <span class="initiator"><%= task.initiator %></span>
           <!-- TODO тут выводим исполнителея если есть или список потенциальных -->
@@ -13,6 +14,11 @@
           <span class="executor">Иванов И. И., Петров П.П. Сидоров С.С.</span>
           <!-- END TODO -->
         </div>
+        <!-- TODO заглушка для описания задачи -->
+        <div class="description">
+          Анатолий Васильевич, уточните контактную информацию для связи
+        </div>
+        <!-- END TODO -->
       </div>
       <div class="entry_title">
         <%= task.entry.composed_title %>
