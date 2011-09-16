@@ -8,14 +8,9 @@ class Ability
       task.executor == user
     end
 
-    can [:clear, :cancel, :suspend], Task do | task |
-      task.initiator == user
-    end
-
     can :restore, Task do |task|
       task.executor == user && (task.next_task.nil? || task.next_task.fresh?)
     end
-
 
     if user && user.corrector?
       can :accept, Review

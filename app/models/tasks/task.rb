@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
 
   state_machine :initial => :pending do
 
-    before_transition any => any do | task, transition |
+    before_transition :on => [:accept, :comlpete, :restore] do | task, transition |
       Ability.new.authorize!(transition.event, task)
     end
 

@@ -32,35 +32,40 @@ User.find_or_initialize_by_email('cp@demo.de').tap do | user |
   end
 end
 
-def complete_prepare(entry)
+def login_as_random_user
   User.current = User.sample
+  User.current.roles = [:corrector, :publisher]
+end
+
+def complete_prepare(entry)
+  login_as_random_user
   entry.prepare.complete!
 end
 
 def accept_review(entry)
-  User.current = User.sample
+  login_as_random_user
   entry.review.reload.accept!
 end
 
 def complete_review(entry)
-  User.current = User.sample
+  login_as_random_user
   entry.review.complete!
 end
 
 def accept_publish(entry)
-  User.current = User.sample
+  login_as_random_user
   entry.publish.reload.accept!
 end
 
 def complete_publish(entry)
-  User.current = User.sample
+  login_as_random_user
   entry.publish.complete!
 end
 
 Entry.destroy_all
 
 YAML.load_file('db/entries.yml').each do | legacy_id, hash |
-  User.current = User.sample
+  login_as_random_user
   Entry.find_or_create_by_legacy_id(legacy_id).tap do | entry |
     entry.update_attributes hash.merge :author => Ryba::Name.full_name
     random = rand(100)
