@@ -1,32 +1,26 @@
-<div class="last_entry_list">
-  <ul>
-    <% if collection.any? %>
-      <% collection.each do | task | %>
-        <li>
-          <a class="more" href="#">Подробнее</a>
-          <div class='title'>
-            <%= task.entry.composed_title %>
-          </div>
-          <div class="details">
-            <div class="task_type">
-              <%= task.class.model_name.human %>
-            </div>
-            <div class="entry_state <%= task.state %>">
-              <%= I18n.t "state_machine.task.state.#{task.state}" %>
-            </div>
-
-            <div class="author">
-              <%= task.initiator %>
-            </div>
-
-            <div class="time_ago">
-              <%= distance_of_time_in_words_to_now(task.created_at) %>
-            </div>
-          </div>
-        </li>
-      <% end %>
-    <% else %>
-      <li class='empty'>Нет задач</li>
-    <% end %>
-  </ul>
+<% if collection.any? %>
+<div class="list">
+  <% collection.each do | task | %>
+    <div class="task">
+      <div class="line">
+        <div class="time_ago"><%= distance_of_time_in_words_to_now(task.created_at) %> назад</div>
+        <div class="title">
+          <%= link_to task.class.model_name.human, entry_path(task.entry), :class => "entry_state  #{task.entry.state}" %>
+          <span class="task_state <%= task.state %>"><%= I18n.t "state_machine.task.state.#{task.state}" %></span>
+          <span class="initiator"><%= task.initiator %></span>
+          <!-- TODO тут выводим исполнителея если есть или список потенциальных -->
+          &rarr;
+          <span class="executor">Иванов И. И., Петров П.П. Сидоров С.С.</span>
+          <!-- END TODO -->
+        </div>
+      </div>
+      <div class="entry_title">
+        <%= task.entry.composed_title %>
+      </div>
+    </div>
+  <% end %>
 </div>
+<% else %>
+  <h1>Нет задач</h1>
+<% end %>
+
