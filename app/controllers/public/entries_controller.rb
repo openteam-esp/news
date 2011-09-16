@@ -19,8 +19,8 @@ class Public::EntriesController < ApplicationController
         searcher.channel_ids = [params[:channel_id]] if params[:channel_id]
         searcher.per_page = paginate_options[:per_page]
         searcher.pagination.merge! paginate_options
-        headers['X-Total-Count'] = searcher.results.total_count
-        headers['X-Total-Pages'] = searcher.results.total_pages
+        headers['X-Total-Count'] = searcher.results.total_count.to_s
+        headers['X-Total-Pages'] = searcher.results.total_pages.to_s
         searcher.results
       else
         end_of_association_chain.by_state('published').page(paginate_options[:page]).per(paginate_options[:per_page])

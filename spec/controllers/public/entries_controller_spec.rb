@@ -64,8 +64,8 @@ describe Public::EntriesController do
       Channel.should_receive(:find).with(1).and_return(Channel.new)
       searcher.should_receive(:results).any_number_of_times.and_return(Sunspot::Search::PaginatedCollection.new([], 1, 10, 13))
       get :index, :channel_id => 1, :utf8 => true
-      response.headers['X-Total-Count'].should == 13
-      response.headers['X-Total-Pages'].should == 2
+      response.headers['X-Total-Count'].should == '13'
+      response.headers['X-Total-Pages'].should == '2'
     end
 
     describe "GET show" do
