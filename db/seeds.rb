@@ -59,6 +59,8 @@ end
 
 def complete_publish(entry)
   login_as_random_user
+  entry.channels << Channel.sample
+  entry.channels << Channel.sample
   entry.publish.complete!
 end
 
