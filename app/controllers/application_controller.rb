@@ -4,7 +4,5 @@ class ApplicationController < ActionController::Base
 
   has_searcher
 
-  layout 'public'
-
 end
 

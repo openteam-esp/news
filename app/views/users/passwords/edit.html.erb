@@ -1,16 +1,27 @@
 <h2><%= t("Change your password") %></h2>
 
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name),
+             :html => { :method => :put, :class => "formtastic user_new" }) do |f| %>
   <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
+  <ul class="inputs">
+    <li><%= f.hidden_field :reset_password_token %></li>
 
-  <p><%= f.label :password, t("New password") %><br />
-  <%= f.password_field :password %></p>
-
-  <p><%= f.label :password_confirmation, t("Confirm new password") %><br />
-  <%= f.password_field :password_confirmation %></p>
-
-  <p><%= f.submit t("Change my password") %></p>
+    <li class="password">
+      <%= f.label :password %>
+      <%= f.password_field :password, :class => "focus_first" %>
+    </li>
+    <li class="password_confirmation password">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+    </li>
+  </ul>
+  <ul class="buttons inline">
+    <li>
+      <%= f.submit t("Change my password"), :class => "button" %>
+    </li>
+    <li class="auth_links">
+      <%= render :partial => "users/shared/links" %>
+    </li>
+  </ul>
 <% end %>
 
-<%= render :partial => "devise/shared/links" %>

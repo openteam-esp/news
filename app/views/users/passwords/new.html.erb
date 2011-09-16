@@ -1,4 +1,4 @@
-<h1><%= t("Forgot your password?") %></h1>
+<h2><%= t("Forgot your password?") %></h2>
 
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name),
              :html => { :method => :post, :class => "formtastic remember_password" }) do |f| %>
@@ -9,11 +9,13 @@
       <%= f.email_field :email, :class => "focus_first" %>
     </li>
   <ul>
-  <ul class="buttons">
+  <ul class="buttons inline">
     <li>
       <%= f.submit t("Send me reset password instructions"), :class => "button" %>
     </li>
+    <li class="auth_links">
+      <%= render :partial => "users/shared/links" %>
+    </li>
   </ul>
 <% end %>
-<p class="auth_links"><%= render :partial => "users/shared/links" %></p>
 

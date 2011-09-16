@@ -1,8 +1,11 @@
-<h1><%= t("News system") %></h1>
+<% content_for :extend_javascript do %>
+  <%= javascript_include_tag "jquery.tipsy" %>
+<% end %>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),
              :html => { :class => "formtastic sign_in" }) do |f| %>
   <%= devise_error_messages! %>
+  <h2><%= t("Sign in") %></h2>
   <ul class="inputs">
     <li class="login string">
       <%= f.label :email %>
@@ -19,16 +22,14 @@
       </li>
     <% end %>
   </ul>
-  <ul class="buttons">
+  <ul class="buttons inline">
     <li>
       <%= f.submit t("login"), :class => "button" %>
     </li>
+    <li class="auth_links">
+      <%= render :partial => "users/shared/links" %>
+    </li>
   </ul>
-<% end %>
-<p class="auth_links"><%= render :partial => "users/shared/links" %></p>
-
-<% content_for :extend_javascript do %>
-  <%= javascript_include_tag "jquery.tipsy" %>
 <% end %>
 
 <div class="social_services">

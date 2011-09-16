@@ -1,4 +1,4 @@
-<h1><%= t("Sign up") %></h1>
+<h2><%= t("Sign up") %></h2>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name),
              :html => { :class => "formtastic sign_up" }) do |f| %>
@@ -21,11 +21,13 @@
       <%= f.password_field :password_confirmation %>
     </li>
   </ul>
-  <ul class="buttons">
+  <ul class="buttons inline">
     <li>
       <%= f.submit t("sign up"), :class => "button" %>
     </li>
+    <li class="auth_links">
+      <%= render :partial => "users/shared/links" %>
+    </li>
   </ul>
 <% end %>
-<p class="auth_links"><%= render :partial => "users/shared/links" %></p>
 
