@@ -53,7 +53,6 @@ gem 'jquery-rails',                               :require => false
 gem 'kaminari'
 gem 'omniauth'
 gem 'permanent_records'
-gem 'progress_bar',                               :require => false
 gem 'rack-cache',                                 :require => 'rack/cache'
 gem 'rails',                    '3.0.9',          :require => false
 gem 'rake',                     '0.8.7',          :require => false
