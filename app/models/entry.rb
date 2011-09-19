@@ -26,15 +26,11 @@ class Entry < ActiveRecord::Base
     state :published
 
     event :up do
-      transition :draft => :correcting
-      transition :correcting => :publishing
-      transition :publishing => :published
+      transition :draft => :correcting, :correcting => :publishing, :publishing => :published
     end
 
     event :down do
-      transition :published => :publishing
-      transition :publishing => :correcting
-      transition :correcting => :draft
+      transition :published => :publishing, :publishing => :correcting, :correcting => :draft
     end
   end
 

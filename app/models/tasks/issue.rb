@@ -18,11 +18,13 @@ class Issue < Task
     end
 
     after_transition :on => :complete do |task, transition|
-      task.send(:switch_entry_to_next_state)
+      task.entry.up!
+      task.next_task.try :clear!
     end
 
     after_transition :on => :restore do |task, transition|
-      task.send(:switch_entry_to_previous_state)
+      task.entry.down!
+      task.next_task.try :suspend!
     end
 
     event :clear do
@@ -47,19 +49,6 @@ class Issue < Task
 
   def next_task
   end
-
-  protected
-
-    def switch_entry_to_next_state
-      entry.switch_to_next_state
-      next_task.try :clear!
-    end
-
-    def switch_entry_to_previous_state
-      entry.switch_to_previous_state
-      next_task.try :suspend!
-    end
-
 end
 
 
