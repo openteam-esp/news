@@ -1,10 +1,12 @@
 <div class="entry_actions_wrapper <%= position %>">
   <ul class="entry_actions">
-    <% @entry.permitted_events.each do |kind| %>
+    <!--
+    <%# @entry.permitted_events.each do |kind| %>
       <li>
-        <%= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
+        <%#= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
       </li>
-    <% end %>
+    <%# end %>
+    -->
     <li class="clear_left">
       <%= render_statistic @entry %>
     </li>
