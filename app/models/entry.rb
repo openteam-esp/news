@@ -23,7 +23,9 @@ class Entry < ActiveRecord::Base
     state :draft
     state :correcting
     state :publishing
-    state :published
+    state :published do
+      validates_presence_of :channels
+    end
 
     event :up do
       transition :draft => :correcting, :correcting => :publishing, :publishing => :published

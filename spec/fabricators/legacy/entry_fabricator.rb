@@ -35,5 +35,6 @@ Fabricator('legacy/entry', :class_name => Legacy::Entry) do
   date_time     "2011-07-20 17:17:00"
   end_date_time "2011-07-21 06:00:00"
   status        "blank"
+  target_id     Fabricate :channel
 end
 

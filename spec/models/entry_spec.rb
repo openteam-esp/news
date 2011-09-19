@@ -103,6 +103,16 @@ describe Entry do
       it { publish.state.should == 'pending' }
     end
   end
+
+  describe "при публикации" do
+    before { set_current_user corrector_and_publisher }
+    it "если нет канала, должна быть ошибка" do
+      processing_publishing.channels = []
+      processing_publishing.save!
+      expect { processing_publishing.publish.complete! }.to raise_error
+    end
+  end
+
 end
 
 
