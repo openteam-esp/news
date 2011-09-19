@@ -1,6 +1,8 @@
-class Publish < Issue
-end
+class Subtask < Task
 
+  belongs_to :issue
+
+end
 
 
 # == Schema Information
@@ -16,6 +18,5 @@ end
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime
-#  issue_id     :integer
 #
 

@@ -1,4 +1,5 @@
-class Prepare < Task
+class Prepare < Issue
+  has_many :tasks
   state_machine :initial => :processing do
     state :processing
     state :completed
@@ -17,6 +18,7 @@ class Prepare < Task
   end
 end
 
+
 # == Schema Information
 #
 # Table name: tasks
@@ -30,5 +32,6 @@ end
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime
+#  issue_id     :integer
 #
 

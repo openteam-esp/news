@@ -1,8 +1,9 @@
-class Review < Task
+class Review < Issue
   def next_task
     entry.publish
   end
 end
+
 
 
 # == Schema Information
@@ -18,5 +19,6 @@ end
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime
+#  issue_id     :integer
 #
 

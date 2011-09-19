@@ -62,6 +62,11 @@ describe Task do
       end
     end
   end
+
+end
+
+describe Issue do
+  it { should have_many(:subtasks)}
 end
 
 
@@ -78,5 +83,6 @@ end
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime
+#  issue_id     :integer
 #
 

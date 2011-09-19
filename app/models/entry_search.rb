@@ -25,6 +25,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: searches
@@ -36,5 +37,6 @@ end
 #  until_gt    :date
 #  channel_ids :string
 #  order_by    :string
+#  per_page    :integer
 #
 
