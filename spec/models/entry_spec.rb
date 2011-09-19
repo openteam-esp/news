@@ -104,16 +104,35 @@ describe Entry do
     end
   end
 
-  describe "при публикации" do
-    before { set_current_user corrector_and_publisher }
-    it "если нет канала, должна быть ошибка" do
-      processing_publishing.channels = []
-      processing_publishing.save!
-      expect { processing_publishing.publish.complete! }.to raise_error
+  it "при публикации, если нет канала, должна быть ошибка" do
+    set_current_user corrector_and_publisher
+    processing_publishing.channels = []
+    processing_publishing.save!
+    expect { processing_publishing.publish.complete! }.to raise_error
+  end
+
+  describe "блокировка" do
+    before do
+      set_current_user initiator
+      stored_draft.lock
+    end
+    it "при блокировки должна сохранять когда и кем заблокирована" do
+      stored_draft.reload.locked?.should be true
+      stored_draft.locked_at.should > Time.now - 5.seconds
+      stored_draft.locked_by.should == initiator
+    end
+
+    it "сохранение новости, должно ее разблокировать" do
+      entry = Entry.find(stored_draft.id)
+      entry.save!
+      entry.reload.locked?.should be false
+      entry.locked_at.should be nil
+      entry.locked_by.should be nil
     end
   end
 
 end
+
 
 
 
@@ -138,5 +157,7 @@ end
 #  created_at   :datetime
 #  updated_at   :datetime
 #  legacy_id    :integer
+#  locked_at    :datetime
+#  locked_by    :integer
 #
 

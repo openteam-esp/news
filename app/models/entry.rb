@@ -4,6 +4,7 @@ include ActionView::Helpers::DateHelper
 
 class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
+  belongs_to :locked_by, :class_name => 'User'
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
@@ -18,6 +19,10 @@ class Entry < ActiveRecord::Base
   has_one :prepare
   has_one :review
   has_one :publish
+
+  attr_accessor :locking
+
+  after_validation :unlock, :if => :need_unlock?
 
   state_machine :initial => :draft do
     state :draft
@@ -142,6 +147,24 @@ class Entry < ActiveRecord::Base
       compact.join(' – ').truncate(100, :omission => '…')
   end
 
+  def lock
+    self.locking = true
+    update_attributes! :locked_at => DateTime.now, :locked_by => User.current
+  end
+
+  def locked?
+    self.locked_at?
+  end
+
+  def need_unlock?
+    !self.locking && self.locked?
+  end
+
+  def unlock
+    self.locked_at = nil
+    self.locked_by = nil
+  end
+
   private
     def create_subscribe
       Subscribe.create!(:subscriber => initiator, :entry => self)
@@ -153,6 +176,8 @@ class Entry < ActiveRecord::Base
       create_publish
     end
 end
+
+
 
 # == Schema Information
 #
@@ -170,5 +195,7 @@ end
 #  created_at   :datetime
 #  updated_at   :datetime
 #  legacy_id    :integer
+#  locked_at    :datetime
+#  locked_by_id :integer
 #
 

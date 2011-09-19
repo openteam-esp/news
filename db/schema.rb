@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110919021149) do
+ActiveRecord::Schema.define(:version => 20110919040437) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(:version => 20110919021149) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "legacy_id"
+    t.datetime "locked_at"
+    t.integer  "locked_by_id"
   end
 
   create_table "events", :force => true do |t|

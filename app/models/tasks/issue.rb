@@ -52,6 +52,7 @@ class Issue < Task
 end
 
 
+
 # == Schema Information
 #
 # Table name: tasks
@@ -65,5 +66,6 @@ end
 #  comment      :text
 #  created_at   :datetime
 #  updated_at   :datetime
+#  issue_id     :integer
 #
 

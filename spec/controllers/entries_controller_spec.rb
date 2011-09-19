@@ -27,6 +27,7 @@ describe EntriesController do
     it "assigns the requested entry as @entry" do
       get :edit, :id => draft_entry.id
       assigns(:entry).should eq(draft_entry)
+      assigns(:entry).should be_locked
     end
   end
 
