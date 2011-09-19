@@ -73,7 +73,7 @@ module Esp::SpecHelper
     draft
   end
 
-  Entry.enums[:state].each do | state |
+  Entry.all_states.each do | state |
     define_method "build_#{state}" do | *args |
       options = (args.last || Hash.new).merge :state => state.to_s, :initiator_id => initiator.id
       Fabricate.build(:entry, options)

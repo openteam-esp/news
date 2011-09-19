@@ -55,7 +55,7 @@ describe Entry do
   describe "папки новостей" do
     it "инициатору показываются только его новости" do
       set_current_user(initiator)
-      Entry.enums[:state].each do |state|
+      Entry.all_states.each do |state|
         Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => initiator.id}
       end
     end

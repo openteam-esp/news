@@ -19,7 +19,24 @@ class Entry < ActiveRecord::Base
   has_one :review
   has_one :publish
 
-  has_enum :state, %w[draft correcting publishing published]
+  state_machine :initial => :draft do
+    state :draft
+    state :correcting
+    state :publishing
+    state :published
+
+    event :up do
+      transition :draft => :correcting
+      transition :correcting => :publishing
+      transition :publishing => :published
+    end
+
+    event :down do
+      transition :published => :publishing
+      transition :publishing => :correcting
+      transition :correcting => :draft
+    end
+  end
 
   default_scope order('created_at desc')
 
@@ -46,7 +63,6 @@ class Entry < ActiveRecord::Base
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
   default_value_for :initiator do User.current end
-  default_value_for :state, :draft
 
   searchable do
     text   :title,      :boost => 3.0
@@ -66,7 +82,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.all_states
-    enums[:state]
+    state_machine.states.map(&:name)
   end
 
   def self.shared_states
@@ -112,14 +128,6 @@ class Entry < ActiveRecord::Base
     else
       self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
     end
-  end
-
-  def switch_to_next_state
-    update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(state) + 1]
-  end
-
-  def switch_to_previous_state
-    update_attribute :state, Entry.enums[:state][Entry.enums[:state].index(state) - 1]
   end
 
   def presented?(attribute, options={})
