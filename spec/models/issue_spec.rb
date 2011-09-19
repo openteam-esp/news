@@ -1,12 +1,10 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Task do
-  it { should belong_to :entry }
-  it { should belong_to(:initiator) }
-  it { should belong_to(:executor) }
-  it { Task.scoped.to_sql.should == Task.unscoped.order('id').to_sql }
+describe Issue do
+  it { should have_many(:subtasks)}
 end
+
 
 # == Schema Information
 #
