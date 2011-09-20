@@ -6,8 +6,6 @@ class Task < ActiveRecord::Base
 
   default_scope order(:id)
 
-  default_value_for :initiator do User.current end
-
   scope :kind, lambda {|kind| User.current.try "#{kind}_tasks" }
 
 end

@@ -2,12 +2,46 @@
 require 'spec_helper'
 
 describe Subtask do
-  describe "авторизованный пользователь с ролями публикатора и корректора может" do
-    before { User.current = initiator(:roles => [:corrector, :publisher]) }
-    describe "создавать позадачи" do
-      it { stored_draft.prepare.subtasks.create! :executor => User.current }
+
+  let :subtask do draft.prepare.subtasks.create! :executor => Fabricate(:user) end
+
+  describe "исполнитель текущей задачи" do
+    before { begin set_current_user(initiator); rescue => e; puts e.backtrace.join("\n"); end }
+
+    it "исполнитель текущей задачи может создавать подзадачи" do
+      subtask.should be_persisted
     end
   end
+
+  #describe "инициатор подзадачи" do
+    #describe "может" do
+      #it "отменять fresh задачи" do
+        #subtask.reject!
+      #end
+      #it "отменять processing задачи" do
+        #processing_tasks.reject!
+      #end
+    #end
+  #end
+
+  #describe "исполнитель подзадчи" do
+    #it "принимать подзадачи" do
+      #subtask.accept!
+    #end
+
+    #it "завершать подзадачи" do
+      #subtask.accept!
+      #subtask.complete!
+    #end
+
+    #it "отклонять подзадачи" do
+      #subtask.reject!
+    #end
+
+    #it "отвергать подзадачи" do
+      #subtask.refuse!
+    #end
+  #end
 
 end
 
@@ -18,8 +52,7 @@ end
 #
 #  id           :integer         not null, primary key
 #  entry_id     :integer
-#  initiator_id :integer
-#  executor_id  :integer
+#  initiator_id :integer #  executor_id  :integer
 #  state        :string(255)
 #  type         :string(255)
 #  comment      :text

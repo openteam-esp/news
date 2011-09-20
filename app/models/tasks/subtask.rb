@@ -2,6 +2,30 @@ class Subtask < Task
 
   belongs_to :issue
 
+  default_value_for :initiator do User.current end
+
+  state_machine :initial => :fresh do
+    state :fresh
+    state :processing
+    state :completed
+    state :rejected
+
+    event :accept do
+      transition :fresh => :processing
+    end
+
+    event :complete do
+      transition :processing => :completed
+    end
+
+    event :reject do
+      transition [:fresh, :processing] => :rejected
+    end
+
+    event :refuse do
+      transition [:fresh, :processing] => :refused
+    end
+  end
 end
 
 

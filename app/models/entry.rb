@@ -61,7 +61,7 @@ class Entry < ActiveRecord::Base
     end
   }
 
-  after_create :create_subscribe, :create_tasks
+  after_create :create_tasks
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -166,14 +166,10 @@ class Entry < ActiveRecord::Base
   end
 
   private
-    def create_subscribe
-      Subscribe.create!(:subscriber => initiator, :entry => self)
-    end
-
     def create_tasks
-      create_prepare :executor => User.current
-      create_review
-      create_publish
+      self.prepare = Prepare.create! :initiator => initiator, :entry => self, :executor => initiator
+      self.review = Review.create! :initiator => initiator, :entry => self
+      self.publish = Publish.create! :initiator => initiator, :entry => self
     end
 end
 

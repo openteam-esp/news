@@ -1,6 +1,6 @@
-require 'spork'
+#require 'spork'
 
-Spork.prefork do
+#Spork.prefork do
   ENV["RAILS_ENV"] ||= 'test'
 
   require File.expand_path("../../config/environment", __FILE__)
@@ -12,19 +12,22 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+
   RSpec.configure do |config|
     config.include Devise::TestHelpers, :type => :controller
     config.include Esp::SpecHelper
+
     config.mock_with :rspec
 
-    config.before(:each) do
-      require 'fabrication'
+    config.before(:all) do
+      ActiveRecord::Base.establish_connection(:adapter => :nulldb)
     end
 
-    config.after(:each) do
-      ActiveRecord::Base.descendants.each do | klass |
-        klass.delete_all unless klass.abstract_class? || klass.name.underscore =~ /search/
-      end
+    config.before(:each) do
+      ActiveRecord::Base.connection.checkpoint!
+      require Rails.root.join "app/models/tasks/task"
+      require 'fabrication'
     end
   end
-end
+#end
+

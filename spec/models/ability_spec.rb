@@ -2,9 +2,10 @@
 
 require "spec_helper"
 
-
 describe Ability do
-  let(:ability) { Ability.new }
+  def ability(options={})
+    Ability.new options[:for]
+  end
 
   describe "задачy" do
     describe 'принять' do
@@ -49,53 +50,32 @@ describe Ability do
       end
     end
 
-    describe 'возобновить' do
-      before { set_current_user initiator }
-
-      it "может исполнитель" do
-        correcting_with_tasks.prepare.state = 'completed'
-        correcting_with_tasks.review.state = 'fresh'
-        ability.should be_able_to(:restore, correcting_with_tasks.prepare)
-      end
-
-      it "не может другой пользователь" do
-        set_current_user corrector
-        correcting_with_tasks.prepare.state = 'completed'
-        ability.should_not be_able_to(:restore, correcting_with_tasks.prepare)
-      end
-
-      it "можно если нет следующей задачи" do
-        set_current_user publisher
-        published_with_tasks.publish.executor = publisher
-        published_with_tasks.publish.state = 'completed'
-        ability.should be_able_to(:restore, published_with_tasks.publish )
-      end
-
-      it "review может любой корректор" do
-        set_current_user corrector
-        publishing_with_tasks.review.state = 'completed'
-        publishing_with_tasks.publish.state = 'fresh'
-        ability.should be_able_to(:restore, publishing_with_tasks.review)
-      end
-
-      it "publish может любой публикатор" do
-        set_current_user publisher
-        published_with_tasks.publish.state = 'completed'
-        ability.should be_able_to(:restore, published_with_tasks.publish )
-      end
-
-      describe 'нельзя' do
-        it "если состояние не completed" do
-          ability.should_not be_able_to(:restore, correcting_with_tasks.prepare)
+    describe "подготовления черновика" do
+      describe "возобновить" do
+        it "может исполнитель" do
+          ability(:for => initiator).should be_able_to(:restore, fresh_correcting.prepare)
         end
-
-        it "если следующая задача не fresh" do
-          correcting_with_tasks.prepare.state = 'completed'
-          %w[processing completed].each do |next_task_state|
-            correcting_with_tasks.review.state = next_task_state
-            ability.should_not be_able_to(:restore, correcting_with_tasks.prepare)
-          end
+        it "не может другой пользователь" do
+          ability(:for => another_initiator(:roles => [:corrector, :publisher])).should_not be_able_to(:restore, fresh_correcting.prepare)
         end
+      end
+    end
+
+    describe "публикации" do
+      describe "может возобновить" do
+        it "любой публикатор" do
+          ability(:for => another_publisher).should be_able_to(:restore, published.publish )
+        end
+      end
+      describe "не может возобновить" do
+        it { ability(:for => corrector).should_not be_able_to(:restore, published.publish) }
+        it { ability(:for => initiator).should_not be_able_to(:restore, published.publish) }
+      end
+    end
+
+    describe "редактирования" do
+      it "может любой корректор" do
+        ability(:for => another_corrector).should be_able_to(:restore, fresh_publishing.review)
       end
     end
   end

@@ -6,36 +6,42 @@ describe EntriesController do
   before :each do
     sign_in initiator
     set_current_user initiator
+    User.should_receive(:first).with(:conditions => { "id" => initiator.id }).and_return initiator
+  end
+
+  def mock_find_by_id
+      scoped = []
+      Entry.should_receive(:scoped).and_return(scoped)
+      scoped.should_receive(:find).with(draft.id).and_return(draft)
   end
 
   describe "GET index" do
     it "assigns all entries as @entries" do
-      entry = create_draft_entry
+      scope = [draft]
+      Entry.should_receive(:state).at_least(1).times.with('draft').and_return(scope)
+      scope.should_receive(:page).at_least(1).times.and_return(scope)
       get :index, 'state' => 'draft'
-      assigns(:entries).should eq([entry])
+      assigns(:entries).should eq([draft])
     end
   end
 
   describe "GET show" do
     it "assigns the requested entry as @entry" do
-      get :show, :id => draft_entry.id
-      assigns(:entry).should eq(draft_entry)
+      mock_find_by_id
+      get :show, :id => draft.id
+      assigns(:entry).should eq(draft)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested entry as @entry" do
-      get :edit, :id => draft_entry.id
-      assigns(:entry).should eq(draft_entry)
-      assigns(:entry).should be_locked
+      mock_find_by_id
+      get :edit, :id => draft.id
+      assigns(:entry).should eq(draft)
     end
   end
 
   describe "POST create" do
-      it "creates a new Entry" do
-        expect { post :create }.to change(Entry, :count).by(1)
-      end
-
       it "assigns a newly created entry as @entry" do
         post :create
         assigns(:entry).should be_a(Entry)
@@ -44,7 +50,7 @@ describe EntriesController do
 
       it "redirects to the editing form of created entry" do
         post :create
-        response.should redirect_to([:edit, Entry.last])
+        response.should redirect_to([:edit, assigns(:entry)])
       end
   end
 

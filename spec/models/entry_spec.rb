@@ -11,9 +11,6 @@ describe Entry do
   it { should have_many(:attachments) }
   it { should have_many(:tasks) }
 
-  it { expect { Fabricate(:entry, :assets_attributes => [ Fabricate.attributes_for(:asset)] ) }.to change(Asset, :count).by(1) }
-  it { expect { Fabricate(:entry, :assets_attributes => [ {} ] ) }.to_not change(Asset, :count) }
-
   describe "composed_title" do
     it "для пустой новости" do
       Entry.new.composed_title.should == "(без заголовка)"
@@ -60,16 +57,24 @@ describe Entry do
       end
     end
 
-    it "личные папки для корректора и публикатора" do
-      [corrector, publisher].each do |user|
-        set_current_user(user)
-        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => user.id}
+    describe "личные папки" do
+      it "корректора" do
+        set_current_user(initiator(:roles => :corrector))
+        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id}
+      end
+      it "публикатора" do
+        set_current_user(initiator(:roles => :publisher))
+        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id}
       end
     end
 
-    it "папки корректора и публикатора для новостей в процесса" do
-      [corrector, publisher].each do |user|
-        set_current_user(user)
+    describe "папки для новостей в процесса" do
+      it "корректора" do
+        set_current_user(initiator(:roles => :corrector))
+        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states}
+      end
+      it "публикатора" do
+        set_current_user(initiator(:roles => :publisher))
         Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states}
       end
     end
@@ -80,10 +85,9 @@ describe Entry do
     before(:each) do
       set_current_user initiator
     end
-    let (:prepare) { stored_draft.prepare.reload }
-    let (:review) { stored_draft.review.reload }
-    let (:publish) { stored_draft.publish.reload }
-    it { stored_draft.tasks.should == [prepare, review, publish] }
+    let (:prepare) { draft.prepare }
+    let (:review) { draft.review }
+    let (:publish) { draft.publish }
 
     describe "задача подготовки" do
       it { prepare.initiator.should == initiator }

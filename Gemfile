@@ -23,6 +23,7 @@ group :test do
   gem 'rspec-rails',                              :require => false
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
+  gem 'activerecord-nulldb-adapter',                                          :git => 'git://github.com/avdi/nulldb'
 end
 
 group :development, :test do
@@ -48,7 +49,7 @@ gem 'gilenson'
 gem 'has_enum'
 gem 'has_scope'
 gem 'has_searcher'
-gem 'inherited_resources',                                                    :git => 'git://github.com/openteam/inherited_resources'
+gem 'inherited_resources'
 gem 'jquery-rails',                               :require => false
 gem 'kaminari'
 gem 'omniauth'
