@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/avdi/nulldb
-  revision: 6ba9106f96e5a4e83191793e2260a9d0b5c6f05e
-  specs:
-    activerecord-nulldb-adapter (0.2.1)
-      activerecord (>= 2.0.0, < 3.1)
-
-GIT
   remote: git://github.com/koppen/hassle
   revision: bb49cd8b37f5369d08398897caf1b687eaa80458
   specs:
@@ -45,6 +38,8 @@ GEM
       activesupport (= 3.0.9)
       arel (~> 2.0.10)
       tzinfo (~> 0.3.23)
+    activerecord-nulldb-adapter (0.2.1)
+      activerecord (>= 2.0.0, < 3.1)
     activeresource (3.0.9)
       activemodel (= 3.0.9)
       activesupport (= 3.0.9)
@@ -238,9 +233,6 @@ GEM
     shoulda-matchers (1.0.0.beta3)
     simple-navigation (3.3.4)
       activesupport (>= 2.3.2)
-    simplecov (0.4.2)
-      simplecov-html (~> 0.4.4)
-    simplecov-html (0.4.5)
     spork (0.9.0.rc9)
     sqlite3 (1.3.4)
     state_machine (1.0.1)
@@ -269,7 +261,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-nulldb-adapter!
+  activerecord-nulldb-adapter
   cancan
   clockwork
   compass
@@ -312,7 +304,6 @@ DEPENDENCIES
   sanitize
   shoulda-matchers
   simple-navigation
-  simplecov
   spork (>= 0.9.0.rc9)
   sqlite3
   state_machine

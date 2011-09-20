@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   delegate :provider, :to => :authentication
 
-  has_enums
+  has_enum :roles, [:corrector, :publisher], :multiple => true
 
   def to_s
     name

@@ -1,15 +1,14 @@
 source :rubygems
 
 group :development do
-  gem 'guard-rspec',                             :require => false
-  gem 'guard-spork',                             :require => false
-  gem 'hirb',                                    :require => false
-  gem 'libnotify',                               :require => false
-  gem 'rb-inotify'
-  gem 'ruby-graphviz',                           :require => false
-  gem 'simplecov'
-  gem 'spork',                  '>= 0.9.0.rc9'
-  gem 'unicorn',                                 :require => false
+  gem 'guard-rspec',                              :require => false
+  gem 'guard-spork',                              :require => false
+  gem 'hirb',                                     :require => false
+  gem 'libnotify',                                :require => false
+  gem 'rb-inotify',                               :require => false
+  gem 'ruby-graphviz',                            :require => false
+  gem 'spork',                  '>= 0.9.0.rc9',   :require => false
+  gem 'unicorn',                                  :require => false
 end
 
 group :production do
@@ -23,7 +22,7 @@ group :test do
   gem 'rspec-rails',                              :require => false
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
-  gem 'activerecord-nulldb-adapter',                                          :git => 'git://github.com/avdi/nulldb'
+  gem 'activerecord-nulldb-adapter',              :require => false
 end
 
 group :development, :test do
