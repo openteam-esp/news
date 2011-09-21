@@ -78,6 +78,26 @@ describe Ability do
         ability(:for => another_corrector).should be_able_to(:restore, fresh_publishing.review)
       end
     end
+
+    describe 'подзадачу' do
+      it "может создать пользователь выполняющий задачу" do
+        ability(:for => corrector).should be_able_to(:create, processing_correcting.review.subtasks.build(:issue => processing_correcting.review))
+      end
+
+      it "не может создать пользователь, не выполняющий задачу" do
+        ability(:for => initiator).should_not be_able_to(:create, processing_correcting.review.subtasks.build(:issue => processing_correcting.review))
+      end
+
+      it "может отменить автор" do
+        subtask = processing_correcting.review.subtasks.create! :initiator => corrector
+        ability(:for => corrector).should be_able_to(:cancel, subtask)
+      end
+
+      it "может отвергнуть исполнитель" do
+        subtask = processing_correcting.review.subtasks.create! :executor => initiator
+        ability(:for => initiator).should be_able_to(:refuse, subtask)
+      end
+    end
   end
 
 if false

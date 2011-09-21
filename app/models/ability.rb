@@ -27,6 +27,17 @@ class Ability
       end
     end
 
+    can :create, Subtask do | subtask |
+      user == subtask.issue.executor && subtask.issue.processing?
+    end
+
+    can :cancel, Subtask do | subtask |
+      user == subtask.initiator
+    end
+
+    can :refuse, Subtask do | subtask |
+      user == subtask.executor
+    end
 
     #################
     #  casual user  #

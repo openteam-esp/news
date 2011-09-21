@@ -8,7 +8,7 @@ class Subtask < Task
     state :fresh
     state :processing
     state :completed
-    state :rejected
+    state :canceled
 
     event :accept do
       transition :fresh => :processing
@@ -18,8 +18,8 @@ class Subtask < Task
       transition :processing => :completed
     end
 
-    event :reject do
-      transition [:fresh, :processing] => :rejected
+    event :cancel do
+      transition [:fresh, :processing] => :canceled
     end
 
     event :refuse do
