@@ -1,6 +1,7 @@
 <%= content_tag(:div, :id => dom_id(asset),
                 :class => "gal-item",
-                :"data-url" => image_path(asset, asset.file_width, asset.file_height, asset.file_name)) do %>
+                :"data-url" => image_path(asset, asset.file_width, asset.file_height, asset.file_name),
+                :"data-alt" => asset.description) do %>
   <%= link_to image_tag("/javascripts/ckeditor/filebrowser/images/gal_del.png", :title => I18n.t('ckeditor.buttons.delete')),
           entry_asset_path(@entry, asset),
           :remote => true,
@@ -10,9 +11,9 @@
   <div class="fileupload-file gal-inner-holder">
     <div class="img"><%=  image_tag cropped_image_path(asset, asset.file_name), :alt => "", :size => "118x100" %></div>
     <div class="img-data">
-      <div class="img-name"><%= asset.file.name %></div>
+      <div class="img-name"><%= asset.file_name %></div>
       <div class="time-size">
-        <div class="time"><%= asset.created_at %></div>
+        <div class="time"><%= l asset.created_at %></div>
         <div class="fileupload-size size"><%= number_to_human_size(asset.file.size) %></div>
       </div>
     </div>
