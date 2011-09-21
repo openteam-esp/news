@@ -1,6 +1,7 @@
 class Asset < ActiveRecord::Base
   belongs_to :entry
 
+  scope :type, ->(type) { where(:type => type.classify) }
   def self.before_destroy(*args) # disable destroy_attached_files
   end
 

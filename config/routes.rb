@@ -9,7 +9,8 @@ News::Application.routes.draw do
   resources :authentications, :only => [:create, :destroy]
 
   resources :entries, :only => [:show, :create, :edit, :index] do
-    resources :assets, :only => [:index, :create, :destroy]
+    get '/:type/' => 'assets#index', :constraints => { :type => /(assets|images|audios|videos|attachments)/ }
+    resources :assets, :only => [:create, :destroy]
   end
 
   get '/:state/entries' => 'entries#index',
@@ -60,8 +61,6 @@ News::Application.routes.draw do
 
   get '/assets/:id/:file_name' => Dragonfly[:assets].endpoint { |params, app|
     app.fetch(Asset.find(params[:id]).file_uid)
-    #Asset.find(params[:id]).file.thumb("118x100#")
-    #Asset.find(params[:id]).file.fetch
   }, :as => :asset, :format => false, :constraints => { :file_name => /.+?/ }
 
 

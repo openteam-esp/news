@@ -7,6 +7,8 @@ class AssetsController < AuthorizedApplicationController
 
   actions :create, :destroy, :index
 
+  has_scope :type, :only => :index
+
   def create
     create! do |success, failure|
       success.html do
