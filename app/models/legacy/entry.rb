@@ -1,9 +1,12 @@
 # encoding: utf-8
+
+
 class Legacy::Entry < ActiveRecord::Base
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper
 
-  establish_connection "legacy_#{Rails.env}" unless Rails.env.production?
+  establish_connection "legacy_#{Rails.env}"
+
   set_table_name "events"
 
   has_many :assets, :foreign_key => 'event_id'
@@ -15,7 +18,7 @@ class Legacy::Entry < ActiveRecord::Base
   end
 
   def migrated_annotation
-    simple_format annotation
+    simple_format annotation.clone
   end
 
   def channel_ids
@@ -38,19 +41,21 @@ class Legacy::Entry < ActiveRecord::Base
       entry.save :validate => false
       entry.channel_ids   = channel_ids
       assets.each do | legacy_asset |
-        asset = entry.assets.find_or_initialize_by_legacy_id legacy_asset.id
+        asset = Asset.find_or_initialize_by_legacy_id legacy_asset.id
+        asset.entry = entry
         asset.file = File.open(legacy_asset.file.path)
         asset.description = legacy_asset.description
         asset.save :validate => false
+        entry.assets << asset
       end
       entry.prepare.complete!
-      if status != 'blank'
-        entry.review.reload.accept!
-        entry.review.reload.complete!
+      if status.to_s != 'blank'
+        entry.review.accept!
+        entry.review.complete!
       end
-      if status == 'publish'
-        entry.publish.reload.accept!
-        entry.publish.reload.complete!
+      if status.to_s == 'publish'
+        entry.publish.accept!
+        entry.publish.complete!
       end
       entry.update_attribute :updated_at, updated_at
     end
@@ -65,8 +70,6 @@ class Legacy::Entry < ActiveRecord::Base
                       end
     end
 end
-
-
 
 # == Schema Information
 #

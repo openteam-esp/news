@@ -5,57 +5,55 @@ require 'spec_helper'
 describe Migrator::Entry do
 
   def legacy(options={})
-    @legacy ||= begin
-                  asset = options.delete(:asset)
-                  entry = Fabricate('legacy/entry', options)
-                  if asset
-                    file = File.open(Rails.root.join "spec", "fixtures", asset.to_s)
-                    entry.assets.create! :file_file_name => asset.to_s,
-                                         :description => "Файл #{asset}",
-                                         :type => 'AttachmentFile'
-                  end
-                  entry
-                end
+    asset = options.delete(:asset)
+    Fabricate('legacy/entry', options).tap do | legacy |
+      if asset
+        file = File.open(Rails.root.join "spec", "fixtures", asset.to_s)
+        legacy.assets.create! :file_file_name => asset.to_s,
+                              :description => "Файл #{asset}",
+                              :type => 'AttachmentFile'
+      end
+    end
   end
 
   def migrated(legacy)
-    subject.migrate
-    Entry.find_by_legacy_id legacy.id
+    legacy.migrate
   end
 
   describe "после миграции" do
-    before(:each) do
-      @entry = migrated(legacy)
-    end
     it "должен установить инициатора" do
-      @entry.initiator.name.should == "Мигратор"
+      migrated(legacy).initiator.name.should == "Мигратор"
     end
+
     it "должен установить title" do
-      @entry.title.should == legacy.title
+      migrated(legacy).title.should == legacy.title
     end
+
     it "должен упрощать annotation" do
-      @entry.annotation.should =~ /^<p>В конце минувшей/
+      migrated(legacy).annotation.should =~ /^<p>В конце минувшей/
     end
+
     it "должен форматировать body" do
-      @entry.body.should == RDiscount.new(legacy.body).to_html
-      @entry.body.should =~ /^<p>/
-      @entry.body.scan("<p>").size.should == 4
+      migrated(legacy).body.should == RDiscount.new(legacy.body).to_html
+      migrated(legacy).body.should =~ /^<p>/
+      migrated(legacy).body.scan("<p>").size.should == 4
     end
+
     it "должен проставлять created_at, updated_at" do
-      @entry.created_at.should == legacy.created_at
-      I18n.l(@entry.created_at, :format => "%d.%m.%Y %H:%M").should == "20.07.2011 17:21"
-      @entry.updated_at.should == legacy.updated_at
+      migrated(legacy).created_at.should == legacy.created_at
+      I18n.l(migrated(legacy).created_at, :format => "%d.%m.%Y %H:%M").should == "20.07.2011 17:21"
+      migrated(legacy).updated_at.should == legacy.updated_at
     end
     it "должен проставлять since, until" do
-      @entry.since.should == legacy.date_time
-      @entry.until.should == legacy.end_date_time
+      migrated(legacy).since.should == legacy.date_time
+      migrated(legacy).until.should == legacy.end_date_time
     end
   end
 
   describe "должен в зависимости от status" do
-    let (:prepare) { @entry.prepare.reload }
-    let (:review) { @entry.review.reload }
-    let (:publish) { @entry.publish.reload }
+    let (:prepare) { @entry.prepare }
+    let (:review) { @entry.review }
+    let (:publish) { @entry.publish }
 
     describe "blank" do
       before { @entry = migrated(legacy(:status => :blank)) }
@@ -68,6 +66,7 @@ describe Migrator::Entry do
       it { @entry.state.should == 'publishing' }
       it { review.should be_completed }
       it { review.executor_id.should_not be_nil }
+      it { publish.should be_fresh }
     end
     describe "publish" do
       before { @entry = migrated(legacy(:status => :publish)) }
@@ -82,31 +81,34 @@ describe Migrator::Entry do
       migrated(legacy(:target_id => nil)).channels.should be_empty
     end
     it "1 => 'Анонсы'" do
-      migrated(legacy(:target_id => 1)).channels.map(&:title).should == ['tomsk.gov.ru/ru/announces']
+      channel = Fabricate(:channel)
+      Channel.should_receive(:find_or_create_by_title).with('tomsk.gov.ru/ru/announces').and_return channel
+      Channel.should_receive(:find).with([channel.id]).and_return [channel]
+      migrated(legacy(:target_id => 1))
     end
     it "2 => 'Новости'" do
-      migrated(legacy(:target_id => 2)).channels.map(&:title).should == ['tomsk.gov.ru/ru/news']
+      channel = Fabricate(:channel)
+      Channel.should_receive(:find_or_create_by_title).with('tomsk.gov.ru/ru/news').and_return channel
+      Channel.should_receive(:find).with([channel.id]).and_return [channel]
+      migrated(legacy(:target_id => 2))
     end
   end
 
   describe "старых новостей с файлами" do
     describe 'должны смигрироваться' do
       it "файлы" do
-        migrated(legacy(:asset => :attachment)).assets.first.file_size.should > 0
-      end
-      it "картинки" do
-        migrated(legacy(:asset => :image)).images.count.should == 1
+        migrated(legacy(:asset => :attachment)).assets[0].file_size.should > 0
       end
     end
     describe "должны проставиться" do
       it "имена файлов" do
-        migrated(legacy(:asset => :attachment)).attachments.first.file_name.should == 'attachment'
+        migrated(legacy(:asset => :attachment)).assets[0].file_name.should == 'attachment'
       end
       it "размеры картинок" do
-        migrated(legacy(:asset => :image)).images.first.file_width.should > 0
+        migrated(legacy(:asset => :image)).assets[0].file_width.should > 0
       end
       it "описания" do
-        migrated(legacy(:asset => :image)).images.first.description.should == "Файл image"
+        migrated(legacy(:asset => :image)).assets[0].description.should == "Файл image"
       end
     end
 
