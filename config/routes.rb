@@ -46,23 +46,23 @@ News::Application.routes.draw do
     get '/channels/:channel_id/entries/:id' => "entries#show"
   end
 
-  get '/assets/:id/:width-:height/:filename' => Dragonfly[:images].endpoint { |params, app|
+  get '/assets/:id/:width-:height/:file_name' => Dragonfly[:assets].endpoint { |params, app|
     image = Image.find(params[:id])
     width = [params[:width].to_i, image.file_width].min
     height = [params[:height].to_i, image.file_height].min
     image.file.thumb("#{width}x#{height}")
-  }, :as => :image, :constraints => { :filename => /.+?/ }
+  }, :as => :image, :format => false, :constraints => { :file_name => /.+?/ }
 
-  get '/assets/:id/cropped/:filename' => Dragonfly[:images].endpoint { |params, app|
+  get '/assets/:id/cropped/:file_name' => Dragonfly[:assets].endpoint { |params, app|
     image = Image.find(params[:id])
     image.file.thumb("118x100#")
-  }, :as => :cropped_image, :constraints => { :filename => /.+?/ }
+  }, :as => :cropped_image, :format => false, :constraints => { :file_name => /.+?/ }
 
-  get '/assets/:id/:filename' => Dragonfly[:images].endpoint { |params, app|
-    p params
-    p Asset.find(params[:id])
+  get '/assets/:id/:file_name' => Dragonfly[:assets].endpoint { |params, app|
     app.fetch(Asset.find(params[:id]).file_uid)
-  }, :as => :asset, :constraints => { :filename => /.+?/ }
+    #Asset.find(params[:id]).file.thumb("118x100#")
+    #Asset.find(params[:id]).file.fetch
+  }, :as => :asset, :format => false, :constraints => { :file_name => /.+?/ }
 
 
   get '/:kind/tasks' => 'tasks#index',

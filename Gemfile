@@ -33,7 +33,7 @@ group :development, :test do
 end
 
 gem 'cancan'
-gem 'ckeditor'
+gem 'ckeditor',                                   :require => false
 gem 'clockwork'
 gem 'compass'
 gem 'configliere'
