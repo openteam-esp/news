@@ -21,10 +21,10 @@ class Legacy::Entry < ActiveRecord::Base
     simple_format annotation.clone
   end
 
-  def channel_ids
+  def channels
     case target_id
-    when 1 then [Channel.find_or_create_by_title('tomsk.gov.ru/ru/announces').id]
-    when 2 then [Channel.find_or_create_by_title('tomsk.gov.ru/ru/news').id]
+    when 1 then [Channel.find_or_create_by_title('tomsk.gov.ru/ru/announces')]
+    when 2 then [Channel.find_or_create_by_title('tomsk.gov.ru/ru/news')]
     else []
     end
   end
@@ -39,7 +39,7 @@ class Legacy::Entry < ActiveRecord::Base
       entry.since         = date_time
       entry.until         = end_date_time
       entry.save :validate => false
-      entry.channel_ids   = channel_ids
+      entry.channels      = channels
       assets.each do | legacy_asset |
         asset = Asset.find_or_initialize_by_legacy_id legacy_asset.id
         asset.entry = entry

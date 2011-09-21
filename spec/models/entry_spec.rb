@@ -118,20 +118,19 @@ describe Entry do
   describe "блокировка" do
     before do
       set_current_user initiator
-      stored_draft.lock
     end
     it "при блокировки должна сохранять когда и кем заблокирована" do
-      stored_draft.reload.locked?.should be true
-      stored_draft.locked_at.should > Time.now - 5.seconds
-      stored_draft.locked_by.should == initiator
+      draft.lock
+      draft.locked?.should be true
+      draft.locked_at.should > Time.now - 5.seconds
+      draft.locked_by.should == initiator
     end
 
     it "сохранение новости, должно ее разблокировать" do
-      entry = Entry.find(stored_draft.id)
-      entry.save!
-      entry.reload.locked?.should be false
-      entry.locked_at.should be nil
-      entry.locked_by.should be nil
+      draft(:locked_at => Time.now).save!
+      draft.should_not be_locked
+      draft.locked_at.should be_nil
+      draft.locked_by.should be_nil
     end
   end
 

@@ -37,7 +37,8 @@ describe EntriesController do
     it "assigns the requested entry as @entry" do
       mock_find_by_id
       get :edit, :id => draft.id
-      assigns(:entry).should eq(draft)
+      assigns(:entry).should == draft
+      assigns(:entry).should be_locked
     end
   end
 

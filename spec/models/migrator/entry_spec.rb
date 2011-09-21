@@ -81,16 +81,10 @@ describe Migrator::Entry do
       migrated(legacy(:target_id => nil)).channels.should be_empty
     end
     it "1 => 'Анонсы'" do
-      channel = Fabricate(:channel)
-      Channel.should_receive(:find_or_create_by_title).with('tomsk.gov.ru/ru/announces').and_return channel
-      Channel.should_receive(:find).with([channel.id]).and_return [channel]
-      migrated(legacy(:target_id => 1))
+      migrated(legacy(:target_id => 1)).channels.map(&:title).should == ["tomsk.gov.ru/ru/announces"]
     end
     it "2 => 'Новости'" do
-      channel = Fabricate(:channel)
-      Channel.should_receive(:find_or_create_by_title).with('tomsk.gov.ru/ru/news').and_return channel
-      Channel.should_receive(:find).with([channel.id]).and_return [channel]
-      migrated(legacy(:target_id => 2))
+      migrated(legacy(:target_id => 2)).channels.map(&:title).should == ["tomsk.gov.ru/ru/news"]
     end
   end
 
