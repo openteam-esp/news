@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Esp::SpecHelper
+module EspSpecHelper
 
   def set_current_user(user = nil)
     user ||= initiator

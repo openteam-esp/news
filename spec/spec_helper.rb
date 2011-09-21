@@ -18,13 +18,18 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.include Devise::TestHelpers, :type => :controller
-    config.include Esp::SpecHelper
+    config.include EspSpecHelper
     config.mock_with :rspec
-
+    config.before(:all) do
+      DeferredGarbageCollection.start
+    end
+    config.after(:all) do
+      DeferredGarbageCollection.reconsider
+    end
     config.before(:all) do
       Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
     end
-    config.before(:each) do
+    config.before(:all) do
       require Rails.root.join 'app/models/tasks/task'
       require 'fabrication'
     end
