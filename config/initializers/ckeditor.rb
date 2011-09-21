@@ -13,15 +13,6 @@ if Object.const_defined?("Ckeditor")
 
     # Allowed attachment file types for upload.
     # Set to nil or [] (empty array) for all file types
-    # config.attachment_file_types = ["doc", "docx", "rar", "zip", "xls", "swf"]
-  end
-
-  module Ckeditor::Utils
-    def self.parameterize_filename(filename)
-      extension = File.extname(filename)
-      basename = filename.gsub(/#{extension}$/, "").force_encoding('utf-8')
-
-      [basename.parameterize('_'), extension].join.downcase
-    end
+    # config.attachment_file_types = ["doc", "docx", "xls", "odt", "ods", "pdf", "rar", "zip", "tar", "swf"]
   end
 end

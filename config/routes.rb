@@ -9,7 +9,7 @@ News::Application.routes.draw do
   resources :authentications, :only => [:create, :destroy]
 
   resources :entries, :only => [:show, :create, :edit, :index] do
-    resources :assets, :only => [:create, :destroy]
+    resources :assets, :only => [:index, :create, :destroy]
   end
 
   get '/:state/entries' => 'entries#index',
@@ -53,7 +53,14 @@ News::Application.routes.draw do
     image.file.thumb("#{width}x#{height}")
   }, :as => :image, :constraints => { :filename => /.+?/ }
 
+  get '/assets/:id/cropped/:filename' => Dragonfly[:images].endpoint { |params, app|
+    image = Image.find(params[:id])
+    image.file.thumb("118x100#")
+  }, :as => :cropped_image, :constraints => { :filename => /.+?/ }
+
   get '/assets/:id/:filename' => Dragonfly[:images].endpoint { |params, app|
+    p params
+    p Asset.find(params[:id])
     app.fetch(Asset.find(params[:id]).file_uid)
   }, :as => :asset, :constraints => { :filename => /.+?/ }
 

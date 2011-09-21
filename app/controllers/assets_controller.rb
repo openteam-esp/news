@@ -3,7 +3,9 @@ class AssetsController < AuthorizedApplicationController
 
   load_and_authorize_resource
 
-  actions :create, :destroy
+  layout 'ckeditor', :only => :index
+
+  actions :create, :destroy, :index
 
   def create
     create! do |success, failure|

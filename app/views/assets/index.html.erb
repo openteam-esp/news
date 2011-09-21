@@ -1,0 +1,12 @@
+<div id="fileupload" class="gal-holder">
+  <div class="gal-item">
+    <div class="fileupload-button gal-upload-holder">
+   <%= link_to I18n.t(:upload, :scope => [:ckeditor, :buttons]), '#', :class => "add" %>
+</div>
+</div>
+
+  <div class="fileupload-list">
+    <%= render :partial => 'asset', :collection => @assets %>
+  </div>
+</div>
+
