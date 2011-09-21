@@ -10,10 +10,6 @@ class Asset < ActiveRecord::Base
 
   before_create :set_type
 
-  def url_content
-    file.url
-  end
-
   private
 
     def set_type
