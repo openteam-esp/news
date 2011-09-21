@@ -18,11 +18,12 @@ group :production do
 end
 
 group :test do
+  gem 'activerecord-nulldb-adapter',              :require => false
   gem 'fabrication',                              :require => false
   gem 'rspec-rails',                              :require => false
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
-  gem 'activerecord-nulldb-adapter',              :require => false
+  gem 'sunspot_matchers',                         :require => false
 end
 
 group :development, :test do
