@@ -239,6 +239,7 @@ ru:
 
       asset:
         file: "Файл"
+        description: "Описание"
 
       event:
         kind_enum:

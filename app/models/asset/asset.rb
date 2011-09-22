@@ -2,6 +2,9 @@ class Asset < ActiveRecord::Base
   belongs_to :entry
 
   scope :type, ->(type) { where(:type => type.classify) }
+
+  before_validation :set_description
+
   def self.before_destroy(*args) # disable destroy_attached_files
   end
 
@@ -12,6 +15,10 @@ class Asset < ActiveRecord::Base
   before_create :set_type
 
   private
+
+    def set_description
+      self.description = self.description.presence || self.file_name
+    end
 
     def set_type
       mime_group = file_mime_type.to_s.split('/')[0]
