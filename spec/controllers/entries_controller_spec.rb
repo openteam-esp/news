@@ -4,15 +4,15 @@ require 'spec_helper'
 
 describe EntriesController do
   before :each do
-    sign_in initiator
     set_current_user initiator
+    sign_in initiator
     User.should_receive(:first).with(:conditions => { "id" => initiator.id }).and_return initiator
   end
 
   def mock_find_by_id
-      scoped = []
-      Entry.should_receive(:scoped).and_return(scoped)
-      scoped.should_receive(:find).with(draft.id).and_return(draft)
+    scoped = []
+    Entry.should_receive(:scoped).and_return(scoped)
+    scoped.should_receive(:find).with(draft.id).and_return(draft)
   end
 
   describe "GET index" do

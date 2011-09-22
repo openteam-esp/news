@@ -4,6 +4,8 @@ class Subtask < Task
 
   default_value_for :initiator do User.current end
 
+  validates_presence_of :executor, :description
+
   state_machine :initial => :fresh do
     state :fresh
     state :processing
@@ -44,5 +46,6 @@ end
 #  created_at   :datetime
 #  updated_at   :datetime
 #  issue_id     :integer
+#  description  :text
 #
 

@@ -43,7 +43,6 @@ News::Application.routes.draw do
 
   namespace :public do
     resources :entries, :only => [:index, :show]
-
     get '/channels/:channel_id/entries/:id' => "entries#show"
   end
 
@@ -71,6 +70,8 @@ News::Application.routes.draw do
   resources :tasks, :only => [] do
     post :fire_event, :on => :member
   end
+
+  post '/issues/:issue_id/subtasks' => 'subtasks#create', :as => :issue_subtask
 
   root :to => 'roots#index'
 end

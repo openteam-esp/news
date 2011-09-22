@@ -8,9 +8,11 @@ class EntriesController < AuthorizedApplicationController
 
   has_searcher
 
-  load_and_authorize_resource
+  authorize_resource
 
-  before_filter :lock_entry, :only => :edit
+  def edit
+    edit! { @entry.lock }
+  end
 
   def create
     create! { edit_entry_path(@entry) }
@@ -53,10 +55,6 @@ class EntriesController < AuthorizedApplicationController
     def sidebar_or_archive_layout
       return 'archive' if current_scopes[:state] == 'published'
       'list'
-    end
-
-    def lock_entry
-      @entry.lock
     end
 end
 

@@ -8,6 +8,7 @@ describe Task do
   it { Task.scoped.to_sql.should == Task.unscoped.order('id').to_sql }
 end
 
+
 # == Schema Information
 #
 # Table name: tasks
@@ -22,5 +23,6 @@ end
 #  created_at   :datetime
 #  updated_at   :datetime
 #  issue_id     :integer
+#  description  :text
 #
 

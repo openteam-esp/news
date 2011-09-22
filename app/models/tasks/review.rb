@@ -6,6 +6,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: tasks
@@ -20,5 +21,6 @@ end
 #  created_at   :datetime
 #  updated_at   :datetime
 #  issue_id     :integer
+#  description  :text
 #
 
