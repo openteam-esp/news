@@ -264,6 +264,9 @@ ru:
         fresh: 'Новая'
         pending: 'Ожидает выполнения предыдущей задачи'
         processing: 'В работе'
+      event:
+        accept: Взять в работу
+
 
     entry:
       state:
@@ -272,49 +275,6 @@ ru:
         publishing: 'Публикация'
         published: 'Опубликована'
 
-
-  entry:
-    state:
-      draft: "черновик"
-      awaiting_correction: "ожидает корректировки"
-      correcting: "на корректировке"
-      awaiting_publication: "ожидает публикации"
-      published: "опубликован"
-      trash: "в корзине"
-
-  event:
-    kind:
-      before:
-        created: "Создать"
-        correct: "Взять на корректуру"
-        publish: "Опубликовать"
-        updated: "Изменить"
-        untrash: "Восстановить из корзины"
-        to_trash: "Поместить в корзину"
-        return_to_corrector: "Вернуть корректору"
-        immediately_publish: "Немедленно опубликовать"
-        immediately_send_to_publisher: "Немедленно отправить публикатору"
-        return_to_author: "Вернуть автору"
-        send_to_corrector: "Отправить корректору"
-        send_to_publisher: "Отправить публикатору"
-      after:
-        created: "создано"
-        store: "изменено"
-        request_correcting: "отправлено на корректуру"
-        request_reworking: "отправлено на доработку"
-        correct: "взято на корректуру"
-        publish: "опубликовано"
-        to_trash: "помещено в корзину"
-        recover: "восстановлено из корзины"
-        discard: "удалено"
-        return_to_corrector: "возвращено корректору"
-        immediately_publish: "немедленно опубликовано"
-        immediately_send_to_publisher: "немедленно отправлено публикатору"
-        restore: "восстановлено"
-        return_to_author: "возвращено автору"
-        send_to_corrector: "отправлено корректору"
-        send_to_publisher: "отправлено публикатору"
-        to_trash: "удалено"
 
   views:
     pagination:

@@ -68,6 +68,10 @@ News::Application.routes.draw do
       :as => :tasks,
       :constraints => { :kind => /(fresh|processed_by_me|initiated_by_me)/ }
 
+  resources :tasks, :only => [] do
+    post :fire_event, :on => :member
+  end
+
   root :to => 'roots#index'
 end
 

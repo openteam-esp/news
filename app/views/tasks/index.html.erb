@@ -19,6 +19,7 @@
           </div>
           <!-- END TODO -->
         </div>
+        <%= render :partial => 'actions', :locals => {:task => task} if task.fresh? %>
         <div class="entry_title">
           <%= composed_title(task.entry) %>
         </div>

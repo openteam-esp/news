@@ -47,6 +47,10 @@ class Issue < Task
     end
   end
 
+  def human_state_events
+    state_events - [:suspend]
+  end
+
   def next_task
   end
 end

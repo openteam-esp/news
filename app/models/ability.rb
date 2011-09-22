@@ -39,12 +39,7 @@ class Ability
       user == subtask.executor
     end
 
-    #################
-    #  casual user  #
-    #################
-
-
-    can :read, Task
+    can [:read, :fire_event], Task
 
     can :create, Entry
 
