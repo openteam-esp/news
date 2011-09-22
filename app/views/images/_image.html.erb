@@ -13,7 +13,7 @@
     <div class="img-data">
       <div class="img-name"><%= image.file_name %></div>
       <div class="time-size">
-        <div class="time"><%= l image.created_at %></div>
+        <div class="time"><%= l image.created_at, :format => :long %></div>
         <div class="fileupload-size size"><%= number_to_human_size(image.file.size) %></div>
       </div>
     </div>
