@@ -5,7 +5,7 @@
         <div class="line">
           <div class="time_ago"><%= time_ago_in_words(entry.created_at) %> назад</div>
           <div class="title">
-            <%= link_to entry.composed_title, entry_path(entry), :class => "entry_state #{entry.state}" %>
+            <%= link_to composed_title(entry), entry_path(entry), :class => "entry_state #{entry.state}" %>
             <span class="task_state <%= entry.state %>"><%= I18n.t "state_machine.entry.state.#{entry.state}" %></span>
             <span class="initiator"><%= entry.initiator %></span>
           </div>

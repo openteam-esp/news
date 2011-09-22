@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-include ActionView::Helpers::DateHelper
-
 class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
@@ -29,7 +27,7 @@ class Entry < ActiveRecord::Base
     state :correcting
     state :publishing
     state :published do
-      validates_presence_of :channels
+      validates_presence_of :title, :body, :channels
     end
 
     event :up do
@@ -74,10 +72,7 @@ class Entry < ActiveRecord::Base
     date   :since
     date   :until
     string :state
-
-    integer :channel_ids, :multiple => true do
-      channel_ids
-    end
+    integer :channel_ids, :multiple => true
   end
 
   def current_user
@@ -114,14 +109,6 @@ class Entry < ActiveRecord::Base
     args.map{|role| self.send("current_user_#{role}?")}.uniq.compact == [true]
   end
 
-  def created_human
-    result = "Создано "
-    result += ::I18n.l(self.created_at, :format => :long)
-    result += " ("
-    result += time_ago_in_words(self.created_at)
-    result += " назад)"
-  end
-
   def restore(*args)
     super
     self.assets.destroy_all
@@ -131,20 +118,6 @@ class Entry < ActiveRecord::Base
     else
       self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
     end
-  end
-
-  def presented?(attribute, options={})
-    value = self.send(attribute)
-    presented = options[:html] ? value.try(:strip_html).presence : value.presence
-  end
-
-  def presented(attribute, options={})
-    presented?(attribute, options) ? self.send(attribute) : I18n.t("blank_entry_#{attribute}")
-  end
-
-  def composed_title
-    [ presented(:title).truncate(80, :omission => '…'), presented?(:body, :html => true) ].
-      compact.join(' – ').truncate(100, :omission => '…')
   end
 
   def lock

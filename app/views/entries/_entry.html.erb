@@ -1,6 +1,6 @@
-<%= presented_content_tag :h2, entry, :title %>
-<%= presented_content_tag :div, entry, :annotation, :html => true %>
-<%= presented_content_tag :div, entry, :body, :html => true  %>
+<%= presented_header entry %>
+<%= presented_html entry, :annotation %>
+<%= presented_html entry, :body %>
 
 <%= render_attribute_values entry, :images, :videos, :audios, :attachments %>
 <hr />

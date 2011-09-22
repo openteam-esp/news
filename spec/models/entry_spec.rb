@@ -11,36 +11,6 @@ describe Entry do
   it { should have_many(:attachments) }
   it { should have_many(:tasks) }
 
-  describe "composed_title" do
-    it "для пустой новости" do
-      Entry.new.composed_title.should == "(без заголовка)"
-    end
-
-    it "для новости с заголовком" do
-      Entry.new(:title => "заголовок").composed_title.should == "заголовок"
-    end
-
-    it "для новости с текстом" do
-      Entry.new(:body => "текст").composed_title.should == "(без заголовка) – текст"
-    end
-
-    it "для новости с заголовком и текстом" do
-      Entry.new(:title => "заголовок", :body => "текст").composed_title.should == "заголовок – текст"
-    end
-
-    it "большой текст" do
-      Entry.new(:body => "a"*100).composed_title.should == "(без заголовка) – #{'a'*81}…"
-    end
-
-    it "большой заголовок" do
-      Entry.new(:title => "a"*100).composed_title.should == "#{'a'*79}…"
-    end
-
-    it "большой заголовок + большой текст" do
-      Entry.new(:title => "a"*100, :body => "<p>" + "a"*100 + "</p>").composed_title.should == "#{'a'*79}… – #{'a'*16}…"
-    end
-  end
-
   it 'сортировка должна быть по убыванию по дате-времени создания' do
     Entry.scoped.to_sql.should == Entry.unscoped.order('created_at desc').to_sql
   end
@@ -144,6 +114,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -161,6 +132,6 @@ end
 #  updated_at   :datetime
 #  legacy_id    :integer
 #  locked_at    :datetime
-#  locked_by    :integer
+#  locked_by_id :integer
 #
 
