@@ -1,7 +1,7 @@
 <% if collection.any? %>
   <div class="list">
     <% collection.each do | task | %>
-      <div class="task">
+      <div class="item">
         <div class="line">
           <div class="time_ago"><%= time_ago_in_words(task.created_at) %> назад</div>
           <div class="title">
@@ -27,6 +27,6 @@
     <% end %>
   </div>
 <% else %>
-  <h2>Нет задач</h2>
+  <h2><%= t('no_any_tasks') %></h2>
 <% end %>
 
