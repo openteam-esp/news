@@ -89,12 +89,12 @@ describe Ability do
       end
 
       it "может отменить автор" do
-        subtask = processing_correcting.review.subtasks.create! :initiator => corrector
+        subtask = processing_correcting.review.subtasks.create! :initiator => corrector, :executor => initiator, :description => :description
         ability(:for => corrector).should be_able_to(:cancel, subtask)
       end
 
       it "может отвергнуть исполнитель" do
-        subtask = processing_correcting.review.subtasks.create! :executor => initiator
+        subtask = processing_correcting.review.subtasks.create! :executor => initiator, :description => :description
         ability(:for => initiator).should be_able_to(:refuse, subtask)
       end
     end

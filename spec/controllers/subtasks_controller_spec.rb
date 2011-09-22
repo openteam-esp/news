@@ -4,6 +4,7 @@ describe SubtasksController do
   before :each do
     sign_in corrector
     set_current_user corrector
+    User.should_receive(:find).with(initiator.id, :conditions => nil).and_return initiator
     User.should_receive(:first).with(:conditions => { "id" => corrector.id }).and_return corrector
     Issue.should_receive(:find).at_least(1).times.with(draft.prepare.id).and_return draft.prepare
   end

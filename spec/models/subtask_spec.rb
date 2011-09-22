@@ -3,10 +3,10 @@ require 'spec_helper'
 
 describe Subtask do
 
-  let :subtask do draft.prepare.subtasks.create! :executor => Fabricate(:user) end
+  let :subtask do draft.prepare.subtasks.create! :executor => Fabricate(:user), :description => :description end
 
   describe "исполнитель текущей задачи" do
-    before { begin set_current_user(initiator); rescue => e; puts e.backtrace.join("\n"); end }
+    before { set_current_user(initiator) }
 
     it "исполнитель текущей задачи может создавать подзадачи" do
       subtask.should be_persisted
