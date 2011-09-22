@@ -1,11 +1,12 @@
 class TasksController < AuthorizedApplicationController
   layout 'list'
 
-  actions :index
+  actions :index, :create
+
+  optional_belongs_to :task
 
   custom_actions :resource => :fire_event
 
-  authorize_resource
 
   has_scope :kind
 
@@ -16,4 +17,14 @@ class TasksController < AuthorizedApplicationController
       redirect_to entry_path(@task.entry) and return
     }
   end
+
+  def create
+    create! { entry_path(parent.entry) }
+  end
+
+  private
+
+    def build_resource
+      get_resource_ivar || set_resource_ivar(Issue.find(params[:task_id]).subtasks.build(params[:subtask]))
+    end
 end

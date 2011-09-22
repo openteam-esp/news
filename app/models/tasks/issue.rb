@@ -1,6 +1,6 @@
 class Issue < Task
 
-  has_many :subtasks
+  has_many :subtasks, :before_add => :set_entry
 
   state_machine :initial => :pending do
 
@@ -53,6 +53,11 @@ class Issue < Task
 
   def next_task
   end
+
+  protected
+    def set_entry(subtask)
+      subtask.entry = entry
+    end
 end
 
 

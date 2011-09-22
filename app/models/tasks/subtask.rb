@@ -4,7 +4,7 @@ class Subtask < Task
 
   default_value_for :initiator do User.current end
 
-  validates_presence_of :executor, :description
+  validates_presence_of :executor, :description, :entry
 
   state_machine :initial => :fresh do
     state :fresh

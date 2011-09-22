@@ -140,9 +140,9 @@ class Entry < ActiveRecord::Base
 
   private
     def create_tasks
-      self.prepare = Prepare.create! :initiator => initiator, :entry => self, :executor => initiator
-      self.review = Review.create! :initiator => initiator, :entry => self
-      self.publish = Publish.create! :initiator => initiator, :entry => self
+      create_prepare :initiator => initiator, :entry => self, :executor => initiator
+      create_review :initiator => initiator, :entry => self
+      create_publish :initiator => initiator, :entry => self
     end
 end
 
