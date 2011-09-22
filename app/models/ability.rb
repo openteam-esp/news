@@ -32,19 +32,16 @@ class Ability
     #  casual user  #
     #################
 
+
     can :read, Task
 
-    can [:create], Entry
+    can :create, Entry
 
     can :read, Entry do | entry |
       true
     end
 
-    can :edit, Entry do |entry|
-      true
-    end
-
-    can :create, Event do |event|
+    can :update, Entry do | entry |
       true
     end
 

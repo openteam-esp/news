@@ -265,6 +265,14 @@ ru:
         pending: 'Ожидает выполнения предыдущей задачи'
         processing: 'В работе'
 
+    entry:
+      state:
+        draft: 'Черновик'
+        correcting: 'Корректура'
+        publishing: 'Публикация'
+        published: 'Опубликована'
+
+
   entry:
     state:
       draft: "черновик"

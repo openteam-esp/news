@@ -1,5 +1,5 @@
 class EntriesController < AuthorizedApplicationController
-  actions :index, :show, :create, :edit
+  actions :index, :show, :create, :edit, :update
 
   layout :sidebar_or_archive_layout
 

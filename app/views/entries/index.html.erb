@@ -1,21 +1,18 @@
 <% if collection.any? %>
   <div class="list">
-    <% collection.each do | entry |%>
-      <div class="entry">
-        <a class="more" href="#">Подробнее</a>
-        <div class="title">
-          <%= link_to entry.composed_title.gilensize, entry_path(entry) %>
-          <a class="view" href="#">подробнее...</a>
-        </div>
-        <div class="details">
-          <div class="entry_state <%= entry.state %>"><%= entry.human_state %></div>
-          <div class="author"><%= entry.initiator %></div>
-          <div class="time_ago"><%= time_ago_in_words(entry.updated_at) %> назад</div>
+    <% collection.each do | entry | %>
+      <div class="task">
+        <div class="line">
+          <div class="time_ago"><%= time_ago_in_words(entry.created_at) %> назад</div>
+          <div class="title">
+            <%= link_to entry.composed_title, entry_path(entry), :class => "entry_state #{entry.state}" %>
+            <span class="task_state <%= entry.state %>"><%= I18n.t "state_machine.entry.state.#{entry.state}" %></span>
+            <span class="initiator"><%= entry.initiator %></span>
+          </div>
         </div>
       </div>
     <% end %>
   </div>
 <% else %>
-  <h1><%= t('no_any_entries') %></h1>
+  <h2><%= t('no_any_entries') %></h2>
 <% end %>
-

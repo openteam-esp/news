@@ -11,8 +11,6 @@
 
 <div class="entry_fields_wrapper">
 
-  <%= render :partial => "edit_actions", :locals => { :position => "top" } %>
-
   <%= semantic_form_for @entry do |form| %>
     <%= form.inputs :class => "inputs common_fields" do %>
       <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
@@ -23,8 +21,9 @@
       <%= form.input :since, :label => "Указать определённую дату и время публикации новости" %>
       <%= form.input :until, :label => "Указать определённую дату и время перемещения новости в архив" %>
       <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a,
-                     :label => "Указать на каких сайтах и в каких разделах будет отображаться опубликованная новость" %>
+        :label => "Указать на каких сайтах и в каких разделах будет отображаться опубликованная новость" %>
     <% end %>
+    <%= form.buttons %>
   <% end %>
   <div class="two_column">
     <div class="first">
@@ -38,7 +37,6 @@
 
   </div>
 
-  <%= render :partial => "edit_actions", :locals => { :position => "bottom" } %>
-
+  <%= render_statistic @entry %>
 </div>
 
