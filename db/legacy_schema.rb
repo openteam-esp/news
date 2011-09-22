@@ -1,4 +1,4 @@
-Legacy::Entry.connection.create_table "events", :force => true do |t|
+LegacyEntry.connection.create_table "events", :force => true do |t|
   t.text     "title"
   t.text     "annotation"
   t.text     "body"
@@ -10,7 +10,7 @@ Legacy::Entry.connection.create_table "events", :force => true do |t|
   t.datetime "end_date_time"
 end
 
-Legacy::Asset.connection.create_table "attachments", :force => true do |t|
+LegacyAsset.connection.create_table "attachments", :force => true do |t|
   t.string   "description"
   t.datetime "created_at"
   t.datetime "updated_at"

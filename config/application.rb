@@ -23,8 +23,10 @@ module News
                                 #{config.root}/app/navigation_renderers
                                 #{config.root}/app/models/asset
                                 #{config.root}/app/models/tasks
-                                #{config.root}/lib
+                                #{config.root}/lib/middleware
                                )
+
+    config.autoload_paths += %W[#{config.root}/lib/legacy_models] unless Rails.env.production?
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -58,9 +60,9 @@ module News
       generators.fixture_replacement  :fabrication
     end
 
-    config.middleware.insert_after 'Warden::Manager', 'Esp::Middleware::SetCurrentUser'
-    config.middleware.insert_after 'Esp::Middleware::SetCurrentUser', 'Esp::Middleware::AuthorizeAssets'
-    config.middleware.insert_after 'Esp::Middleware::AuthorizeAssets', 'Dragonfly::Middleware', :assets
+    config.middleware.insert_after 'Warden::Manager', 'SetCurrentUserMiddleware'
+    config.middleware.insert_after 'SetCurrentUserMiddleware', 'AuthorizeAssetsMiddleware'
+    config.middleware.insert_after 'AuthorizeAssetsMiddleware', 'Dragonfly::Middleware', :assets
     config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
       :verbose     => true,
       :metastore   => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/meta"),

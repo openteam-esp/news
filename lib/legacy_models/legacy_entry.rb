@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 
-class Legacy::Entry < ActiveRecord::Base
+class LegacyEntry < ActiveRecord::Base
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper
 
@@ -9,7 +9,7 @@ class Legacy::Entry < ActiveRecord::Base
 
   set_table_name "events"
 
-  has_many :assets, :foreign_key => 'event_id'
+  has_many :legacy_assets, :foreign_key => 'event_id'
 
   default_scope order('id desc')
 
@@ -29,9 +29,19 @@ class Legacy::Entry < ActiveRecord::Base
     end
   end
 
+  def self.migrate(logger=nil)
+    LegacyEntry.record_timestamps = false
+    LegacyEntry.find_in_batches(:batch_size => 100) do | batch |
+      logger.try :print, '.'
+      batch.each do | legacy_entry |
+        legacy_entry.migrate
+      end
+    end
+  end
+
   def migrate
     User.current = initiator
-    ::Entry.find_or_initialize_by_legacy_id(id).tap do |entry|
+    Entry.find_or_initialize_by_legacy_id(id).tap do |entry|
       entry.title         = title
       entry.annotation    = migrated_annotation
       entry.body          = migrated_body
@@ -40,7 +50,7 @@ class Legacy::Entry < ActiveRecord::Base
       entry.until         = end_date_time
       entry.save :validate => false
       entry.channels      = channels
-      assets.each do | legacy_asset |
+      legacy_assets.each do | legacy_asset |
         asset = Asset.find_or_initialize_by_legacy_id legacy_asset.id
         asset.entry = entry
         asset.file = File.open(legacy_asset.file.path)

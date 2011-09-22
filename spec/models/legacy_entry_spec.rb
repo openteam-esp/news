@@ -2,18 +2,20 @@
 
 require 'spec_helper'
 
-describe Migrator::Entry do
+describe LegacyEntry do
 
   def legacy(options={})
-    asset = options.delete(:asset)
-    Fabricate('legacy/entry', options).tap do | legacy |
-      if asset
-        file = File.open(Rails.root.join "spec", "fixtures", asset.to_s)
-        legacy.assets.create! :file_file_name => asset.to_s,
-                              :description => "Файл #{asset}",
-                              :type => 'AttachmentFile'
-      end
-    end
+    @legacy ||= begin
+                  asset = options.delete(:asset)
+                  Fabricate(:legacy_entry, options).tap do | legacy |
+                    if asset
+                      file = File.open(Rails.root.join "spec", "fixtures", asset.to_s)
+                      legacy.legacy_assets.create!  :file_file_name => asset.to_s,
+                        :description => "Файл #{asset}",
+                        :type => 'AttachmentFile'
+                    end
+                  end
+                end
   end
 
   def migrated(legacy)

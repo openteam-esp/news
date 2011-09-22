@@ -8,12 +8,9 @@ development:
 test:
   adapter:  nulldb
 
-legacy_production: &legacy
+legacy_development:
   adapter: postgresql
   database: atonews
-
-legacy_development:
-  <<: *legacy
 
 legacy_test:
   adapter:  nulldb

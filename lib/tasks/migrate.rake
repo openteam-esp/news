@@ -3,6 +3,6 @@
 desc "migrate old data"
 task :migrate => :environment do
   print "migrate entries "
-  Migrator::Entry.new(STDOUT).migrate
+  LegacyEntry.migrate(STDOUT)
   puts " ok"
 end

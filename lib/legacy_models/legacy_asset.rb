@@ -1,4 +1,4 @@
-class Legacy::Asset < ActiveRecord::Base
+class LegacyAsset < ActiveRecord::Base
   set_inheritance_column :_type
 
   establish_connection "legacy_#{Rails.env}"
@@ -7,7 +7,7 @@ class Legacy::Asset < ActiveRecord::Base
 
   default_scope order(:id)
 
-  belongs_to :entry, :class_name => 'Legacy::Entry', :foreign_key => 'event_id'
+  belongs_to :entry, :class_name => 'LegacyEntry', :foreign_key => 'event_id'
 
   def file
     File.new(Rails.root.join "spec", "fixtures", file_file_name) if Rails.env.test?
