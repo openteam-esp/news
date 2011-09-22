@@ -4,11 +4,6 @@
     <li>
       <%= link_to t('edit'), edit_entry_path(@entry), :class => "button" if can?(:edit, @entry)  %>
     </li>
-    <% (@entry.permitted_events - [:store]).each do |kind| %>
-      <li class="<%= kind %>">
-        <%= render :partial => 'events/form', :locals => {:event => Event.new(:entry => @entry, :kind => kind)} %>
-      </li>
-    <% end %>
     <li class="clear_left">
       <%= render_statistic @entry %>
     </li>
