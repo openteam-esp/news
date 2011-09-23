@@ -14,8 +14,8 @@
   <%= semantic_form_for @entry do |form| %>
     <%= form.inputs :class => "inputs common_fields" do %>
       <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
-      <%= form.cktext_area :annotation %>
-      <%= form.cktext_area :body %>
+      <%= form.input :annotation, :as => :ckeditor %>
+      <%= form.input :body, :as => :ckeditor %>
     <% end %>
     <%= form.inputs :class => "inputs additional_fields" do %>
       <%= form.input :since, :label => "Указать определённую дату и время публикации новости" %>
