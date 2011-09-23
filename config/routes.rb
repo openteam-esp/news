@@ -69,7 +69,10 @@ News::Application.routes.draw do
 
 
   post '/tasks/:id/fire_event' => 'tasks#fire_event', :as => :task_fire_event
-  post '/tasks/:task_id/tasks' => 'tasks#create', :as => :task_tasks
+
+  resources :issues, :only => [] do
+    resources :subtasks, :only => [:new, :create]
+  end
 
   root :to => 'roots#index'
 end

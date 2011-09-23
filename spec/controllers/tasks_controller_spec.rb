@@ -29,28 +29,5 @@ describe TasksController do
     end
   end
 
-  describe "POST create" do
-    before :each do
-      sign_in initiator
-      set_current_user initiator
-      User.should_receive(:first).with(:conditions => { "id" => initiator.id }).and_return initiator
-      Issue.should_receive(:find).with(draft.prepare.id).at_least(1).times.and_return draft.prepare
-      Issue.should_receive(:find).with(draft.prepare.id, :conditions => nil).and_return draft.prepare
-      User.should_receive(:find).with(another_initiator.id, :conditions => nil).and_return another_initiator
-    end
-    it "assigns a newly created subtask as @subtask" do
-      as initiator do
-        post :create, :task_id => draft.prepare.id, :subtask => { :description => "kjkjk", :executor_id => another_initiator.id } rescue nil
-      end
-      assigns(:task).should be_a(Subtask)
-      assigns(:task).should be_persisted
-    end
-    it "redirects to the entry view" do
-      as initiator do
-        post :create, :task_id => draft.prepare.id, :subtask => { :description => "ololo", :executor_id => another_initiator.id }
-      end
-      response.should redirect_to([draft])
-    end
-  end
 end
 

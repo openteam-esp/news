@@ -1,0 +1,10 @@
+<%= semantic_form_for @subtask, :url => task_tasks_path(parent) do |form| %>
+  <%= form.error_messages %>
+  <%= form.inputs do %>
+    <%= form.input :executor %>
+    <%= form.input :description %>
+  <% end %>
+  <%= form.buttons do %>
+    <%= form.commit_button %>
+  <% end %>
+<% end %>
