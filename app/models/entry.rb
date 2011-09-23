@@ -39,7 +39,10 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  default_scope order('created_at desc')
+  scope :ordered, order('id desc')
+
+  default_scope not_deleted.ordered
+
 
   scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
 
@@ -148,6 +151,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -166,5 +170,6 @@ end
 #  legacy_id    :integer
 #  locked_at    :datetime
 #  locked_by_id :integer
+#  deleted_at   :datetime
 #
 

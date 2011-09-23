@@ -4,11 +4,14 @@ class Task < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :executor, :class_name => 'User'
 
-  default_scope order(:id)
 
   scope :kind, lambda {|kind| User.current.try "#{kind}_tasks" }
+  scope :ordered, order('id desc')
+
+  default_scope not_deleted.ordered
 
 end
+
 
 
 
@@ -28,5 +31,6 @@ end
 #  updated_at   :datetime
 #  issue_id     :integer
 #  description  :text
+#  deleted_at   :datetime
 #
 

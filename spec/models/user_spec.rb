@@ -7,16 +7,16 @@ describe User do
     before { set_current_user initiator }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.should == { :state => :fresh, :type => ['Subtask'], :executor_id => [initiator.id, nil]}
+      initiator.fresh_tasks.where_values_hash.should == { :state => :fresh, :type => ['Subtask'], :executor_id => [initiator.id, nil], 'deleted_at' => nil}
     end
 
     it "выполняемых мною задач" do
-      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id, 'deleted_at' => nil}
     end
 
     it "созданных мною задач" do
       initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
-      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id, 'deleted_at' => nil}
     end
   end
 
@@ -24,16 +24,16 @@ describe User do
     before { set_current_user initiator(:roles => :corrector) }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Subtask', 'Review'], :executor_id => [initiator.id, nil]}
+      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Subtask', 'Review'], :executor_id => [initiator.id, nil], 'deleted_at' => nil}
     end
 
     it "выполняемых мною задач" do
-      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id, 'deleted_at' => nil}
     end
 
     it "созданных мною задач" do
       initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
-      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id, 'deleted_at' => nil }
     end
   end
 
@@ -41,16 +41,16 @@ describe User do
     before { set_current_user initiator(:roles => :publisher) }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Subtask', 'Publish'], :executor_id => [initiator.id, nil]}
+      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Subtask', 'Publish'], :executor_id => [initiator.id, nil], 'deleted_at' => nil}
     end
 
     it "выполняемых мною задач" do
-      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id, 'deleted_at' => nil}
     end
 
     it "созданных мною задач" do
       initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
-      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id, 'deleted_at' => nil}
     end
   end
 
@@ -58,16 +58,16 @@ describe User do
     before { set_current_user initiator(:roles => [:publisher, :corrector]) }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Subtask', 'Review', 'Publish'], :executor_id => [initiator.id, nil]}
+      initiator.fresh_tasks.where_values_hash.should == {:state => :fresh, :type => ['Subtask', 'Review', 'Publish'], :executor_id => [initiator.id, nil], 'deleted_at' => nil}
     end
 
     it "выполняемых мною задач" do
-      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id}
+      initiator.processed_by_me_tasks.where_values_hash.should == {:state => :processing, :executor_id => initiator.id, 'deleted_at' => nil}
     end
 
     it "созданных мною задач" do
       initiator.initiated_by_me_tasks.to_sql.should =~ /\(state <> 'pending'\)/
-      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id}
+      initiator.initiated_by_me_tasks.where_values_hash.should == {:initiator_id => initiator.id, 'deleted_at' => nil}
     end
   end
 

@@ -9,11 +9,9 @@ describe Entry do
   it { should have_many(:videos) }
   it { should have_many(:audios) }
   it { should have_many(:attachments) }
-  it { should have_many(:tasks) }
+  it { should have_many(:tasks).dependent(:destroy) }
 
-  it 'сортировка должна быть по убыванию по дате-времени создания' do
-    Entry.scoped.to_sql.should == Entry.unscoped.order('created_at desc').to_sql
-  end
+  it { Entry.scoped.to_sql.should =~ /WHERE entries.deleted_at IS NULL ORDER BY id desc$/ }
 
   it 'должна корректно сохранять и отображать дату' do
     I18n.l(draft(:since => "19.07.2011 09:20").since, :format => :datetime).should == "19.07.2011 09:20"
@@ -23,29 +21,29 @@ describe Entry do
     it "инициатору показываются только его новости" do
       set_current_user(initiator)
       Entry.all_states.each do |state|
-        Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => initiator.id}
+        Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => initiator.id, 'deleted_at' => nil}
       end
     end
 
     describe "личные папки" do
       it "корректора" do
         set_current_user(initiator(:roles => :corrector))
-        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id}
+        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id, 'deleted_at' => nil}
       end
       it "публикатора" do
         set_current_user(initiator(:roles => :publisher))
-        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id}
+        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id, 'deleted_at' => nil}
       end
     end
 
     describe "папки для новостей в процесса" do
       it "корректора" do
         set_current_user(initiator(:roles => :corrector))
-        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states}
+        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states, 'deleted_at' => nil}
       end
       it "публикатора" do
         set_current_user(initiator(:roles => :publisher))
-        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states}
+        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states, 'deleted_at' => nil}
       end
     end
 
@@ -115,6 +113,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -133,5 +132,6 @@ end
 #  legacy_id    :integer
 #  locked_at    :datetime
 #  locked_by_id :integer
+#  deleted_at   :datetime
 #
 

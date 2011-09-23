@@ -10,7 +10,7 @@ describe Public::EntriesController do
 
     it "должны показываться только опубликованные новости" do
       get :index
-      assigns(:entries).where_values_hash.should == {:state => 'published'}
+      assigns(:entries).where_values_hash.symbolize_keys.should == {:state => 'published', :deleted_at => nil}
     end
 
     describe "должен отдавать результаты в формате" do
