@@ -10,7 +10,7 @@
   <div class="fileupload-file gal-inner-holder">
     <div class="img"><%=  image_tag "filetypes/icon_#{attachment.file_type}.png", :alt => "", :size => "64x64" %></div>
     <div class="img-data">
-      <div class="img-name"><%= attachment.description %></div>
+      <div class="img-name"><%= attachment.file_name %></div>
       <div class="time-size">
         <div class="time"><%= l attachment.created_at, :format => :long %></div>
         <div class="fileupload-size size"><%= number_to_human_size(attachment.file.size) %></div>
