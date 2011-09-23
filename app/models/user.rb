@@ -35,10 +35,10 @@ class User < ActiveRecord::Base
   end
 
   def fresh_tasks
-    types = []
+    types = ['Subtask']
     types << 'Review' if corrector?
     types << 'Publish' if publisher?
-    Task.where(:type => types).where(:state => :fresh)
+    Task.where(:type => types).where(:state => :fresh, :executor_id => [self.id, nil])
   end
 
   def processed_by_me_tasks
