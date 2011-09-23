@@ -1,7 +1,7 @@
 class Asset < ActiveRecord::Base
   belongs_to :entry
 
-  scope :type, ->(type) { where(:type => type.classify) }
+  scope :type, ->(type) { type == 'assets' ? scoped : where(:type => type.classify) }
 
   before_validation :set_description
 
