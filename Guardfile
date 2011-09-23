@@ -7,7 +7,6 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, :wait => 40 do
   watch(%r{^config/environments/.+\.rb$})
   watch(%r{^config/initializers/.+\.rb$})
   watch('spec/spec_helper.rb')
-  watch(%r{lib/(.+)/spec_helper.rb})
 end
 
 guard 'rspec', :cli => '--drb', :version => 2 do

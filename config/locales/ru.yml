@@ -159,7 +159,7 @@ ru:
       title: Новости
       draft: Черновики
       processing: В работе
-      trashed: Корзина
+      deleted: Корзина
 
     archive:
       title: Архив

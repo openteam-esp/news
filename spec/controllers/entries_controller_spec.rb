@@ -18,9 +18,9 @@ describe EntriesController do
   describe "GET index" do
     it "assigns all entries as @entries" do
       scope = [draft]
-      Entry.should_receive(:state).at_least(1).times.with('draft').and_return(scope)
+      Entry.should_receive(:folder).at_least(1).times.with('draft').and_return(scope)
       scope.should_receive(:page).at_least(1).times.and_return(scope)
-      get :index, 'state' => 'draft'
+      get :index, :folder => 'draft'
       assigns(:entries).should eq([draft])
     end
   end

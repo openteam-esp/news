@@ -23,7 +23,7 @@ class Public::EntriesController < ApplicationController
         headers['X-Total-Pages'] = searcher.results.total_pages.to_s
         searcher.results
       else
-        end_of_association_chain.by_state('published').page(paginate_options[:page]).per(paginate_options[:per_page])
+        end_of_association_chain.published.page(paginate_options[:page]).per(paginate_options[:per_page])
       end
     end
 

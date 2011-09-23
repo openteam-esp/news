@@ -39,28 +39,20 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  scope :ordered, order('id desc')
+  scope :descending, ->(attribute) { order("#{attribute} desc") }
+  scope :self_initiated, -> { where(:initiator_id => User.current_id) }
+  scope :processing, -> { where(:state => processing_states).not_deleted }
+  scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
+  scope :draft, -> { where(:state => :draft).not_deleted }
 
-  default_scope not_deleted.ordered
+  def self.folder(folder)
+    case folder.to_sym
+    when :processing  then User.current.roles.any? ? processing : processing.self_initiated
+    when :draft       then draft.self_initiated
+    when :deleted     then deleted.where(:deleted_by_id => User.current_id)
+    end.descending(:id)
+  end
 
-
-  scope :self_initiated, lambda { where(:initiator_id => User.current_id) }
-
-  scope :by_state, lambda { |state|
-    if state.to_s == 'processing'
-      where(:state => processing_states)
-    else
-      where(:state => state)
-    end
-  }
-
-  scope :state, lambda { |state|
-    if User.current.roles.empty? || state.to_s == 'draft'
-      by_state(state).self_initiated
-    else
-      by_state(state)
-    end
-  }
 
   after_create :create_tasks
 
@@ -95,7 +87,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.processing_states
-    %w[correcting publishing]
+    [:correcting, :publishing]
   end
 
   delegate :publisher?, :corrector?, :to => :current_user, :prefix => true

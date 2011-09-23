@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe Entry do
-
   it { should have_many(:assets) }
   it { should have_many(:images) }
   it { should have_many(:videos) }
@@ -11,40 +10,55 @@ describe Entry do
   it { should have_many(:attachments) }
   it { should have_many(:tasks).dependent(:destroy) }
 
-  it { Entry.scoped.to_sql.should =~ /WHERE entries.deleted_at IS NULL ORDER BY id desc$/ }
-
   it 'должна корректно сохранять и отображать дату' do
     I18n.l(draft(:since => "19.07.2011 09:20").since, :format => :datetime).should == "19.07.2011 09:20"
   end
 
-  describe "папки новостей" do
-    it "инициатору показываются только его новости" do
-      set_current_user(initiator)
-      Entry.all_states.each do |state|
-        Entry.state(state).where_values_hash.should == {:state => state, :initiator_id => initiator.id, 'deleted_at' => nil}
+  describe "разделяются на папки" do
+    let(:draft) { Entry.folder(:draft) }
+    let(:processing) { Entry.folder(:processing) }
+    let(:deleted) { Entry.folder(:deleted) }
+
+    shared_examples_for "личные" do
+      it "черновики" do
+        draft.should have_entries.with_state(:draft).created_by_me.not_deleted.ordered_by(:id, :desc)
+      end
+      it "в корзине" do
+        deleted.should have_entries.deleted_by_me.ordered_by(:id, :desc)
       end
     end
 
-    describe "личные папки" do
-      it "корректора" do
-        set_current_user(initiator(:roles => :corrector))
-        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id, 'deleted_at' => nil}
-      end
-      it "публикатора" do
-        set_current_user(initiator(:roles => :publisher))
-        Entry.state(:draft).where_values_hash.should == {:state => :draft, :initiator_id => initiator.id, 'deleted_at' => nil}
+    shared_examples_for "общие в работе" do
+      it "в работе" do
+        processing.should have_entries.with_states(:correcting, :publishing).not_deleted.ordered_by(:id, :desc)
       end
     end
 
-    describe "папки для новостей в процесса" do
-      it "корректора" do
-        set_current_user(initiator(:roles => :corrector))
-        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states, 'deleted_at' => nil}
+    describe "для инициатора" do
+      before { set_current_user(initiator) }
+      it_behaves_like "личные"
+      it "в работе" do
+        processing.should have_entries.with_states(:correcting, :publishing).created_by_me.not_deleted.ordered_by(:id, :desc)
       end
-      it "публикатора" do
-        set_current_user(initiator(:roles => :publisher))
-        Entry.state('processing').where_values_hash.should == {:state => Entry.processing_states, 'deleted_at' => nil}
-      end
+    end
+
+    describe "для корректора" do
+      before { set_current_user(initiator(:roles => :corrector)) }
+      it_behaves_like "личные"
+      it_behaves_like "общие в работе"
+    end
+
+
+    describe "публикатора" do
+      before { set_current_user(initiator(:roles => :publisher)) }
+      it_behaves_like "личные"
+      it_behaves_like "общие в работе"
+    end
+
+    describe "корректора и публикатора" do
+      before { set_current_user(initiator(:roles => [:corrector, :publisher])) }
+      it_behaves_like "личные"
+      it_behaves_like "общие в работе"
     end
 
   end

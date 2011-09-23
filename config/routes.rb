@@ -13,9 +13,9 @@ News::Application.routes.draw do
     resources :assets, :only => [:create, :destroy]
   end
 
-  get '/:state/entries' => 'entries#index',
+  get '/:folder/entries' => 'entries#index',
       :as => :scoped_entries,
-      :constraints => { :state => /(draft|processing|trashed|published)/ }
+      :constraints => { :folder => /(draft|processing|deleted|published)/ }
 
   get '/last_day/entries' => 'entries#index',
       :as => :last_day_entries,

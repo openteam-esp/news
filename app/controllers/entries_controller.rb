@@ -3,7 +3,7 @@ class EntriesController < AuthorizedApplicationController
 
   layout :sidebar_or_archive_layout
 
-  has_scope :state
+  has_scope :folder
   has_scope :page, :default => 1, :only => :index
 
   has_searcher

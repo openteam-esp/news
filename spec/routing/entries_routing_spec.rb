@@ -3,7 +3,7 @@ require "spec_helper"
 describe EntriesController do
   describe "routing" do
     it "routes to #index" do
-      get("/draft/entries").should route_to("entries#index", :state => 'draft')
+      get("/draft/entries").should route_to("entries#index", :folder => 'draft')
     end
 
     it "routes to #show" do
