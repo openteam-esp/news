@@ -50,7 +50,7 @@ module EntryHelper
   end
 
   def presented_html(entry, attribute)
-    if entry.send(attribute).strip_html.presence
+    if entry.send(attribute).to_s.strip_html.presence
       content_tag :html, entry.send(attribute).sanitize.gilensize.html_safe
     else
       content_tag :html, empty_message(:title), :class => :empty
