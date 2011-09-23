@@ -13,7 +13,6 @@
     <% end %>
     <%= semantic_form_for Asset.new, :url => entry_assets_path(@entry), :html => {:multipart => true} do |form| %>
       <%= form.inputs do %>
-        <%= form.input :description, :as => :string %>
         <%= form.input :file, :as => :file %>
       <% end %>
     <% end %>

@@ -3,8 +3,6 @@ class Asset < ActiveRecord::Base
 
   scope :type, ->(type) { type == 'assets' ? scoped : where(:type => type.classify) }
 
-  before_validation :set_description
-
   def self.before_destroy(*args) # disable destroy_attached_files
   end
 
@@ -12,25 +10,19 @@ class Asset < ActiveRecord::Base
     storage_path { "#{I18n.l entry.created_at, :format => "%Y/%m/%d"}/#{entry_id}/#{Time.now.to_i}-#{file_name}"}
   end
 
+  def file_type
+    self.file_mime_type.gsub("/", "_").gsub("-", "_").gsub(".", "_")
+  end
+
   before_create :set_type
 
   private
-
-    def set_description
-      self.description = self.description.presence || self.file_name
-    end
 
     def set_type
       mime_group = file_mime_type.to_s.split('/')[0]
       self.type = %w[audio video image].include?(mime_group) ? mime_group.classify : 'Attachment'
     end
 end
-
-
-
-
-
-
 
 # == Schema Information
 #

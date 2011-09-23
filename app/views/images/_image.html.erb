@@ -1,7 +1,6 @@
 <%= content_tag(:div, :id => dom_id(image),
                 :class => "gal-item",
-                :"data-url" => image_path(image, image.file_width, image.file_height, image.file_name),
-                :"data-alt" => image.description) do %>
+                :"data-url" => image_path(image, image.file_width, image.file_height, image.file_name)) do %>
   <%= link_to image_tag("/javascripts/ckeditor/filebrowser/images/gal_del.png", :title => I18n.t('ckeditor.buttons.delete')),
           entry_asset_path(@entry, image),
           :remote => true,
