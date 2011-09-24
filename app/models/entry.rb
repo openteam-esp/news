@@ -3,6 +3,7 @@
 class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
+  belongs_to :deleted_by, :class_name => 'User'
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
@@ -131,17 +132,26 @@ class Entry < ActiveRecord::Base
 
   def destroy
     self.tap do | entry |
-      entry.update_attribute :deleted_by_id, User.current_id
+      entry.update_attribute :deleted_by, User.current
       entry.tasks.update_all(:deleted_at => Time.now)
     end
   end
 
   def recycle
     self.tap do | entry |
-      entry.update_attribute :deleted_by_id, nil
+      entry.update_attribute :deleted_by, nil
       entry.tasks.update_all(:deleted_at => nil)
     end
   end
+
+  def has_processing_task_executed_by?(user)
+    tasks.processing.where(:executor_id => user).exists?
+  end
+
+  def has_participant?(user)
+    tasks.where(['executor_id = ? OR initiator_id = ?', self, self]).exists?
+  end
+
 
   private
     def create_tasks

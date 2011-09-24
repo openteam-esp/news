@@ -23,8 +23,7 @@ class EntriesController < AuthorizedApplicationController
 
   def recycle
     recycle! do
-      @entry.recycle
-      redirect_to @entry and return
+      redirect_to @entry.recycle and return
     end
   end
 

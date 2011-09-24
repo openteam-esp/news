@@ -21,6 +21,7 @@ Spork.prefork do
     config.include Devise::TestHelpers, :type => :controller
     config.include EspSpecHelper
     config.mock_with :rspec
+    config.after do User.current = nil end
     config.before(:all) do
       DeferredGarbageCollection.start
     end

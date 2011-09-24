@@ -1,5 +1,21 @@
 # encoding: utf-8
 
+Entry
+
+class Entry
+  def all_tasks
+    [prepare, review, publish].map{|issue| [issue, issue.subtasks]}.flatten
+  end
+
+  def has_processing_task_executed_by?(user)
+    all_tasks.select(&:processing?).map(&:executor).include? user
+  end
+
+  def has_participant?(user)
+    all_tasks.map(&:executor).include?(user) || all_tasks.map(&:initiator).include?(user)
+  end
+end
+
 module EspSpecHelper
 
   def set_current_user(user = nil)
@@ -54,6 +70,12 @@ module EspSpecHelper
 
   def draft(options={})
     @draft ||= create_draft(options)
+  end
+
+  def deleted_draft(options={})
+    @deleted_draft ||= draft(options).tap do | entry |
+                         as initiator do entry.destroy end
+                       end
   end
 
   def create_draft(options={})

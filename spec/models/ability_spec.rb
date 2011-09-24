@@ -100,11 +100,89 @@ describe Ability do
     end
   end
 
+  describe "на entries" do
+    def mock_participation(participation = true)
+      User.current.should_receive(:takes_participation_on?).with(draft).any_number_of_times.and_return(participation)
+    end
+
+    describe "draft" do
+      shared_examples_for "не может управлять черновиком" do
+        it { ability.should_not be_able_to(:read, draft) }
+        it { ability.should_not be_able_to(:update, draft) }
+        it { ability.should_not be_able_to(:destroy, draft) }
+        it { ability.should_not be_able_to(:recycle, deleted_draft) }
+      end
+
+      describe "initiator" do
+        before { set_current_user initiator }
+        it { ability.should be_able_to(:create, Entry.new) }
+        it { ability.should be_able_to(:read, draft) }
+        it { ability.should be_able_to(:update, draft) }
+        it { ability.should be_able_to(:destroy, draft) }
+        it { ability.should be_able_to(:recycle, deleted_draft) }
+      end
+
+      describe "another_initiator" do
+        before { set_current_user another_initiator }
+        it_behaves_like "не может управлять черновиком"
+      end
+
+      describe "anonymous" do
+        it { ability.should_not be_able_to(:create, Entry.new)}
+        it_behaves_like "не может управлять черновиком"
+      end
+
+      describe "corrector" do
+        before { set_current_user corrector_and_publisher }
+        it_behaves_like "не может управлять черновиком"
+      end
+    end
+
+    shared_examples_for "может только просматривать" do
+      it { ability.should be_able_to(:read, entry) }
+      it { ability.should_not be_able_to(:update, entry) }
+      it { ability.should_not be_able_to(:destroy, entry) }
+    end
+
+    describe "fresh correcting" do
+      let(:entry) { fresh_correcting }
+      describe "initiator" do
+        before { set_current_user initiator }
+        it_behaves_like "может только просматривать"
+      end
+      describe "corrector and publisher" do
+        before { set_current_user corrector_and_publisher }
+        it_behaves_like "может только просматривать"
+      end
+    end
+
+    describe "processing correcting" do
+      let(:entry) { processing_correcting }
+      describe "initiator" do
+        before { set_current_user initiator }
+        it_behaves_like "может только просматривать"
+      end
+
+      describe "corrector" do
+        before { set_current_user corrector }
+        it { ability.should be_able_to(:read, processing_correcting) }
+        it { ability.should be_able_to(:update, processing_correcting) }
+        it { ability.should be_able_to(:destroy, processing_correcting) }
+      end
+
+      describe "other corrector" do
+        before { set_current_user another_corrector }
+        it_behaves_like "может только просматривать"
+      end
+    end
+  end
+
 if false
   describe "просмотр новости" do
     describe "инициатором" do
       before(:each) do
         set_current_user initiator
+
       end
       it { ability.should be_able_to(:read, draft) }
       it { ability.should be_able_to(:read, awaiting_correction) }

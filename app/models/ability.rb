@@ -12,6 +12,27 @@ class Ability
       task.executor == user && (task.next_task.nil? || task.next_task.fresh?)
     end
 
+
+    ##################################
+    ###           Entry            ###
+    ##################################
+
+    can :create, Entry do
+      user.persisted?
+    end
+
+    can [:update, :destroy], Entry do | entry |
+      entry.has_processing_task_executed_by? user
+    end
+
+    can :read, Entry do | entry |
+      (user.roles.any? && !entry.draft?) || entry.has_participant?(user)
+    end
+
+    can :recycle, Entry do | entry |
+      entry.deleted_by == user
+    end
+
     if user && user.corrector?
       can :accept, Review
       can :restore, Review do |task|
@@ -41,23 +62,7 @@ class Ability
 
     can [:read, :fire_event], Task
 
-    can :create, Entry
 
-    can :read, Entry do | entry |
-      true
-    end
-
-    can :update, Entry do | entry |
-      true
-    end
-
-    can :destroy, Entry do | entry |
-      true
-    end
-
-    can :recycle, Entry do | entry |
-      true
-    end
 
     can :read, Asset do | asset |
       if asset.deleted_at?

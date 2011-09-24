@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def processed_by_me_tasks
-    Task.where(:state => :processing).where(:executor_id => self)
+    Task.processing.where(:executor_id => self)
   end
 
   def initiated_by_me_tasks

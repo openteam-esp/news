@@ -8,6 +8,7 @@ class Task < ActiveRecord::Base
   scope :kind, lambda {|kind| User.current.try "#{kind}_tasks" }
   scope :ordered, order('id desc')
   scope :not_deleted, where(:deleted_at => nil)
+  scope :processing, where(:state => :processing)
 
   default_scope not_deleted.ordered
 
