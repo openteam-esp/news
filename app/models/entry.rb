@@ -136,7 +136,7 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  def restore
+  def recycle
     self.tap do | entry |
       entry.update_attribute :deleted_by_id, nil
       entry.tasks.update_all(:deleted_at => nil)

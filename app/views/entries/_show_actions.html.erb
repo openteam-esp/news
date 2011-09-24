@@ -5,7 +5,15 @@
       <%= link_to t('edit'), edit_entry_path(@entry), :class => 'button' if can?(:edit, @entry)  %>
     </li>
     <li>
-      <%= link_to t('delete'), delete_entry_path(@entry), :class => 'button' if can?(:destroy, @entry)  %>
+      <% if @entry.deleted? %>
+        <%= semantic_form_for @entry, :url => recycle_entry_path(@entry), :html => { :method => :post } do | form | %>
+          <%= form.buttons do %>
+            <%= form.commit_button t('recycle'), :button_html => { :disabled => !can?(:recycle, @entry)} %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= link_to t('delete'), delete_entry_path(@entry), :class => 'button' if can?(:destroy, @entry)  %>
+      <% end %>
     </li>
     <li class='clear_left'>
       <%= render_statistic @entry %>

@@ -132,12 +132,12 @@ describe Entry do
     end
 
     describe "восстановление" do
-      it {deleted_draft.restore.should_not be_deleted}
+      it {deleted_draft.recycle.should_not be_deleted}
       it "должно восстановить таски" do
         tasks = []
         deleted_draft.should_receive(:tasks).and_return(tasks)
         tasks.should_receive(:update_all).with(:deleted_at => nil)
-        deleted_draft.restore
+        deleted_draft.recycle
       end
     end
   end

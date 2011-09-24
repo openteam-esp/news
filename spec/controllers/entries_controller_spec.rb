@@ -9,10 +9,10 @@ describe EntriesController do
     User.should_receive(:first).with(:conditions => { "id" => initiator.id }).and_return initiator
   end
 
-  def mock_find_by_id
+  def mock_find_by_id(entry = draft)
     scoped = []
     Entry.should_receive(:scoped).and_return(scoped)
-    scoped.should_receive(:find).with(draft.id).and_return(draft)
+    scoped.should_receive(:find).with(draft.id).and_return(entry)
   end
 
   describe "GET index" do
@@ -69,6 +69,16 @@ describe EntriesController do
       mock_find_by_id
       delete :destroy, :id => draft.id
       assigns(:entry).should be_persisted
+    end
+  end
+
+  describe "POST recycle" do
+    let(:deleted_draft) { draft.destroy }
+    it "restores deleted entry" do
+      mock_find_by_id(deleted_draft)
+      post :recycle, :id => deleted_draft.id
+      response.should redirect_to(assigns(:entry))
+      assigns(:entry).should_not be_deleted
     end
   end
 end

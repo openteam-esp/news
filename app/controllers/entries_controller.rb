@@ -1,6 +1,6 @@
 class EntriesController < AuthorizedApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
-  custom_actions :resource => :delete
+  custom_actions :resource => [:delete, :recycle]
 
   layout :sidebar_or_archive_layout
 
@@ -19,6 +19,13 @@ class EntriesController < AuthorizedApplicationController
 
   def create
     create! { edit_entry_path(@entry) }
+  end
+
+  def recycle
+    recycle! do
+      @entry.recycle
+      redirect_to @entry and return
+    end
   end
 
   def update
