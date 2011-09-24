@@ -112,5 +112,9 @@ module EspSpecHelper
                    end
   end
 
+  def prepare_subtask_for(executor)
+    @prepare_subtask_for ||= as initiator do draft.prepare.subtasks.create!(:description => "подзадача", :executor => executor) end
+  end
+
 end
 

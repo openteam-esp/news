@@ -97,6 +97,10 @@ describe Ability do
         subtask = processing_correcting.review.subtasks.create! :executor => initiator, :description => :description
         ability(:for => initiator).should be_able_to(:refuse, subtask)
       end
+
+      it "может принять только назначенный исполнитель"
+
+      it "не может принять другой пользователь"
     end
   end
 
@@ -144,16 +148,30 @@ describe Ability do
       it { ability.should_not be_able_to(:destroy, entry) }
     end
 
-    describe "fresh correcting" do
-      let(:entry) { fresh_correcting }
+    shared_examples_for "все могут только просматривать" do
       describe "initiator" do
         before { set_current_user initiator }
         it_behaves_like "может только просматривать"
       end
-      describe "corrector and publisher" do
-        before { set_current_user corrector_and_publisher }
+      describe "corrector" do
+        before { set_current_user initiator }
         it_behaves_like "может только просматривать"
       end
+      describe "publisher" do
+        before { set_current_user publisher }
+        it_behaves_like "может только просматривать"
+      end
+    end
+
+    shared_examples_for "может управлять" do
+      it { ability.should be_able_to(:read, entry) }
+      it { ability.should be_able_to(:update, entry) }
+      it { ability.should be_able_to(:destroy, entry) }
+    end
+
+    describe "fresh correcting" do
+      let(:entry) { fresh_correcting }
+      it_behaves_like "все могут только просматривать"
     end
 
     describe "processing correcting" do
@@ -165,9 +183,7 @@ describe Ability do
 
       describe "corrector" do
         before { set_current_user corrector }
-        it { ability.should be_able_to(:read, processing_correcting) }
-        it { ability.should be_able_to(:update, processing_correcting) }
-        it { ability.should be_able_to(:destroy, processing_correcting) }
+        it_behaves_like "может управлять"
       end
 
       describe "other corrector" do
@@ -175,6 +191,59 @@ describe Ability do
         it_behaves_like "может только просматривать"
       end
     end
+
+    describe "fresh publishing" do
+      let(:entry) { fresh_publishing }
+      it_behaves_like "все могут только просматривать"
+    end
+
+    describe "processing publishing" do
+      let(:entry) { processing_publishing }
+      describe "initiator" do
+        before { set_current_user initiator }
+        it_behaves_like "может только просматривать"
+      end
+
+      describe "corrector" do
+        before { set_current_user corrector }
+        it_behaves_like "может только просматривать"
+      end
+
+      describe "publisher" do
+        before { set_current_user publisher }
+        it_behaves_like "может управлять"
+      end
+
+      describe "other publisher" do
+        before { set_current_user another_publisher }
+        it_behaves_like "может только просматривать"
+      end
+    end
+
+    describe "published" do
+      let(:entry) { published }
+      it_behaves_like "все могут только просматривать"
+      it { ability.should be_able_to(:read, entry) }
+    end
+
+    describe "locked entry" do
+      before do
+        as corrector do
+          prepare_subtask_for(corrector).accept
+          draft.lock
+        end
+      end
+      it { ability(:for => corrector).should be_able_to(:update, draft) }
+      it { ability(:for => corrector).should_not be_able_to(:destroy, draft) }
+      it { ability(:for => initiator).should_not be_able_to(:update, draft) }
+      it { ability(:for => initiator).should_not be_able_to(:destroy, draft) }
+    end
+
+    describe "deleted entry" do
+      let(:entry) {as publisher do processing_publishing.destroy end}
+      it_behaves_like "все могут только просматривать"
+    end
+
   end
 
 if false

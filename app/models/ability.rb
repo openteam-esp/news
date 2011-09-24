@@ -21,12 +21,21 @@ class Ability
       user.persisted?
     end
 
+    can :update, Entry do | entry |
+      entry.has_processing_task_executed_by?(user) && entry.locked_by == user
+    end
     can [:update, :destroy], Entry do | entry |
-      entry.has_processing_task_executed_by? user
+      entry.has_processing_task_executed_by?(user) && !entry.locked? && !entry.deleted?
     end
 
     can :read, Entry do | entry |
-      (user.roles.any? && !entry.draft?) || entry.has_participant?(user)
+      user.roles.any? && !entry.draft?
+    end
+    can :read, Entry do | entry |
+      entry.has_participant?(user)
+    end
+    can :read, Entry do | entry |
+      entry.published?
     end
 
     can :recycle, Entry do | entry |
