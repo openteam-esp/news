@@ -80,27 +80,29 @@ describe Ability do
     end
 
     describe 'подзадачу' do
-      it "может создать пользователь выполняющий задачу" do
-        ability(:for => corrector).should be_able_to(:create, processing_correcting.review.subtasks.build(:issue => processing_correcting.review))
+      describe "создать" do
+        it "может пользователь выполняющий задачу" do
+          ability(:for => initiator).should be_able_to(:create, draft.prepare.subtasks.build(:issue => draft.prepare))
+        end
+        it "не может другой пользователь" do
+          ability(:for => corrector).should_not be_able_to(:create, draft.prepare.subtasks.build(:issue => draft.prepare))
+        end
       end
 
-      it "не может создать пользователь, не выполняющий задачу" do
-        ability(:for => initiator).should_not be_able_to(:create, processing_correcting.review.subtasks.build(:issue => processing_correcting.review))
+      describe "принять" do
+        it {ability(:for => another_initiator).should be_able_to(:accept, prepare_subtask_for(another_initiator))}
+        it {ability(:for => corrector).should_not be_able_to(:cancel, prepare_subtask_for(another_initiator))}
       end
 
-      it "может отменить автор" do
-        subtask = processing_correcting.review.subtasks.create! :initiator => corrector, :executor => initiator, :description => :description
-        ability(:for => corrector).should be_able_to(:cancel, subtask)
+      describe "отменить" do
+        it {ability(:for => initiator).should be_able_to(:cancel, prepare_subtask_for(corrector))}
+        it {ability(:for => corrector).should_not be_able_to(:cancel, prepare_subtask_for(corrector))}
       end
 
-      it "может отвергнуть исполнитель" do
-        subtask = processing_correcting.review.subtasks.create! :executor => initiator, :description => :description
-        ability(:for => initiator).should be_able_to(:refuse, subtask)
+      describe "отвергнуть" do
+        it {ability(:for => initiator).should_not be_able_to(:refuse, prepare_subtask_for(corrector))}
+        it {ability(:for => corrector).should be_able_to(:refuse, prepare_subtask_for(corrector))}
       end
-
-      it "может принять только назначенный исполнитель"
-
-      it "не может принять другой пользователь"
     end
   end
 
