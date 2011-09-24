@@ -138,6 +138,7 @@ ru:
   "leave blank if you don't want to change it": "оставьте пустым, если вы не хотите изменить его"
   "we need your current password to confirm your changes": "Введите пароль для подтверждения изменений"
   Hello: "Приветствуем Вас, "
+
   "Unlock my account": "Разблокировать мой аккаунт"
   "Your account has been locked due to an excessive amount of unsuccessful sign in attempts": "Ваш аккаунт был заблокирован из-за большого количества неудачных попыток авторизации."
   "Click the link below to unlock your account": "Нажмите на ссылку ниже, чтобы разблокировать аккаунт"
@@ -145,7 +146,7 @@ ru:
   "If you didn't request this, please ignore this email": "Если вы получили это сообщение по ошибке, то проигнорируйте его."
   "Your password won't change until you access the link above and create a new one": "Для изменения пароля, перейдете по ссылке выше и создайте новый."
   Welcome: "Добро пожаловать "
-  "You can confirm your account through the link below": "Вы можете подтвердить свой аккаунт по ссылке ниже"
+  upload: Загрузить с диска
 
   sidebar:
     notifications: Уведомления

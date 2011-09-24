@@ -1,9 +1,14 @@
 <div id="fileupload" class="gal-holder">
   <div class="gal-item">
     <div class="fileupload-button gal-upload-holder">
-   <%= link_to I18n.t(:upload, :scope => [:ckeditor, :buttons]), '#', :class => "add" %>
-</div>
-</div>
+      <%= semantic_form_for Asset.new, :url => entry_assets_path(@entry), :html => {:multipart => true} do |form| %>
+        <%= link_to t(:upload), "#", :id => "fileupload", :class => "add" %>
+        <%= form.inputs do %>
+          <%= form.input :file, :as => :file %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
   <div class="fileupload-list">
     <%= render :partial => @assets %>
   </div>
