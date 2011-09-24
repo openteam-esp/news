@@ -248,30 +248,30 @@ describe Ability do
 
   end
 
-  describe "на assets" do
-    describe "создавать" do
-      describe "может исполнитель выполняемой задачи" do
-        it { ability(:for => initiator).should be_able_to(:create, draft.assets.build)}
-        it { ability(:for => corrector).should be_able_to(:create, processing_correcting.assets.build)}
-        it { ability(:for => publisher).should be_able_to(:create, processing_publishing.assets.build)}
-      end
-      it "может исполнитель подзадачи" do
-        as another_initiator do prepare_subtask_for(another_initiator).accept end
-        ability(:for => another_initiator).should be_able_to(:create, draft.assets.build)
-      end
-
-      describe "не может другой пользователь" do
-
-      end
-
-      describe "нельзя если новость удалены" do
-
-      end
-
-      describe "нельзя если новость заблокирована другим пользователем" do
-
-      end
-
+  describe "просмотр assets" do
+    describe "черновика" do
+      let(:asset) { Asset.create!(:entry => draft) }
+      it { ability(:for => initiator).should be_able_to(:read, asset) }
+      it { ability(:for => another_initiator).should_not be_able_to(:read, asset) }
+      it { ability(:for => corrector).should_not be_able_to(:read, asset) }
+      it { ability(:for => publisher).should_not be_able_to(:read, asset) }
+      it { Ability.new.should_not be_able_to(:read, asset) }
+    end
+    describe "удаленного asset" do
+      let(:asset) { Asset.create!(:entry => processing_correcting) }
+      it { ability(:for => initiator).should be_able_to(:read, asset) }
+      it { ability(:for => another_initiator).should_not be_able_to(:read, asset) }
+      it { ability(:for => corrector).should be_able_to(:read, asset) }
+      it { ability(:for => publisher).should be_able_to(:read, asset) }
+      it { Ability.new.should_not be_able_to(:read, asset) }
+    end
+    describe "удаленной новости" do
+      let(:asset) { Asset.create!(:entry => processing_correcting.destroy) }
+      it { ability(:for => initiator).should be_able_to(:read, asset) }
+      it { ability(:for => another_initiator).should_not be_able_to(:read, asset) }
+      it { ability(:for => corrector).should be_able_to(:read, asset) }
+      it { ability(:for => publisher).should be_able_to(:read, asset) }
+      it { Ability.new.should_not be_able_to(:read, asset) }
     end
   end
 

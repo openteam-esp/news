@@ -78,20 +78,19 @@ class Ability
       entry.deleted_by == user
     end
 
-
-
-
-
+    ##################################
+    ###          Asset             ###
+    ##################################
     can :read, Asset do | asset |
-      if asset.deleted_at?
-        asset.entry.current_user_participant?
+      if asset.deleted? || asset.entry.deleted?
+        asset.has_participant?(user)
       else
         can? :read, asset.entry
       end
     end
 
     can [:create, :destroy], Asset do | asset |
-      can? :edit, asset.entry
+      can? :update, asset.entry
     end
 
     can [:read, :destroy], Message
