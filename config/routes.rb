@@ -9,6 +9,7 @@ News::Application.routes.draw do
   resources :authentications, :only => [:create, :destroy]
 
   resources :entries, :except => :index do
+    get 'delete', :on => :member
     get '/:type/' => 'assets#index', :constraints => { :type => /(assets|images|audios|videos|attachments)/ }
     resources :assets, :only => [:create, :destroy]
   end

@@ -39,6 +39,7 @@ class Entry < ActiveRecord::Base
     end
   end
 
+  scope :not_deleted, where(:deleted_by_id => nil)
   scope :descending, ->(attribute) { order("#{attribute} desc") }
   scope :self_initiated, -> { where(:initiator_id => User.current_id) }
   scope :processing, -> { where(:state => processing_states).not_deleted }
@@ -49,7 +50,7 @@ class Entry < ActiveRecord::Base
     case folder.to_sym
     when :processing  then User.current.roles.any? ? processing : processing.self_initiated
     when :draft       then draft.self_initiated
-    when :deleted     then deleted.where(:deleted_by_id => User.current_id)
+    when :deleted     then where(:deleted_by_id => User.current_id)
     end.descending(:id)
   end
 
@@ -104,17 +105,6 @@ class Entry < ActiveRecord::Base
     args.map{|role| self.send("current_user_#{role}?")}.uniq.compact == [true]
   end
 
-  def restore(*args)
-    super
-    self.assets.destroy_all
-    if entry = events.offset(1).first.try(:versioned_entry)
-      self.update_attributes entry.attributes.merge(:channel_ids => entry.channel_ids)
-      self.assets.unscoped.where(:id => entry.image_ids + entry.video_ids + entry.audio_ids + entry.attachment_ids).update_all(:deleted_at => nil)
-    else
-      self.update_attributes Entry.new.attributes.merge(:channel_ids => [])
-    end
-  end
-
   def lock
     self.locking = true
     update_attributes! :locked_at => DateTime.now, :locked_by => User.current
@@ -131,6 +121,26 @@ class Entry < ActiveRecord::Base
   def unlock
     self.locked_at = nil
     self.locked_by = nil
+  end
+
+  def deleted?
+    deleted_by_id
+  end
+
+  alias :destroy_without_trash :destroy
+
+  def destroy
+    self.tap do | entry |
+      entry.update_attribute :deleted_by_id, User.current_id
+      entry.tasks.update_all(:deleted_at => Time.now)
+    end
+  end
+
+  def restore
+    self.tap do | entry |
+      entry.update_attribute :deleted_by_id, nil
+      entry.tasks.update_all(:deleted_at => nil)
+    end
   end
 
   private

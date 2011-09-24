@@ -1,10 +1,13 @@
-<div class="entry_actions_wrapper <%= position %>">
-  <ul class="entry_actions">
-    <%= content_tag(:li, link_to("история изменений", "#", :class => "entry_history"), :class => "floatr") if @entry.events.count > 1 %>
+<div class='entry_actions_wrapper <%= position %>'>
+  <ul class='entry_actions'>
+    <%= content_tag(:li, link_to('история изменений', '#', :class => 'entry_history'), :class => 'floatr') if @entry.events.count > 1 %>
     <li>
-      <%= link_to t('edit'), edit_entry_path(@entry), :class => "button" if can?(:edit, @entry)  %>
+      <%= link_to t('edit'), edit_entry_path(@entry), :class => 'button' if can?(:edit, @entry)  %>
     </li>
-    <li class="clear_left">
+    <li>
+      <%= link_to t('delete'), delete_entry_path(@entry), :class => 'button' if can?(:destroy, @entry)  %>
+    </li>
+    <li class='clear_left'>
       <%= render_statistic @entry %>
     </li>
   </ul>

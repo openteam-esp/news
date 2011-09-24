@@ -12,7 +12,7 @@ RSpec::Matchers.define :have_entries do |attribute, kind|
      @conditions[:initiator_id] = User.current_id
   end
   chain :not_deleted do
-     @conditions[:deleted_at] = nil
+     @conditions[:deleted_by_id] = nil
   end
   chain :with_state do | state |
      @conditions[:state] = state

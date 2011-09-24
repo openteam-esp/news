@@ -1,0 +1,9 @@
+Вы уверены что хотите переместить новость в корзину?
+<%= composed_title @entry %>
+
+<%= semantic_form_for @entry, :html => { :method => :delete } do | form |  %>
+  <%= form.buttons do  %>
+    <%= form.commit_button %>
+    <li><%= link_to t('cancel'), @entry %></li>
+  <% end %>
+<% end %>

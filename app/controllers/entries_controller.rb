@@ -1,5 +1,6 @@
 class EntriesController < AuthorizedApplicationController
-  actions :index, :show, :create, :edit, :update
+  actions :index, :show, :create, :edit, :update, :destroy
+  custom_actions :resource => :delete
 
   layout :sidebar_or_archive_layout
 
@@ -8,7 +9,9 @@ class EntriesController < AuthorizedApplicationController
 
   has_searcher
 
-  authorize_resource
+  def destroy
+    destroy! { root_path }
+  end
 
   def edit
     edit! { @entry.lock }

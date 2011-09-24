@@ -116,16 +116,32 @@ describe Entry do
     end
   end
 
+  describe "корзина" do
+    let(:deleted_draft) { draft.destroy }
+    before { set_current_user(initiator) }
+    describe "удаление" do
+      it { deleted_draft.should be_persisted }
+      it { deleted_draft.should be_deleted }
+      it { draft.destroy_without_trash.should_not be_persisted }
+      it "должно типа удалять таски" do
+        tasks = []
+        draft.should_receive(:tasks).and_return(tasks)
+        tasks.should_receive(:update_all)
+        draft.destroy
+      end
+    end
+
+    describe "восстановление" do
+      it {deleted_draft.restore.should_not be_deleted}
+      it "должно восстановить таски" do
+        tasks = []
+        deleted_draft.should_receive(:tasks).and_return(tasks)
+        tasks.should_receive(:update_all).with(:deleted_at => nil)
+        deleted_draft.restore
+      end
+    end
+  end
 end
-
-
-
-
-
-
-
-
-
 
 
 # == Schema Information

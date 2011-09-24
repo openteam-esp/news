@@ -42,6 +42,15 @@ describe EntriesController do
     end
   end
 
+  describe "GET delete" do
+    it "assigns the requested entry as @entry" do
+      mock_find_by_id
+      get :delete, :id => draft.id
+      assigns(:entry).should == draft
+      assigns(:entry).should_not be_locked
+    end
+  end
+
   describe "POST create" do
       it "assigns a newly created entry as @entry" do
         post :create
@@ -55,5 +64,12 @@ describe EntriesController do
       end
   end
 
+  describe "DELETE destroy" do
+    it "fakely destroys entry" do
+      mock_find_by_id
+      delete :destroy, :id => draft.id
+      assigns(:entry).should be_persisted
+    end
+  end
 end
 

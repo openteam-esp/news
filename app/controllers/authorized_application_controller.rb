@@ -11,11 +11,13 @@ class AuthorizedApplicationController < ApplicationController
       case action = params[:action].to_sym
       when :show
         action = :read
-      when :edit
-        action = :update
       when :new, :create
         action = :create
         resource = build_resource
+      when :edit
+        action = :update
+      when :delete
+        action = :destroy
       end
 
       resource ||= self.resource

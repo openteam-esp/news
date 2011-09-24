@@ -51,6 +51,10 @@ class Ability
       true
     end
 
+    can :destroy, Entry do | entry |
+      true
+    end
+
     can :read, Asset do | asset |
       if asset.deleted_at?
         asset.entry.current_user_participant?

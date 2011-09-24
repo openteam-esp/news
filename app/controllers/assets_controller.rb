@@ -1,8 +1,6 @@
 class AssetsController < AuthorizedApplicationController
   belongs_to :entry
 
-  authorize_resource
-
   layout 'ckeditor', :only => :index
 
   actions :create, :destroy, :index
