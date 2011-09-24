@@ -16,13 +16,28 @@ describe Asset do
     expect { Asset.new(:file_mime_type => 'application/pdf').save :validate => false }.to change{Attachment.count}.by(1)
   end
   end
-  it "Должны проставляться размеры изображения" do
-    image = Image.new(:entry => draft)
+
+  let(:image) { Image.new(:entry => draft).tap do |image|
     image.file = File.new(Rails.root.join "public/images/google_32.png")
-    image.save
+    image.save!
+  end
+  }
+
+  it "Должны проставляться размеры изображения" do
     image.file_width.should == 32
     image.file_height.should == 64
   end
+
+  describe "удаление" do
+    before do
+      @asset = draft.assets.create!
+      @asset.destroy
+    end
+    it { @asset.should be_persisted }
+    it { @asset.should be_deleted }
+    it { @asset.realy_destroy.should_not be_persisted }
+  end
+
 end
 
 

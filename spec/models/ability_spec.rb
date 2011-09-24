@@ -248,132 +248,31 @@ describe Ability do
 
   end
 
-if false
-  describe "просмотр новости" do
-    describe "инициатором" do
-      before(:each) do
-        set_current_user initiator
+  describe "на assets" do
+    describe "создавать" do
+      describe "может исполнитель выполняемой задачи" do
+        it { ability(:for => initiator).should be_able_to(:create, draft.assets.build)}
+        it { ability(:for => corrector).should be_able_to(:create, processing_correcting.assets.build)}
+        it { ability(:for => publisher).should be_able_to(:create, processing_publishing.assets.build)}
+      end
+      it "может исполнитель подзадачи" do
+        as another_initiator do prepare_subtask_for(another_initiator).accept end
+        ability(:for => another_initiator).should be_able_to(:create, draft.assets.build)
+      end
+
+      describe "не может другой пользователь" do
 
       end
-      it { ability.should be_able_to(:read, draft) }
-      it { ability.should be_able_to(:read, awaiting_correction) }
-      it { ability.should be_able_to(:read, correcting) }
-      it { ability.should be_able_to(:read, awaiting_publication) }
-      it { ability.should be_able_to(:read, publicating) }
-      it { ability.should be_able_to(:read, published) }
-      it { ability.should be_able_to(:read, trash) }
-      it { ability.should_not be_able_to(:destroy, Asset.new(:entry => trash)) }
-      it { ability.should be_able_to(:create, Asset.new(:entry => draft)) }
-      it { ability.should be_able_to(:read, Asset.new(:entry => published, :deleted_at => Time.now)) }
-      it { ability.should be_able_to(:read, Image.new(:entry => published, :deleted_at => Time.now)) }
-    end
-    describe "корректором" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:corrector])
+
+      describe "нельзя если новость удалены" do
+
       end
-      it { ability.should_not be_able_to(:read, draft) }
-      it { ability.should be_able_to(:read, awaiting_correction) }
-      it { ability.should be_able_to(:read, correcting) }
-      it { ability.should be_able_to(:read, awaiting_publication) }
-      it { ability.should be_able_to(:read, publicating) }
-      it { ability.should be_able_to(:read, published) }
-      it { ability.should_not be_able_to(:read, trash) }
-      it { ability.should be_able_to(:read, my_trash) }
-    end
-    describe "публикатором" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:publisher])
+
+      describe "нельзя если новость заблокирована другим пользователем" do
+
       end
-      it { ability.should_not be_able_to(:read, draft) }
-      it { ability.should be_able_to(:read, awaiting_correction) }
-      it { ability.should be_able_to(:read, correcting) }
-      it { ability.should be_able_to(:read, awaiting_publication) }
-      it { ability.should be_able_to(:read, publicating) }
-      it { ability.should be_able_to(:read, published) }
-      it { ability.should_not be_able_to(:read, trash) }
-      it { ability.should be_able_to(:read, my_trash) }
-    end
-    describe "другим инициатором" do
-      before(:each) do
-        set_current_user another_initiator
-      end
-      it { ability.should_not be_able_to(:read, draft) }
-      it { ability.should_not be_able_to(:read, awaiting_correction) }
-      it { ability.should_not be_able_to(:read, correcting) }
-      it { ability.should_not be_able_to(:read, awaiting_publication) }
-      it { ability.should_not be_able_to(:read, publicating) }
-      it { ability.should be_able_to(:read, published) }
-      it { ability.should_not be_able_to(:read, trash) }
-      it { ability.should_not be_able_to(:read, Asset.new(:entry => draft)) }
-      it { ability.should be_able_to(:read, Asset.new(:entry => published)) }
-      it { ability.should_not be_able_to(:read, Asset.new(:entry => published, :deleted_at => Time.now)) }
+
     end
   end
 
-  describe "редактирование новости" do
-    describe "инициатором" do
-      before(:each) do
-        set_current_user initiator
-      end
-      it { ability.should be_able_to(:edit, draft) }
-      it { ability.should_not be_able_to(:edit, awaiting_correction) }
-      it { ability.should_not be_able_to(:edit, correcting) }
-      it { ability.should_not be_able_to(:edit, awaiting_publication) }
-      it { ability.should_not be_able_to(:edit, publicating) }
-      it { ability.should_not be_able_to(:edit, published) }
-      it { ability.should_not be_able_to(:edit, trash) }
-    end
-    describe "корректором" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:corrector])
-      end
-      it { ability.should_not be_able_to(:edit, draft) }
-      it { ability.should_not be_able_to(:edit, awaiting_correction) }
-      it { ability.should be_able_to(:edit, correcting) }
-      it { ability.should_not be_able_to(:edit, awaiting_publication) }
-      it { ability.should_not be_able_to(:edit, publicating) }
-      it { ability.should_not be_able_to(:edit, published) }
-      it { ability.should_not be_able_to(:edit, trash) }
-      it { ability.should_not be_able_to(:edit, my_trash) }
-    end
-    describe "публикатором" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:publisher])
-      end
-      it { ability.should_not be_able_to(:edit, draft) }
-      it { ability.should_not be_able_to(:edit, awaiting_correction) }
-      it { ability.should_not be_able_to(:edit, correcting) }
-      it { ability.should_not be_able_to(:edit, awaiting_publication) }
-      it { ability.should be_able_to(:edit, publicating) }
-      it { ability.should be_able_to(:edit, published) }
-      it { ability.should_not be_able_to(:edit, trash) }
-      it { ability.should_not be_able_to(:edit, my_trash) }
-    end
-    describe "публикатором + корректором" do
-      before(:each) do
-        set_current_user another_initiator(:roles => [:publisher, :corrector])
-      end
-      it { ability.should_not be_able_to(:edit, draft) }
-      it { ability.should_not be_able_to(:edit, awaiting_correction) }
-      it { ability.should be_able_to(:edit, correcting) }
-      it { ability.should_not be_able_to(:edit, awaiting_publication) }
-      it { ability.should be_able_to(:edit, publicating) }
-      it { ability.should be_able_to(:edit, published) }
-      it { ability.should_not be_able_to(:edit, trash) }
-      it { ability.should_not be_able_to(:edit, my_trash) }
-    end
-    describe "другим инициатором" do
-      before(:each) do
-        set_current_user another_initiator
-      end
-      it { ability.should_not be_able_to(:edit, draft) }
-      it { ability.should_not be_able_to(:edit, awaiting_correction) }
-      it { ability.should_not be_able_to(:edit, correcting) }
-      it { ability.should_not be_able_to(:edit, awaiting_publication) }
-      it { ability.should_not be_able_to(:edit, publicating) }
-      it { ability.should_not be_able_to(:edit, published) }
-      it { ability.should_not be_able_to(:edit, trash) }
-    end
-  end
-end
 end

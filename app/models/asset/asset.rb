@@ -16,6 +16,18 @@ class Asset < ActiveRecord::Base
 
   before_create :set_type
 
+  def deleted?
+    deleted_at
+  end
+
+  alias :realy_destroy :destroy
+
+  def destroy
+    self.tap do | entry |
+      entry.update_attribute :deleted_at, Time.now
+    end
+  end
+
   private
 
     def set_type
