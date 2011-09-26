@@ -1,1 +1,21 @@
-<%= link_to audio.file_name, asset_path(audio, audio.file_name) %>
+<%= content_tag(:div, :id => dom_id(audio),
+                :class => "gal-item",
+                :"data-url" => asset_path(audio, audio.file_name)) do %>
+  <%= link_to image_tag("/javascripts/ckeditor/filebrowser/images/gal_del.png", :title => I18n.t('ckeditor.buttons.delete')),
+          entry_asset_path(@entry, audio),
+          :remote => true,
+          :method => :delete,
+          :confirm => t('ckeditor.confirm_delete'),
+          :class => "fileupload-cancel gal-del" %>
+  <div class="fileupload-file gal-inner-holder">
+    <div class="img"><%=  image_tag "mimetypes/icon_application_audio.png", :alt => "", :size => "100x100" %></div>
+    <div class="img-data">
+      <div class="img-name"><%= audio.file_name %></div>
+      <div class="time-size">
+        <div class="time"><%= l audio.created_at, :format => :long %></div>
+        <div class="fileupload-size size"><%= number_to_human_size(audio.file.size) %></div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
