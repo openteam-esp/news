@@ -1,5 +1,5 @@
 <%= presented_header entry %>
-<%= presented_html entry, :annotation %>
+<%= raw entry.annotation %>
 <%= presented_html entry, :body %>
 
 <%= render_attribute_values entry, :images, :videos, :audios, :attachments %>
