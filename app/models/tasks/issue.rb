@@ -60,7 +60,11 @@ class Issue < Task
     end
 end
 
-
+unless Rails.configuration.cache_classes # force subclasses loading
+  Prepare
+  Review
+  Publish
+end
 
 # == Schema Information
 #
