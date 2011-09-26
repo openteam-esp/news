@@ -2,7 +2,7 @@ class EntriesController < AuthorizedApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
   custom_actions :resource => [:delete, :recycle]
 
-  layout :sidebar_or_archive_layout
+  layout :resolve_layout
 
   has_scope :folder
   has_scope :page, :default => 1, :only => :index
@@ -61,9 +61,10 @@ class EntriesController < AuthorizedApplicationController
       }.merge(options)
     end
 
-    def sidebar_or_archive_layout
+    def resolve_layout
       return 'archive' if current_scopes[:state] == 'published'
-      'list'
+      return 'system/entry'   if action_name == 'show'
+      'system/list'
     end
 end
 

@@ -39,7 +39,7 @@ module EntryHelper
 
   def presented_header(entry)
     if entry.title.presence
-      content_tag :h2, entry.title.gilensize_text
+      content_tag :h2, entry.title.gilensize_text, :class => 'title'
     else
       content_tag :h2, empty_message(:title), :class => :empty
     end

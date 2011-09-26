@@ -1,16 +1,25 @@
 <% if collection.any? %>
-  <div class="list">
+  <ul class='item_list'>
     <% collection.each do | entry | %>
-      <div class="item">
-        <div class="line">
-          <div class="title"><%= link_to composed_title(entry), entry_path(entry) %></div>
-          <div class="item_state <%= entry.state %>"><%= I18n.t "state_machine.entry.state.#{entry.state}" %></div>
-          <div class="initiator"><%= entry.initiator %></div>
-          <div class="time_ago"><%= time_ago_in_words(entry.created_at) %> назад</div>
+      <li>
+        <div class="title">
+          <%= link_to composed_title(entry), entry_path(entry) %>
         </div>
-      </div>
+
+        <div class="state <%= entry.state %>">
+          <%= I18n.t "state_machine.entry.state.#{entry.state}" %>
+        </div>
+
+        <div class="participants">
+          <%= entry.initiator %>
+        </div>
+
+        <div class="time_ago">
+          <%= time_ago_in_words(entry.created_at) %> назад
+        </div>
+      </li>
     <% end %>
-  </div>
+  </ul>
 <% else %>
-  <h2><%= t('no_any_entries') %></h2>
+  <h2 class='empty'><%= t('no_any_entries') %></h2>
 <% end %>

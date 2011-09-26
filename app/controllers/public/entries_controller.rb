@@ -5,7 +5,7 @@ class Public::EntriesController < ApplicationController
 
   actions :index, :show
 
-  layout 'public'
+  layout 'public/list'
 
   belongs_to :channel, :optional => true
 

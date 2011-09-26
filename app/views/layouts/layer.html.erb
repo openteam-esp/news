@@ -1,0 +1,9 @@
+<%= content_for :main do %>
+  <div class='header'>
+    <%= yield :header %>
+  </div>
+
+  <%= yield :content %>
+<% end %>
+
+<%= render :template => 'layouts/application' %>

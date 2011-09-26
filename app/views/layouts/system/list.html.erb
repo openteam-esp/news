@@ -1,0 +1,33 @@
+<% content_for :header do %>
+  <h1><%= link_to t("News system"), root_path %></h1>
+  <%= semantic_form_for :entry, :url => entries_path do | form | %>
+    <%= form.buttons do %>
+      <%= form.commit_button t('new_entry'), :button_html => { :class => "button new_entry" } %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <div class="sidebar">
+    <div class='nav'>
+      <h5><%= t("sidebar.tasks.title") %></h5>
+      <%= render_navigation :context => :tasks, :renderer => :list_with_counters %>
+
+      <h5><%= t("sidebar.entries.title") %></h5>
+      <%= render_navigation :context => :entries, :renderer => :list_with_counters %>
+
+      <h5><%= t("sidebar.archive.title") %></h5>
+      <%= render_navigation :context => :archive %>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :content do %>
+  <div class='section'>
+    <div class='article'>
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render :template => 'layouts/layer' %>

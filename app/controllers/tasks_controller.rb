@@ -1,10 +1,8 @@
 class TasksController < AuthorizedApplicationController
-  layout 'list'
-
   actions :index
-
   custom_actions :resource => :fire_event
 
+  layout 'system/list'
   has_scope :kind
 
   def fire_event

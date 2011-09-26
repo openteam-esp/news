@@ -1,10 +1,80 @@
-<div class="entry_fields_wrapper">
+<div class="content_wrapper">
+  <div class="side_stuff">
+    <%= link_to t('edit_entry'), edit_entry_path(@entry) %>
 
-  <%= render :partial => 'entries/show_actions', :locals => { :position => "top" } %>
+    <% if @entry.locked_by %>
+      <%= @entry.locked_by %>
+      <%= time_ago_in_words(@entry.locked_at) %> назад
+    <% end %>
 
-  <%= render :partial => @entry %>
+    <ul class="tabs">
+      <li><a href='#'>Задачи</a></li>
+      <li><a href='#'>Лента активности</a></li>
+      <li><a href='#'>Уведомления</a></li>
+    </ul>
 
-  <%= render :partial => 'entries/show_actions', :locals => { :position => "bottom" } %>
+    <ul class="issues">
+      <% @entry.issues.each do |task| %>
+        <%= task %>
+      <% end %>
 
+      <% if false %>
+
+        <li>
+          <%= task.class.model_name.human %>
+
+          <%= I18n.t "state_machine.task.state.#{task.state}" %>
+
+          <%= task.executor %>
+
+          <%= time_ago_in_words(task.created_at) %> назад
+
+          <%= task.comment %>
+
+          <%= semantic_form_for task, :url => '#' do |form| %>
+            <%= form.inputs do %>
+              <%= form.input :comment %>
+            <% end %>
+            <%= form.buttons %>
+          <% end %>
+
+          <ul class="subtasks">
+            <% task.subtasks.each do |subtask| %>
+              <%= subtask %>
+            <% end %>
+          </ul>
+
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="article">
+    <div class="top_stuff">
+      <div>
+        <span>Опубликовать</span>
+        <%= l @entry.since %>
+      </div>
+
+      <div>
+        <span>Переместить в архив</span>
+        <%= l @entry.until %>
+      </div>
+
+      <div>
+        <span>Каналы</span>
+        <%= @entry.channels.map(&:title).join(', ') %>
+      </div>
+    </div>
+
+    <%= presented_header @entry %>
+
+    <div class="annotation">
+      <%= presented_html @entry, :annotation %>
+    </div>
+
+    <div class="body">
+      <%= presented_html @entry, :body %>
+    </div>
+  </div>
 </div>
-

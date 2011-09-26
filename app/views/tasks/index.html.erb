@@ -1,32 +1,32 @@
 <% if collection.any? %>
-  <div class="list">
+  <ul class='item_list'>
     <% collection.each do | task | %>
-      <div class="item">
-        <div class="line">
-          <div class="time_ago"><%= time_ago_in_words(task.created_at) %> назад</div>
-          <div class="title">
-            <%= link_to task.class.model_name.human, entry_path(task.entry), :class => "entry_state #{task.entry.state}" %>
-            <span class="task_state <%= task.state %>"><%= I18n.t "state_machine.task.state.#{task.state}" %></span>
-            <span class="initiator"><%= task.initiator %></span>
-            <!-- TODO тут выводим исполнителея если есть или список потенциальных -->
-            &rarr;
-            <span class="executor">Иванов И. И., Петров П.П. Сидоров С.С.</span>
-            <!-- END TODO -->
-          </div>
-          <!-- TODO заглушка для описания задачи -->
-          <div class="description">
-            Анатолий Васильевич, уточните контактную информацию для связи
-          </div>
-          <!-- END TODO -->
+      <li>
+        <div class="title floatl">
+          <%= link_to task.class.model_name.human, entry_path(task.entry) %>
         </div>
-        <%= render :partial => 'actions', :locals => {:task => task} if task.fresh? %>
+
         <div class="entry_title">
           <%= composed_title(task.entry) %>
         </div>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <h2><%= t('no_any_tasks') %></h2>
-<% end %>
 
+
+        <div class="state <%= task.state %>">
+          <%= I18n.t "state_machine.task.state.#{task.state}" %>
+        </div>
+
+        <div class="participants">
+          <%= task.initiator %>
+        </div>
+
+        <div class="time_ago">
+          <%= time_ago_in_words(task.created_at) %> назад
+        </div>
+
+        <%= render :partial => 'actions', :locals => {:task => task} if task.fresh? %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <h2 class='empty'><%= t('no_any_tasks') %></h2>
+<% end %>

@@ -14,6 +14,7 @@ class Entry < ActiveRecord::Base
   has_many :images, :conditions => {:deleted_at => nil}
   has_many :videos, :conditions => {:deleted_at => nil}
   has_many :tasks, :dependent => :destroy
+  has_many :issues
 
   has_one :prepare
   has_one :review

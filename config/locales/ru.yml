@@ -1,6 +1,7 @@
 ru:
   time:
     formats:
+      default: "%d %b %Y %H:%M"
       datetime: "%d.%m.%Y %H:%M"
 
   default_author: "Пресс-служба администрации Томской области"
@@ -104,6 +105,7 @@ ru:
   list_of_entries: "Список новостей"
   destroy_message: 'Удалить сообщение'
   no_any_messages: "Нет новых сообщений"
+  to_task_list: К списку задач
   logout: "Выход"
   not_any_channels: "Нет каналов"
   i_want_to_change_the_news: "Я хочу изменить новость"
@@ -190,9 +192,9 @@ ru:
       entry: "новость"
       recipient: "подписчика"
       task: Задача
-      prepare: Подготовка
-      review: Корректировка
-      publish: Публикация
+      prepare: Подготовить черновик
+      review: Откорректировать новость
+      publish: Подготовить к публикации
 
     attributes:
       user:
@@ -269,7 +271,9 @@ ru:
         processing: 'В работе'
       event:
         accept: Взять в работу
-
+        cancel: Отказаться
+        complete: Закрыть
+        restore: Возобновить
 
     entry:
       state:

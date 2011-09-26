@@ -4,10 +4,11 @@ class ListWithCounters < SimpleNavigation::Renderer::Base
     list_content = item_container.items.inject([]) do |list, item|
       li_options = item.html_options.reject { |k, v| k == :link || k == :counter }
       counter    = item.html_options[:counter]
-      li_content = link_to(item.name, item.url, link_options_for(item))
+      link_name  = item.name
       if counter && !counter.zero?
-        li_content << content_tag(:span, counter, :class => :counter)
+        link_name += content_tag(:span, counter, :class => :counter)
       end
+      li_content = link_to(link_name, item.url, link_options_for(item))
       if include_sub_navigation?(item)
         li_content << render_sub_navigation_for(item)
       end
