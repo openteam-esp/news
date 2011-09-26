@@ -10,17 +10,12 @@ describe Event do
 
   it { should belong_to :entry }
   it { should belong_to :user }
+  it { should belong_to :task }
 
   describe "должен создаваться" do
-    describe "при создании новости" do
-      it { draft.events.should have(1).item }
-      it { draft.events[0].user.should == initiator }
-      it { draft.events[0].kind.should == 'create_entry' }
-    end
-
     def updated_entry(options={})
-      @updated_entry ||= processing_correcting.tap do | entry |
-                            as corrector do
+      @updated_entry ||= draft.tap do | entry |
+                            as initiator do
                               if options[:assets]
                                 entry.assets << Asset.create!(:entry => entry, :file => File.open(Rails.root.join('spec/fixtures/image')))
                                 Asset.should_receive(:find).with([entry.assets[0].id]).and_return entry.assets
@@ -30,17 +25,19 @@ describe Event do
                                 Channel.should_receive(:find).with([entry.channels[0].id]).and_return entry.channels
                               end
                               entry.update_attributes :author => Ryba::Name.full_name
+                              entry.prepare.complete!
                             end
                           end
     end
 
-    describe "при обновлении новости" do
+    describe "при закрытии задачи" do
       def last_event(options={})
-        @last_event ||= updated_entry(options).events[1]
+        @last_event ||= updated_entry(options).events[0]
       end
-      it { updated_entry.events.should have(2).items }
-      it { last_event.user.should == corrector }
-      it { last_event.kind.should == 'update_entry' }
+
+      it { p updated_entry.events; updated_entry.events.should have(1).items; }
+      it { last_event.user.should == initiator }
+      it { last_event.event.should == 'complete' }
       it { last_event.versioned_entry.author.should == updated_entry.author }
       it { last_event(:assets => true).versioned_entry.asset_ids.should == updated_entry.asset_ids }
       it { last_event(:channels => true).versioned_entry.channel_ids.should == updated_entry.channel_ids }
@@ -169,17 +166,19 @@ describe Event do
 end
 
 
+
 # == Schema Information
 #
 # Table name: events
 #
 #  id               :integer         not null, primary key
-#  kind             :string(255)
+#  transition       :string(255)
 #  text             :text
 #  entry_id         :integer
 #  user_id          :integer
 #  created_at       :datetime
 #  updated_at       :datetime
 #  serialized_entry :text
+#  task_id          :integer
 #
 

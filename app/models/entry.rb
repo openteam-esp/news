@@ -57,9 +57,6 @@ class Entry < ActiveRecord::Base
 
 
   after_create :create_tasks
-  after_create :create_event
-
-  after_update :create_event_at_update
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -134,7 +131,7 @@ class Entry < ActiveRecord::Base
   end
 
   def has_participant?(user)
-    tasks.where(['executor_id = ? OR initiator_id = ?', self, self]).exists?
+    tasks.where(['executor_id = ? OR initiator_id = ?', user, user]).exists?
   end
 
 
@@ -145,15 +142,8 @@ class Entry < ActiveRecord::Base
       create_publish :initiator => initiator, :entry => self
     end
 
-    def create_event
-      events.create :kind => 'create_entry'
-    end
-
-    def create_event_at_update
-      events.create :kind => 'update_entry', :entry => self unless state_changed?
-    end
-
 end
+
 
 
 
@@ -162,20 +152,20 @@ end
 #
 # Table name: entries
 #
-#  id           :integer         not null, primary key
-#  title        :text
-#  annotation   :text
-#  body         :text
-#  since        :datetime
-#  until        :datetime
-#  state        :string(255)
-#  author       :string(255)
-#  initiator_id :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#  legacy_id    :integer
-#  locked_at    :datetime
-#  locked_by_id :integer
-#  deleted_at   :datetime
+#  id            :integer         not null, primary key
+#  title         :text
+#  annotation    :text
+#  body          :text
+#  since         :datetime
+#  until         :datetime
+#  state         :string(255)
+#  author        :string(255)
+#  initiator_id  :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  legacy_id     :integer
+#  locked_at     :datetime
+#  locked_by_id  :integer
+#  deleted_by_id :integer
 #
 

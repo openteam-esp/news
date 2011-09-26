@@ -16,6 +16,12 @@ class Task < ActiveRecord::Base
     deleted_at
   end
 
+  protected
+
+    def create_event(transition)
+      entry.events.create! :entry => entry, :task => self, :event => transition.event.to_s
+    end
+
 end
 
 

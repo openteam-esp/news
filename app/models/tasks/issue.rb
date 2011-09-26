@@ -8,6 +8,8 @@ class Issue < Task
       Ability.new.authorize!(transition.event, task)
     end
 
+    after_transition :create_event
+
     state :pending
     state :fresh
     state :processing
@@ -58,12 +60,6 @@ class Issue < Task
     def set_entry(subtask)
       subtask.entry = entry
     end
-end
-
-unless Rails.configuration.cache_classes # force subclasses loading
-  Prepare
-  Review
-  Publish
 end
 
 # == Schema Information

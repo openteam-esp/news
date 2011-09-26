@@ -7,6 +7,9 @@ class Subtask < Task
   validates_presence_of :executor, :description, :entry
 
   state_machine :initial => :fresh do
+
+    after_transition :create_event
+
     state :fresh
     state :processing
     state :completed

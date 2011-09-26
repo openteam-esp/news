@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110924032521) do
+ActiveRecord::Schema.define(:version => 20110926101243) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -80,13 +80,14 @@ ActiveRecord::Schema.define(:version => 20110924032521) do
   end
 
   create_table "events", :force => true do |t|
-    t.string   "kind"
+    t.string   "event"
     t.text     "text"
     t.integer  "entry_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "serialized_entry"
+    t.integer  "task_id"
   end
 
   create_table "messages", :force => true do |t|

@@ -5,6 +5,7 @@ include ActionView::Helpers::DateHelper
 class Event < ActiveRecord::Base
   belongs_to :entry
   belongs_to :user
+  belongs_to :task
 
   default_scope :order => 'created_at DESC'
 
@@ -23,9 +24,10 @@ class Event < ActiveRecord::Base
   private
 
     def save_and_serialize_entry
-      self.serialized_entry = entry.to_json(:methods => %w[asset_ids channel_ids]) if kind == 'update_entry'
+      self.serialized_entry = entry.to_json(:methods => %w[asset_ids channel_ids]) if event == 'complete'
     end
 end
+
 
 
 
@@ -38,12 +40,13 @@ end
 # Table name: events
 #
 #  id               :integer         not null, primary key
-#  kind             :string(255)
+#  transition       :string(255)
 #  text             :text
 #  entry_id         :integer
 #  user_id          :integer
 #  created_at       :datetime
 #  updated_at       :datetime
 #  serialized_entry :text
+#  task_id          :integer
 #
 

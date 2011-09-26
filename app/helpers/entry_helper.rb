@@ -25,11 +25,7 @@ module EntryHelper
     result  = "Состояние: "
     result += ::I18n.t("entry.state.#{entry.state}")
     result += ". "
-    if entry.events.first
-      result += entry.events.first.created_human
-    else
-      result += creator_of(entry)
-    end
+    result += creator_of(entry.events.first)
     result += ". "
     result += "Пользователь: "
     if entry.events.first
