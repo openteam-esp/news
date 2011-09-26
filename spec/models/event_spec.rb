@@ -21,18 +21,29 @@ describe Event do
     def updated_entry(options={})
       @updated_entry ||= processing_correcting.tap do | entry |
                             as corrector do
-                              processing_correcting.update_attributes :author => Ryba::Name.full_name
+                              if options[:assets]
+                                entry.assets << Asset.create!(:entry => entry, :file => File.open(Rails.root.join('spec/fixtures/image')))
+                                Asset.should_receive(:find).with([entry.assets[0].id]).and_return entry.assets
+                              end
+                              if options[:channels]
+                                entry.channels << channel
+                                Channel.should_receive(:find).with([entry.channels[0].id]).and_return entry.channels
+                              end
+                              entry.update_attributes :author => Ryba::Name.full_name
                             end
                           end
     end
 
     describe "при обновлении новости" do
-      let(:last_event) { updated_entry.events[1] }
+      def last_event(options={})
+        @last_event ||= updated_entry(options).events[1]
+      end
       it { updated_entry.events.should have(2).items }
       it { last_event.user.should == corrector }
       it { last_event.kind.should == 'update_entry' }
       it { last_event.versioned_entry.author.should == updated_entry.author }
-      it { updated_entry(:create_assets => true).events[1].versioned_entry.assets.should == updated_entry.assets }
+      it { last_event(:assets => true).versioned_entry.asset_ids.should == updated_entry.asset_ids }
+      it { last_event(:channels => true).versioned_entry.channel_ids.should == updated_entry.channel_ids }
     end
   end
 

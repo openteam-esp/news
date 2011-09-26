@@ -23,7 +23,7 @@ class Event < ActiveRecord::Base
   private
 
     def save_and_serialize_entry
-      self.serialized_entry = entry.to_json(:methods => %w[image_ids video_ids audio_ids attachment_ids channel_ids])
+      self.serialized_entry = entry.to_json(:methods => %w[asset_ids channel_ids]) if kind == 'update_entry'
     end
 end
 

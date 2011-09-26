@@ -14,6 +14,14 @@ class Entry
   def has_participant?(user)
     all_tasks.map(&:executor).include?(user) || all_tasks.map(&:initiator).include?(user)
   end
+
+  def asset_ids
+    assets.map(&:id)
+  end
+
+  def channel_ids
+    channels.map(&:id)
+  end
 end
 
 module EspSpecHelper
