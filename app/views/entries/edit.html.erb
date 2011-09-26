@@ -3,7 +3,7 @@
   <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
   <%= javascript_include_tag "jquery.ui.timepicker" %>
   <%= javascript_include_tag "jquery.ui.timepicker.ru" %>
-  <%= javascript_include_tag "ckeditor/ckeditor_source" %>
+  <%= javascript_include_tag "ckeditor/ckeditor" %>
   <%= javascript_include_tag "jquery.tipsy" %>
   <%= javascript_include_tag "jquery.iframe.transport" %>
   <%= javascript_include_tag "jquery.fileupload" %>
@@ -15,7 +15,7 @@
     <%= form.inputs :class => "inputs common_fields" do %>
       <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
       <%= form.input :annotation, :as => :ckeditor %>
-      <%#= form.input :body, :as => :ckeditor %>
+      <%= form.input :body, :as => :ckeditor %>
     <% end %>
     <%= form.inputs :class => "inputs additional_fields" do %>
       <%= form.input :since, :label => "Указать определённую дату и время публикации новости" %>
