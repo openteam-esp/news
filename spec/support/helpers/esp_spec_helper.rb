@@ -88,27 +88,30 @@ module EspSpecHelper
                            end
   end
 
-  def processing_correcting
-    @processing_correcting ||=  fresh_correcting.tap do | entry |
+  def processing_correcting(options={})
+    @processing_correcting ||=  fresh_correcting(options).tap do | entry |
                                   as corrector do entry.review.accept! end
                                 end
   end
 
-  def fresh_publishing
-    @fresh_publishing ||= processing_correcting.tap do | entry |
+  def fresh_publishing(options={})
+    @fresh_publishing ||= processing_correcting(options).tap do | entry |
                             as corrector do entry.review.complete! end
                           end
   end
 
-  def processing_publishing
-    @processing_publishing ||= fresh_publishing.tap do | entry |
+  def processing_publishing(options={})
+    @processing_publishing ||= fresh_publishing(options).tap do | entry |
                                 as publisher do entry.publish.accept! end
                                end
   end
 
-  def published
-    @published ||= processing_publishing.tap  do | entry|
-                     as publisher do entry.publish.complete! end
+  def published(options={})
+    @published ||= processing_publishing(options).tap  do | entry |
+                     as publisher do
+                       entry.channels << channel
+                       entry.publish.complete!
+                     end
                    end
   end
 

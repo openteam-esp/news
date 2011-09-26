@@ -22,10 +22,10 @@ Spork.prefork do
     config.include EspSpecHelper
     config.mock_with :rspec
     config.after do User.current = nil end
-    config.before(:all) do
+    config.before do
       DeferredGarbageCollection.start
     end
-    config.after(:all) do
+    config.after do
       DeferredGarbageCollection.reconsider
     end
     config.before(:all) do

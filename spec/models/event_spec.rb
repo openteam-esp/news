@@ -2,37 +2,58 @@
 
 require 'spec_helper'
 
-if false
 describe Event do
 
   before(:each) do
     set_current_user(initiator)
   end
 
-  describe "должен сохранять entry" do
-    it "должен сохранять каналы" do
-      channel_ids = [Fabricate(:channel), Fabricate(:channel)].map(&:id)
-      draft_entry.events.create(:kind => :store, :entry_attributes => draft_entry.attributes.merge(:channel_ids => channel_ids))
-      draft_entry.reload.channel_ids.should == channel_ids
+  it { should belong_to :entry }
+  it { should belong_to :user }
+
+  describe "должен создаваться" do
+    describe "при создании новости" do
+      it { draft.events.should have(1).item }
+      it { draft.events[0].user.should == initiator }
+      it { draft.events[0].kind.should == 'create_entry' }
+    end
+
+    def updated_entry(options={})
+      @updated_entry ||= processing_correcting.tap do | entry |
+                            as corrector do
+                              processing_correcting.update_attributes :author => Ryba::Name.full_name
+                            end
+                          end
+    end
+
+    describe "при обновлении новости" do
+      let(:last_event) { updated_entry.events[1] }
+      it { updated_entry.events.should have(2).items }
+      it { last_event.user.should == corrector }
+      it { last_event.kind.should == 'update_entry' }
+      it { last_event.versioned_entry.author.should == updated_entry.author }
+      it { updated_entry(:create_assets => true).events[1].versioned_entry.assets.should == updated_entry.assets }
     end
   end
 
+  if(false)
+
   describe "сохраняемые версии новости" do
     it "event не должен создаваться после сохранения новости" do
-      expect {draft_entry.update_attribute :title, "title"}.to_not change(Event, :count)
+      expect {entry.update_attribute :title, "title"}.to_not change(Event, :count)
     end
 
     it "должны сохраняться images" do
-      draft_entry_with_asset.events.create(:kind => :store)
-      draft_entry_with_asset.events.last.versioned_entry.images.should == draft_entry_with_asset.images
+      entry_with_asset.events.create(:kind => :store)
+      entry_with_asset.events.last.versioned_entry.images.should == entry_with_asset.images
     end
 
     it "должен сохранять каналы" do
       channels = [Fabricate(:channel), Fabricate(:channel)]
       channel_ids = channels.map(&:id)
-      draft_entry.events.create(:kind => :store, :entry_attributes => draft_entry.attributes.merge(:channel_ids => channel_ids))
+      entry.events.create(:kind => :store, :entry_attributes => entry.attributes.merge(:channel_ids => channel_ids))
       channels.last.destroy
-      draft_entry.events.last.versioned_entry.channels.should == channels
+      entry.events.last.versioned_entry.channels.should == channels
     end
 
   end
@@ -40,18 +61,18 @@ describe Event do
   describe "отмена изменений" do
     it "когда была пустая новость" do
       channel_ids = [Fabricate(:channel).id]
-      draft_entry.update_attributes(:title => "title", :channel_ids => channel_ids)
-      asset = Fabricate(:asset, :entry => draft_entry)
-      draft_entry.events.create(:kind => :restore)
-      restore_entry_version = draft_entry.events.first.versioned_entry
+      entry.update_attributes(:title => "title", :channel_ids => channel_ids)
+      asset = Fabricate(:asset, :entry => entry)
+      entry.events.create(:kind => :restore)
+      restore_entry_version = entry.events.first.versioned_entry
       restore_entry_version.title.should == "title"
       restore_entry_version.channel_ids.should == channel_ids
       restore_entry_version.image_ids.should == [asset.id]
       restore_entry_version.images.first.file_name.should_not be_nil
-      draft_entry.reload
-      draft_entry.title.should be_nil
-      draft_entry.channel_ids.should == []
-      draft_entry.image_ids.should == []
+      entry.reload
+      entry.title.should be_nil
+      entry.channel_ids.should == []
+      entry.image_ids.should == []
     end
 
     it "уже были события" do
@@ -93,6 +114,15 @@ describe Event do
       it { ability.should_not be_able_to :create, stored_draft.events.build(:kind => :store) }
     end
   end
+
+  describe "должен сохранять entry" do
+    it "должен сохранять каналы" do
+      channel_ids = [Fabricate(:channel), Fabricate(:channel)].map(&:id)
+      entry.events.create(:kind => :store, :entry_attributes => entry.attributes.merge(:channel_ids => channel_ids))
+      entry.reload.channel_ids.should == channel_ids
+    end
+  end
+
   #it 'после создания события с типом create, инициатор должен иметь подписку на созданную новость' do
     #@initiator.subscribes.should be_one
   #end
@@ -124,13 +154,8 @@ describe Event do
     #expect { Fabricate(:entry) }.to change{@subscriber.messages.reload.count}.by(1)
   #end
 
+  end
 end
-
-
-end
-
-
-
 
 
 # == Schema Information

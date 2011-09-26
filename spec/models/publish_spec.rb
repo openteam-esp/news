@@ -1,16 +1,17 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Task do
+describe Publish do
   before { User.current = initiator(:roles => [:corrector, :publisher]) }
+  let(:publish) { processing_publishing(:channels => [channel]).publish }
   describe "закрытие" do
-    before { processing_publishing.publish.complete! }
+    before { publish.complete! }
     it { processing_publishing.should be_published }
   end
 
   describe 'отказ от выполнения' do
-    before { processing_publishing.publish.cancel! }
-    it { processing_publishing.publish.should be_fresh }
+    before { publish.cancel! }
+    it { publish.should be_fresh }
     it { processing_publishing.should be_publishing }
   end
 

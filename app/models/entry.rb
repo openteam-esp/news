@@ -7,7 +7,7 @@ class Entry < ActiveRecord::Base
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
-  has_many :events, :validate => false
+  has_many :events
   has_many :assets, :conditions => {:deleted_at => nil}
   has_many :attachments, :conditions => {:deleted_at => nil}
   has_many :audios, :conditions => {:deleted_at => nil}
@@ -57,6 +57,9 @@ class Entry < ActiveRecord::Base
 
 
   after_create :create_tasks
+  after_create :create_event
+
+  after_update :create_event_at_update
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -70,10 +73,6 @@ class Entry < ActiveRecord::Base
     date   :until
     string :state
     integer :channel_ids, :multiple => true
-  end
-
-  def current_user
-    User.current
   end
 
   def self.all_states
@@ -90,20 +89,6 @@ class Entry < ActiveRecord::Base
 
   def self.processing_states
     [:correcting, :publishing]
-  end
-
-  delegate :publisher?, :corrector?, :to => :current_user, :prefix => true
-
-  def current_user_initiator?
-    initiator == current_user
-  end
-
-  def current_user_participant?
-    current_user_initiator? || events.where(:user_id => current_user).any?
-  end
-
-  def current_user_is_a?(*args)
-    args.map{|role| self.send("current_user_#{role}?")}.uniq.compact == [true]
   end
 
   def lock
@@ -159,6 +144,15 @@ class Entry < ActiveRecord::Base
       create_review :initiator => initiator, :entry => self
       create_publish :initiator => initiator, :entry => self
     end
+
+    def create_event
+      events.create :kind => 'create_entry'
+    end
+
+    def create_event_at_update
+      events.create :kind => 'update_entry', :entry => self unless state_changed?
+    end
+
 end
 
 
