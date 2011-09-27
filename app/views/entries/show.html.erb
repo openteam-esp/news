@@ -1,4 +1,35 @@
-<div class="content_wrapper">
+<div class="content_wrapper with_sidebar">
+  <div class="article">
+    <div class="top_stuff">
+      <div>
+        <span>Опубликовать</span>
+        <%= l @entry.since if @entry.since %>
+      </div>
+
+      <div>
+        <span>Переместить в архив</span>
+        <%= l @entry.until if @entry.until %>
+      </div>
+
+      <div>
+        <span>Каналы</span>
+        <%= @entry.channels.map(&:title).join(', ') %>
+      </div>
+    </div>
+
+    <%= presented_header @entry %>
+
+    <div class="annotation">
+      <%= presented_html @entry, :annotation %>
+    </div>
+
+    <div class="body">
+      <%= presented_html @entry, :body %>
+    </div>
+  </div>
+</div>
+
+<% content_for :right_sidebar do %>
   <div class="side_stuff">
 
     <% if @entry.locked_by %>
@@ -49,33 +80,4 @@
       <% end %>
     </ul>
   </div>
-
-  <div class="article">
-    <div class="top_stuff">
-      <div>
-        <span>Опубликовать</span>
-        <%= l @entry.since if @entry.since %>
-      </div>
-
-      <div>
-        <span>Переместить в архив</span>
-        <%= l @entry.until if @entry.until %>
-      </div>
-
-      <div>
-        <span>Каналы</span>
-        <%= @entry.channels.map(&:title).join(', ') %>
-      </div>
-    </div>
-
-    <%= presented_header @entry %>
-
-    <div class="annotation">
-      <%= presented_html @entry, :annotation %>
-    </div>
-
-    <div class="body">
-      <%= presented_html @entry, :body %>
-    </div>
-  </div>
-</div>
+<% end %>
