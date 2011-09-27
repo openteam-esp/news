@@ -13,6 +13,7 @@ class Task < ActiveRecord::Base
   default_scope not_deleted.ordered
 
   delegate :prepare, :review, :publish, :to => :entry
+  delegate :fresh?, :to => :next_task, :prefix => true
 
   def deleted?
     deleted_at

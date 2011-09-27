@@ -16,7 +16,7 @@ class Prepare < Issue
     end
 
     event :restore do
-      transition :completed => :processing
+      transition :completed => :processing, :if => :next_task_fresh?
     end
   end
 

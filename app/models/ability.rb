@@ -14,24 +14,21 @@ class Ability
       task.executor == user
     end
     can :refuse, Task do | task |
-      user == task.executor
+      task.executor == user
     end
 
     ##################################
     ###          Prepare           ###
     ##################################
     can :restore, Prepare do | task |
-      task.executor == user && task.review.fresh?
+      task.executor == user
     end
 
     ##################################
     ###          Review            ###
     ##################################
-    if user.corrector?
-      can :accept, Review
-      can :restore, Review do |task|
-        task.publish.fresh?
-      end
+    can [:accept, :restore], Review do | task |
+      user.corrector?
     end
 
     ##################################
