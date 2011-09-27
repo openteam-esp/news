@@ -2,21 +2,20 @@
 require 'spec_helper'
 
 describe Publish do
-  before { User.current = initiator(:roles => [:corrector, :publisher]) }
   let(:publish) { processing_publishing(:channels => [channel]).publish }
   describe "закрытие" do
-    before { publish.complete! }
+    before { as publisher do publish.complete! end }
     it { processing_publishing.should be_published }
   end
 
   describe 'отказ от выполнения' do
-    before { publish.cancel! }
+    before { as publisher do publish.refuse! end }
     it { publish.should be_fresh }
     it { processing_publishing.should be_publishing }
   end
 
   describe "восстановление" do
-    before { published.publish.restore! }
+    before { as publisher do published.publish.restore! end }
     it { published.should be_publishing }
     it { published.publish.should be_processing }
   end

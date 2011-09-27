@@ -7,32 +7,38 @@ class Ability
     ##################################
     ###           Task             ###
     ##################################
-    can [:read, :fire_event], Task
-
+    can :fire_event, Task do | task |
+      can? :read, task.entry
+    end
     can :complete, Task do |task|
       task.executor == user
     end
-
-    can :restore, Task do |task|
-      task.executor == user && (task.next_task.nil? || task.next_task.fresh?)
+    can :refuse, Task do | task |
+      user == task.executor
     end
 
     ##################################
-    ###          Issue             ###
+    ###          Prepare           ###
     ##################################
-    if user && user.corrector?
+    can :restore, Prepare do | task |
+      task.executor == user && task.review.fresh?
+    end
+
+    ##################################
+    ###          Review            ###
+    ##################################
+    if user.corrector?
       can :accept, Review
       can :restore, Review do |task|
-        task.next_task.nil? || task.next_task.fresh?
+        task.publish.fresh?
       end
-
     end
 
-    if user && user.publisher?
-      can :accept, Publish
-      can :restore, Publish do |task|
-        task.next_task.nil? || task.next_task.fresh?
-      end
+    ##################################
+    ###          Publish           ###
+    ##################################
+    can [:accept, :restore], Publish do
+      user.publisher?
     end
 
     ##################################
@@ -41,13 +47,14 @@ class Ability
     can :create, Subtask do | subtask |
       user == subtask.issue.executor && subtask.issue.processing?
     end
-
+    can :accept, Subtask do | subtask |
+      user == subtask.executor
+    end
     can :cancel, Subtask do | subtask |
       user == subtask.initiator
     end
-
-    can [:refuse, :accept], Subtask do | subtask |
-      user == subtask.executor
+    can :restore, Subtask do |task|
+      task.executor == user
     end
 
     ##################################

@@ -5,7 +5,6 @@ class TasksController < AuthorizedApplicationController
 
   custom_actions :resource => :fire_event
 
-
   has_scope :kind
 
   def fire_event

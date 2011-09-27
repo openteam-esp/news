@@ -9,13 +9,9 @@ class Event < ActiveRecord::Base
 
   default_scope :order => 'created_at DESC'
 
-  delegate :initiator, :to => :entry
-
   before_create :save_and_serialize_entry
 
   default_value_for :user do User.current end
-
-  attr_accessor :entry_attributes
 
   def versioned_entry
     Entry.new.from_json(serialized_entry)

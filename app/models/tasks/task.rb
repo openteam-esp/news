@@ -12,8 +12,14 @@ class Task < ActiveRecord::Base
 
   default_scope not_deleted.ordered
 
+  delegate :prepare, :review, :publish, :to => :entry
+
   def deleted?
     deleted_at
+  end
+
+  def self.human_state_events
+    [:accept, :complete, :restore, :refuse]
   end
 
   protected

@@ -30,12 +30,16 @@ describe Event do
                           end
     end
 
+    it "при создании новости" do
+      draft.events.map(&:event).should == ['create_entry']
+    end
+
     describe "при закрытии задачи" do
       def last_event(options={})
-        @last_event ||= updated_entry(options).events[0]
+        @last_event ||= updated_entry(options).events[1]
       end
 
-      it { p updated_entry.events; updated_entry.events.should have(1).items; }
+      it { updated_entry.events.should have(2).items }
       it { last_event.user.should == initiator }
       it { last_event.event.should == 'complete' }
       it { last_event.versioned_entry.author.should == updated_entry.author }

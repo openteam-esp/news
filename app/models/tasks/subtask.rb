@@ -8,7 +8,7 @@ class Subtask < Task
 
   state_machine :initial => :fresh do
 
-    after_transition :create_event
+    after_transition :on => Subtask.human_state_events, :do => :create_event
 
     state :fresh
     state :processing
@@ -30,6 +30,10 @@ class Subtask < Task
     event :refuse do
       transition [:fresh, :processing] => :refused
     end
+  end
+
+  def self.human_state_events
+    Task.human_state_events + [:cancel]
   end
 end
 

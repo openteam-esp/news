@@ -4,11 +4,11 @@ class Issue < Task
 
   state_machine :initial => :pending do
 
-    before_transition :on => [:accept, :comlpete, :restore] do | task, transition |
+    before_transition :on => Issue.human_state_events do | task, transition |
       Ability.new.authorize!(transition.event, task)
     end
 
-    after_transition :create_event
+    after_transition :on => Issue.human_state_events, :do => :create_event
 
     state :pending
     state :fresh
@@ -38,7 +38,7 @@ class Issue < Task
     event :complete do
       transition :processing => :completed
     end
-    event :cancel do
+    event :refuse do
       transition :processing => :fresh
     end
     event :suspend do
@@ -47,10 +47,6 @@ class Issue < Task
     event :restore do
       transition :completed => :processing
     end
-  end
-
-  def human_state_events
-    state_events - [:suspend]
   end
 
   def next_task

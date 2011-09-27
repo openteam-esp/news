@@ -3,21 +3,20 @@ require 'spec_helper'
 
 describe Review do
   describe "авторизованный пользователь с ролями публикатора и корректора может выполнять" do
-    before { set_current_user initiator(:roles => [:corrector, :publisher]) }
     describe "закрытие" do
-      before { processing_correcting.review.complete! }
+      before { as corrector do processing_correcting.review.complete! end }
       it { processing_correcting.should be_publishing }
       it { processing_correcting.publish.should be_fresh }
     end
 
     describe 'отказ от выполнения' do
-      before { processing_correcting.review.cancel! }
+      before { as corrector do processing_correcting.review.refuse! end }
       it { processing_correcting.review.should be_fresh }
       it { processing_correcting.should be_correcting }
     end
 
     describe "восстановление" do
-      before { fresh_publishing.review.restore! }
+      before { as corrector do fresh_publishing.review.restore! end }
       it { fresh_publishing.should be_correcting }
       it { fresh_publishing.publish.should be_pending }
     end

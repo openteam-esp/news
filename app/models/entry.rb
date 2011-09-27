@@ -57,6 +57,7 @@ class Entry < ActiveRecord::Base
 
 
   after_create :create_tasks
+  after_create :create_event
 
   accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
@@ -140,6 +141,10 @@ class Entry < ActiveRecord::Base
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
       create_review :initiator => initiator, :entry => self
       create_publish :initiator => initiator, :entry => self
+    end
+
+    def create_event
+      events.create! :event => 'create_entry'
     end
 
 end
