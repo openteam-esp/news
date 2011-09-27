@@ -1,12 +1,17 @@
-<% task.class.human_state_events.each do | event | %>
-  <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post } do | form | %>
-    <%= form.inputs do %>
-      <%= form.input :event, :value => event, :as => :hidden %>
-    <% end %>
-
-    <%= form.buttons do %>
-      <%= form.commit_button t("state_machine.task.event.#{event}"),
-                             :button_html => { :class => "button dark", :disabled => !can?(event, task) }   %>
+<div class="actions">
+  <% task.class.human_state_events.each do | event | %>
+    <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post } do | form | %>
+      <%= form.inputs do %>
+        <%= form.input :event, :value => event, :as => :hidden %>
+        <%= form.input :comment,
+                       :label => false,
+                       :input_html => {:class => 'comment_input',
+                                       :placeholder => t(:comment)} if event == :complete %>
+      <% end %>
+      <%= form.buttons do %>
+        <%= form.commit_button t("state_machine.task.event.#{event}"),
+        :button_html => { :class => "button #{event}", :disabled => !can?(event, task) }   %>
     <% end %>
   <% end %>
 <% end %>
+</div>

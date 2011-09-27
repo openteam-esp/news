@@ -14,7 +14,6 @@ class Entry < ActiveRecord::Base
   has_many :images, :conditions => {:deleted_at => nil}
   has_many :videos, :conditions => {:deleted_at => nil}
   has_many :tasks, :dependent => :destroy
-  has_many :issues
 
   has_one :prepare
   has_one :review
@@ -72,6 +71,10 @@ class Entry < ActiveRecord::Base
     date   :until
     string :state
     integer :channel_ids, :multiple => true
+  end
+
+  def issues
+    [prepare, review, publish]
   end
 
   def self.all_states

@@ -69,6 +69,8 @@ ru:
   "All recipient": "Все подписчики:"
   "Sign in": "Вход"
   Destroy: "Удалить"
+  comment: Комментарий
+  edit_entry: Изменить новость
   subscribers: "Списки рассылки:"
   Resepients: "Списки рассылок"
   send_to_corrector: "Отправить корректору"
@@ -102,6 +104,7 @@ ru:
   immediately_after_correcting: "Немедленно опубликовать после корректировки"
   actions: "Доступные действия"
   no_any_entries: "Нет новостей"
+  no_any_tasks: Нет задач
   list_of_entries: "Список новостей"
   destroy_message: 'Удалить сообщение'
   no_any_messages: "Нет новых сообщений"

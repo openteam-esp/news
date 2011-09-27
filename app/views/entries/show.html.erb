@@ -1,48 +1,49 @@
 <div class="content_wrapper">
   <div class="side_stuff">
-    <%= link_to t('edit_entry'), edit_entry_path(@entry) %>
 
     <% if @entry.locked_by %>
-      <%= @entry.locked_by %>
-      <%= time_ago_in_words(@entry.locked_at) %> назад
+      <div class="lock_info">
+        <div class="locked_by">
+          <%= @entry.locked_by %>
+        </div>
+
+        <div class="time_ago">
+          <%= time_ago_in_words(@entry.locked_at) %> назад
+        </div>
+      </div>
     <% end %>
 
+    <%= link_to t('edit_entry'), edit_entry_path(@entry), :class => 'button edit_button' %>
+
     <ul class="tabs">
-      <li><a href='#'>Задачи</a></li>
+      <li class='active'><a href='#'>Задачи</a></li>
       <li><a href='#'>Лента активности</a></li>
-      <li><a href='#'>Уведомления</a></li>
+      <li class='notices'><a href='#'>Уведомления</a></li>
     </ul>
+    <div class="under_tabs"></div>
 
     <ul class="issues">
-      <% @entry.issues.each do |task| %>
-        <%= task %>
-      <% end %>
+      <% @entry.issues.each do |issue| %>
+        <li class='<%= issue.state %>'>
 
-      <% if false %>
+          <a href='#' class='title'>
+            <%= issue.class.model_name.human %>
+            <span class="time_ago"><%= time_ago_in_words(issue.created_at) %> назад</span>
+          </a>
 
-        <li>
-          <%= task.class.model_name.human %>
-
-          <%= I18n.t "state_machine.task.state.#{task.state}" %>
-
-          <%= task.executor %>
-
-          <%= time_ago_in_words(task.created_at) %> назад
-
-          <%= task.comment %>
-
-          <%= semantic_form_for task, :url => '#' do |form| %>
-            <%= form.inputs do %>
-              <%= form.input :comment %>
-            <% end %>
-            <%= form.buttons %>
+          <% if issue.executor %>
+            <div class="executor">
+              <%= issue.executor %>
+            </div>
           <% end %>
 
-          <ul class="subtasks">
-            <% task.subtasks.each do |subtask| %>
-              <%= subtask %>
-            <% end %>
-          </ul>
+          <% if issue.comment %>
+            <div class="comment">
+              <%= issue.comment %>
+            </div>
+          <% end %>
+
+          <%= render :partial => 'tasks/actions', :locals => { :task => issue } %>
 
         </li>
       <% end %>
@@ -53,12 +54,12 @@
     <div class="top_stuff">
       <div>
         <span>Опубликовать</span>
-        <%= l @entry.since %>
+        <%= l @entry.since if @entry.since %>
       </div>
 
       <div>
         <span>Переместить в архив</span>
-        <%= l @entry.until %>
+        <%= l @entry.until if @entry.until %>
       </div>
 
       <div>
