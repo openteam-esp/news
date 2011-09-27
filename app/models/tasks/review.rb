@@ -1,4 +1,37 @@
 class Review < Issue
+  state_machine :initial => :pending do
+
+    before_transition :authorize_transition
+    after_transition :create_event
+    after_transition :on => :complete, :do => :after_complete
+    after_transition :on => :accept, :do => :after_accept
+    after_transition :on => :restore, :do => :after_restore
+
+    state :pending
+    state :fresh
+    state :processing
+    state :completed
+
+    event :clear do
+      transition :pending => :fresh
+    end
+    event :accept do
+      transition :fresh => :processing
+    end
+    event :complete do
+      transition :processing => :completed
+    end
+    event :refuse do
+      transition :processing => :fresh
+    end
+    event :suspend do
+      transition :fresh => :pending
+    end
+    event :restore do
+      transition :completed => :processing
+    end
+  end
+
   def next_task
     entry.publish
   end

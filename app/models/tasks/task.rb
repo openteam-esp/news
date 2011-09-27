@@ -24,9 +24,28 @@ class Task < ActiveRecord::Base
 
   protected
 
-    def create_event(transition)
-      entry.events.create! :entry => entry, :task => self, :event => transition.event.to_s
+    def authorize_transition(transition)
+      Ability.new.authorize!(transition.event, self) if self.class.human_state_events.include? transition.event
     end
+
+    def create_event(transition)
+      entry.events.create! :entry => entry, :task => self, :event => transition.event.to_s if self.class.human_state_events.include? transition.event
+    end
+
+    def after_complete
+      entry.up!
+      next_task.try :clear!
+    end
+
+    def after_accept
+      update_attributes! :executor => User.current
+    end
+
+    def after_restore
+      entry.down!
+      next_task.try :suspend!
+    end
+
 
 end
 

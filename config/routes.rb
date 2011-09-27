@@ -72,7 +72,7 @@ News::Application.routes.draw do
       :constraints => { :kind => /(fresh|processed_by_me|initiated_by_me)/ }
 
 
-  post '/tasks/:id/fire_event' => 'tasks#fire_event', :as => :task_fire_event
+  post '/tasks/:id/fire_event' => 'tasks#fire_event', :as => :fire_event_task
 
   resources :issues, :only => [] do
     resources :subtasks, :only => [:new, :create]

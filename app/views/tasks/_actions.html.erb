@@ -1,5 +1,5 @@
 <div class="actions">
-  <% task.class.human_state_events.each do | event | %>
+  <% (task.state_events & task.class.human_state_events).each do | event | %>
     <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post } do | form | %>
       <%= form.inputs do %>
         <%= form.input :event, :value => event, :as => :hidden %>
@@ -10,7 +10,7 @@
       <% end %>
       <%= form.buttons do %>
         <%= form.commit_button t("state_machine.task.event.#{event}"),
-        :button_html => { :class => "button #{event}", :disabled => !can?(event, task) }   %>
+        :button_html => { :class => "button #{event} #{'disabled' if !can?(event, task) }", :disabled => !can?(event, task) }   %>
     <% end %>
   <% end %>
 <% end %>

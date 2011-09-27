@@ -274,9 +274,10 @@ ru:
         processing: 'В работе'
       event:
         accept: Взять в работу
-        cancel: Отказаться
+        cancel: Отменить
         complete: Закрыть
         restore: Возобновить
+        refuse: Отказаться
 
     entry:
       state:

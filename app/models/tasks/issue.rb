@@ -2,53 +2,6 @@ class Issue < Task
 
   has_many :subtasks, :before_add => :set_entry
 
-  state_machine :initial => :pending do
-
-    before_transition :on => Issue.human_state_events do | task, transition |
-      Ability.new.authorize!(transition.event, task)
-    end
-
-    after_transition :on => Issue.human_state_events, :do => :create_event
-
-    state :pending
-    state :fresh
-    state :processing
-    state :completed
-
-    after_transition :on => :accept do | task, transition |
-      task.update_attributes! :executor => User.current
-    end
-
-    after_transition :on => :complete do |task, transition|
-      task.entry.up!
-      task.next_task.try :clear!
-    end
-
-    after_transition :on => :restore do |task, transition|
-      task.entry.down!
-      task.next_task.try :suspend!
-    end
-
-    event :clear do
-      transition :pending => :fresh
-    end
-    event :accept do
-      transition :fresh => :processing
-    end
-    event :complete do
-      transition :processing => :completed
-    end
-    event :refuse do
-      transition :processing => :fresh
-    end
-    event :suspend do
-      transition :fresh => :pending
-    end
-    event :restore do
-      transition :completed => :processing
-    end
-  end
-
   def next_task
   end
 
