@@ -12,7 +12,7 @@ group :development do
 end
 
 group :production do
-  gem 'hassle',                                                               :git => 'git://github.com/koppen/hassle'
+  gem 'hassle',                                   :require => false,        :git => 'git://github.com/koppen/hassle'
   gem 'hoptoad_notifier'
   gem 'pg',                                       :require => false
 end
@@ -27,9 +27,9 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rdiscount'
-  gem 'sunspot_solr',           '~> 1.3.0.rc4'
-  gem 'ya2yaml'
+  gem 'rdiscount',                                :require => false
+  gem 'sunspot_solr',           '~> 1.3.0.rc4',   :require => false
+  gem 'ya2yaml',                                  :require => false
 end
 
 gem 'cancan'

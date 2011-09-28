@@ -10,7 +10,11 @@ class LegacyAsset < ActiveRecord::Base
   belongs_to :entry, :class_name => 'LegacyEntry', :foreign_key => 'event_id'
 
   def file
-    File.new(Rails.root.join "spec", "fixtures", file_file_name) if Rails.env.test?
+    if Rails.env.test?
+      File.new(Rails.root.join "spec/fixtures/#{file_file_name}")
+    else
+      File.new(Rails.root.join "public/legacy/#{id}/original/#{file_file_name}")
+    end
   end
 
 end

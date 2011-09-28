@@ -12,9 +12,9 @@ config/sunspot.yml
 *.swo
 public/stylesheets/*.css
 public/system/*
+public/legacy/*
+coverage/*
 assets/*
 .rake_tasks~
-coverage/index.html
-coverage/resultset.yml
 solr/data
 solr/pids

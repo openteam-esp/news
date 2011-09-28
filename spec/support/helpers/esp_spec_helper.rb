@@ -10,6 +10,7 @@ class Asset
     type.classify.constantize.find_or_initialize_by_id(id).tap do |asset|
       asset.attributes = self.attributes
       asset.description = self.description
+      asset.entry = self.entry
     end
   end
 end

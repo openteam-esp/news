@@ -22,57 +22,54 @@ describe LegacyEntry do
     @migrated ||= legacy.migrate
   end
 
+  let(:entry) { migrated(legacy) }
+
   describe "после миграции" do
     it "должен установить инициатора" do
-      migrated(legacy).initiator.name.should == "Мигратор"
+      entry.initiator.name.should == "Мигратор"
     end
-
     it "должен установить title" do
-      migrated(legacy).title.should == legacy.title
+      entry.title.should == legacy.title
     end
-
     it "должен упрощать annotation" do
-      migrated(legacy).annotation.should =~ /^<p>В конце минувшей/
+      entry.annotation.should =~ /^<p>В конце минувшей/
     end
-
     it "должен форматировать body" do
-      migrated(legacy).body.should == RDiscount.new(legacy.body).to_html
-      migrated(legacy).body.should =~ /^<p>/
-      migrated(legacy).body.scan("<p>").size.should == 4
+      entry.body.should == RDiscount.new(legacy.body).to_html
+      entry.body.should =~ /^<p>/
+      entry.body.scan("<p>").size.should == 4
     end
-
     it "должен проставлять created_at, updated_at" do
-      migrated(legacy).created_at.should == legacy.created_at
-      I18n.l(migrated(legacy).created_at, :format => "%d.%m.%Y %H:%M").should == "20.07.2011 17:21"
-      migrated(legacy).updated_at.should == legacy.updated_at
+      entry.created_at.should == legacy.created_at
+      entry.updated_at.should == legacy.updated_at
     end
     it "должен проставлять since, until" do
-      migrated(legacy).since.should == legacy.date_time
-      migrated(legacy).until.should == legacy.end_date_time
+      entry.since.should == legacy.date_time
+      entry.until.should == legacy.end_date_time
     end
   end
 
   describe "должен в зависимости от status" do
-    let (:prepare) { @entry.prepare }
-    let (:review) { @entry.review }
-    let (:publish) { @entry.publish }
+    let (:prepare) { entry.prepare }
+    let (:review) { entry.review }
+    let (:publish) { entry.publish }
 
     describe "blank" do
-      before { @entry = migrated(legacy(:status => :blank)) }
-      it { @entry.state.should == "correcting" }
+      let(:entry) { migrated(legacy(:status => :blank)) }
+      it { entry.state.should == "correcting" }
       it { prepare.should be_completed }
       it { prepare.executor_id.should_not be_nil }
     end
     describe "ready_to_publish" do
-      before { @entry = migrated(legacy(:status => :ready_to_publish)) }
-      it { @entry.state.should == 'publishing' }
+      let(:entry) { migrated(legacy(:status => :ready_to_publish)) }
+      it { entry.state.should == 'publishing' }
       it { review.should be_completed }
       it { review.executor_id.should_not be_nil }
       it { publish.should be_fresh }
     end
     describe "publish" do
-      before { @entry = migrated(legacy(:status => :publish)) }
-      it { @entry.state.should == "published" }
+      let(:entry) { migrated(legacy(:status => :publish)) }
+      it { entry.state.should == "published" }
       it { publish.should be_completed }
       it { publish.executor_id.should_not be_nil }
     end
@@ -90,37 +87,18 @@ describe LegacyEntry do
     end
   end
 
-  describe "старых новостей с файлами" do
+  describe "с файлами" do
+    let(:audio) { migrated(legacy(:asset => :audio)).audios[0] }
+    let(:image) {  migrated(legacy(:asset => :image)).images[0] }
+    let(:attachment) { migrated(legacy(:asset => :attachment)).attachments[0] }
 
-    describe 'должны смигрироваться' do
-      it "файлы" do
-        migrated(legacy(:asset => :attachment)).assets[0].file_size.should > 0
-      end
-    end
-    describe "должны проставиться" do
-      it "имена файлов" do
-        migrated(legacy(:asset => :attachment)).assets[0].file_name.should == 'attachment'
-      end
-      it "размеры картинок" do
-        migrated(legacy(:asset => :image)).assets[0].file_width.should > 0
-      end
-    end
-
-    describe "в новостях должны проставляться ссылки" do
-      def asset(type=:attachemnt)
-        @asset ||= migrated(legacy(:asset => type)).assets[0].instance
-      end
-      it "на аттачи" do
-        migrated(legacy(:asset => :attachment)).body.should =~ /<p><a.*?>Файл attachment<\/a><\/p>/
-      end
-      it "на аудиофайлы" do
-        migrated(legacy(:asset => :audio)).body.should include "<p>\n  #{asset.to_html}\n</p>"
-      end
-      it "на картинки" do
-        migrated(legacy(:asset => :image)).body.should include "<p>\n  #{asset.to_html}\n</p>"
-      end
-      it { asset(:image).to_s.should == %Q{<img alt="Файл image" height="150" src="/assets/#{asset.id}/32-150/image" width="32" />} }
-      it { asset(:audio).to_html.should == %Q{<audio controls="controls" height="50" width="300"><source src="/assets/#{asset.id}/audio" type="audio/x-wav" />Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: <a href="/assets/#{asset.id}/audio" target="_blank">Файл audio</a></audio>} }
+    describe "после миграции" do
+      it { attachment.to_html.should == %Q{<a href="/assets/#{attachment.id}/attachment" target="_blank">Файл attachment</a>} }
+      it { attachment.entry.body.should include "<p>#{attachment.to_html}</p>" }
+      it { audio.to_html.should =~ %r{<audio .*><source src="/assets/#{audio.id}/audio" .* />.*<a href="/assets/#{audio.id}/audio".*>Файл audio</a></audio>} }
+      it { audio.entry.body.should include "<p>#{audio.to_html}</p>" }
+      it { image.to_html.should =~ %r{<a href="/assets/#{image.id}/image".*><img alt="Файл image" height="150" src="/assets/#{image.id}/32-150/image" width="32"} }
+      it { image.entry.body.should include "<p>#{image.to_html}</p>" }
     end
   end
 
