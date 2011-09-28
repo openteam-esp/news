@@ -31,7 +31,7 @@ describe Event do
     end
 
     it "при создании новости" do
-      draft.events.map(&:event).should == ['create_entry']
+      draft.events.map(&:event).should == ['accept']
     end
 
     describe "при закрытии задачи" do

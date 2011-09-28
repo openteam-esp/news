@@ -148,7 +148,7 @@ class Entry < ActiveRecord::Base
     end
 
     def create_event
-      events.create! :event => 'create_entry'
+      events.create! :event => 'accept', :task => prepare
     end
 
 end

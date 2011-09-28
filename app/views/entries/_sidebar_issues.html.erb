@@ -1,0 +1,26 @@
+<ul class="issues">
+  <% entry.issues.each do |issue| %>
+    <li class='<%= issue.state %>'>
+
+      <a href='#' class='title'>
+        <%= issue.description %>
+        <span class="time_ago"><%= time_ago_in_words(issue.created_at) %> назад</span>
+      </a>
+
+      <% if issue.executor %>
+        <div class="executor">
+          <%= issue.executor %>
+        </div>
+      <% end %>
+
+      <% if issue.comment %>
+        <div class="comment">
+          <%= issue.comment %>
+        </div>
+      <% end %>
+
+      <%= render :partial => 'tasks/actions', :locals => { :task => issue } %>
+
+    </li>
+  <% end %>
+</ul>

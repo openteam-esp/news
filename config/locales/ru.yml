@@ -280,6 +280,13 @@ ru:
         restore: Возобновить
         refuse: Отказаться
 
+      state_for_activity:
+        accept: Взята в работу
+        cancel: Отмена
+        complete: Закрыта
+        restore: Возобновлена
+        refuse: Отказ
+
     entry:
       state:
         draft: 'Черновик'

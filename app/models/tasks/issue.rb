@@ -5,6 +5,10 @@ class Issue < Task
   def next_task
   end
 
+  def description
+   self.class.model_name.human
+  end
+
   protected
     def set_entry(subtask)
       subtask.entry = entry

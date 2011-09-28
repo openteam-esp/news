@@ -17,6 +17,8 @@ News::Application.routes.draw do
     resources :assets, :only => [:create, :destroy]
   end
 
+  resources :events, :only => :show
+
   get '/:folder/entries' => 'entries#index',
       :as => :scoped_entries,
       :constraints => { :folder => /(draft|processing|deleted|published)/ }

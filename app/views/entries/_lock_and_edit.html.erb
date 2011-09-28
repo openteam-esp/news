@@ -1,0 +1,13 @@
+<% if entry.locked_by %>
+  <div class="lock_info">
+    <div class="locked_by">
+      <%= entry.locked_by %>
+    </div>
+
+    <div class="time_ago">
+      <%= time_ago_in_words(entry.locked_at) %> назад
+    </div>
+  </div>
+<% end %>
+
+<%= link_to t('edit_entry'), edit_entry_path(entry), :class => 'button edit_button' %>

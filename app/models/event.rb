@@ -14,7 +14,7 @@ class Event < ActiveRecord::Base
   default_value_for :user do User.current end
 
   def versioned_entry
-    Entry.new.from_json(serialized_entry)
+    Entry.new.from_json(serialized_entry) if serialized_entry
   end
 
   private

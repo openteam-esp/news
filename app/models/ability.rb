@@ -100,6 +100,10 @@ class Ability
     can [:read, :destroy], Message
     can [:create, :destroy], Subscribe
 
+    ##################################
+    ###           Event            ###
+    ##################################
+    can :read, Event
   end
 end
 
