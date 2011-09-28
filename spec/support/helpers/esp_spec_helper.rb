@@ -1,6 +1,18 @@
 # encoding: utf-8
 
-Entry
+
+require Rails.root.join('app/models/entry')
+require Rails.root.join('app/models/asset/asset')
+require Rails.root.join('app/models/asset/image')
+
+class Asset
+  def instance
+    type.classify.constantize.find_or_initialize_by_id(id).tap do |asset|
+      asset.attributes = self.attributes
+      asset.description = self.description
+    end
+  end
+end
 
 class Entry
   def all_tasks
@@ -21,6 +33,16 @@ class Entry
 
   def channel_ids
     channels.map(&:id)
+  end
+
+  def type(type)
+    assets.select{ |asset| asset.type == type.classify }
+  end
+
+  %w[attachment audio video image].each do | type |
+    define_method type.pluralize do
+      type(type).map(&:instance)
+    end
   end
 end
 

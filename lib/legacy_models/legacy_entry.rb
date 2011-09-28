@@ -1,5 +1,101 @@
 # encoding: utf-8
 
+require Rails.root.join('app/models/entry')
+require Rails.root.join('app/models/asset/asset')
+require Rails.root.join('app/models/asset/image')
+require Rails.root.join('app/models/asset/audio')
+require Rails.root.join('app/models/asset/video')
+require Rails.root.join('app/models/asset/attachment')
+
+include ActionView::Helpers::TagHelper
+include ActionView::Helpers::AssetTagHelper
+include Rails.application.routes.url_helpers
+
+class Asset
+  attr_accessor :description
+  def path
+    asset_path id, file_name
+  end
+
+  def to_html
+    content_tag :a, self.to_s, :target => '_blank', :href => path,
+  end
+
+  def to_s
+    description
+  end
+end
+
+class Image
+  def size
+    @size ||= begin
+                height = 150
+                if file_height > height
+                  ratio = height / file_height.to_f
+                  width = (file_width * ratio).to_i
+                else
+                  height = file_height
+                  width = file_width
+                end
+                { :width => width, :height => height}
+              end
+  end
+
+  def width
+    size[:width]
+  end
+
+  def height
+    size[:height]
+  end
+
+  def resized_path
+    image_path(id, width, height, file_name)
+  end
+
+  def to_s
+    tag(:img, :src => resized_path, :alt => description, :width => width, :height => height)
+  end
+end
+
+class Audio
+  alias :old_to_html :to_html
+
+  def to_html
+    content_tag(:audio, tag(:source, :src => path, :type => file_mime_type) + deprecated_browser_message, :controls => true, :height => 50, :width => 300)
+  end
+
+  def tag_name
+    self.class.to_s.downcase
+  end
+
+  def deprecated_browser_message
+    %Q{Ваш браузер не поддерживает тэг #{tag_name}. Вы можете скачать файл: #{old_to_html}}.html_safe
+  end
+end
+
+
+class Entry
+  def add_assets_html
+    attachments.each do | attachment |
+      body << "<p>#{attachment.to_html}</p>"
+    end
+    if audios.any?
+      body << "<p>\n"
+      audios.each do | audio |
+        body << "  #{audio.to_html}\n"
+      end
+      body << "</p>"
+    end
+    if images.any?
+      body << "<p>\n"
+      images.each do | image |
+        body << "  #{image.to_html}\n"
+      end
+      body << "</p>"
+    end
+  end
+end
 
 class LegacyEntry < ActiveRecord::Base
   include ActionView::Helpers::TextHelper
@@ -58,6 +154,7 @@ class LegacyEntry < ActiveRecord::Base
         asset.save :validate => false
         entry.assets << asset
       end
+      entry.add_assets_html
       entry.prepare.complete!
       if status.to_s != 'blank'
         entry.review.accept!

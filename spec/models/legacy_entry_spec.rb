@@ -18,8 +18,8 @@ describe LegacyEntry do
                 end
   end
 
-  def migrated(legacy)
-    legacy.migrate
+  def migrated(legacy=nil)
+    @migrated ||= legacy.migrate
   end
 
   describe "после миграции" do
@@ -91,6 +91,7 @@ describe LegacyEntry do
   end
 
   describe "старых новостей с файлами" do
+
     describe 'должны смигрироваться' do
       it "файлы" do
         migrated(legacy(:asset => :attachment)).assets[0].file_size.should > 0
@@ -103,20 +104,23 @@ describe LegacyEntry do
       it "размеры картинок" do
         migrated(legacy(:asset => :image)).assets[0].file_width.should > 0
       end
-      it "описания" do
-        migrated(legacy(:asset => :image)).assets[0].description.should == "Файл image"
-      end
     end
 
     describe "в новостях должны проставляться ссылки" do
-      it "на картинки" do
-        pending
-        migrated(legacy(:asset => :image)).body.should =~ /<li><a.*?>\s*<img .*?>\s*<\/a><\/li>/
+      def asset(type=:attachemnt)
+        @asset ||= migrated(legacy(:asset => type)).assets[0].instance
       end
       it "на аттачи" do
-        pending
-        migrated(legacy(:asset => :attachment)).body.should =~ /<li><a.*?>Файл attachment<\/a><\/li>/
+        migrated(legacy(:asset => :attachment)).body.should =~ /<p><a.*?>Файл attachment<\/a><\/p>/
       end
+      it "на аудиофайлы" do
+        migrated(legacy(:asset => :audio)).body.should include "<p>\n  #{asset.to_html}\n</p>"
+      end
+      it "на картинки" do
+        migrated(legacy(:asset => :image)).body.should include "<p>\n  #{asset.to_html}\n</p>"
+      end
+      it { asset(:image).to_s.should == %Q{<img alt="Файл image" height="150" src="/assets/#{asset.id}/32-150/image" width="32" />} }
+      it { asset(:audio).to_html.should == %Q{<audio controls="controls" height="50" width="300"><source src="/assets/#{asset.id}/audio" type="audio/x-wav" />Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: <a href="/assets/#{asset.id}/audio" target="_blank">Файл audio</a></audio>} }
     end
   end
 

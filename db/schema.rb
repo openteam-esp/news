@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110926101243) do
+ActiveRecord::Schema.define(:version => 20110927053802) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(:version => 20110926101243) do
     t.integer  "file_width"
     t.integer  "file_height"
     t.integer  "legacy_id"
-    t.text     "description"
   end
 
   create_table "authentications", :force => true do |t|
