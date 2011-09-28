@@ -81,5 +81,11 @@
         </li>
       <% end %>
     </ul>
+
+    <ul class='events'>
+      <% @entry.events.each do | event | %>
+        <%= event.event %>
+      <% end %>
+    </ul>
   </div>
 <% end %>

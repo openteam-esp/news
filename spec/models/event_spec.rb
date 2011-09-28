@@ -171,12 +171,13 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: events
 #
 #  id               :integer         not null, primary key
-#  transition       :string(255)
+#  event            :string(255)
 #  text             :text
 #  entry_id         :integer
 #  user_id          :integer

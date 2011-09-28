@@ -43,6 +43,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: tasks
@@ -58,5 +59,6 @@ end
 #  updated_at   :datetime
 #  issue_id     :integer
 #  description  :text
+#  deleted_at   :datetime
 #
 
