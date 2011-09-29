@@ -32,6 +32,7 @@ group :development, :test do
   gem 'ya2yaml',                                  :require => false
 end
 
+gem 'attribute_normalizer',     '~> 1.0.0.pre4'
 gem 'cancan'
 gem 'ckeditor'
 gem 'clockwork'

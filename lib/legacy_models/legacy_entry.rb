@@ -43,7 +43,7 @@ end
 class Audio
   alias :old_to_html :to_html
   def to_html
-    content_tag(:audio, tag(:source, :src => path, :type => file_mime_type) + deprecated_browser_message, :controls => true, :height => 50, :width => 300)
+    content_tag(:audio, deprecated_browser_message, :src => path, :controls => true)
   end
   def deprecated_browser_message
     %Q{Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: #{old_to_html}}.html_safe
@@ -52,15 +52,17 @@ end
 
 
 class Entry
-  def add_assets_html
-    attachments.each do | attachment |
-      body << content_tag(:p, attachment.to_html)
-    end
-    audios.each do | audio |
-      body << content_tag(:p, audio.to_html)
-    end
-    if images.any?
-      body << content_tag(:p, images.map(&:to_html).join("\n").html_safe)
+  def assets_html
+    "".tap do | assets_html |
+      attachments.each do | attachment |
+        assets_html << content_tag(:p, attachment.to_html)
+      end
+      audios.each do | audio |
+        assets_html << content_tag(:p, audio.to_html)
+      end
+      if images.any?
+        assets_html << content_tag(:p, images.map(&:to_html).join("\n").html_safe)
+      end
     end
   end
 end
@@ -106,7 +108,6 @@ class LegacyEntry < ActiveRecord::Base
     Entry.find_or_initialize_by_legacy_id(id).tap do |entry|
       entry.title         = title
       entry.annotation    = migrated_annotation
-      entry.body          = migrated_body
       entry.created_at    = created_at
       entry.since         = date_time
       entry.until         = end_date_time
@@ -120,7 +121,7 @@ class LegacyEntry < ActiveRecord::Base
         asset.save :validate => false
         entry.assets << asset
       end
-      entry.add_assets_html
+      entry.update_attribute :body, migrated_body + entry.assets_html
       entry.prepare.complete!
       if status.to_s != 'blank'
         entry.review.accept!
@@ -130,7 +131,7 @@ class LegacyEntry < ActiveRecord::Base
         entry.publish.accept!
         entry.publish.complete!
       end
-      entry.update_attribute :updated_at, updated_at
+      entry.update_attributes :updated_at => updated_at
     end
   end
 

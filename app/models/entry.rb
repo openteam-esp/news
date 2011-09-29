@@ -73,6 +73,9 @@ class Entry < ActiveRecord::Base
     integer :channel_ids, :multiple => true
   end
 
+  normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
+  normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
+
   def issues
     [prepare, review, publish]
   end

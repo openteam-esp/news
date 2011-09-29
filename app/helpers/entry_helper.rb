@@ -10,7 +10,7 @@ module EntryHelper
   end
 
   def composed_title(entry)
-    [ presented(entry, :title), entry.body.to_s.strip_html.presence].compact.join(' – ').truncate(100, :omission => '…').gilensize_text
+    [ presented(entry, :title), entry.body.to_s.strip_html.presence].compact.join(' – ').truncate(100, :omission => '…')
   end
 
   def creator_of(entry)
@@ -39,7 +39,7 @@ module EntryHelper
 
   def presented_header(entry)
     if entry.title.presence
-      content_tag :h2, entry.title.gilensize_text, :class => 'title'
+      content_tag :h2, entry.title, :class => 'title'
     else
       content_tag :h2, empty_message(:title), :class => :empty
     end
@@ -47,9 +47,9 @@ module EntryHelper
 
   def presented_html(entry, attribute)
     if entry.send(attribute).to_s.strip_html.presence
-      content_tag :html, entry.send(attribute).sanitize.gilensize.html_safe
+      content_tag :div, raw(entry.send(attribute))
     else
-      content_tag :html, empty_message(:title), :class => :empty
+      content_tag :div, empty_message(attribute), :class => :empty
     end
   end
 

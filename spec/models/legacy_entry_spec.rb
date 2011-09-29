@@ -29,13 +29,13 @@ describe LegacyEntry do
       entry.initiator.name.should == "Мигратор"
     end
     it "должен установить title" do
-      entry.title.should == legacy.title
+      entry.title.should == legacy.title.gilensize(:html => false, :raw_output => true)
     end
     it "должен упрощать annotation" do
       entry.annotation.should =~ /^<p>В конце минувшей/
     end
     it "должен форматировать body" do
-      entry.body.should == RDiscount.new(legacy.body).to_html
+      entry.body.should == RDiscount.new(legacy.body).to_html.gilensize.gsub(/&#160;/, '&nbsp;')
       entry.body.should =~ /^<p>/
       entry.body.scan("<p>").size.should == 4
     end
@@ -94,11 +94,11 @@ describe LegacyEntry do
 
     describe "после миграции" do
       it { attachment.to_html.should == %Q{<a href="/assets/#{attachment.id}/attachment" target="_blank">Файл attachment</a>} }
-      it { attachment.entry.body.should include "<p>#{attachment.to_html}</p>" }
-      it { audio.to_html.should =~ %r{<audio .*><source src="/assets/#{audio.id}/audio" .* />.*<a href="/assets/#{audio.id}/audio".*>Файл audio</a></audio>} }
-      it { audio.entry.body.should include "<p>#{audio.to_html}</p>" }
+      it { attachment.entry.body.should include "<p>\n#{attachment.to_html.gilensize.gsub(/&#160/, '&nbsp')}\n</p>" }
+      it { audio.to_html.should =~ %r{<audio controls="controls" src="/assets/#{audio.id}/audio">.*<a href="/assets/#{audio.id}/audio".*>Файл audio</a></audio>} }
+      it { audio.entry.body.should include "<p>\n#{audio.to_html.gilensize.gsub(/&#160/, '&nbsp')}\n</p>" }
       it { image.to_html.should =~ %r{<a href="/assets/#{image.id}/image".*><img alt="Файл image" height="150" src="/assets/#{image.id}/32-150/image" width="32"} }
-      it { image.entry.body.should include "<p>#{image.to_html}</p>" }
+      it { image.entry.body.should include "<p>\n#{image.to_html.gilensize.gsub(/&#160/, '&nbsp')}\n</p>" }
     end
   end
 

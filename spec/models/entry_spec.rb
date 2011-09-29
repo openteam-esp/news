@@ -10,6 +10,15 @@ describe Entry do
   it { should have_many(:attachments) }
   it { should have_many(:tasks).dependent(:destroy) }
 
+  it { should normalize_attribute(:title).from(nil).to(nil) }
+  it { should normalize_attribute(:title).from("  ").to(nil) }
+  it { should normalize_attribute(:title).from("кое-как").to("кое-как") }
+  it { should normalize_attribute(:title).from("  das  asf\n").to("das asf") }
+  it { should normalize_attribute(:title).from('"Томск - как центр инновационной культуры"').to("«Томск – как центр инновационной культуры»") }
+  it { should normalize_attribute(:annotation).from("<em><script>alert();</script>Hi</em>\ndas  asf\n").to("<em>alert();Hi</em>\ndas&nbsp;asf") }
+  it { should normalize_attribute(:annotation).from('"Томск - как центр инновационной культуры"').to("&laquo;Томск &ndash; как&nbsp;центр инновационной культуры&raquo;") }
+  it { should normalize_attribute(:body).from("<em><script>alert();</script>Hi</em>\ndas  asf\n").to("<em>alert();Hi</em>\ndas&nbsp;asf") }
+
   it 'должна корректно сохранять и отображать дату' do
     I18n.l(draft(:since => "19.07.2011 09:20").since, :format => :datetime).should == "19.07.2011 09:20"
   end

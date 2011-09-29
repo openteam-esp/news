@@ -20,6 +20,7 @@ Spork.prefork do
   RSpec.configure do |config|
     config.include Devise::TestHelpers, :type => :controller
     config.include EspSpecHelper
+    config.include AttributeNormalizer::RSpecMatcher
     config.mock_with :rspec
     config.after do User.current = nil end
     config.before do
