@@ -1,10 +1,12 @@
 <%= semantic_remote_form_for @subtask, :url => issue_subtasks_path(parent) do |form| %>
-  <%= form.error_messages %>
   <%= form.inputs do %>
-    <%= form.input :executor %>
-    <%= form.input :description %>
+    <%= form.input :executor, :label => false %>
+    <%= form.input :description, :label => false %>
   <% end %>
   <%= form.buttons do %>
-    <%= form.commit_button t('add') %>
+    <%= form.commit_button t('add'), :button_html => {:class => "button add"} %>
+    <li>
+      <a href='#' class='cancel_link'>Отменить</a>
+    </li>
   <% end %>
 <% end %>

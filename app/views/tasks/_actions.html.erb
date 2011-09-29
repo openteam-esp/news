@@ -1,17 +1,21 @@
-<div class="actions">
-  <% (task.state_events & task.class.human_state_events).each do | event | %>
-    <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post, :class => "#{event}_form" } do | form | %>
-      <%= form.inputs do %>
-        <%= form.input :event, :value => event, :as => :hidden %>
-        <%= form.input :comment,
-                       :label => false,
-                       :input_html => {:class => 'comment_input',
-                                       :placeholder => t(:comment)} if event == :complete %>
+<% if (task.state_events & task.class.human_state_events).any? %>
+  <div class="actions">
+    <% (task.state_events & task.class.human_state_events).each do | event | %>
+      <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post, :class => "#{event}_form" } do | form | %>
+        <%= form.inputs do %>
+          <%= form.input :event, :value => event, :as => :hidden %>
+          <%= form.input :comment,
+            :label => false,
+            :input_html => {:class => 'comment_input',
+                            :placeholder => t(:comment)} if event == :complete %>
+        <% end %>
+        <%= form.buttons do %>
+          <%= form.commit_button t("state_machine.task.event.#{event}"),
+                                :button_html => { :class => "button #{event} #{'disabled' if !can?(event, task) }", :disabled => !can?(event, task) }   %>
+        <% end %>
       <% end %>
-      <%= form.buttons do %>
-        <%= form.commit_button t("state_machine.task.event.#{event}"),
-        :button_html => { :class => "button #{event} #{'disabled' if !can?(event, task) }", :disabled => !can?(event, task) }   %>
     <% end %>
-  <% end %>
+
+    <a href='#' class='add_subtask' id='<%= "#{task.class.name.downcase}_#{task.id}" %>'>Добавить подзадачу</a>
+  </div>
 <% end %>
-</div>

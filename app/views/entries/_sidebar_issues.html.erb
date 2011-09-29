@@ -21,16 +21,13 @@
 
       <%= render :partial => 'tasks/actions', :locals => { :task => issue } %>
 
-      <% if issue.subtasks.any? %>
-        <div>
-          <a href='#' class='add_subtask' id='issue_<%= issue.id %>'>Добавить подзадачу</a>
-          <ul class="subtasks">
-            <% issue.subtasks.each do | subtask | %>
-              <%= render subtask %>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+      <div class='subtasks_wrapper'>
+        <ul class="subtasks" id='<%= issue.class.name.downcase %>'>
+          <% issue.subtasks.each do | subtask | %>
+            <%= render subtask %>
+          <% end %>
+        </ul>
+      </div>
 
     </li>
   <% end %>
