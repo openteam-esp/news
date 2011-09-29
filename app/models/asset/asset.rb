@@ -3,6 +3,8 @@ class Asset < ActiveRecord::Base
 
   scope :type, ->(type) { type == 'assets' ? scoped : where(:type => type.classify) }
 
+  default_scope order('created_at desc')
+
   def self.before_destroy(*args) # disable destroy_attached_files
   end
 

@@ -61,7 +61,7 @@ News::Application.routes.draw do
 
   get '/assets/:id/cropped/:file_name' => Dragonfly[:assets].endpoint { |params, app|
     image = Image.find(params[:id])
-    image.file.thumb("118x100#")
+    image.file.thumb("100x100#")
   }, :as => :cropped_image, :format => false, :constraints => { :file_name => /.+?/ }
 
   get '/assets/:id/:file_name' => Dragonfly[:assets].endpoint { |params, app|

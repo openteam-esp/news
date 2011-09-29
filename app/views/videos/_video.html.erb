@@ -12,8 +12,14 @@
     <div class="img-data">
       <div class="img-name"><%= video.file_name %></div>
       <div class="time-size">
-        <div class="time"><%= l video.created_at, :format => :long %></div>
+        <div class="time"><%= l video.created_at %></div>
         <div class="fileupload-size size"><%= number_to_human_size(video.file.size) %></div>
+      </div>
+      <div class="time-remove">
+        <%= link_to "удалить", entry_asset_path(@entry, video),
+                    :remote => true, :method => :delete,
+                    :confirm => t('ckeditor.confirm_delete'),
+                    :class => "remove", :title => "удалить" %>
       </div>
     </div>
   </div>

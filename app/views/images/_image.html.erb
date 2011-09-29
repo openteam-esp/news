@@ -8,12 +8,18 @@
           :confirm => t('ckeditor.confirm_delete'),
           :class => "fileupload-cancel gal-del" %>
   <div class="fileupload-file gal-inner-holder">
-    <div class="img"><%=  image_tag cropped_image_path(image, image.file_name), :alt => "", :size => "118x100" %></div>
+    <div class="img"><%=  image_tag cropped_image_path(image, image.file_name), :alt => "", :size => "100x100" %></div>
     <div class="img-data">
       <div class="img-name"><%= image.file_name %></div>
       <div class="time-size">
-        <div class="time"><%= l image.created_at, :format => :long %></div>
+        <div class="time"><%= l image.created_at %></div>
         <div class="fileupload-size size"><%= number_to_human_size(image.file.size) %></div>
+      </div>
+      <div class="time-remove">
+        <%= link_to "удалить", entry_asset_path(@entry, image),
+                    :remote => true, :method => :delete,
+                    :confirm => t('ckeditor.confirm_delete'),
+                    :class => "remove", :title => "удалить" %>
       </div>
     </div>
   </div>
