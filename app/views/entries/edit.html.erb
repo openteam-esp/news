@@ -58,8 +58,8 @@
 
     <div class="top_border"></div>
 
-    <%= link_to t('save_entry'), "#", :class => 'button positive_button save_entry' %>
-    <%= link_to t('cancel'), "#", :class => 'button cancel' %>
+    <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
+    <%= link_to t('cancel'), @entry, :class => 'button cancel' %>
 
     <ul class="tabs">
       <li class='assets active'><a href='#' id='issues'>Вложения</a></li>
