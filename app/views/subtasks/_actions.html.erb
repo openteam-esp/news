@@ -10,14 +10,11 @@
                             :placeholder => t(:comment)} if event == :complete %>
         <% end %>
         <%= form.buttons do %>
-          <%= form.commit_button t("state_machine.task.event.#{event}"),
-                                :button_html => { :class => "button #{event} #{'disabled' if !can?(event, task) }", :disabled => !can?(event, task) }   %>
+
+          <%= form.commit_button t("state_machine.task.event.#{event}") if can?(event, task) %>
         <% end %>
       <% end %>
     <% end %>
-
-    <% if @entry %>
-      <a href='#' class='add_subtask' id='<%= "#{task.class.name.downcase}_#{task.id}" %>'>Добавить подзадачу</a>
-    <% end %>
   </div>
 <% end %>
+

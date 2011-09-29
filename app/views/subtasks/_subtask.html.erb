@@ -11,5 +11,5 @@
       <%= subtask.description %>
     </span>
   </div>
-  <%= subtask.state_events %>
+  <%= render :partial => 'subtasks/actions', :locals => { :task => subtask } %>
 </li>
