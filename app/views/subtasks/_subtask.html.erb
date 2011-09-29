@@ -1,1 +1,14 @@
-<%= @subtask.description %>
+<li class='<%= subtask.state %>'>
+  <div class="time_ago margin-top"><%= time_ago_in_words(subtask.created_at) %> назад</div>
+
+  <div class="executor">
+    <%= subtask.initiator %> &rarr;
+    <%= subtask.executor %>
+  </div>
+
+  <div class='title margin-bottom'>
+    <span class="description">
+      <%= subtask.description %>
+    </span>
+  </div>
+</li>

@@ -2,10 +2,10 @@
   <% entry.issues.each do |issue| %>
     <li class='<%= issue.state %>'>
 
-      <a href='#' class='title'>
+      <div class='title'>
         <%= issue.description %>
         <span class="time_ago"><%= time_ago_in_words(issue.created_at) %> назад</span>
-      </a>
+      </div>
 
       <% if issue.executor %>
         <div class="executor">
@@ -20,6 +20,17 @@
       <% end %>
 
       <%= render :partial => 'tasks/actions', :locals => { :task => issue } %>
+
+      <% if issue.subtasks.any? %>
+        <div>
+          <a href='#' class='add_subtask' id='issue_<%= issue.id %>'>Добавить подзадачу</a>
+          <ul class="subtasks">
+            <% issue.subtasks.each do | subtask | %>
+              <%= render subtask %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
     </li>
   <% end %>
