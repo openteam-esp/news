@@ -82,9 +82,11 @@ describe Ability do
     describe 'подзадачу' do
       describe "создать" do
         it "может пользователь выполняющий задачу" do
+          Task.should_receive(:find).with(draft.prepare.id).any_number_of_times.and_return(draft.prepare)
           ability(:for => initiator).should be_able_to(:create, draft.prepare.subtasks.build(:issue => draft.prepare))
         end
         it "не может другой пользователь" do
+          Task.should_receive(:find).with(draft.prepare.id).any_number_of_times.and_return(draft.prepare)
           ability(:for => corrector).should_not be_able_to(:create, draft.prepare.subtasks.build(:issue => draft.prepare))
         end
       end
