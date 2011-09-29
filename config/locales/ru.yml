@@ -70,8 +70,10 @@ ru:
   "Sign in": "Вход"
   "News is not complete": Новость не полностью заполнена
   add: Добавить
+  cancel: Отменить
   Destroy: "Удалить"
   comment: Комментарий
+  save_entry: Сохранить новость
   edit_entry: Изменить новость
   subscribers: "Списки рассылки:"
   Resepients: "Списки рассылок"

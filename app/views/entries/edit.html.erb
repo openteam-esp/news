@@ -1,10 +1,10 @@
 <% content_for :extend_javascript do %>
   <%= javascript_include_tag "jquery.ui.min" %>
-  <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
-  <%= javascript_include_tag "jquery.ui.timepicker" %>
-  <%= javascript_include_tag "jquery.ui.timepicker.ru" %>
+  <%#= javascript_include_tag "jquery.ui.datepicker.ru" %>
+  <%#= javascript_include_tag "jquery.ui.timepicker" %>
+  <%#= javascript_include_tag "jquery.ui.timepicker.ru" %>
   <%= javascript_include_tag "ckeditor/ckeditor" %>
-  <%= javascript_include_tag "jquery.tipsy" %>
+  <%#= javascript_include_tag "jquery.tipsy" %>
   <%= javascript_include_tag "jquery.iframe.transport" %>
   <%= javascript_include_tag "jquery.fileupload" %>
 <% end %>
@@ -58,7 +58,15 @@
 
     <div class="top_border"></div>
 
-    <%= render :partial => "assets/assets" %>
+    <%= link_to t('save_entry'), "#", :class => 'button positive_button save_entry' %>
+    <%= link_to t('cancel'), "#", :class => 'button cancel' %>
+
+    <ul class="tabs">
+      <li class='assets active'><a href='#' id='issues'>Вложения</a></li>
+      <li class='upload_asset'><a href='#'>Добавить вложение</a></li>
+    </ul>
+    <div class="under_tabs"></div>
+    <%#= render :partial => "assets/assets" %>
 
   </div>
 <% end %>
