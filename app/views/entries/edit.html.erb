@@ -9,34 +9,57 @@
   <%= javascript_include_tag "jquery.fileupload" %>
 <% end %>
 
-<div class="entry_fields_wrapper">
+<div class="content_wrapper with_sidebar">
+  <div class="article">
 
-  <%= semantic_form_for @entry do |form| %>
-    <%= form.inputs :class => "inputs common_fields" do %>
-      <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
-      <%= form.input :annotation, :as => :ckeditor %>
-      <%= form.input :body, :as => :ckeditor %>
-    <% end %>
-    <%= form.inputs :class => "inputs additional_fields" do %>
-      <%= form.input :since, :label => "Указать определённую дату и время публикации новости" %>
-      <%= form.input :until, :label => "Указать определённую дату и время перемещения новости в архив" %>
-      <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a,
-        :label => "Указать на каких сайтах и в каких разделах будет отображаться опубликованная новость" %>
-    <% end %>
-    <%= form.buttons %>
-  <% end %>
-  <div class="two_column">
-    <div class="first">
-      <%= render :partial => "assets/assets" %>
-    </div>
-    <div class="second">
-      <fieldset class="forgery_additional_fields">
-        <legend><span>Дополнительно</span></legend>
-      </fieldset>
-    </div>
+    <%= semantic_form_for @entry do |form| %>
 
+      <div class="top_stuff">
+        <div>
+          <span>Опубликовать</span>
+          <ol class="hidden">
+            <%= form.input :since, :label => false %>
+          </ol>
+        </div>
+
+        <div>
+          <span>Переместить в архив</span>
+          <ol class="hidden">
+            <%= form.input :until, :label => false %>
+          </ol>
+        </div>
+
+        <div>
+          <span>Каналы</span>
+          <ol class="hidden">
+            <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a, :label => false %>
+          </ol>
+        </div>
+      </div>
+
+      <%= form.inputs :class => "inputs common_fields" do %>
+        <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
+        <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => 100 } %>
+        <%= form.input :body, :as => :ckeditor %>
+      <% end %>
+
+      <%= form.buttons do %>
+        <%= form.commit_button %>
+        <li><%= link_to "Отмена", @entry %></li>
+      <% end %>
+
+    <% end %>
   </div>
 
-  <%= render_statistic @entry %>
 </div>
+
+<% content_for :right_sidebar do %>
+  <div class="side_stuff">
+
+    <div class="top_border"></div>
+
+    <%= render :partial => "assets/assets" %>
+
+  </div>
+<% end %>
 

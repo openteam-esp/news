@@ -63,7 +63,7 @@ class EntriesController < AuthorizedApplicationController
 
     def resolve_layout
       return 'archive' if current_scopes[:state] == 'published'
-      return 'system/entry'   if action_name == 'show'
+      return 'system/entry' if ['show', 'edit'].include?(action_name)
       'system/list'
     end
 end
