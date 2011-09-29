@@ -43,7 +43,7 @@
         <%= form.input :body, :as => :ckeditor %>
       <% end %>
 
-      <%= form.buttons do %>
+      <%= form.buttons :class => "buttons hidden" do %>
         <%= form.commit_button %>
         <li><%= link_to "Отмена", @entry %></li>
       <% end %>
