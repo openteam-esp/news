@@ -3,7 +3,12 @@
     <% collection.each do | task | %>
       <li>
         <div class="title floatl">
-          <%= link_to task.class.model_name.human, entry_path(task.entry) %>
+          <!-- #TODO remove this stinky code-->
+          <% if task.is_a?(Subtask) %>
+            <%= link_to task.truncated_description, entry_path(task.entry) %>
+          <% else %>
+            <%= link_to task.class.model_name.human, entry_path(task.entry) %>
+          <% end %>
         </div>
 
         <div class="entry_title">

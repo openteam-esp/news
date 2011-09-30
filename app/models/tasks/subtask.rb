@@ -46,6 +46,10 @@ class Subtask < Task
     User.where('id not in (?)', initiator_id)
   end
 
+  def truncated_description
+    description.truncate(60, :omission => '…')
+  end
+
   private
     def not_itself_assigned
       self.errors[:executor_id] = 'Нелья назначить подзадачу себе' if executor_id == initiator_id

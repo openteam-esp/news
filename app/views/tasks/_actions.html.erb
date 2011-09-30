@@ -11,8 +11,11 @@
         <% end %>
         <%= form.buttons do %>
 
-          <%= form.commit_button t("state_machine.task.event.#{event}"),
-                                 :button_html => { :class => "button #{event}"} if can?(event, task) && task.is_a?(Subtask) %>
+          <!-- #TODO remove this stinky code-->
+          <% if event != :refuse || @entry.present? %>
+            <%= form.commit_button t("state_machine.task.event.#{event}"),
+                                   :button_html => { :class => "button #{event}"} if can?(event, task) && task.is_a?(Subtask) %>
+          <% end %>
 
           <%= form.commit_button t("state_machine.task.event.#{event}"),
                                  :button_html => { :class => "button #{event} #{ability_to(event, task)}",
