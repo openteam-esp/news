@@ -14,6 +14,7 @@ if Settings[:s3]
     datastore.region = :openteam
     datastore.access_key_id = Settings['s3.access_key_id']
     datastore.secret_access_key = Settings['s3.secret_access_key']
+    datastore.bucket_name = Settings['s3.bucket_name']
   end
 else
   assets_app.datastore.configure do |datastore|
