@@ -7,7 +7,10 @@ describe User do
     before { set_current_user initiator }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == { :state => :fresh, :type => ['Subtask'], :executor_id => [initiator.id, nil], :deleted_at => nil}
+      initiator.fresh_tasks.to_sql.should =~ /executor_id IS NULL OR executor_id = #{initiator.id}/
+      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == { :state => :fresh,
+                                                                         :type => ['Subtask'],
+                                                                         :deleted_at => nil}
     end
 
     it "выполняемых мною задач" do
@@ -24,7 +27,10 @@ describe User do
     before { set_current_user initiator(:roles => :corrector) }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == {:state => :fresh, :type => ['Subtask', 'Review'], :executor_id => [initiator.id, nil], :deleted_at => nil}
+      initiator.fresh_tasks.to_sql.should =~ /executor_id IS NULL OR executor_id = #{initiator.id}/
+      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == {:state => :fresh,
+                                                                        :type => ['Subtask', 'Review'],
+                                                                        :deleted_at => nil}
     end
 
     it "выполняемых мною задач" do
@@ -41,7 +47,10 @@ describe User do
     before { set_current_user initiator(:roles => :publisher) }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == {:state => :fresh, :type => ['Subtask', 'Publish'], :executor_id => [initiator.id, nil], :deleted_at => nil}
+      initiator.fresh_tasks.to_sql.should =~ /executor_id IS NULL OR executor_id = #{initiator.id}/
+      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == {:state => :fresh,
+                                                                        :type => ['Subtask', 'Publish'],
+                                                                        :deleted_at => nil}
     end
 
     it "выполняемых мною задач" do
@@ -58,7 +67,10 @@ describe User do
     before { set_current_user initiator(:roles => [:publisher, :corrector]) }
 
     it "новых задач" do
-      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == {:state => :fresh, :type => ['Subtask', 'Review', 'Publish'], :executor_id => [initiator.id, nil], :deleted_at => nil}
+      initiator.fresh_tasks.to_sql.should =~ /executor_id IS NULL OR executor_id = #{initiator.id}/
+      initiator.fresh_tasks.where_values_hash.symbolize_keys.should == {:state => :fresh,
+                                                                        :type => ['Subtask', 'Review', 'Publish'],
+                                                                        :deleted_at => nil}
     end
 
     it "выполняемых мною задач" do
