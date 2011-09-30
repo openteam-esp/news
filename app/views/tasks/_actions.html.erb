@@ -14,6 +14,9 @@
                                 :button_html => { :class => "button #{event} #{'disabled' if !can?(event, task) }", :disabled => !can?(event, task) }   %>
         <% end %>
       <% end %>
+      <%= form.buttons do %>
+        <%= form.commit_button t("state_machine.task.event.#{event}"),
+        :button_html => { :class => "button #{event} #{ability_to(event, task)}", :disabled => cannot?(event, task) }   %>
     <% end %>
 
     <% if @entry %>

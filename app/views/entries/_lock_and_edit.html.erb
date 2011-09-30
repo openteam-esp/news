@@ -7,8 +7,14 @@
     <div class="time_ago">
       <%= time_ago_in_words(entry.locked_at) %> назад
     </div>
+    <%= semantic_form_for entry, :url => unlock_entry_path(entry), :html => {:method => :post} do | form | %>
+      <%= form.buttons :class => "buttons" do %>
+        <%= form.commit_button t('unlock_entry'), :button_html => {:class => ability_to(:unlock, entry), :disabled => cannot?(:unlock, entry)} %>
+      <% end %>
+    <% end %>
   </div>
 <% end %>
 
-<%= link_to t('edit_entry'), edit_entry_path(entry), :class => 'button positive_button' %>
+<%= link_to t('edit_entry'), edit_entry_path(entry), :class => "button positive_button #{ability_to(:update, entry)}" %>
+
 

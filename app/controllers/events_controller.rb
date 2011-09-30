@@ -1,12 +1,7 @@
 class EventsController < AuthorizedApplicationController
   actions :show
 
+  belongs_to :entry, :shallow => true
   layout 'system/entry'
 
-  def show
-    show! {
-      @entry = @event.entry
-      @versioned_entry = @event.versioned_entry
-    }
-  end
 end

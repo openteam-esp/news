@@ -113,8 +113,7 @@ class Entry < ActiveRecord::Base
   end
 
   def unlock
-    self.locked_at = nil
-    self.locked_by = nil
+    update_attributes :locked_at => nil, :locked_by => nil
   end
 
   def deleted?
