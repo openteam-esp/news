@@ -23,7 +23,6 @@ group :test do
   gem 'rspec-rails',                              :require => false
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
-  gem 'sunspot_matchers',                         :require => false
 end
 
 group :development, :test do
@@ -64,5 +63,5 @@ gem 'ryba',                                       :require => false
 gem 'sanitize'
 gem 'simple-navigation'
 gem 'state_machine'
+gem 'sunspot_matchers',                           :require => false
 gem 'sunspot_rails',            '~> 1.3.0.rc4'
-
