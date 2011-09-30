@@ -23,7 +23,7 @@
 
       <div class='subtasks_wrapper'>
         <ul class="subtasks" id='<%= issue.class.name.downcase %>'>
-          <% issue.filtered_subtasks.each do | subtask | %>
+          <% issue.subtasks_opened.each do | subtask | %>
             <%= render subtask %>
           <% end %>
         </ul>
