@@ -12,7 +12,7 @@ config/sunspot.yml
 *.swo
 public/stylesheets/*.css
 public/system/*
-public/legacy/*
+public/.legacy/*
 coverage/*
 assets/*
 .rake_tasks~

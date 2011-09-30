@@ -13,7 +13,7 @@ class LegacyAsset < ActiveRecord::Base
     if Rails.env.test?
       File.new(Rails.root.join "spec/fixtures/#{file_file_name}")
     else
-      File.new(Rails.root.join "public/legacy/#{id}/original/#{file_file_name}")
+      File.new(Rails.root.join "public/.legacy/#{id}/original/#{file_file_name}")
     end
   end
 
