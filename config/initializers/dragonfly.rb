@@ -9,9 +9,9 @@ assets_app.define_macro(ActiveRecord::Base, :asset_accessor)
 if Settings[:s3]
   require 'fog'
   assets_app.datastore = Dragonfly::DataStorage::S3DataStore.new
-  Dragonfly::DataStorage::S3DataStore::REGIONS[:openteam] = 's3.openteam.ru'
+  Dragonfly::DataStorage::S3DataStore::REGIONS['openteam'] = 's3.openteam.ru'
   assets_app.datastore.configure do |datastore|
-    datastore.region = :openteam
+    datastore.region = 'openteam'
     datastore.access_key_id = Settings['s3.access_key_id']
     datastore.secret_access_key = Settings['s3.secret_access_key']
     datastore.bucket_name = Settings['s3.bucket_name']
