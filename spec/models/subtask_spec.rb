@@ -3,62 +3,50 @@ require 'spec_helper'
 
 describe Subtask do
 
-  let :subtask do draft.prepare.subtasks.create! :executor => Fabricate(:user), :description => :description end
-
-  it "создание подзадачи" do
-    set_current_user(initiator)
-    subtask.should be_persisted
+  before do
+    @entry = draft
+    @prepare = draft.prepare
   end
 
-#  describe "инициатор подзадачи" do
-#    describe "может" do
-#      it "отменять fresh задачи" do
-#        subtask.reject!
-#      end
-#      it "отменять processing задачи" do
-#        processing_tasks.reject!
-#      end
-#    end
-#  end
+  shared_examples_for "не изменяет задачу и новость" do
+    it "не изменяет задачу" do
+      draft.prepare.should == @prepare
+    end
 
-  #describe "исполнитель подзадчи" do
-    #it "принимать подзадачи" do
-      #subtask.accept!
-    #end
+    it "не изменяет новость" do
+      draft == @entry
+    end
+  end
 
-    #it "завершать подзадачи" do
-      #subtask.accept!
-      #subtask.complete!
-    #end
+  describe "создание подзадачи" do
+    before do
+      prepare_subtask_for(another_initiator)
+    end
+    it_behaves_like "не изменяет задачу и новость"
+  end
 
-    #it "отклонять подзадачи" do
-      #subtask.reject!
-    #end
+  describe "принятие подзадачи" do
+    before { as another_initiator do prepare_subtask_for(another_initiator).accept! end }
+    it_behaves_like "не изменяет задачу и новость"
+  end
 
-    #it "отвергать подзадачи" do
-      #subtask.refuse!
-    #end
-  #end
+  describe "выполнение подзадачи" do
+    before do
+      as another_initiator do
+        prepare_subtask_for(another_initiator).accept!
+        prepare_subtask_for(another_initiator).complete!
+      end
+    end
+    it_behaves_like "не изменяет задачу и новость"
+  end
 
+  describe "отказ от подзадачи" do
+    before { as another_initiator do prepare_subtask_for(another_initiator).refuse! end }
+    it_behaves_like "не изменяет задачу и новость"
+  end
+
+  describe "отмена подзадачи" do
+    before { as initiator do prepare_subtask_for(another_initiator).cancel! end }
+    it_behaves_like "не изменяет задачу и новость"
+  end
 end
-
-
-
-# == Schema Information
-#
-# Table name: tasks
-#
-#  id           :integer         not null, primary key
-#  entry_id     :integer
-#  initiator_id :integer
-#  executor_id  :integer
-#  state        :string(255)
-#  type         :string(255)
-#  comment      :text
-#  created_at   :datetime
-#  updated_at   :datetime
-#  issue_id     :integer
-#  description  :text
-#  deleted_at   :datetime
-#
-

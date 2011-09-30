@@ -42,8 +42,7 @@ class Ability
     ###           Subtask          ###
     ##################################
     can :create, Subtask do | subtask |
-      # TODO user == subtask.issue.executor && subtask.issue.processing?
-      user.id == Task.find(subtask.issue_id).executor_id && Task.find(subtask.issue_id).processing?
+      user == subtask.issue.executor && subtask.issue.processing?
     end
     can :accept, Subtask do | subtask |
       user == subtask.executor
