@@ -23,7 +23,7 @@
           <%= time_ago_in_words(task.created_at) %> назад
         </div>
 
-        <%= render :partial => 'actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
+        <%= render :partial => 'tasks/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
       </li>
     <% end %>
   </ul>

@@ -10,8 +10,13 @@
                             :placeholder => t(:comment)} if event == :complete %>
         <% end %>
         <%= form.buttons do %>
+
           <%= form.commit_button t("state_machine.task.event.#{event}"),
-                                :button_html => { :class => "button #{event} #{'disabled' if !can?(event, task) }", :disabled => !can?(event, task) }   %>
+                                 :button_html => { :class => "button #{event}"} if can?(event, task) && task.is_a?(Subtask) %>
+
+          <%= form.commit_button t("state_machine.task.event.#{event}"),
+                                 :button_html => { :class => "button #{event} #{ability_to(event, task)}",
+                                                   :disabled => cannot?(event, task) } if task.is_a?(Issue) %>
         <% end %>
       <% end %>
       <%= form.buttons do %>
@@ -19,7 +24,7 @@
         :button_html => { :class => "button #{event} #{ability_to(event, task)}", :disabled => cannot?(event, task) }   %>
     <% end %>
 
-    <% if @entry %>
+    <% if @entry && task.is_a?(Issue) %>
       <a href='#' class='add_subtask' id='<%= "#{task.class.name.downcase}_#{task.id}" %>'>Добавить подзадачу</a>
     <% end %>
   </div>
