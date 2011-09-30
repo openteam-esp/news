@@ -9,13 +9,12 @@ class Subtask < Task
   validates_presence_of :executor, :description, :entry
   validate :not_itself_assigned
 
+  scope :opened, where(:state => [:fresh, :processing])
+
   state_machine :initial => :fresh do
 
     before_transition :authorize_transition
     after_transition :create_event
-    after_transition :on => :complete, :do => :after_complete
-    after_transition :on => :accept, :do => :after_accept
-    after_transition :on => :restore, :do => :after_restore
 
     state :fresh
     state :processing

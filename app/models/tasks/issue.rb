@@ -9,9 +9,36 @@ class Issue < Task
    self.class.model_name.human
   end
 
+  delegate :opened, :to => :subtasks, :prefix => true
+
   protected
     def set_entry(subtask)
       subtask.entry = entry
+    end
+
+    def cancel_subtasks
+      subtasks_opened.each do |subtask|
+        subtask.cancel!
+      end
+    end
+
+    def after_complete
+      cancel_subtasks
+      entry.up!
+      next_task.try :clear!
+    end
+
+    def after_accept
+      update_attributes! :executor => User.current
+    end
+
+    def after_restore
+      entry.down!
+      next_task.try :suspend!
+    end
+
+    def after_refuse
+      cancel_subtasks
     end
 end
 

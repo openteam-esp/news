@@ -2,6 +2,7 @@
 
 
 require Rails.root.join('app/models/entry')
+require Rails.root.join('app/models/tasks/issue')
 require Rails.root.join('app/models/asset/asset')
 require Rails.root.join('app/models/asset/image')
 
@@ -12,6 +13,16 @@ class Asset
       asset.description = self.description
       asset.entry = self.entry
     end
+  end
+end
+
+class Issue
+  def subtasks_opened
+    subtasks_opened = []
+    subtasks.each do |subtask|
+      subtasks_opened << subtask if subtask.fresh? || subtask.processing?
+    end
+    subtasks_opened
   end
 end
 
@@ -148,6 +159,10 @@ module EspSpecHelper
 
   def prepare_subtask_for(executor)
     @prepare_subtask_for ||= as initiator do draft.prepare.subtasks.create!(:description => "подзадача", :executor => executor) end
+  end
+
+  def review_subtask_for(executor)
+    @review_subtask_for ||= as corrector do processing_correcting.review.subtasks.create!(:description => "подзадача", :executor => executor) end
   end
 
 end

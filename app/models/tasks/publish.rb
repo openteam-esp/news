@@ -6,6 +6,7 @@ class Publish < Issue
     after_transition :on => :complete, :do => :after_complete
     after_transition :on => :accept, :do => :after_accept
     after_transition :on => :restore, :do => :after_restore
+    after_transition :on => :refuse, :do => :after_refuse
 
     state :pending
     state :fresh

@@ -5,24 +5,21 @@ describe Subtask do
 
   let :subtask do draft.prepare.subtasks.create! :executor => Fabricate(:user), :description => :description end
 
-  describe "исполнитель текущей задачи" do
-    before { set_current_user(initiator) }
-
-    it "исполнитель текущей задачи может создавать подзадачи" do
-      subtask.should be_persisted
-    end
+  it "создание подзадачи" do
+    set_current_user(initiator)
+    subtask.should be_persisted
   end
 
-  #describe "инициатор подзадачи" do
-    #describe "может" do
-      #it "отменять fresh задачи" do
-        #subtask.reject!
-      #end
-      #it "отменять processing задачи" do
-        #processing_tasks.reject!
-      #end
-    #end
-  #end
+#  describe "инициатор подзадачи" do
+#    describe "может" do
+#      it "отменять fresh задачи" do
+#        subtask.reject!
+#      end
+#      it "отменять processing задачи" do
+#        processing_tasks.reject!
+#      end
+#    end
+#  end
 
   #describe "исполнитель подзадчи" do
     #it "принимать подзадачи" do
