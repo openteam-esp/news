@@ -1,6 +1,6 @@
 class EntriesController < AuthorizedApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
-  custom_actions :resource => [:delete, :recycle]
+  custom_actions :resource => [:delete, :recycle, :unlock]
 
   layout :resolve_layout
 
@@ -37,6 +37,13 @@ class EntriesController < AuthorizedApplicationController
         end
         redirect_to smart_resource_url
       }
+    end
+  end
+
+  def unlock
+    unlock! do
+      @entry.unlock
+      redirect_to smart_resource_url and return
     end
   end
 

@@ -55,6 +55,9 @@ class Entry < ActiveRecord::Base
     end.descending(:id)
   end
 
+  def processing_issue
+    issues.select(&:processing?).first
+  end
 
   after_create :create_tasks
   after_create :create_event

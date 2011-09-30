@@ -34,11 +34,21 @@ describe EntriesController do
   end
 
   describe "GET edit" do
-    it "assigns the requested entry as @entry" do
+    it "assigns the requested entry as @entry and entry must be locked" do
       mock_find_by_id
       get :edit, :id => draft.id
       assigns(:entry).should == draft
       assigns(:entry).should be_locked
+    end
+  end
+
+  describe "POST unlock" do
+    it "should unlock entry" do
+      draft.lock
+      mock_find_by_id
+      post :unlock, :id => draft.id
+      response.should redirect_to(assigns(:entry))
+      assigns(:entry).should_not be_locked
     end
   end
 

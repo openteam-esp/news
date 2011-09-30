@@ -243,6 +243,17 @@ describe Ability do
       it { ability(:for => initiator).should_not be_able_to(:destroy, draft) }
     end
 
+    describe "unlock entry" do
+      before do
+        prepare_subtask_for(another_initiator)
+        as another_initiator do draft.lock end
+      end
+      it { ability(:for => initiator).should be_able_to(:unlock, draft) }
+      it { ability(:for => another_initiator).should be_able_to(:unlock, draft) }
+      it { ability(:for => corrector).should_not be_able_to(:unlock, draft) }
+      it { ability(:for => publisher).should_not be_able_to(:unlock, draft) }
+    end
+
     describe "deleted entry" do
       let(:entry) {as publisher do processing_publishing.destroy end}
       it_behaves_like "все могут только просматривать"

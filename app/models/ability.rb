@@ -83,6 +83,10 @@ class Ability
       entry.deleted_by == user
     end
 
+    can :unlock, Entry do | entry |
+      [entry.locked_by, entry.processing_issue.executor].include? user
+    end
+
     ##################################
     ###          Asset             ###
     ##################################

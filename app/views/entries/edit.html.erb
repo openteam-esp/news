@@ -45,7 +45,6 @@
 
       <%= form.buttons :class => "buttons hidden" do %>
         <%= form.commit_button %>
-        <li><%= link_to "Отмена", @entry %></li>
       <% end %>
 
     <% end %>
@@ -59,7 +58,11 @@
     <div class="top_border"></div>
 
     <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
-    <%= link_to t('cancel'), @entry, :class => 'button cancel' %>
+    <%= semantic_form_for @entry, :url => unlock_entry_path(@entry), :html => {:method => :post} do | form | %>
+      <%= form.buttons :class => "buttons" do %>
+        <%= form.commit_button t('cancel') %>
+      <% end %>
+    <% end %>
 
     <ul class="tabs">
       <li class='assets active'><a href='#' id='issues'>Вложения</a></li>
