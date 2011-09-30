@@ -12,7 +12,7 @@ group :development do
 end
 
 group :production do
-  gem 'hassle',                                   :require => false,        :git => 'git://github.com/koppen/hassle'
+  gem 'hassle',                                                             :git => 'git://github.com/koppen/hassle'
   gem 'hoptoad_notifier'
   gem 'pg',                                       :require => false
 end
