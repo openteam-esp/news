@@ -1,6 +1,6 @@
 <%= semantic_remote_form_for @subtask, :url => issue_subtasks_path(parent) do |form| %>
   <%= form.inputs do %>
-    <%= form.input :executor, :label => false %>
+    <%= form.input :executor, :label => false, :collection => @subtask.executors_without_initiator %>
     <%= form.input :description, :label => false %>
   <% end %>
   <%= form.buttons do %>

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Subtask < Task
 
   belongs_to :issue
@@ -5,6 +7,7 @@ class Subtask < Task
   default_value_for :initiator do User.current end
 
   validates_presence_of :executor, :description, :entry
+  validate :not_itself_assigned
 
   state_machine :initial => :fresh do
 
@@ -39,6 +42,17 @@ class Subtask < Task
   def self.human_state_events
     Task.human_state_events + [:cancel]
   end
+
+  def executors_without_initiator
+    User.where('id not in (?)', initiator_id)
+  end
+
+  private
+    def not_itself_assigned
+      self.errors[:executor_id] = 'Нелья назначить подзадачу себе' if executor_id == initiator_id
+    end
+
+
 end
 
 
