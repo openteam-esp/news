@@ -4,6 +4,7 @@ class TasksController < AuthorizedApplicationController
 
   layout 'system/list'
   has_scope :kind
+  has_scope :page, :default => 1, :only => :index
 
   def fire_event
     fire_event! {
