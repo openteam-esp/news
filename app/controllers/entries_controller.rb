@@ -57,7 +57,7 @@ class EntriesController < AuthorizedApplicationController
         searcher.pagination = paginate_options
         searcher.results
       else
-        end_of_association_chain.page
+        end_of_association_chain
       end
     end
 
