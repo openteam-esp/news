@@ -28,8 +28,10 @@ class Entry < ActiveRecord::Base
     state :correcting
     state :publishing
     state :published do
-      validates_presence_of :title, :body, :channels
+      validates_presence_of :title, :body, :channels, :since
     end
+
+    before_transition :publishing => :published, :do => :set_since
 
     event :up do
       transition :draft => :correcting, :correcting => :publishing, :publishing => :published
@@ -154,6 +156,10 @@ class Entry < ActiveRecord::Base
 
     def create_event
       events.create! :event => 'accept', :task => prepare
+    end
+
+    def set_since
+      self.since ||= Time.now
     end
 
 end

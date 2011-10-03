@@ -150,6 +150,24 @@ describe Entry do
       end
     end
   end
+
+  describe "после публикации" do
+    before do
+      processing_publishing.channels << Fabricate(:channel)
+    end
+    it "должна поставиться дата публикации (если не установлена)" do
+      as publisher do processing_publishing.publish.complete! end
+      processing_publishing.since.should_not be nil
+      processing_publishing.since.should > Time.now - 1.seconds
+    end
+
+    it "не должна изменяться установленная дата публикации" do
+      processing_publishing.update_attribute(:since, Time.new(2011, 10, 3, 9, 0, 30))
+      as publisher do processing_publishing.publish.complete! end
+      processing_publishing.since.should == Time.new(2011, 10, 3, 9, 0, 30)
+    end
+  end
+
 end
 
 
