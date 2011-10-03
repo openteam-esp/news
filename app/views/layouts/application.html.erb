@@ -18,6 +18,7 @@
     <% flash.each do |name, msg| %>
       <div class="flash_wrapper" style='display:none;'>
         <%= content_tag :div, msg, :id => "flash_#{name}", :class => "flash_block" %>
+        <a href='#' class='close_link'>Закрыть</a>
       </div>
     <% end %>
 
