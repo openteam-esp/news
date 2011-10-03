@@ -57,6 +57,7 @@ end
                              :name => Ryba::Name.full_name,
                              :roles => [:corrector]
     end
+    @correctors << user
   end
   User.find_or_initialize_by_email("publisher#{index}@demo.de").tap do | user |
     if user.new_record?
@@ -65,6 +66,7 @@ end
                              :name => Ryba::Name.full_name,
                              :roles => [:publisher]
     end
+    @publishers << user
   end
 end
 
