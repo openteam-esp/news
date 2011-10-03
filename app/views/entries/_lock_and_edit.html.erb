@@ -17,3 +17,7 @@
 
 <%= link_to t('edit_entry'), edit_entry_path(entry), :class => "button positive_button #{ability_to(:update, entry)}" %>
 
+<br />
+<hr />
+
+<%= link_to t('to_trash'), entry_path, :method => :delete, :class => 'button to_trash' if can?(:destroy, entry) %>

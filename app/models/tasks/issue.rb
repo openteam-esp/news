@@ -33,6 +33,7 @@ class Issue < Task
     end
 
     def after_restore
+      update_attributes! :executor => User.current
       entry.down!
       next_task.try :suspend!
     end
