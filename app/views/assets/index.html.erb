@@ -1,12 +1,8 @@
 <div id="fileupload" class="gal-holder">
   <div class="gal-item">
     <div class="fileupload-button gal-upload-holder">
-      <%= semantic_form_for Asset.new, :url => entry_assets_path(@entry), :html => {:multipart => true} do |form| %>
-        <%= link_to t(:upload), "#", :id => "fileupload", :class => "add" %>
-        <%= form.inputs do %>
-          <%= form.input :file, :as => :file %>
-        <% end %>
-      <% end %>
+      <%= content_tag(:span, t(:upload), :id => "fileupload", :class => "add") %>
+      <%= render :partial => "upload_form" %>
     </div>
   </div>
   <div class="fileupload-list">
