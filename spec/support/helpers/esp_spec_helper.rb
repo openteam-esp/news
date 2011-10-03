@@ -116,7 +116,10 @@ module EspSpecHelper
 
   def deleted_draft(options={})
     @deleted_draft ||= draft(options).tap do | entry |
-                         as initiator do entry.destroy end
+                         as initiator do
+                           entry.destroy
+                           entry.prepare.update_attribute(:deleted_at, Time.now)
+                         end
                        end
   end
 
@@ -136,6 +139,12 @@ module EspSpecHelper
                                 end
   end
 
+  def deleted_processing_correcting(options={})
+    @deleted_processing_correcting ||= processing_correcting(options).tap do | entry |
+                         as corrector do entry.destroy end
+                       end
+  end
+
   def fresh_publishing(options={})
     @fresh_publishing ||= processing_correcting(options).tap do | entry |
                             as corrector do entry.review.complete! end
@@ -146,6 +155,12 @@ module EspSpecHelper
     @processing_publishing ||= fresh_publishing(options).tap do | entry |
                                 as publisher do entry.publish.accept! end
                                end
+  end
+
+  def deleted_processing_publishing(options={})
+    @deleted_processing_publishing ||= processing_publishing(options).tap do | entry |
+                         as publisher do entry.destroy end
+                       end
   end
 
   def published(options={})
@@ -159,6 +174,12 @@ module EspSpecHelper
 
   def prepare_subtask_for(executor)
     @prepare_subtask_for ||= as initiator do draft.prepare.subtasks.create!(:description => "подзадача", :executor => executor) end
+  end
+
+  def deleted_prepare_subtask_for(executor)
+    @deleted_prepare_subtask_for ||= prepare_subtask_for(executor).tap do |subtask|
+                                       subtask.update_attribute(:deleted_at, Time.now)
+                                     end
   end
 
   def review_subtask_for(executor)

@@ -8,50 +8,50 @@ class Ability
     ###           Task             ###
     ##################################
     can :fire_event, Task do | task |
-      can? :read, task.entry
+      can?(:read, task.entry) && !task.deleted?
     end
     can :complete, Task do |task|
-      task.executor == user
+      task.executor == user && !task.deleted?
     end
     can :refuse, Task do | task |
-      task.executor == user
+      task.executor == user && !task.deleted?
     end
 
     ##################################
     ###          Prepare           ###
     ##################################
     can :restore, Prepare do | task |
-      task.executor == user
+      task.executor == user && task.next_task_fresh?
     end
 
     ##################################
     ###          Review            ###
     ##################################
-    can [:accept, :restore], Review do | task |
-      user.corrector?
+    can :accept, Review do | task |
+      user.corrector? && !task.deleted?
+    end
+    can :restore, Review do | task |
+      user.corrector? && task.next_task_fresh?
     end
 
     ##################################
     ###          Publish           ###
     ##################################
-    can [:accept, :restore], Publish do
-      user.publisher?
+    can [:accept, :restore], Publish do | task |
+      user.publisher? && !task.deleted?
     end
 
     ##################################
     ###           Subtask          ###
     ##################################
     can :create, Subtask do | subtask |
-      user == subtask.issue.executor && subtask.issue.processing?
+      user == subtask.issue.executor && subtask.issue.processing? && !subtask.issue.deleted?
     end
     can :accept, Subtask do | subtask |
-      user == subtask.executor
+      user == subtask.executor && !subtask.deleted?
     end
     can :cancel, Subtask do | subtask |
-      user == subtask.initiator
-    end
-    can :restore, Subtask do |task|
-      task.executor == user
+      user == subtask.initiator && !subtask.deleted?
     end
 
     ##################################
