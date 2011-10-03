@@ -49,6 +49,25 @@ User.find_or_initialize_by_email('cp@demo.de').tap do | user |
   end
 end
 
+(1..2).each do |index|
+  User.find_or_initialize_by_email("corrector#{index}@demo.de").tap do | user |
+    if user.new_record?
+      user.update_attributes :password => '123123',
+                             :password_confirmation => '123123',
+                             :name => Ryba::Name.full_name,
+                             :roles => [:corrector]
+    end
+  end
+  User.find_or_initialize_by_email("publisher#{index}@demo.de").tap do | user |
+    if user.new_record?
+      user.update_attributes :password => '123123',
+                             :password_confirmation => '123123',
+                             :name => Ryba::Name.full_name,
+                             :roles => [:publisher]
+    end
+  end
+end
+
 def as(user, &block)
   User.current = user
   yield
