@@ -2,10 +2,11 @@
   <%= javascript_include_tag "jquery.tipsy" %>
 <% end %>
 
+<h2><%= t("Sign in") %></h2>
+
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),
              :html => { :class => "formtastic sign_in" }) do |f| %>
   <%= devise_error_messages! %>
-  <h2><%= t("Sign in") %></h2>
   <ul class="inputs">
     <li class="login string">
       <%= f.label :email %>

@@ -2,20 +2,21 @@
 
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name),
              :html => { :method => :post, :class => "formtastic remember_password" }) do |f| %>
-  <%= devise_error_messages! %>
-  <ul class="inputs">
-    <li class="email string">
-      <%= f.label :email %>
-      <%= f.email_field :email, :class => "focus_first" %>
-    </li>
-  <ul>
-  <ul class="buttons inline">
-    <li>
-      <%= f.submit t("Send me reset password instructions"), :class => "button" %>
-    </li>
-    <li class="auth_links">
-      <%= render :partial => "users/shared/links" %>
-    </li>
-  </ul>
-<% end %>
+             <%= devise_error_messages! %>
+             <ul class="inputs">
+               <li class="email string">
+                 <%= f.label :email %>
+                 <%= f.email_field :email, :class => "focus_first" %>
+               </li>
+             </ul>
+
+             <ul class="buttons inline">
+               <li>
+                 <%= f.submit t("Send me reset password instructions"), :class => "button" %>
+               </li>
+               <li class="auth_links">
+                 <%= render :partial => "users/shared/links" %>
+               </li>
+             </ul>
+           <% end %>
 
