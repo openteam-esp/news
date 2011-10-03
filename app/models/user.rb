@@ -41,15 +41,15 @@ class User < ActiveRecord::Base
     types = ['Subtask']
     types << 'Review' if corrector?
     types << 'Publish' if publisher?
-    Task.where(:type => types).where(:state => :fresh).where(['executor_id IS NULL OR executor_id = ?', self.id])
+    Task.not_deleted.where(:type => types).where(:state => :fresh).where(['executor_id IS NULL OR executor_id = ?', self.id])
   end
 
   def processed_by_me_tasks
-    Task.processing.where(:executor_id => self.id)
+    Task.not_deleted.processing.where(:executor_id => self.id)
   end
 
   def initiated_by_me_tasks
-    Task.where(:initiator_id => self.id).where("state <> 'pending'")
+    Task.not_deleted.where(:initiator_id => self.id).where("state <> 'pending'")
   end
 
   def following_for(target)

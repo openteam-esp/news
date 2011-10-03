@@ -76,6 +76,7 @@ ru:
   save_entry: Сохранить новость
   edit_entry: Изменить новость
   unlock_entry: Разблокировать
+  recycle_entry: Восстановить новость
   subscribers: "Списки рассылки:"
   Resepients: "Списки рассылок"
   send_to_corrector: "Отправить корректору"

@@ -10,7 +10,7 @@ class Task < ActiveRecord::Base
   scope :not_deleted, where(:deleted_at => nil)
   scope :processing, where(:state => :processing)
 
-  default_scope not_deleted.ordered
+  default_scope ordered
 
   delegate :prepare, :review, :publish, :to => :entry
   delegate :fresh?, :to => :next_task, :prefix => true
