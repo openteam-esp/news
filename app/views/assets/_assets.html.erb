@@ -1,11 +1,5 @@
 <fieldset class="assets_with_form">
   <div class="inner">
-    <%= semantic_form_for Asset.new, :url => entry_assets_path(@entry), :html => {:multipart => true, :class => "hidden"} do |form| %>
-      <p><%= link_to "Загрузить файл", "#", :id => "fileupload", :multiple => "" %></p>
-      <%= form.inputs do %>
-        <%= form.input :file, :as => :file %>
-      <% end %>
-    <% end %>
     <% if @entry.reload.assets.any? %>
       <ul>
         <% @entry.reload.assets.each do |asset| %>
