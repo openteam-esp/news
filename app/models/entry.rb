@@ -49,7 +49,6 @@ class Entry < ActiveRecord::Base
   scope :processing, -> { where(:state => processing_states).not_deleted }
   scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
   scope :draft, -> { where(:state => :draft).not_deleted }
-  scope :stale, -> { where('deleted_by_id IS NOT NULL').where(['updated_at <= ?', 30.days.ago]) }
 
   def self.folder(folder)
     case folder.to_sym
