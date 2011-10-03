@@ -1,6 +1,8 @@
 <% if (task.state_events & task.class.human_state_events).any? %>
   <div class="actions">
     <% (task.state_events & task.class.human_state_events).each do | event | %>
+      <% if can?(event, task) %>
+
       <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post, :class => "#{event}_form" } do | form | %>
         <%= form.inputs do %>
           <%= form.input :event, :value => event, :as => :hidden %>
@@ -26,8 +28,9 @@
         <%= form.commit_button t("state_machine.task.event.#{event}"),
         :button_html => { :class => "button #{event} #{ability_to(event, task)}", :disabled => cannot?(event, task) }   %>
     <% end %>
+      <% end %>
 
-    <% if @entry && task.is_a?(Issue) %>
+    <% if @entry && task.is_a?(Issue) && can?(:create, task.subtasks.build) %>
       <a href='#' class='add_subtask' id='<%= "#{task.class.name.downcase}_#{task.id}" %>'>Добавить подзадачу</a>
     <% end %>
   </div>

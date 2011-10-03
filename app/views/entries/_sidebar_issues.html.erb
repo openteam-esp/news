@@ -7,11 +7,9 @@
         <span class="time_ago"><%= time_ago_in_words(issue.created_at) %> назад</span>
       </div>
 
-      <% if issue.executor %>
-        <div class="executor">
-          <%= issue.executor %>
-        </div>
-      <% end %>
+      <div class="executor">
+        <%= issue.executor if issue.executor %>
+      </div>
 
       <% if issue.comment %>
         <div class="comment">

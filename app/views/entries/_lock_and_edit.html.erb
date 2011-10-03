@@ -9,12 +9,11 @@
     </div>
     <%= semantic_form_for entry, :url => unlock_entry_path(entry), :html => {:method => :post} do | form | %>
       <%= form.buttons :class => "buttons" do %>
-        <%= form.commit_button t('unlock_entry'), :button_html => {:class => ability_to(:unlock, entry), :disabled => cannot?(:unlock, entry)} %>
+        <%= form.commit_button t('unlock_entry'), :button_html => {:class => "button"} %>
       <% end %>
-    <% end %>
+    <% end if can?(:unlock, entry) %>
   </div>
 <% end %>
 
 <%= link_to t('edit_entry'), edit_entry_path(entry), :class => "button positive_button #{ability_to(:update, entry)}" %>
-
 
