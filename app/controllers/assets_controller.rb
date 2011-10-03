@@ -10,6 +10,7 @@ class AssetsController < AuthorizedApplicationController
   def create
     create! do |success, failure|
       success.html do
+        @assets = params[:type].blank? ? @entry.reload.assets : @entry.reload.assets.type(params[:type].capitalize)
         render :partial => "assets"
       end
     end
@@ -18,6 +19,7 @@ class AssetsController < AuthorizedApplicationController
   def destroy
     destroy! do |success, failure|
       success.html do
+        @assets = @entry.assets
         render :partial => "assets"
       end
     end

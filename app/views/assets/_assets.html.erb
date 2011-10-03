@@ -1,8 +1,8 @@
 <fieldset class="assets_with_form">
   <div class="inner">
-    <% if @entry.reload.assets.any? %>
+    <% if @assets.any? %>
       <ul>
-        <% @entry.reload.assets.each do |asset| %>
+        <% @assets.each do |asset| %>
           <li>
             <%= render :partial => asset %>
           </li>

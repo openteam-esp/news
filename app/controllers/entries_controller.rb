@@ -14,7 +14,10 @@ class EntriesController < AuthorizedApplicationController
   end
 
   def edit
-    edit! { @entry.lock }
+    edit! do
+      @entry.lock
+      @assets = @entry.assets
+    end
   end
 
   def create
