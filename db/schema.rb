@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110928100958) do
+ActiveRecord::Schema.define(:version => 20111003015745) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -91,6 +91,13 @@ ActiveRecord::Schema.define(:version => 20110928100958) do
     t.datetime "updated_at"
     t.text     "serialized_entry"
     t.integer  "task_id"
+  end
+
+  create_table "followings", :force => true do |t|
+    t.integer  "follower_id"
+    t.integer  "target_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "messages", :force => true do |t|

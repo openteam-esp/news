@@ -3,6 +3,10 @@
 require 'spec_helper'
 
 describe User do
+
+  it { should have_many(:followers) }
+  it { should have_many(:followings) }
+
   describe "инициатор должен получить список" do
     before { set_current_user initiator }
 

@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_many :subscribes, :foreign_key => :subscriber_id
   has_many :messages
 
+  has_many :followings, :foreign_key => :follower_id
+  has_many :followers, :through => :followings, :foreign_key => :target_id, :order => :follower_id
+
   delegate :provider, :to => :authentication
 
   has_enum :roles, [:corrector, :publisher], :multiple => true
