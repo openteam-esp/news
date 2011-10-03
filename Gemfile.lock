@@ -7,13 +7,6 @@ GIT
       rack
 
 GIT
-  remote: git://github.com/lda/dragonfly
-  revision: 3647679620dffceda09ab11bc16efa4dd6ebbd97
-  specs:
-    dragonfly (0.9.8)
-      rack
-
-GIT
   remote: git://github.com/tacid/russian
   revision: 544a5e931a9044d941ff6f6746b10722f2fdb326
   specs:
@@ -80,6 +73,8 @@ GEM
       orm_adapter (~> 0.0.3)
       warden (~> 1.0.3)
     diff-lcs (1.1.2)
+    dragonfly (0.9.8)
+      rack
     dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -305,7 +300,7 @@ DEPENDENCIES
   default_value_for
   delayed_job
   devise
-  dragonfly!
+  dragonfly
   dynamic_form
   fabrication
   fancy-buttons
