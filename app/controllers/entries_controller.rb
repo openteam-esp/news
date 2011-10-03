@@ -76,5 +76,6 @@ class EntriesController < AuthorizedApplicationController
       return 'system/entry' if ['show', 'edit'].include?(action_name)
       'system/list'
     end
+
 end
 
