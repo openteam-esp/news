@@ -1,0 +1,12 @@
+<% if can?(:create, User.current.followings.build(:target => task.initiator)) && !task.initiator.followers.include?(User.current) %>
+  <%= semantic_form_for User.current.followings.build(:target => task.initiator) do |form| %>
+    <%= form.input :target_id, :as => :hidden %>
+    <%= form.buttons do %>
+      <%= form.commit_button "Отмечать задачи от этого пользователя" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if task.initiator.followers.include?(User.current) %>
+  <%= link_to 'Не выделять для меня задачи этого пользователя',  User.current.following_for(task.initiator), :method => :delete %>
+<% end %>

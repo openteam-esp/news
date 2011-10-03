@@ -18,6 +18,7 @@
 
         <div class="state <%= task.state %>">
           <%= I18n.t "state_machine.task.state.#{task.state}" %>
+          <%= render :partial => 'followings/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
         </div>
 
         <div class="participants">

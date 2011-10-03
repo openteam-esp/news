@@ -81,6 +81,8 @@ News::Application.routes.draw do
     resources :subtasks, :only => [:new, :create]
   end
 
+  resources :followings, :only => [:create, :destroy]
+
   root :to => 'roots#index'
 end
 

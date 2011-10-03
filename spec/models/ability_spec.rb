@@ -288,4 +288,19 @@ describe Ability do
     end
   end
 
+  describe "слежение за пользователем" do
+    describe "создание" do
+      it { ability(:for => initiator).should_not be_able_to(:create, Following) }
+      it { ability(:for => corrector).should_not be_able_to(:create, Following.new(:follower => another_corrector)) }
+      it { ability(:for => corrector).should be_able_to(:create, Following.new(:follower => corrector)) }
+      it { ability(:for => publisher).should be_able_to(:create, Following.new(:follower => publisher)) }
+    end
+    describe "удаление" do
+      it { ability(:for => initiator).should_not be_able_to(:destroy, Following) }
+      it { ability(:for => corrector).should_not be_able_to(:destroy, Following.new(:follower => another_corrector)) }
+      it { ability(:for => corrector).should be_able_to(:destroy, Following.new(:follower => corrector)) }
+      it { ability(:for => publisher).should be_able_to(:destroy, Following.new(:follower => publisher)) }
+    end
+  end
+
 end

@@ -108,6 +108,15 @@ class Ability
     ###           Event            ###
     ##################################
     can :read, Event
+
+    ##################################
+    ###           Following        ###
+    ##################################
+    if user.roles.any?
+      can [:create, :destroy], Following do | following |
+        following.follower == user
+      end
+    end
   end
 end
 

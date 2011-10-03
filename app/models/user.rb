@@ -52,6 +52,10 @@ class User < ActiveRecord::Base
     Task.where(:initiator_id => self.id).where("state <> 'pending'")
   end
 
+  def following_for(target)
+    followings.where(:target_id => target).first
+  end
+
 end
 
 
