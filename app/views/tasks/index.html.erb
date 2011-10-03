@@ -1,7 +1,11 @@
 <% if collection.any? %>
   <ul class='item_list'>
     <% collection.each do | task | %>
-      <li>
+      <li class='balnk <%= "followed" if task.initiator.followers.include?(User.current) %>'>
+        <div class="time_ago">
+          <%= time_ago_in_words(task.created_at) %> назад
+        </div>
+
         <div class="title floatl">
           <!-- #TODO remove this stinky code-->
           <% if task.is_a?(Subtask) %>
@@ -15,21 +19,25 @@
           <%= composed_title(task.entry) %>
         </div>
 
+        <br />
 
         <div class="state <%= task.state %>">
           <%= I18n.t "state_machine.task.state.#{task.state}" %>
-          <%= render :partial => 'followings/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
-        </div>
-
-        <div class="participants">
-          <%= task.initiator %>
-        </div>
-
-        <div class="time_ago">
-          <%= time_ago_in_words(task.created_at) %> назад
         </div>
 
         <%= render :partial => 'tasks/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
+
+        <div class="participants">
+          <%= render :partial => 'followings/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
+          <%= task.initiator %>
+          <%= raw "&rarr; #{task.executor}" if task.executor %>
+          <% if task.initiator.followers.any? %>
+            <span class='candidates' title='Возможные исполнители'>
+              <%= raw "&rarr; #{task.initiator.followers.map(&:name).join(', ')}" if task.respond_to?(:fresh?) && task.fresh? %>
+            </span>
+          <% end %>
+        </div>
+
       </li>
     <% end %>
   </ul>
