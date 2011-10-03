@@ -34,7 +34,6 @@ end
 gem 'attribute_normalizer',     '~> 1.0.0.pre4'
 gem 'cancan'
 gem 'ckeditor'
-gem 'clockwork'
 gem 'compass'
 gem 'configliere'
 gem 'default_value_for'

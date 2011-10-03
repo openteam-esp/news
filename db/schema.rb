@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111003015745) do
+ActiveRecord::Schema.define(:version => 20111003085240) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20111003015745) do
     t.datetime "locked_at"
     t.integer  "locked_by_id"
     t.integer  "deleted_by_id"
+    t.integer  "destroy_entry_job_id"
   end
 
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"

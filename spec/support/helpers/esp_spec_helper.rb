@@ -118,9 +118,14 @@ module EspSpecHelper
     @deleted_draft ||= draft(options).tap do | entry |
                          as initiator do
                            entry.destroy
-                           entry.prepare.update_attribute(:deleted_at, Time.now)
                          end
                        end
+  end
+
+  def recycled_draft(options={})
+    @recycled_draft ||= deleted_draft(options).tap do | entry |
+                          as initiator do entry.recycle end
+                        end
   end
 
   def create_draft(options={})

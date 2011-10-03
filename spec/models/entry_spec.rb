@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 describe Entry do
+  it { should belong_to :destroy_entry_job }
   it { should have_many(:assets) }
   it { should have_many(:images) }
   it { should have_many(:videos) }
@@ -126,7 +127,6 @@ describe Entry do
   end
 
   describe "корзина" do
-    let(:deleted_draft) { draft.destroy }
     before { set_current_user(initiator) }
     describe "удаление" do
       it { deleted_draft.should be_persisted }
@@ -141,7 +141,7 @@ describe Entry do
     end
 
     describe "восстановление" do
-      it {deleted_draft.recycle.should_not be_deleted}
+      it {recycled_draft.should_not be_deleted}
       it "должно восстановить таски" do
         tasks = []
         deleted_draft.should_receive(:tasks).and_return(tasks)
@@ -150,6 +150,7 @@ describe Entry do
       end
     end
   end
+
 
   describe "после публикации" do
     before do
@@ -169,8 +170,6 @@ describe Entry do
   end
 
 end
-
-
 
 # == Schema Information
 #

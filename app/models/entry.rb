@@ -4,6 +4,7 @@ class Entry < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
   belongs_to :deleted_by, :class_name => 'User'
+  belongs_to :destroy_entry_job, :class_name => 'Delayed::Backend::ActiveRecord::Job'
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
@@ -127,14 +128,16 @@ class Entry < ActiveRecord::Base
 
   def destroy
     self.tap do | entry |
-      entry.update_attribute :deleted_by, User.current
+      entry.update_attributes :deleted_by => User.current,
+                              :destroy_entry_job => Delayed::Job.enqueue(:run_at => 30.days.since, :payload_object => DestroyEntryJob.new(self.id))
       entry.tasks.update_all(:deleted_at => Time.now)
     end
   end
 
   def recycle
     self.tap do | entry |
-      entry.update_attribute :deleted_by, nil
+      entry.destroy_entry_job.destroy
+      entry.update_attributes :deleted_by => nil, :destroy_entry_job => nil
       entry.tasks.update_all(:deleted_at => nil)
     end
   end
