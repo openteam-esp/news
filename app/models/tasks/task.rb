@@ -23,10 +23,14 @@ class Task < ActiveRecord::Base
     [:accept, :complete, :restore, :refuse]
   end
 
+  def human_state_events
+    self.class.human_state_events & state_events
+  end
+
   protected
 
     def authorize_transition(transition)
-      Ability.new.authorize!(transition.event, self) if self.class.human_state_events.include? transition.event
+      Ability.new.authorize!(transition.event, self) if human_state_events.include? transition.event
     end
 
     def create_event(transition)

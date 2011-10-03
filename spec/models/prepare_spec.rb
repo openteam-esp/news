@@ -16,6 +16,16 @@ describe Prepare do
     end
   end
 
+  describe "доступные действия" do
+    it { Prepare.new(:state => 'processing').human_state_events.should == [:complete] }
+    it { Prepare.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == [] }
+    it { fresh_correcting.prepare.human_state_events.should == [:restore] }
+    it {
+      fresh_correcting.prepare.deleted_at = Time.now
+      fresh_correcting.prepare.human_state_events.should == []
+    }
+  end
+
 end
 
 

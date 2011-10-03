@@ -1,6 +1,6 @@
-<% if (task.state_events & task.class.human_state_events).any? %>
+<% if task.human_state_events.any? %>
   <div class="actions">
-    <% (task.state_events & task.class.human_state_events).each do | event | %>
+    <% task.human_state_events.each do | event | %>
       <% if can?(event, task) %>
 
       <%= semantic_form_for :task, :url => fire_event_task_path(task), :html => { :method => :post, :class => "#{event}_form" } do | form | %>

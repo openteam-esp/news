@@ -16,13 +16,11 @@ describe Ability do
 
       it "review может пользователь с ролью корректор" do
         ability(:for => corrector).should be_able_to(:accept, fresh_review)
-        ability(:for => corrector).should_not be_able_to(:accept, deleted_fresh_review)
         ability(:for => publisher).should_not be_able_to(:accept, fresh_review)
       end
 
       it "publish может пользователь с ролью публикатора" do
         ability(:for => publisher).should be_able_to(:accept, fresh_publish)
-        ability(:for => publisher).should_not be_able_to(:accept, deleted_fresh_publish)
         ability(:for => corrector).should_not be_able_to(:accept, fresh_publish)
       end
     end
@@ -47,22 +45,6 @@ describe Ability do
         it { ability.should_not be_able_to(:complete, processing_review_task) }
         it { ability.should_not be_able_to(:complete, processing_publish_task) }
       end
-
-
-      describe "нельзя если задача удалена" do
-        it { ability.should_not be_able_to(:complete, Prepare.new(
-                                                        :state => 'processing',
-                                                        :executor => initiator,
-                                                        :deleted_at => Time.now)) }
-        it { ability.should_not be_able_to(:complete, Review.new(
-                                                        :state => 'processing',
-                                                        :executor => initiator,
-                                                        :deleted_at => Time.now)) }
-        it { ability.should_not be_able_to(:complete, Publish.new(
-                                                        :state => 'processing',
-                                                        :executor => initiator,
-                                                        :deleted_at => Time.now)) }
-      end
     end
 
     describe "отказаться от выполнения" do
@@ -78,31 +60,15 @@ describe Ability do
         it { ability(:for => corrector).should_not be_able_to(:refuse, processing_publish_task) }
       end
 
-      describe "нельзя если задача удалена" do
-        it { ability.should_not be_able_to(:refuse, Prepare.new(
-                                                        :state => 'processing',
-                                                        :executor => initiator,
-                                                        :deleted_at => Time.now)) }
-        it { ability.should_not be_able_to(:refuse, Review.new(
-                                                        :state => 'processing',
-                                                        :executor => initiator,
-                                                        :deleted_at => Time.now)) }
-        it { ability.should_not be_able_to(:refuse, Publish.new(
-                                                        :state => 'processing',
-                                                        :executor => initiator,
-                                                        :deleted_at => Time.now)) }
-      end
     end
 
     describe "подготовления черновика" do
       describe "возобновить" do
         it "может исполнитель" do
           ability(:for => initiator).should be_able_to(:restore, fresh_correcting.prepare)
-          ability(:for => initiator).should_not be_able_to(:restore, processing_correcting.prepare)
         end
         it "не может другой пользователь" do
           ability(:for => another_initiator(:roles => [:corrector, :publisher])).should_not be_able_to(:restore, fresh_correcting.prepare)
-          ability(:for => initiator).should_not be_able_to(:restore, deleted_processing_correcting.prepare)
         end
       end
     end
@@ -120,9 +86,8 @@ describe Ability do
     end
 
     describe "редактирования" do
-      it "может любой корректор" do
+      it "может возобновить любой корректор" do
         ability(:for => another_corrector).should be_able_to(:restore, fresh_publishing.review)
-        ability(:for => corrector).should_not be_able_to(:restore, processing_publishing.review)
       end
     end
 
@@ -134,27 +99,21 @@ describe Ability do
         it "не может другой пользователь" do
           ability(:for => corrector).should_not be_able_to(:create, draft.prepare.subtasks.build(:issue => draft.prepare))
         end
-        it "нельзя если задача удалена" do
-          ability(:for => initiator).should_not be_able_to(:create, deleted_draft.prepare.subtasks.build(:issue => draft.prepare))
-        end
       end
 
       describe "принять" do
         it {ability(:for => another_initiator).should be_able_to(:accept, prepare_subtask_for(another_initiator))}
         it {ability(:for => corrector).should_not be_able_to(:accept, prepare_subtask_for(another_initiator))}
-        it {ability(:for => another_initiator).should_not be_able_to(:accept, deleted_prepare_subtask_for(another_initiator))}
       end
 
       describe "отменить" do
         it {ability(:for => initiator).should be_able_to(:cancel, prepare_subtask_for(corrector))}
-        it {ability(:for => initiator).should_not be_able_to(:cancel, deleted_prepare_subtask_for(corrector))}
         it {ability(:for => corrector).should_not be_able_to(:cancel, prepare_subtask_for(corrector))}
       end
 
       describe "отвергнуть" do
         it {ability(:for => initiator).should_not be_able_to(:refuse, prepare_subtask_for(corrector))}
         it {ability(:for => corrector).should be_able_to(:refuse, prepare_subtask_for(corrector))}
-        it {ability(:for => corrector).should_not be_able_to(:refuse, deleted_prepare_subtask_for(corrector))}
       end
     end
   end

@@ -22,6 +22,19 @@ describe Review do
     end
   end
 
+  describe "доступные действия" do
+    it { Review.new(:state => 'pending').human_state_events.should == [] }
+    it { Review.new(:state => 'fresh').human_state_events.should == [:accept]}
+    it { Review.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
+    it { Review.new(:state => 'processing').human_state_events.should == [:complete, :refuse]}
+    it { Review.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
+    it { fresh_publishing.review.human_state_events.should == [:restore] }
+    it {
+      fresh_publishing.review.deleted_at = Time.now
+      fresh_publishing.review.human_state_events.should == []
+    }
+  end
+
 end
 
 

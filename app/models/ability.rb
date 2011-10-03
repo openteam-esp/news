@@ -10,35 +10,29 @@ class Ability
     can :fire_event, Task do | task |
       can?(:read, task.entry) && !task.deleted?
     end
-    can :complete, Task do |task|
-      task.executor == user && !task.deleted?
-    end
-    can :refuse, Task do | task |
-      task.executor == user && !task.deleted?
+    can [:complete, :refuse], Task do |task|
+      task.executor == user
     end
 
     ##################################
     ###          Prepare           ###
     ##################################
     can :restore, Prepare do | task |
-      task.executor == user && task.next_task_fresh?
+      task.executor == user
     end
 
     ##################################
     ###          Review            ###
     ##################################
-    can :accept, Review do | task |
-      user.corrector? && !task.deleted?
-    end
-    can :restore, Review do | task |
-      user.corrector? && task.next_task_fresh?
+    can [:accept, :restore], Review do | task |
+      user.corrector?
     end
 
     ##################################
     ###          Publish           ###
     ##################################
     can [:accept, :restore], Publish do | task |
-      user.publisher? && !task.deleted?
+      user.publisher?
     end
 
     ##################################
@@ -48,10 +42,10 @@ class Ability
       user == subtask.issue.executor && subtask.issue.processing? && !subtask.issue.deleted?
     end
     can :accept, Subtask do | subtask |
-      user == subtask.executor && !subtask.deleted?
+      user == subtask.executor
     end
     can :cancel, Subtask do | subtask |
-      user == subtask.initiator && !subtask.deleted?
+      user == subtask.initiator
     end
 
     ##################################

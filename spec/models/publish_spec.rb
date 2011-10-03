@@ -19,6 +19,15 @@ describe Publish do
     it { published.should be_publishing }
     it { published.publish.should be_processing }
   end
+
+  describe "доступные действия" do
+    it { Publish.new(:state => 'pending').human_state_events.should == [] }
+    it { Publish.new(:state => 'fresh').human_state_events.should == [:accept]}
+    it { Publish.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
+    it { Publish.new(:state => 'processing').human_state_events.should == [:complete, :refuse]}
+    it { Publish.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
+    it { published.publish.human_state_events.should == [:restore] }
+  end
 end
 
 

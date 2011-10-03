@@ -49,4 +49,14 @@ describe Subtask do
     before { as initiator do prepare_subtask_for(another_initiator).cancel! end }
     it_behaves_like "не изменяет задачу и новость"
   end
+
+  describe "доступные действия" do
+    it { Subtask.new(:state => 'fresh').human_state_events.should == [:accept, :refuse, :cancel] }
+    it { Subtask.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == [] }
+    it { Subtask.new(:state => 'processing').human_state_events.should == [:complete, :refuse, :cancel] }
+    it { Subtask.new(:state => 'processing', :deleted_at => Time.now()).human_state_events.should == [] }
+    it { Subtask.new(:state => 'completed').human_state_events.should == [] }
+    it { Subtask.new(:state => 'refused').human_state_events.should == [] }
+    it { Subtask.new(:state => 'canceled').human_state_events.should == [] }
+  end
 end

@@ -17,13 +17,13 @@ class Publish < Issue
       transition :pending => :fresh
     end
     event :accept do
-      transition :fresh => :processing
+      transition :fresh => :processing, :unless => :deleted?
     end
     event :complete do
-      transition :processing => :completed
+      transition :processing => :completed, :unless => :deleted?
     end
     event :refuse do
-      transition :processing => :fresh
+      transition :processing => :fresh, :unless => :deleted?
     end
     event :suspend do
       transition :fresh => :pending
