@@ -5,7 +5,7 @@ AttributeNormalizer.configure do |config|
   SANITIZE_CONFIG[:attributes]['a'] << 'target'
   SANITIZE_CONFIG[:attributes]['audio'] = %w[controls src]
   SANITIZE_CONFIG[:attributes]['video'] = %w[controls src width height]
-  SANITIZE_CONFIG[:attributes][:all] << 'style'
+  SANITIZE_CONFIG[:attributes][:all] += %w[style class]
   SANITIZE_CONFIG[:output] = :xhtml
 
   config.normalizers[:sanitize] = ->(value, options) do
