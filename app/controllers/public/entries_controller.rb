@@ -5,11 +5,16 @@ class Public::EntriesController < ApplicationController
 
   actions :index, :show
 
-  layout 'public/list'
+  layout :resolve_layout
 
   belongs_to :channel, :optional => true
 
   protected
+    def resolve_layout
+      return 'public/entry' if action_name == 'show'
+      'public/list'
+    end
+
     def collection
       get_collection_ivar || set_collection_ivar(search_and_paginate_collection)
     end

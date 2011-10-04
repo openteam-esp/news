@@ -115,6 +115,7 @@ ru:
   destroy_message: 'Удалить сообщение'
   no_any_messages: "Нет новых сообщений"
   to_task_list: К списку задач
+  to_entries_list: К списку новостей
   logout: "Выход"
   not_any_channels: "Нет каналов"
   i_want_to_change_the_news: "Я хочу изменить новость"

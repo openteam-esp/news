@@ -3,7 +3,7 @@
     <% collection.each do | entry | %>
       <li>
         <div class="title">
-          <%= link_to composed_title(entry), entry_path(entry) %>
+          <%= link_to composed_title(entry), public_entry_path(entry) %>
         </div>
 
         <div class="state <%= entry.state %>">
