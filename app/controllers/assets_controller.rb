@@ -27,7 +27,11 @@ class AssetsController < AuthorizedApplicationController
   def destroy
     @asset.mark_as_deleted
     @assets = @entry.assets
-    render :partial => "assets"
+    respond_with do |format|
+      format.html do
+        render :partial => "assets"
+      end
+    end
   end
 
   protected
