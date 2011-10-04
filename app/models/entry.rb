@@ -149,6 +149,14 @@ class Entry < ActiveRecord::Base
     tasks.where(['executor_id = ? OR initiator_id = ?', user, user]).exists?
   end
 
+  def distance_destroy_entry
+    distance = (self.destroy_entry_job.run_at - Time.now)
+    return nil if distance < 0
+    return I18n.t("destroy_entry_in_days", :count => ((distance/60/60/24).ceil)) if distance >= 86400
+    return I18n.t("destroy_entry_in_hours", :count => ((distance/60/60).ceil)) if distance >= 3600
+    return I18n.t("destroy_entry_in_minutes", :count => (distance.ceil/60)) if distance >= 60
+    return I18n.t("destroy_entry_less_minute")
+  end
 
   private
     def create_tasks

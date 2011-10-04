@@ -20,8 +20,9 @@
 <%= semantic_form_for :entry, :url => recycle_entry_path(entry), :html => {:class => 'right_bottom'} do | form | %>
   <%= form.buttons do %>
     <%= form.commit_button t('recycle_entry'), :button_html => {:class => 'button recycle'} %>
-    <li>Будет автоматически удалена через <%= time_ago_in_words(entry.destroy_entry_job.run_at) %></li>
+    <%= content_tag :li, entry.distance_destroy_entry if entry.distance_destroy_entry %>
    <% end %>
 <% end if @entry.deleted? && can?(:recycle, entry) %>
 
 <%= link_to t('to_trash'), entry_path, :method => :delete, :class => 'button to_trash right_bottom' if can?(:destroy, entry) %>
+
