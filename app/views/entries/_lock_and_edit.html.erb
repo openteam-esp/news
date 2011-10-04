@@ -19,8 +19,8 @@
 
 <%= semantic_form_for :entry, :url => recycle_entry_path(entry), :html => {:class => 'right_bottom'} do | form | %>
   <%= form.buttons do %>
-    <li>Новость будет автоматически удалена <%= l entry.destroy_entry_job.run_at %></li>
     <%= form.commit_button t('recycle_entry'), :button_html => {:class => 'button recycle'} %>
+    <li>Будет автоматически удалена через <%= time_ago_in_words(entry.destroy_entry_job.run_at) %></li>
    <% end %>
 <% end if @entry.deleted? && can?(:recycle, entry) %>
 
