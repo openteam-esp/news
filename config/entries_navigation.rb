@@ -1,9 +1,9 @@
 SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
 
-    %w[draft processing deleted].each do | state |
-      primary.item "sidebar_entry_#{state}", t("sidebar.entries.#{state}"), scoped_entries_path(state), :counter => Entry.folder(state).count,
-                   :highlights_on => lambda { params[:state] == state && params[:controller] == 'entries' }
+    %w[draft processing deleted].each do | folder |
+      primary.item "sidebar_entry_#{folder}", t("sidebar.entries.#{folder}"), scoped_entries_path(folder), :counter => Entry.folder(folder).count,
+                   :highlights_on => lambda { params[:folder] == folder && params[:controller] == 'entries' }
     end
 
   end

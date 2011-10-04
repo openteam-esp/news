@@ -5,7 +5,7 @@ class Task < ActiveRecord::Base
   belongs_to :executor, :class_name => 'User'
 
 
-  scope :kind, lambda {|kind| User.current.try "#{kind}_tasks" }
+  scope :folder, lambda {|folder| User.current.try "#{folder}_tasks" }
   scope :ordered, order('id desc')
   scope :not_deleted, where(:deleted_at => nil)
   scope :processing, where(:state => :processing)

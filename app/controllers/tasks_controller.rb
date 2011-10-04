@@ -3,7 +3,7 @@ class TasksController < AuthorizedApplicationController
   custom_actions :resource => :fire_event
 
   layout 'system/list'
-  has_scope :kind
+  has_scope :folder
   has_scope :page, :default => 1, :only => :index
 
   def fire_event

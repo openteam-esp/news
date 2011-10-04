@@ -70,9 +70,9 @@ News::Application.routes.draw do
   }, :as => :asset, :format => false, :constraints => { :file_name => /.+?/ }
 
 
-  get '/:kind/tasks' => 'tasks#index',
+  get '/:folder/tasks' => 'tasks#index',
       :as => :tasks,
-      :constraints => { :kind => /(fresh|processed_by_me|initiated_by_me)/ }
+      :constraints => { :folder => /(fresh|processed_by_me|initiated_by_me)/ }
 
 
   post '/tasks/:id/fire_event' => 'tasks#fire_event', :as => :fire_event_task

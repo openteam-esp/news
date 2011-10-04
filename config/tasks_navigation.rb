@@ -1,10 +1,10 @@
 SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
 
-    %w[fresh processed_by_me initiated_by_me].each do | scope |
-      primary.item "sidebar_tasks_#{scope}", t("sidebar.tasks.#{scope}"),
-                   tasks_path(scope), :counter => scope == 'initiated_by_me' ? 0 : Task.send(:kind, scope).count,
-                   :highlights_on => lambda { params[:kind] == scope && params[:controller] == 'tasks' }
+    %w[fresh processed_by_me initiated_by_me].each do | folder |
+      primary.item "sidebar_tasks_#{folder}", t("sidebar.tasks.#{folder}"),
+                   tasks_path(folder), :counter => folder == 'initiated_by_me' ? 0 : Task.send(:folder, folder).count,
+                   :highlights_on => lambda { params[:folder] == folder && params[:controller] == 'tasks' }
     end
 
   end
