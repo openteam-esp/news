@@ -24,29 +24,7 @@ News::Application.routes.draw do
       :as => :scoped_entries,
       :constraints => { :folder => /(draft|processing|deleted|published)/ }
 
-  get '/last_day/entries' => 'entries#index',
-      :as => :last_day_entries,
-      :defaults => {
-                     'utf8' => '✓',
-                     'entry_search[since_lt]' => I18n.l(Date.today),
-                     'entry_search[since_gt]' => I18n.l(Date.today - 1)
-                   }
-
-  get '/last_week/entries' => 'entries#index',
-      :as => :last_week_entries,
-      :defaults => {
-                     'utf8' => '✓',
-                     'entry_search[since_lt]' => I18n.l(Date.today),
-                     'entry_search[since_gt]' => I18n.l(Date.today - 1.week)
-                   }
-
-  get '/last_month/entries' => 'entries#index',
-      :as => :last_month_entries,
-      :defaults => {
-                     'utf8' => '✓',
-                     'entry_search[since_lt]' => I18n.l(Date.today),
-                     'entry_search[since_gt]' => I18n.l(Date.today - 1.month)
-                   }
+  get '/last_:period/entries' => 'entries#index', :constraints => {:period => /(day|week|month)/}, :as => :archive
 
   namespace :public do
     resources :entries, :only => [:index, :show]

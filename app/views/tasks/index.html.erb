@@ -3,7 +3,7 @@
     <% collection.each do | task | %>
       <li class='balnk <%= "followed" if task.initiator.followers.include?(User.current) %>'>
         <div class="time_ago">
-          <%= time_ago_in_words(task.created_at) %> назад
+          <%= time_ago_in_words(task.updated_at) %> назад
         </div>
 
         <div class="title floatl">

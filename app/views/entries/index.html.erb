@@ -2,6 +2,10 @@
   <ul class='item_list'>
     <% collection.each do | entry | %>
       <li>
+        <div class="time_ago">
+          <%= time_ago_in_words(entry.updated_at) %> назад
+        </div>
+
         <div class="title">
           <%= link_to composed_title(entry), entry_path(entry) %>
         </div>
@@ -12,10 +16,6 @@
 
         <div class="participants">
           <%= entry.initiator %>
-        </div>
-
-        <div class="time_ago">
-          <%= time_ago_in_words(entry.created_at) %> назад
         </div>
       </li>
     <% end %>

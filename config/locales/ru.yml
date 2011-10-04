@@ -3,6 +3,7 @@ ru:
     formats:
       default: "%d.%m.%Y, %H:%M"
       datetime: "%d.%m.%Y %H:%M"
+      short: "%d.%m.%Y"
 
   default_author: "Пресс-служба администрации Томской области"
 

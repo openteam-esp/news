@@ -56,19 +56,24 @@ class EntriesController < AuthorizedApplicationController
     end
 
     def search_and_paginate_collection
-      if params[:utf8]
-        searcher.pagination = paginate_options
+      if params[:period]
+        searcher.order_by = 'updated_at desc'
+        searcher.updated_at_gt = 1.send(params[:period]).ago.to_date
+      end
+      if params[:utf8] || params[:period]
+        searcher.per_page = paginate_options[:per_page]
+        searcher.pagination.merge! paginate_options
         searcher.results
       else
-        end_of_association_chain
+        end_of_association_chain.page(paginate_options[:page]).per(paginate_options[:per_page])
       end
     end
 
-    def paginate_options(options={})
+    def paginate_options()
       {
         :page       => params[:page],
-        :per_page   => 10
-      }.merge(options)
+        :per_page   => [[(params[:per_page] || 10).to_i,  1].max, 10].min
+      }
     end
 
     def resolve_layout

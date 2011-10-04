@@ -74,6 +74,7 @@ class Entry < ActiveRecord::Base
     text   :body,       :boost => 1.0
     date   :since
     date   :until
+    date   :updated_at
     string :state
     integer :channel_ids, :multiple => true
   end

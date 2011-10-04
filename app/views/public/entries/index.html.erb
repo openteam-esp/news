@@ -2,20 +2,14 @@
   <ul class='item_list'>
     <% collection.each do | entry | %>
       <li>
-        <div class="title">
-          <%= link_to composed_title(entry), public_entry_path(entry) %>
-        </div>
-
-        <div class="state <%= entry.state %>">
-          <%= I18n.t "state_machine.entry.state.#{entry.state}" %>
-        </div>
-
-        <div class="participants">
-          <%= entry.initiator %>
-        </div>
-
         <div class="time_ago">
-          <%= time_ago_in_words(entry.created_at) %> назад
+          <%= l entry.since, :format => :short %>
+        </div>
+        <div class="title">
+          <%= link_to entry.title, public_entry_path(entry) %>
+        </div>
+        <div class="annotation">
+          <%= raw entry.annotation %>
         </div>
       </li>
     <% end %>
