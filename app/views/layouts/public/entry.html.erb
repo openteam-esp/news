@@ -7,6 +7,10 @@
   <div class="composed_title">
     <%= composed_title(@entry) %>
   </div>
+
+  <% if current_user %>
+    <%= link_to "Управление новостью", entry_path(@entry), :class => "button to_manage" %>
+  <% end %>
 <% end  %>
 
 <%= content_for :content do %>

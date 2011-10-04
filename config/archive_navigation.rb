@@ -4,7 +4,7 @@ SimpleNavigation::Configuration.run do |navigation|
     %w[last_day last_week last_month].each do | archive |
       primary.item "sidebar_archive_#{archive}", t("sidebar.archive.#{archive}"), send("#{archive}_entries_path")
     end
-    primary.item "sidebar_archive_search", t("sidebar.archive.search"), scoped_entries_path('published')
+    primary.item "sidebar_archive_search", t("sidebar.archive.search"), public_entries_path
 
   end
 end
