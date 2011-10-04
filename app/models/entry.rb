@@ -8,7 +8,7 @@ class Entry < ActiveRecord::Base
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
-  has_many :events
+  has_many :events, :dependent => :destroy
   has_many :assets, :conditions => {:deleted_at => nil}
   has_many :attachments, :conditions => {:deleted_at => nil}
   has_many :audios, :conditions => {:deleted_at => nil}

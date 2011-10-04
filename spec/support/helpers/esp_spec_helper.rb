@@ -6,6 +6,11 @@ require Rails.root.join('app/models/tasks/issue')
 require Rails.root.join('app/models/asset/asset')
 require Rails.root.join('app/models/asset/image')
 
+class Array
+  def update_all(options)
+    self.each { |record| record.update_attributes options }
+  end
+end
 class Asset
   def instance
     type.classify.constantize.find_or_initialize_by_id(id).tap do |asset|
@@ -27,16 +32,16 @@ class Issue
 end
 
 class Entry
-  def all_tasks
+  def tasks
     [prepare, review, publish].map{|issue| [issue, issue.subtasks]}.flatten
   end
 
   def has_processing_task_executed_by?(user)
-    all_tasks.select(&:processing?).map(&:executor).include? user
+    tasks.select(&:processing?).map(&:executor).include? user
   end
 
   def has_participant?(user)
-    all_tasks.map(&:executor).include?(user) || all_tasks.map(&:initiator).include?(user)
+    tasks.map(&:executor).include?(user) || tasks.map(&:initiator).include?(user)
   end
 
   def asset_ids

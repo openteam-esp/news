@@ -10,6 +10,7 @@ describe Entry do
   it { should have_many(:audios) }
   it { should have_many(:attachments) }
   it { should have_many(:tasks).dependent(:destroy) }
+  it { should have_many(:events).dependent(:destroy) }
 
   it { should normalize_attribute(:title).from(nil).to(nil) }
   it { should normalize_attribute(:title).from("  ").to(nil) }
@@ -77,6 +78,8 @@ describe Entry do
     before(:each) do
       set_current_user initiator
     end
+
+    it { draft.tasks.should == [prepare, review, publish] }
     let (:prepare) { draft.prepare }
     let (:review) { draft.review }
     let (:publish) { draft.publish }
@@ -151,6 +154,15 @@ describe Entry do
     end
   end
 
+  describe "удаление протухшей новости" do
+    let (:destroyed_draft) { draft.destroy_without_trash }
+    it "должно удалять tasks" do
+      destroyed_draft.tasks.each { |task| task.should_not be_persisted }
+    end
+    it "должно удалять events" do
+      destroyed_draft.events.each { |event| event.should_not be_persisted }
+    end
+  end
 
   describe "после публикации" do
     before do
