@@ -55,7 +55,7 @@ describe Public::EntriesController do
 
       it "ограничивать per_page максимум 20" do
         get :index, :per_page => 21, :utf8 => true
-        searcher.pagination[:per_page].should == 20
+        searcher.pagination[:per_page].should == 10
       end
 
     end
