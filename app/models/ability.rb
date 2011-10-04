@@ -85,7 +85,7 @@ class Ability
     ##################################
     can :read, Asset do | asset |
       if asset.deleted? || asset.entry.deleted?
-        asset.has_participant?(user)
+        asset.entry.has_participant?(user)
       else
         can? :read, asset.entry
       end

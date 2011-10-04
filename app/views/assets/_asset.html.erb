@@ -1,0 +1,29 @@
+<%= content_tag(:div, :id => dom_id(asset),
+                :class => "gal-item",
+                :"data-url" => asset_path(asset, asset.file_name)) do %>
+  <%= link_to image_tag("/javascripts/ckeditor/filebrowser/images/gal_del.png", :title => I18n.t('ckeditor.buttons.delete')),
+          entry_asset_path(@entry, asset),
+          :remote => true,
+          :method => :delete,
+          :confirm => t('ckeditor.confirm_delete'),
+          :class => "fileupload-cancel gal-del" %>
+  <div class="fileupload-file gal-inner-holder">
+    <div class="img">
+      <%= link_to image_tag(icon_path, :alt => "", :size => "100x100"), asset_path(asset, asset.file_name) %>
+    </div>
+    <div class="img-data">
+      <div class="img-name"><%= link_to asset.file_name, asset_path(asset, asset.file_name) %></div>
+      <div class="time-size">
+        <div class="time"><%= l asset.created_at %></div>
+        <div class="fileupload-size size"><%= number_to_human_size(asset.file.size) %></div>
+      </div>
+      <div class="time-remove">
+        <%= link_to "удалить", entry_asset_path(@entry, asset),
+                    :remote => true, :method => :delete,
+                    :confirm => t('ckeditor.confirm_delete'),
+                    :class => "remove", :title => "удалить" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
