@@ -26,6 +26,17 @@
     <div class="body">
       <%= presented_html entry, :body %>
     </div>
+
+    <% if entry.assets.any? %>
+      <ul class="assets">
+        <% entry.assets.each do |asset| %>
+          <li>
+            <%= render :partial => asset %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
   </div>
 </div>
 
@@ -68,3 +79,4 @@
     </ul>
   </div>
 <% end %>
+

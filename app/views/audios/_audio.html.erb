@@ -8,9 +8,11 @@
           :confirm => t('ckeditor.confirm_delete'),
           :class => "fileupload-cancel gal-del" %>
   <div class="fileupload-file gal-inner-holder">
-    <div class="img"><%=  image_tag "mimetypes/icon_application_audio.png", :alt => "", :size => "100x100" %></div>
+    <div class="img">
+      <%= link_to image_tag("mimetypes/icon_application_audio.png", :alt => "", :size => "100x100"), asset_path(audio, audio.file_name) %>
+    </div>
     <div class="img-data">
-      <div class="img-name"><%= audio.file_name %></div>
+      <div class="img-name"><%= link_to audio.file_name, entry_asset_path(@entry, audio) %></div>
       <div class="time-size">
         <div class="time"><%= l audio.created_at %></div>
         <div class="fileupload-size size"><%= number_to_human_size(audio.file.size) %></div>
