@@ -22,12 +22,8 @@ class Asset < ActiveRecord::Base
     deleted_at
   end
 
-  alias :realy_destroy :destroy
-
-  def destroy
-    self.tap do | entry |
-      entry.update_attribute :deleted_at, Time.now
-    end
+  def mark_as_deleted
+    update_attribute :deleted_at, Time.now
   end
 
   private

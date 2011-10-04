@@ -2,40 +2,25 @@
 require 'spec_helper'
 
 describe Asset do
-  pending "nulldb" do
-  it "Должен автомагически создавать ассет нужного типа для видео" do
-    expect { Asset.new(:file_mime_type => 'video/flv').save :validate => false }.to change{Video.count}.by(1)
+  let(:image) do
+    Image.new(:entry => draft).tap do |image|
+      image.file = File.new(Rails.root.join "public/images/google_32.png")
+      image.save!
+    end
   end
-  it "Должен автомагически создавать ассет нужного типа для аудио" do
-    expect { Asset.new(:file_mime_type => 'audio/ogg').save :validate => false }.to change{Audio.count}.by(1)
-  end
-  it "Должен автомагически создавать ассет нужного типа для картинок" do
-    expect { Asset.new(:file_mime_type => 'image/jpeg').save :validate => false }.to change{Image.count}.by(1)
-  end
-  it "Должен автомагически создавать ассет нужного типа для остальных файлов" do
-    expect { Asset.new(:file_mime_type => 'application/pdf').save :validate => false }.to change{Attachment.count}.by(1)
-  end
-  end
-
-  let(:image) { Image.new(:entry => draft).tap do |image|
-    image.file = File.new(Rails.root.join "public/images/google_32.png")
-    image.save!
-  end
-  }
 
   it "Должны проставляться размеры изображения" do
     image.file_width.should == 32
     image.file_height.should == 64
   end
 
-  describe "удаление" do
+  describe "пометка удаленным" do
     before do
       @asset = draft.assets.create!
-      @asset.destroy
+      @asset.mark_as_deleted
     end
     it { @asset.should be_persisted }
     it { @asset.should be_deleted }
-    it { @asset.realy_destroy.should_not be_persisted }
   end
 
 end

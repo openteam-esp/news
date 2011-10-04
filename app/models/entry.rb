@@ -9,6 +9,7 @@ class Entry < ActiveRecord::Base
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
 
   has_many :events, :dependent => :destroy
+  has_many :all_assets, :class_name => 'Asset', :dependent => :destroy
   has_many :assets, :conditions => {:deleted_at => nil}
   has_many :attachments, :conditions => {:deleted_at => nil}
   has_many :audios, :conditions => {:deleted_at => nil}
@@ -64,8 +65,6 @@ class Entry < ActiveRecord::Base
 
   after_create :create_tasks
   after_create :create_event
-
-  accepts_nested_attributes_for :assets, :reject_if => :all_blank, :allow_destroy => true
 
   default_value_for :initiator do User.current end
 

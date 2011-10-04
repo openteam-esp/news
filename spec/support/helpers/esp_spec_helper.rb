@@ -56,6 +56,10 @@ class Entry
     assets.select{ |asset| asset.type == type.classify }
   end
 
+  def all_assets
+    assets
+  end
+
   %w[attachment audio video image].each do | type |
     define_method type.pluralize do
       type(type).map(&:instance)
