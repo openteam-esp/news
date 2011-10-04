@@ -5,9 +5,6 @@ class Asset < ActiveRecord::Base
 
   default_scope order('created_at desc')
 
-  def self.before_destroy(*args) # disable destroy_attached_files
-  end
-
   asset_accessor :file do
     storage_path { "#{I18n.l entry.created_at, :format => "%Y/%m/%d"}/#{entry_id}/#{Time.now.to_i}-#{file_name}"}
   end
