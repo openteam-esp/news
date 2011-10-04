@@ -1,6 +1,6 @@
 <% content_for :header do %>
   <h1><%= link_to t("News system"), root_path %></h1>
-  <%= link_to t('sign_in'), new_user_session_path %>
+  <%= link_to t('sign_in'), new_user_session_path, :class => 'button sign_in' unless current_user %>
 <% end %>
 
 <% content_for :sidebar do %>

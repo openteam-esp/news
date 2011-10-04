@@ -95,6 +95,7 @@ ru:
   availability: "Когда будет доступно?"
   entry_title: "Заголовок"
   inbox: "Входящие"
+  sign_in: Вход
   awaiting_correction: "Ожидающие корректировки"
   awaiting_publication: "Ожидающие публикации"
   published: "Опубликованные"
