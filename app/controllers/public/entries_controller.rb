@@ -3,7 +3,7 @@
 class Public::EntriesController < ApplicationController
   inherit_resources
 
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   actions :index, :show
 
