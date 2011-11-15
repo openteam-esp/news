@@ -13,7 +13,7 @@ class EntrySearch < Search
   has_enum :order_by
 
   default_value_for :order_by, 'since desc'
-  default_value_for :channel_ids, do Channel.all.map(&:id) end
+  default_value_for :channel_ids do Channel.all.map(&:id) end
   default_value_for :state, 'published'
 
   def state
@@ -29,17 +29,20 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: searches
 #
-#  keywords    :text
-#  since_lt    :date
-#  since_gt    :date
-#  until_lt    :date
-#  until_gt    :date
-#  channel_ids :string
-#  order_by    :string
-#  per_page    :integer
+#  keywords      :text
+#  since_lt      :date
+#  since_gt      :date
+#  until_lt      :date
+#  until_gt      :date
+#  channel_ids   :string
+#  order_by      :string
+#  per_page      :integer
+#  state         :string
+#  updated_at_gt :date
 #
 

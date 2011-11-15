@@ -19,7 +19,7 @@ class Asset
     asset_path id, file_name
   end
   def to_html
-    content_tag :a, self.to_s, :target => '_blank', :href => path,
+    content_tag :a, self.to_s, :target => '_blank', :href => path
   end
   def to_s
     description

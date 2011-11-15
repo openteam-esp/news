@@ -9,3 +9,15 @@ describe Following do
   it { should validate_presence_of(:target_id) }
 
 end
+
+# == Schema Information
+#
+# Table name: followings
+#
+#  id          :integer         not null, primary key
+#  follower_id :integer
+#  target_id   :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+

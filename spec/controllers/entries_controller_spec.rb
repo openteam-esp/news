@@ -20,6 +20,7 @@ describe EntriesController do
       scope = [draft]
       Entry.should_receive(:folder).at_least(1).times.with('draft').and_return(scope)
       scope.should_receive(:page).at_least(1).times.and_return(scope)
+      scope.should_receive(:per).at_least(1).times.and_return(scope)
       get :index, :folder => 'draft'
       assigns(:entries).should eq([draft])
     end

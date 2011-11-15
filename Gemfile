@@ -1,6 +1,7 @@
 source :rubygems
 
 group :development do
+  gem 'annotate',                                 :require => false
   gem 'guard-rspec',                              :require => false
   gem 'guard-spork',                              :require => false
   gem 'hirb',                                     :require => false
@@ -42,6 +43,7 @@ gem 'devise'
 gem 'dragonfly'
 gem 'dynamic_form'
 gem 'fancy-buttons'
+gem 'friendly_id',              '4.0.0.beta14'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
 gem 'formtastic'

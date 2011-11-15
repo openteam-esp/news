@@ -1,12 +1,14 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
+  extend FriendlyId
+
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
   belongs_to :deleted_by, :class_name => 'User'
   belongs_to :destroy_entry_job, :class_name => 'Delayed::Backend::ActiveRecord::Job'
 
-  has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}
+  has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}, :uniq => true
 
   has_many :events, :dependent => :destroy
   has_many :all_assets, :class_name => 'Asset', :dependent => :destroy
@@ -24,6 +26,8 @@ class Entry < ActiveRecord::Base
   attr_accessor :locking
 
   after_validation :unlock, :if => :need_unlock?
+
+  friendly_id :truncated_title, :use => :slugged
 
   state_machine :initial => :draft do
     state :draft
@@ -57,6 +61,10 @@ class Entry < ActiveRecord::Base
     when :draft       then draft.self_initiated
     when :deleted     then where(:deleted_by_id => User.current_id)
     end.descending(:id)
+  end
+
+  def truncated_title
+    title.split(/\s+/)[0..4].compact.join(' ') if title
   end
 
   def processing_issue
@@ -179,24 +187,27 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: entries
 #
-#  id            :integer         not null, primary key
-#  title         :text
-#  annotation    :text
-#  body          :text
-#  since         :datetime
-#  until         :datetime
-#  state         :string(255)
-#  author        :string(255)
-#  initiator_id  :integer
-#  created_at    :datetime
-#  updated_at    :datetime
-#  legacy_id     :integer
-#  locked_at     :datetime
-#  locked_by_id  :integer
-#  deleted_by_id :integer
+#  id                   :integer         not null, primary key
+#  title                :text
+#  annotation           :text
+#  body                 :text
+#  since                :datetime
+#  until                :datetime
+#  state                :string(255)
+#  author               :string(255)
+#  initiator_id         :integer
+#  created_at           :datetime
+#  updated_at           :datetime
+#  legacy_id            :integer
+#  locked_at            :datetime
+#  locked_by_id         :integer
+#  deleted_by_id        :integer
+#  destroy_entry_job_id :integer
+#  slug                 :string(255)
 #
 
