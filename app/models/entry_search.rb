@@ -5,6 +5,7 @@ class EntrySearch < Search
   column :until_lt,       :date
   column :until_gt,       :date
   column :channel_ids,    :string
+  column :channel_slugs,  :string
   column :order_by,       :string
   column :per_page,       :integer
   column :state,          :string

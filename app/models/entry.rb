@@ -85,6 +85,9 @@ class Entry < ActiveRecord::Base
     date   :updated_at
     string :state
     integer :channel_ids, :multiple => true
+    string :channel_slugs, :multiple => true do
+      channels.map(&:slug)
+    end
   end
 
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]

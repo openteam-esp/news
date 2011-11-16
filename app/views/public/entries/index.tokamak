@@ -1,11 +1,10 @@
 collection(@entries) do |collection|
   collection.members(:root => resource_collection_name.to_s) do |member, object|
     member.values do |value|
-      value.id      object[:id]
       value.title   object[:title]
       value.annotation object[:annotation]
       value.updated_at object[:updated_at]
+      value.link    resource_path(object)
     end
-  member.link object.title, resource_path(object)
   end
 end
