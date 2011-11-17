@@ -7,7 +7,4 @@ collection(@entries) do |collection|
       value.link    resource_path(object)
     end
   end
-  @entries.num_pages.times do |n|
-    collection.pagination collection_path(:format => :json, :page => n+1, :per_page => params[:per_page], :current => "#{true if (n+1) == @entries.current_page}")
-  end
 end

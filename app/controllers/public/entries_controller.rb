@@ -27,7 +27,7 @@ class Public::EntriesController < ApplicationController
         searcher.per_page = paginate_options[:per_page]
         searcher.pagination.merge! paginate_options
         results = searcher.results
-        headers['X-Total-Count'] = results.total_count.to_s
+        headers['X-Current-Page'] = results.current_page.to_s
         headers['X-Total-Pages'] = results.total_pages.to_s
         results
       else
