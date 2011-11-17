@@ -1,0 +1,7 @@
+member(resource) do |member|
+  member.title resource.title
+  member.annotation resource.annotation
+  member.body resource.body
+  member.author resource.author
+  member.updated_at resource.updated_at
+end

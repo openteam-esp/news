@@ -4,7 +4,7 @@ collection(@entries) do |collection|
       value.title   object[:title]
       value.annotation object[:annotation]
       value.updated_at object[:updated_at]
-      value.link    resource_path(object)
+      value.link object[:slug]
     end
   end
 end
