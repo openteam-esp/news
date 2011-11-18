@@ -1,4 +1,5 @@
 member(resource) do |member|
+  member.slug resource.slug
   member.title resource.title
   member.annotation resource.annotation
   member.body resource.body
