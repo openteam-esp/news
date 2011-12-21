@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111115074722) do
+ActiveRecord::Schema.define(:version => 20111221150527) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -30,14 +31,6 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
 
   add_index "assets", ["entry_id"], :name => "index_assets_on_entry_id"
   add_index "assets", ["legacy_id"], :name => "index_assets_on_legacy_id"
-
-  create_table "authentications", :force => true do |t|
-    t.integer "user_id"
-    t.string  "provider"
-    t.string  "uid"
-  end
-
-  add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
 
   create_table "channels", :force => true do |t|
     t.string   "title"
@@ -175,20 +168,28 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
   add_index "tasks", ["issue_id"], :name => "index_tasks_on_issue_id"
 
   create_table "users", :force => true do |t|
+    t.string   "uid"
     t.text     "name"
-    t.string   "email"
-    t.string   "encrypted_password",     :limit => 128
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.text     "email"
+    t.text     "nickname"
+    t.text     "first_name"
+    t.text     "last_name"
+    t.text     "location"
+    t.text     "description"
+    t.text     "image"
+    t.text     "phone"
+    t.text     "urls"
+    t.text     "raw_info"
+    t.text     "roles"
+    t.integer  "sign_in_count",      :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "roles"
   end
+
+  add_index "users", ["uid"], :name => "index_users_on_uid"
 
 end

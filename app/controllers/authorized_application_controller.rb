@@ -7,7 +7,7 @@ class AuthorizedApplicationController < ApplicationController
   protected
 
     def check_ability
-
+      User.current = current_user
       case action = params[:action].to_sym
       when :show
         action = :read

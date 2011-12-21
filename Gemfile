@@ -7,7 +7,6 @@ gem 'compass',                  '~> 0.12.alpha.2'
 gem 'configliere'
 gem 'default_value_for'
 gem 'delayed_job'
-gem 'devise'
 gem 'dynamic_form'
 gem 'fancy-buttons'
 gem 'fog',                                        :require => false
@@ -29,6 +28,7 @@ gem 'ryba',                                       :require => false
 gem 'sanitize'
 gem 'sass-rails'
 gem 'simple-navigation'
+gem 'sso_client'
 gem 'state_machine'
 gem 'sunspot_matchers',                           :require => false
 gem 'sunspot_rails'

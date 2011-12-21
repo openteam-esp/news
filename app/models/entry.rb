@@ -51,7 +51,7 @@ class Entry < ActiveRecord::Base
 
   def self.folder(folder)
     case folder.to_sym
-    when :processing  then User.current.roles.any? ? processing : processing.self_initiated
+    when :processing  then User.current && User.current.roles.any? ? processing : processing.self_initiated
     when :draft       then draft.self_initiated
     when :deleted     then where(:deleted_by_id => User.current_id)
     end.descending(:id)

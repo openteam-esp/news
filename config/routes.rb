@@ -2,12 +2,6 @@
 
 News::Application.routes.draw do
 
-  devise_for :users
-
-  match '/auth/:provider/callback' => 'authentications#create'
-
-  resources :authentications, :only => [:create, :destroy]
-
   resources :entries, :except => :index do
     member do
       get 'delete'
