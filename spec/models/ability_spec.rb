@@ -271,33 +271,6 @@ describe Ability do
 
   end
 
-  describe "просмотр assets" do
-    describe "черновика" do
-      let(:asset) { Asset.create!(:entry => draft) }
-      it { ability(:for => initiator).should be_able_to(:read, asset) }
-      it { ability(:for => another_initiator).should_not be_able_to(:read, asset) }
-      it { ability(:for => corrector).should_not be_able_to(:read, asset) }
-      it { ability(:for => publisher).should_not be_able_to(:read, asset) }
-      it { Ability.new.should_not be_able_to(:read, asset) }
-    end
-    describe "удаленного asset" do
-      let(:asset) { Asset.create!(:entry => processing_correcting) }
-      it { ability(:for => initiator).should be_able_to(:read, asset) }
-      it { ability(:for => another_initiator).should_not be_able_to(:read, asset) }
-      it { ability(:for => corrector).should be_able_to(:read, asset) }
-      it { ability(:for => publisher).should be_able_to(:read, asset) }
-      it { Ability.new.should_not be_able_to(:read, asset) }
-    end
-    describe "удаленной новости" do
-      let(:asset) { Asset.create!(:entry => processing_correcting.destroy) }
-      it { ability(:for => initiator).should be_able_to(:read, asset) }
-      it { ability(:for => another_initiator).should_not be_able_to(:read, asset) }
-      it { ability(:for => corrector).should be_able_to(:read, asset) }
-      it { ability(:for => publisher).should be_able_to(:read, asset) }
-      it { Ability.new.should_not be_able_to(:read, asset) }
-    end
-  end
-
   describe "слежение за пользователем" do
     describe "создание" do
       it { ability(:for => initiator).should_not be_able_to(:create, Following) }

@@ -23,7 +23,6 @@ module News
                                 #{config.root}/app/navigation_renderers
                                 #{config.root}/app/models/asset
                                 #{config.root}/app/models/tasks
-                                #{config.root}/lib/middleware
                                )
 
     config.autoload_paths += %W[#{config.root}/lib/legacy_models] unless Rails.env.production?
@@ -60,14 +59,6 @@ module News
       generators.fixture_replacement  :fabrication
     end
 
-    config.middleware.insert_after 'Warden::Manager', 'SetCurrentUserMiddleware'
-    config.middleware.insert_after 'SetCurrentUserMiddleware', 'AuthorizeAssetsMiddleware'
-    config.middleware.insert_after 'AuthorizeAssetsMiddleware', 'Dragonfly::Middleware', :assets
-    config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
-      :verbose     => true,
-      :metastore   => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/meta"),
-      :entitystore => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/body")
-    }
   end
 end
 

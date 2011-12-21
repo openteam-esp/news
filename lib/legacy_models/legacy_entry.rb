@@ -2,54 +2,50 @@
 
 require 'rdiscount'
 require Rails.root.join('app/models/entry')
-require Rails.root.join('app/models/asset/asset')
-require Rails.root.join('app/models/asset/image')
-require Rails.root.join('app/models/asset/audio')
-require Rails.root.join('app/models/asset/video')
-require Rails.root.join('app/models/asset/attachment')
 
 include ActionView::Helpers::TagHelper
 include ActionView::Helpers::AssetTagHelper
 include ActionView::Helpers::TextHelper
 include Rails.application.routes.url_helpers
 
-class Asset
-  attr_accessor :description
-  def path
-    asset_path id, file_name
-  end
-  def to_html
-    content_tag :a, self.to_s, :target => '_blank', :href => path
-  end
-  def to_s
-    description
-  end
-end
-
-class Image
-  def to_s
-    height = 150
-    if file_height > height
-      ratio = height / file_height.to_f
-      width = (file_width * ratio).to_i
-    else
-      height = file_height
-      width = file_width
+if false
+  class Asset
+    attr_accessor :description
+    def path
+      asset_path id, file_name
     end
-    tag :img, :src => image_path(id, width, height, file_name), :alt => description, :width => width, :height => height
+    def to_html
+      content_tag :a, self.to_s, :target => '_blank', :href => path
+    end
+    def to_s
+      description
+    end
+  end
+
+  class Image
+    def to_s
+      height = 150
+      if file_height > height
+        ratio = height / file_height.to_f
+        width = (file_width * ratio).to_i
+      else
+        height = file_height
+        width = file_width
+      end
+      tag :img, :src => image_path(id, width, height, file_name), :alt => description, :width => width, :height => height
+    end
+  end
+
+  class Audio
+    alias :old_to_html :to_html
+    def to_html
+      content_tag(:audio, deprecated_browser_message, :src => path, :controls => true)
+    end
+    def deprecated_browser_message
+      %Q{Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: #{old_to_html}}.html_safe
+    end
   end
 end
-
-class Audio
-  alias :old_to_html :to_html
-  def to_html
-    content_tag(:audio, deprecated_browser_message, :src => path, :controls => true)
-  end
-  def deprecated_browser_message
-    %Q{Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: #{old_to_html}}.html_safe
-  end
-end
-
 
 class Entry
   def assets_html

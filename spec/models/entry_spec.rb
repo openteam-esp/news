@@ -4,12 +4,6 @@ require 'spec_helper'
 
 describe Entry do
   it { should belong_to :destroy_entry_job }
-  it { should have_many(:assets) }
-  it { should have_many(:images) }
-  it { should have_many(:videos) }
-  it { should have_many(:audios) }
-  it { should have_many(:attachments) }
-  it { should have_many(:all_assets).dependent(:destroy) }
   it { should have_many(:tasks).dependent(:destroy) }
   it { should have_many(:events).dependent(:destroy) }
 
@@ -164,9 +158,6 @@ describe Entry do
     end
     it "должно удалять events" do
       destroyed_draft.events.each { |event| event.should_not be_persisted }
-    end
-    it "должно удалять assets" do
-      destroyed_draft.assets.each { |asset| asset.should_not be_persisted }
     end
   end
 

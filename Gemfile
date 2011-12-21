@@ -28,7 +28,7 @@ end
 
 group :development, :test do
   gem 'rdiscount',                                :require => false
-  gem 'sunspot_solr',           '~> 1.3.0.rc4',   :require => false
+  gem 'sunspot_solr',                             :require => false
   gem 'ya2yaml',                                  :require => false
 end
 
@@ -40,7 +40,7 @@ gem 'configliere'
 gem 'default_value_for'
 gem 'delayed_job'
 gem 'devise'
-gem 'dragonfly'
+gem 'omniauth'
 gem 'dynamic_form'
 gem 'fancy-buttons'
 gem 'friendly_id',              '4.0.0.beta14'
@@ -55,7 +55,6 @@ gem 'has_searcher'
 gem 'inherited_resources'
 gem 'jquery-rails',                               :require => false
 gem 'kaminari'
-gem 'omniauth'
 gem 'rack-cache',                                 :require => 'rack/cache'
 gem 'rails',                    '3.0.9',          :require => false
 gem 'rake',                     '0.8.7',          :require => false
@@ -66,4 +65,4 @@ gem 'sanitize'
 gem 'simple-navigation'
 gem 'state_machine'
 gem 'sunspot_matchers',                           :require => false
-gem 'sunspot_rails',            '~> 1.3.0.rc4'
+gem 'sunspot_rails'

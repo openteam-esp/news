@@ -3,21 +3,10 @@
 
 require Rails.root.join('app/models/entry')
 require Rails.root.join('app/models/tasks/issue')
-require Rails.root.join('app/models/asset/asset')
-require Rails.root.join('app/models/asset/image')
 
 class Array
   def update_all(options)
     self.each { |record| record.update_attributes options }
-  end
-end
-class Asset
-  def instance
-    type.classify.constantize.find_or_initialize_by_id(id).tap do |asset|
-      asset.attributes = self.attributes
-      asset.description = self.description
-      asset.entry = self.entry
-    end
   end
 end
 
@@ -44,27 +33,10 @@ class Entry
     tasks.map(&:executor).include?(user) || tasks.map(&:initiator).include?(user)
   end
 
-  def asset_ids
-    assets.map(&:id)
-  end
-
   def channel_ids
     channels.map(&:id)
   end
 
-  def type(type)
-    assets.select{ |asset| asset.type == type.classify }
-  end
-
-  def all_assets
-    assets
-  end
-
-  %w[attachment audio video image].each do | type |
-    define_method type.pluralize do
-      type(type).map(&:instance)
-    end
-  end
 end
 
 module EspSpecHelper

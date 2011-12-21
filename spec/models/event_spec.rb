@@ -16,10 +16,6 @@ describe Event do
     def updated_entry(options={})
       @updated_entry ||= draft.tap do | entry |
                             as initiator do
-                              if options[:assets]
-                                entry.assets << Asset.create!(:entry => entry, :file => File.open(Rails.root.join('spec/fixtures/image')))
-                                Asset.should_receive(:find).with([entry.assets[0].id]).and_return entry.assets
-                              end
                               if options[:channels]
                                 entry.channels << channel
                                 Channel.should_receive(:find).with([entry.channels[0].id]).and_return entry.channels
@@ -43,7 +39,6 @@ describe Event do
       it { last_event.user.should == initiator }
       it { last_event.event.should == 'complete' }
       it { last_event.versioned_entry.author.should == updated_entry.author }
-      it { last_event(:assets => true).versioned_entry.asset_ids.should == updated_entry.asset_ids }
       it { last_event(:channels => true).versioned_entry.channel_ids.should == updated_entry.channel_ids }
     end
   end
@@ -53,11 +48,6 @@ describe Event do
   describe "сохраняемые версии новости" do
     it "event не должен создаваться после сохранения новости" do
       expect {entry.update_attribute :title, "title"}.to_not change(Event, :count)
-    end
-
-    it "должны сохраняться images" do
-      entry_with_asset.events.create(:kind => :store)
-      entry_with_asset.events.last.versioned_entry.images.should == entry_with_asset.images
     end
 
     it "должен сохранять каналы" do
@@ -74,13 +64,10 @@ describe Event do
     it "когда была пустая новость" do
       channel_ids = [Fabricate(:channel).id]
       entry.update_attributes(:title => "title", :channel_ids => channel_ids)
-      asset = Fabricate(:asset, :entry => entry)
       entry.events.create(:kind => :restore)
       restore_entry_version = entry.events.first.versioned_entry
       restore_entry_version.title.should == "title"
       restore_entry_version.channel_ids.should == channel_ids
-      restore_entry_version.image_ids.should == [asset.id]
-      restore_entry_version.images.first.file_name.should_not be_nil
       entry.reload
       entry.title.should be_nil
       entry.channel_ids.should == []
@@ -90,23 +77,17 @@ describe Event do
     it "уже были события" do
       set_current_user initiator
       channels = [Fabricate(:channel), Fabricate(:channel)]
-      awaiting_correction_entry(:title => "title", :channel_ids => channels.map(&:id), :asset_ids => [Fabricate(:asset).id])
-      awaiting_correction_entry.assets.destroy_all
-      Fabricate(:asset, :entry => awaiting_correction_entry, :file_mime_type => "video/ogg")
+      awaiting_correction_entry(:title => "title", :channel_ids => channels.map(&:id))
       awaiting_correction_entry.channels.last.destroy
       awaiting_correction_entry.update_attributes(:title => "new title")
       awaiting_correction_entry.events.create!(:kind => :restore)
       restored_entry = awaiting_correction_entry.events.first.versioned_entry
-      restored_entry.images.should be_empty
-      restored_entry.videos.should be_one
       restored_entry.channels.should == [channels.first]
       restored_entry.title.should == "new title"
       awaiting_correction_entry.reload
 
       awaiting_correction_entry.title.should == "title"
       awaiting_correction_entry.channels.should == [channels.first]
-      awaiting_correction_entry.assets.should be_one
-      awaiting_correction_entry.images.should be_one
     end
   end
 

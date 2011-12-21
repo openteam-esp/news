@@ -81,19 +81,8 @@ class Ability
     end
 
     ##################################
-    ###          Asset             ###
+    ###          Messages          ###
     ##################################
-    can :read, Asset do | asset |
-      if asset.deleted? || asset.entry.deleted?
-        asset.entry.has_participant?(user)
-      else
-        can? :read, asset.entry
-      end
-    end
-
-    can [:create, :destroy], Asset do | asset |
-      can? :update, asset.entry
-    end
 
     can [:read, :destroy], Message
     can [:create, :destroy], Subscribe

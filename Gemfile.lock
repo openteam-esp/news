@@ -67,8 +67,6 @@ GEM
       orm_adapter (~> 0.0.3)
       warden (~> 1.0.3)
     diff-lcs (1.1.2)
-    dragonfly (0.9.8)
-      rack
     dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -246,7 +244,7 @@ GEM
       nokogiri (>= 1.4.2)
       rack-conneg
       respondie (~> 0.9.0)
-    rsolr (1.0.2)
+    rsolr (1.0.6)
       builder (>= 2.1.2)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
@@ -279,15 +277,16 @@ GEM
     spork (0.9.0.rc9)
     sqlite3 (1.3.4)
     state_machine (1.0.1)
-    sunspot (1.3.0.rc4)
-      escape (= 0.0.4)
+    sunspot (1.3.0)
+      escape (~> 0.0.4)
       pr_geohash (~> 1.0)
-      rsolr (= 1.0.2)
+      rsolr (~> 1.0.6)
     sunspot_matchers (1.2.1.4)
-    sunspot_rails (1.3.0.rc4)
+    sunspot_rails (1.3.0)
       nokogiri
-      sunspot (= 1.3.0.rc4)
-    sunspot_solr (1.3.0.rc4)
+      sunspot (= 1.3.0)
+    sunspot_solr (1.3.0)
+      escape (~> 0.0.4)
     systemu (2.2.0)
     thor (0.14.6)
     treetop (1.4.10)
@@ -318,7 +317,6 @@ DEPENDENCIES
   default_value_for
   delayed_job
   devise
-  dragonfly
   dynamic_form
   fabrication
   fancy-buttons
@@ -359,7 +357,7 @@ DEPENDENCIES
   sqlite3
   state_machine
   sunspot_matchers
-  sunspot_rails (~> 1.3.0.rc4)
-  sunspot_solr (~> 1.3.0.rc4)
+  sunspot_rails
+  sunspot_solr
   unicorn
   ya2yaml

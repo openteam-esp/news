@@ -20,17 +20,9 @@ class Event < ActiveRecord::Base
   private
 
     def save_and_serialize_entry
-      self.serialized_entry = entry.to_json(:methods => %w[asset_ids channel_ids]) if event == 'complete'
+      self.serialized_entry = entry.to_json(:methods => [:channel_ids]) if event == 'complete'
     end
 end
-
-
-
-
-
-
-
-
 
 # == Schema Information
 #
@@ -46,4 +38,3 @@ end
 #  serialized_entry :text
 #  task_id          :integer
 #
-

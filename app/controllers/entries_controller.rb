@@ -16,7 +16,6 @@ class EntriesController < AuthorizedApplicationController
   def edit
     edit! do
       @entry.lock
-      @assets = @entry.assets
     end
   end
 
@@ -35,7 +34,6 @@ class EntriesController < AuthorizedApplicationController
       success.html {
         if request.xhr?
           @entry.reload
-          @entry.assets.build
           render :edit, :layout => false and return
         end
         redirect_to smart_resource_url
