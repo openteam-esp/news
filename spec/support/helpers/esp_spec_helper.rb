@@ -1,44 +1,5 @@
 # encoding: utf-8
 
-
-require Rails.root.join('app/models/entry')
-require Rails.root.join('app/models/tasks/issue')
-
-class Array
-  def update_all(options)
-    self.each { |record| record.update_attributes options }
-  end
-end
-
-class Issue
-  def subtasks_opened
-    subtasks_opened = []
-    subtasks.each do |subtask|
-      subtasks_opened << subtask if subtask.fresh? || subtask.processing?
-    end
-    subtasks_opened
-  end
-end
-
-class Entry
-  def tasks
-    [prepare, review, publish].map{|issue| [issue, issue.subtasks]}.flatten
-  end
-
-  def has_processing_task_executed_by?(user)
-    tasks.select(&:processing?).map(&:executor).include? user
-  end
-
-  def has_participant?(user)
-    tasks.map(&:executor).include?(user) || tasks.map(&:initiator).include?(user)
-  end
-
-  def channel_ids
-    channels.map(&:id)
-  end
-
-end
-
 module EspSpecHelper
 
   def set_current_user(user = nil)

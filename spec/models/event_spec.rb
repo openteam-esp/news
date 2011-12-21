@@ -18,7 +18,6 @@ describe Event do
                             as initiator do
                               if options[:channels]
                                 entry.channels << channel
-                                Channel.should_receive(:find).with([entry.channels[0].id]).and_return entry.channels
                               end
                               entry.update_attributes :author => Ryba::Name.full_name
                               entry.prepare.complete!
@@ -32,7 +31,7 @@ describe Event do
 
     describe "при закрытии задачи" do
       def last_event(options={})
-        @last_event ||= updated_entry(options).events[1]
+        @last_event ||= updated_entry(options).events(true).first
       end
 
       it { updated_entry.events.should have(2).items }

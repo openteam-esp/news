@@ -2,7 +2,7 @@
 
 RSpec::Matchers.define :have_entries do |attribute, kind|
   @conditions = {}
-  @sql_matchers = [/FROM entries/]
+  @sql_matchers = [/FROM "entries"/]
   @mess = []
 
   chain :deleted_by_me do

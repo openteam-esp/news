@@ -7,7 +7,7 @@ class Event < ActiveRecord::Base
   belongs_to :user
   belongs_to :task
 
-  default_scope :order => 'created_at DESC'
+  default_scope :order => 'id DESC'
 
   before_create :save_and_serialize_entry
 

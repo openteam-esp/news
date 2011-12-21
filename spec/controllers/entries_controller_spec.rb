@@ -9,12 +9,6 @@ describe EntriesController do
     User.should_receive(:first).with(:conditions => { "id" => initiator.id }).and_return initiator
   end
 
-  def mock_find_by_id(entry = draft)
-    scoped = []
-    Entry.should_receive(:scoped).and_return(scoped)
-    scoped.should_receive(:find).with(draft.id).and_return(entry)
-  end
-
   describe "GET index" do
     it "assigns all entries as @entries" do
       scope = [draft]
@@ -28,7 +22,6 @@ describe EntriesController do
 
   describe "GET show" do
     it "assigns the requested entry as @entry" do
-      mock_find_by_id
       get :show, :id => draft.id
       assigns(:entry).should eq(draft)
     end
@@ -36,7 +29,6 @@ describe EntriesController do
 
   describe "GET edit" do
     it "assigns the requested entry as @entry and entry must be locked" do
-      mock_find_by_id
       get :edit, :id => draft.id
       assigns(:entry).should == draft
       assigns(:entry).should be_locked
@@ -46,7 +38,6 @@ describe EntriesController do
   describe "POST unlock" do
     it "should unlock entry" do
       draft.lock
-      mock_find_by_id
       post :unlock, :id => draft.id
       response.should redirect_to(assigns(:entry))
       assigns(:entry).should_not be_locked
@@ -55,7 +46,6 @@ describe EntriesController do
 
   describe "GET delete" do
     it "assigns the requested entry as @entry" do
-      mock_find_by_id
       get :delete, :id => draft.id
       assigns(:entry).should == draft
       assigns(:entry).should_not be_locked
@@ -77,7 +67,6 @@ describe EntriesController do
 
   describe "DELETE destroy" do
     it "fakely destroys entry" do
-      mock_find_by_id
       delete :destroy, :id => draft.id
       assigns(:entry).should be_persisted
     end
@@ -86,7 +75,6 @@ describe EntriesController do
   describe "POST recycle" do
     let(:deleted_draft) { draft.destroy }
     it "restores deleted entry" do
-      mock_find_by_id(deleted_draft)
       post :recycle, :id => deleted_draft.id
       response.should redirect_to(assigns(:entry))
       assigns(:entry).should_not be_deleted

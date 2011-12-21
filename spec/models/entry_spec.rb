@@ -76,7 +76,6 @@ describe Entry do
       set_current_user initiator
     end
 
-    it { draft.tasks.should == [prepare, review, publish] }
     let (:prepare) { draft.prepare }
     let (:review) { draft.review }
     let (:publish) { draft.publish }

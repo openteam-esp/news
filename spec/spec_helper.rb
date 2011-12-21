@@ -22,6 +22,7 @@ Spork.prefork do
     config.include EspSpecHelper
     config.include AttributeNormalizer::RSpecMatcher
     config.mock_with :rspec
+    config.use_transactional_fixtures = true
     config.after do User.current = nil end
     config.before do
       DeferredGarbageCollection.start

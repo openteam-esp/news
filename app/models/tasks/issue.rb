@@ -6,7 +6,7 @@ class Issue < Task
   end
 
   def description
-   self.class.model_name.human
+    self.class.model_name.human
   end
 
   delegate :opened, :to => :subtasks, :prefix => true

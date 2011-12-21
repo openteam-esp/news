@@ -12,12 +12,12 @@ describe Issue do
     shared_examples_for "отмена выполнения подзадачи" do
       it "при закрытии задачи" do
         as corrector do processing_correcting.review.complete! end
-        review_subtask_for(another_initiator).should be_canceled
+        review_subtask_for(another_initiator).reload.should be_canceled
       end
 
       it "при отказе от выполнения задачи" do
         as corrector do processing_correcting.review.refuse! end
-        review_subtask_for(another_initiator).should be_canceled
+        review_subtask_for(another_initiator).reload.should be_canceled
       end
     end
 
