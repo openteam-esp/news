@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.integer  "legacy_id"
   end
 
+  add_index "assets", ["entry_id"], :name => "index_assets_on_entry_id"
   add_index "assets", ["legacy_id"], :name => "index_assets_on_legacy_id"
 
   create_table "authentications", :force => true do |t|
@@ -35,6 +36,8 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.string  "provider"
     t.string  "uid"
   end
+
+  add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
 
   create_table "channels", :force => true do |t|
     t.string   "title"
@@ -48,6 +51,9 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.integer "channel_id"
     t.integer "entry_id"
   end
+
+  add_index "channels_entries", ["channel_id"], :name => "index_channels_entries_on_channel_id"
+  add_index "channels_entries", ["entry_id"], :name => "index_channels_entries_on_entry_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -83,7 +89,11 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.string   "slug"
   end
 
+  add_index "entries", ["deleted_by_id"], :name => "index_entries_on_deleted_by_id"
+  add_index "entries", ["destroy_entry_job_id"], :name => "index_entries_on_destroy_entry_job_id"
+  add_index "entries", ["initiator_id"], :name => "index_entries_on_initiator_id"
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"
+  add_index "entries", ["locked_by_id"], :name => "index_entries_on_locked_by_id"
 
   create_table "events", :force => true do |t|
     t.string   "event"
@@ -96,12 +106,19 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.integer  "task_id"
   end
 
+  add_index "events", ["entry_id"], :name => "index_events_on_entry_id"
+  add_index "events", ["task_id"], :name => "index_events_on_task_id"
+  add_index "events", ["user_id"], :name => "index_events_on_user_id"
+
   create_table "followings", :force => true do |t|
     t.integer  "follower_id"
     t.integer  "target_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "followings", ["follower_id"], :name => "index_followings_on_follower_id"
+  add_index "followings", ["target_id"], :name => "index_followings_on_target_id"
 
   create_table "messages", :force => true do |t|
     t.integer  "event_id"
@@ -110,6 +127,9 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "messages", ["event_id"], :name => "index_messages_on_event_id"
+  add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
 
   create_table "recipients", :force => true do |t|
     t.string   "email"
@@ -120,6 +140,8 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.datetime "updated_at"
   end
 
+  add_index "recipients", ["channel_id"], :name => "index_recipients_on_channel_id"
+
   create_table "subscribes", :force => true do |t|
     t.integer  "subscriber_id"
     t.integer  "initiator_id"
@@ -128,6 +150,10 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "subscribes", ["entry_id"], :name => "index_subscribes_on_entry_id"
+  add_index "subscribes", ["initiator_id"], :name => "index_subscribes_on_initiator_id"
+  add_index "subscribes", ["subscriber_id"], :name => "index_subscribes_on_subscriber_id"
 
   create_table "tasks", :force => true do |t|
     t.integer  "entry_id"
@@ -142,6 +168,11 @@ ActiveRecord::Schema.define(:version => 20111115074722) do
     t.text     "description"
     t.datetime "deleted_at"
   end
+
+  add_index "tasks", ["entry_id"], :name => "index_tasks_on_entry_id"
+  add_index "tasks", ["executor_id"], :name => "index_tasks_on_executor_id"
+  add_index "tasks", ["initiator_id"], :name => "index_tasks_on_initiator_id"
+  add_index "tasks", ["issue_id"], :name => "index_tasks_on_issue_id"
 
   create_table "users", :force => true do |t|
     t.text     "name"

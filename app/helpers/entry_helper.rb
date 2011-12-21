@@ -28,11 +28,7 @@ module EntryHelper
     result += creator_of(entry.events.first)
     result += ". "
     result += "Пользователь: "
-    if entry.events.first
-      result += entry.events.first.user.name
-    else
-      result += entry.initiator.name
-    end
+    result += entry.events.first.user.name
     result += "."
     content_tag :span, result, :class => "entry_statistic"
   end

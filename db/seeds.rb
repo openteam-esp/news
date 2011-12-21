@@ -99,8 +99,11 @@ end
 
 Entry.destroy_all
 
+require 'lib/legacy_models/legacy_entry'
+
 YAML.load_file('db/entries.yml').each do | legacy_id, hash |
   as User.sample do
+    LegacyEntry.new hash.merge :author => Ryba::Name.full_name
     Entry.find_or_create_by_legacy_id(legacy_id).tap do | entry |
       entry.update_attributes hash.merge :author => Ryba::Name.full_name
       random = rand(10)
