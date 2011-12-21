@@ -13,14 +13,13 @@ group :development do
 end
 
 group :production do
-  gem 'hassle',                                                             :git => 'git://github.com/koppen/hassle'
   gem 'hoptoad_notifier'
   gem 'pg',                                       :require => false
 end
 
 group :test do
   gem 'fabrication',                              :require => false
-  gem 'rspec-rails',                              :require => false
+  gem 'rspec-rails',            '~> 2.6.0',       :require => false
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
 end
@@ -34,15 +33,14 @@ end
 gem 'attribute_normalizer'
 gem 'cancan'
 gem 'ckeditor'
-gem 'compass'
+gem 'compass',                  '~> 0.12.alpha.2'
 gem 'configliere'
 gem 'default_value_for'
 gem 'delayed_job'
 gem 'devise'
-gem 'omniauth'
 gem 'dynamic_form'
 gem 'fancy-buttons'
-gem 'friendly_id',              '4.0.0.beta14'
+gem 'friendly_id',              '4.0.0.rc2'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
 gem 'formtastic'
@@ -54,9 +52,7 @@ gem 'has_searcher'
 gem 'inherited_resources'
 gem 'jquery-rails',                               :require => false
 gem 'kaminari'
-gem 'rack-cache',                                 :require => 'rack/cache'
-gem 'rails',                    '3.0.9',          :require => false
-gem 'rake',                     '0.8.7',          :require => false
+gem 'rails'
 gem 'restfulie'
 gem 'russian'
 gem 'ryba',                                       :require => false
