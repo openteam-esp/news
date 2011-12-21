@@ -1,12 +1,8 @@
 <% content_for :extend_javascript do %>
-  <%= javascript_include_tag "jquery.ui.min" %>
   <%= javascript_include_tag "jquery.ui.datepicker.ru" %>
   <%= javascript_include_tag "jquery.ui.timepicker" %>
   <%= javascript_include_tag "jquery.ui.timepicker.ru" %>
   <%= javascript_include_tag "ckeditor/ckeditor" %>
-  <%#= javascript_include_tag "jquery.tipsy" %>
-  <%= javascript_include_tag "jquery.iframe.transport" %>
-  <%= javascript_include_tag "jquery.fileupload" %>
 <% end %>
 
 <div class="content_wrapper with_sidebar">
@@ -18,13 +14,13 @@
         <div>
           <span>Опубликовать</span>
           <ol>
-            <%= form.input :since, :label => false %>
+            <%= form.input :since, :label => false, :as => :datetime_picker %>
           </ol>
         </div>
         <div>
           <span>Переместить в архив</span>
           <ol>
-            <%= form.input :until, :label => false %>
+            <%= form.input :until, :label => false, :as => :datetime_picker %>
           </ol>
         </div>
         <div>

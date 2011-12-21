@@ -6,10 +6,8 @@
     <%= csrf_meta_tag %>
     <%= favicon_link_tag %>
     <%= stylesheet_link_tag "application" %>
-    <%#= javascript_include_tag "jquery.min" %>
-    <%#= yield :extend_javascript %>
-    <%#= javascript_include_tag "jquery.ujs" %>
     <%= javascript_include_tag "application" %>
+    <%= yield :extend_javascript %>
   </head>
   <body>
     <% flash.each do |name, msg| %>

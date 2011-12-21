@@ -2,7 +2,7 @@ source :rubygems
 
 gem 'attribute_normalizer'
 gem 'cancan'
-gem 'ckeditor'
+gem 'ckeditor',                                   :git => 'git://github.com/pshoukry/ckeditor.git'
 gem 'compass',                  '~> 0.12.alpha.2'
 gem 'configliere'
 gem 'default_value_for'
@@ -19,7 +19,7 @@ gem 'has_enum'
 gem 'has_scope'
 gem 'has_searcher'
 gem 'inherited_resources'
-gem 'jquery-rails',                               :require => false
+gem 'jquery-rails'
 gem 'kaminari'
 gem 'rails'
 gem 'restfulie'
