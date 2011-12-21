@@ -1,6 +1,5 @@
 require 'spork'
 
-
 Spork.prefork do
   ENV["RAILS_ENV"] ||= 'test'
 
@@ -13,9 +12,8 @@ Spork.prefork do
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
-  require "#{Rails.root}/spec/support/deferred_garbage_collection"
-
   Dir[Rails.root.join("spec/support/helpers/*.rb")].each {|f| require f}
+  Dir[Rails.root.join("spec/support/matchers/*.rb")].each {|f| require f}
 
   RSpec.configure do |config|
     config.include Devise::TestHelpers, :type => :controller
@@ -24,19 +22,9 @@ Spork.prefork do
     config.mock_with :rspec
     config.use_transactional_fixtures = true
     config.after do User.current = nil end
-    config.before do
-      DeferredGarbageCollection.start
-    end
-    config.after do
-      DeferredGarbageCollection.reconsider
-    end
     config.before(:all) do
-      Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
-    end
-    config.before(:all) do
-      Dir[Rails.root.join("spec/support/matchers/*.rb")].each {|f| require f}
       require Rails.root.join 'app/models/tasks/task'
-      require 'fabrication'
+      Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
     end
   end
 end

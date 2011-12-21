@@ -1,0 +1,38 @@
+@import "compass/utilities"
+@import "compass/css3"
+
+.content_wrapper
+  padding: 20px
+  .main_search
+    +clearfix
+    border-bottom: 1px solid #ccc
+    padding-bottom: 20px
+    margin-bottom: 20px
+    fieldset
+      float: left
+    .inputs
+      margin-right: 10px
+      input
+        width: 300px
+        border: 1px solid #aaa
+        font-family: Verdana, Tahoma, sans-serif
+        font-size: 13px
+        padding: 4px 5px
+  .search_result
+    color: #999
+    font-size: 14px
+    margin-bottom: 20px
+    +text-shadow(none)
+  ul.subdivisions
+    margin-bottom: 20px
+    li
+      font-size: 16px
+      margin-bottom: 5px
+  ol.subdivisions
+    margin-left: 25px
+    .item
+      list-style: decimal
+      margin-bottom: 20px
+      .title
+        font-size: 16px
+        margin-bottom: 5px

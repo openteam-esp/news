@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-News::Application.config.secret_token = '380b854354d22b5593356b6b8022d6a6c77da6f8bdaac6a592deb996e8f322caa65eb5db701e65d3d8755380edcce7793d1ac6faa4011660eb0ee56a22c3b914'
+News::Application.config.secret_token = '596c2eb3a5c25b8e9c0ca4b857b22eb939ee5e8b915fa01cee9b6014b646a83782c292266de38785b3ab41a16df5987b1e50f1b0b86b924e4588c1a49b2932cd'

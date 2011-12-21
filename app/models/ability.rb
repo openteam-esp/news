@@ -72,7 +72,7 @@ class Ability
       entry.published?
     end
 
-    can :recycle, Entry do | entry |
+    can :revivify, Entry do | entry |
       entry.deleted_by == user
     end
 

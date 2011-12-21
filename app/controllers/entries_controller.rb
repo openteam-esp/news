@@ -1,6 +1,6 @@
 class EntriesController < AuthorizedApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
-  custom_actions :resource => [:delete, :recycle, :unlock]
+  custom_actions :resource => [:delete, :revivify, :unlock]
 
   layout :resolve_layout
 
@@ -23,9 +23,9 @@ class EntriesController < AuthorizedApplicationController
     create! { edit_entry_path(@entry) }
   end
 
-  def recycle
-    recycle! do
-      redirect_to @entry.recycle and return
+  def revivify
+    revivify! do
+      redirect_to @entry.revivify and return
     end
   end
 

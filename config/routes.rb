@@ -11,7 +11,7 @@ News::Application.routes.draw do
   resources :entries, :except => :index do
     member do
       get 'delete'
-      post 'recycle'
+      post 'revivify'
       post 'unlock'
     end
     get '/:type/' => 'assets#index', :constraints => { :type => /(assets|images|audios|videos|attachments)/ }

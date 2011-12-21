@@ -77,7 +77,7 @@ ru:
   save_entry: Сохранить новость
   edit_entry: Изменить новость
   unlock_entry: Разблокировать
-  recycle_entry: Восстановить новость
+  revivify_entry: Восстановить новость
   subscribers: "Списки рассылки:"
   Resepients: "Списки рассылок"
   send_to_corrector: "Отправить корректору"
@@ -106,7 +106,7 @@ ru:
   login: "Войти"
   new_entry: "Создать новость"
   edit: "Редактировать"
-  recycle: "Восттановить из корзины"
+  revivify: "Восттановить из корзины"
   back: "Назад"
   Back: "Назад"
   immediately_after_correcting: "Немедленно опубликовать после корректировки"

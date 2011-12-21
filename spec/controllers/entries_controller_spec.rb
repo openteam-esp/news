@@ -6,15 +6,11 @@ describe EntriesController do
   before :each do
     set_current_user initiator
     sign_in initiator
-    User.should_receive(:first).with(:conditions => { "id" => initiator.id }).and_return initiator
   end
 
   describe "GET index" do
     it "assigns all entries as @entries" do
-      scope = [draft]
-      Entry.should_receive(:folder).at_least(1).times.with('draft').and_return(scope)
-      scope.should_receive(:page).at_least(1).times.and_return(scope)
-      scope.should_receive(:per).at_least(1).times.and_return(scope)
+      draft
       get :index, :folder => 'draft'
       assigns(:entries).should eq([draft])
     end
@@ -72,10 +68,10 @@ describe EntriesController do
     end
   end
 
-  describe "POST recycle" do
+  describe "POST revivify" do
     let(:deleted_draft) { draft.destroy }
     it "restores deleted entry" do
-      post :recycle, :id => deleted_draft.id
+      post :revivify, :id => deleted_draft.id
       response.should redirect_to(assigns(:entry))
       assigns(:entry).should_not be_deleted
     end

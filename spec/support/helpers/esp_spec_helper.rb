@@ -64,9 +64,9 @@ module EspSpecHelper
                        end
   end
 
-  def recycled_draft(options={})
-    @recycled_draft ||= deleted_draft(options).tap do | entry |
-                          as initiator do entry.recycle end
+  def revivified_draft(options={})
+    @revivified_draft ||= deleted_draft(options).tap do | entry |
+                          as initiator do entry.revivify end
                         end
   end
 

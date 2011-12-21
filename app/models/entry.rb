@@ -138,7 +138,7 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  def recycle
+  def revivify
     self.tap do | entry |
       entry.destroy_entry_job.destroy
       entry.update_attributes :deleted_by => nil, :destroy_entry_job => nil

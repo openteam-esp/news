@@ -61,7 +61,7 @@ describe Public::EntriesController do
     end
 
     it "при поиске должен проставлять HTTP заголовки X-Total-Count, X-Total-Pages" do
-      Channel.should_receive(:find).with(1).and_return(Channel.new)
+      Channel.should_receive(:find).with('1').and_return(Channel.new)
       searcher.should_receive(:results).any_number_of_times.and_return(Sunspot::Search::PaginatedCollection.new([], 1, 10, 13))
       get :index, :channel_id => 1, :utf8 => true
       response.headers['X-Current-Page'].should == '1'
@@ -70,37 +70,21 @@ describe Public::EntriesController do
 
     describe "GET show" do
       describe "должен отдавать результаты в формате" do
-        before {Entry.should_receive(:find).with(1).and_return(Entry.new)}
         it "xml" do
-          get :show, :id => 1, :format => :xml
+          get :show, :id => draft, :format => :xml
           response.header["Content-Type"].should match(/xml/)
         end
 
         it "json" do
-          get :show, :id => 1, :format => :json
+          get :show, :id => draft, :format => :json
           response.header["Content-Type"].should match(/json/)
         end
       end
 
       describe "должен возвращать новость из канала" do
-        let (:entry) { "" }
-        let (:channel) { "" }
-
-        def mock_channel
-          Channel.should_receive(:find).with(2).and_return(channel)
-        end
-
-        def mock_entries
-          entries = []
-          entries.should_receive(:find).with(1).and_return(entry)
-          channel.should_receive(:entries).and_return(entries)
-        end
-
         it "если новость есть" do
-          mock_channel
-          mock_entries
-          get :show, :channel_id => 2, :id => 1
-          assigns(:entry).should == entry
+          get :show, :channel_id => published.channels.first.id, :id => published
+          assigns(:entry).should == published
         end
 
         it "если нет новости в канале, то ошибку" do

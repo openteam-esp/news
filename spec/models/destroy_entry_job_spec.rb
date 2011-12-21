@@ -17,7 +17,7 @@ describe DestroyEntryJob do
     it { draft.destroy_entry_job.should be_nil }
   end
   describe "у восстановленной новости" do
-    before { @job = deleted_draft.destroy_entry_job; @entry = deleted_draft.recycle }
+    before { @job = deleted_draft.destroy_entry_job; @entry = deleted_draft.revivify }
     it { @job.should_not be_persisted }
     it { @entry.destroy_entry_job.should be_nil }
   end

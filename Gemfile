@@ -1,35 +1,5 @@
 source :rubygems
 
-group :development do
-  gem 'annotate',                                 :require => false
-  gem 'guard-rspec',                              :require => false
-  gem 'guard-spork',                              :require => false
-  gem 'hirb',                                     :require => false
-  gem 'libnotify',                                :require => false
-  gem 'rb-inotify',                               :require => false
-  gem 'ruby-graphviz',                            :require => false
-  gem 'spork',                  '>= 0.9.0.rc9',   :require => false
-  gem 'unicorn',                                  :require => false
-end
-
-group :production do
-  gem 'hoptoad_notifier'
-  gem 'pg',                                       :require => false
-end
-
-group :test do
-  gem 'fabrication',                              :require => false
-  gem 'rspec-rails',            '~> 2.6.0',       :require => false
-  gem 'shoulda-matchers',                         :require => false
-  gem 'sqlite3',                                  :require => false
-end
-
-group :development, :test do
-  gem 'rdiscount',                                :require => false
-  gem 'sunspot_solr',                             :require => false
-  gem 'ya2yaml',                                  :require => false
-end
-
 gem 'attribute_normalizer'
 gem 'cancan'
 gem 'ckeditor'
@@ -40,11 +10,11 @@ gem 'delayed_job'
 gem 'devise'
 gem 'dynamic_form'
 gem 'fancy-buttons'
-gem 'friendly_id',              '4.0.0.rc2'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
 gem 'formtastic'
 gem 'formtastic_date_as_string'
+gem 'friendly_id',              '4.0.0.rc2'
 gem 'gilenson'
 gem 'has_enum'
 gem 'has_scope'
@@ -57,7 +27,42 @@ gem 'restfulie'
 gem 'russian'
 gem 'ryba',                                       :require => false
 gem 'sanitize'
+gem 'sass-rails'
 gem 'simple-navigation'
 gem 'state_machine'
 gem 'sunspot_matchers',                           :require => false
 gem 'sunspot_rails'
+
+group :assets do
+  gem 'therubyracer'
+  gem 'coffee-rails'
+  gem 'uglifier'
+end
+
+group :development do
+  gem 'annotate',                                 :require => false
+  gem 'guard-rspec',                              :require => false
+  gem 'guard-spork',                              :require => false
+  gem 'hirb',                                     :require => false
+  gem 'libnotify',                                :require => false
+  gem 'rb-inotify',                               :require => false
+  gem 'rdiscount',                                :require => false
+  gem 'ruby-graphviz',                            :require => false
+  gem 'spork',                  '>= 0.9.0.rc9',   :require => false
+  gem 'sunspot_solr',                             :require => false
+  gem 'unicorn',                                  :require => false
+  gem 'ya2yaml',                                  :require => false
+end
+
+group :production do
+  gem 'hoptoad_notifier'
+  gem 'pg',                                       :require => false
+end
+
+group :test do
+  gem 'fabrication'
+  gem 'rspec-rails',            '~> 2.6.0',       :require => false
+  gem 'shoulda-matchers',                         :require => false
+  gem 'sqlite3',                                  :require => false
+end
+
