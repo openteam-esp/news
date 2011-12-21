@@ -1,17 +1,39 @@
-@import "compass/utilities"
-@import "compass/css3"
+@import 'compass/utilities'
 
 .pagination
-  span
+  margin: 10px 0
+  text-align: center
+
+  .page
     +inline-block
-    border: 1px solid #ccc
-    +border-radius
-    margin: 0 2px
-    &.current,
-    &.gap,
+    border: 0
+    margin: 0
+    padding: 0
+    font-size: 11px
+    list-style: none
+    margin-right: 2px
+
     a
-      +inline-block
-      padding: 5px 10px
-    &.current,
-    &.gap
-      cursor: default
+      border: 1px solid #9aafe5
+      color: #0e509e
+      display: block
+      margin-right: 2px
+      padding: 3px 6px
+      text-decoration: none
+
+      &:hover
+        border: 1px solid #0e509e
+
+      &:active
+        background: #2e6ab1
+        color: #FFFFFF
+        font-weight: bold
+
+  .current
+    background: #2e6ab1
+    color: #FFFFFF
+    cursor:  default
+    font-weight: bold
+    padding: 4px 7px
+
+

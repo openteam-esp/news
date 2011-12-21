@@ -1,0 +1,120 @@
+@import 'compass/utilities'
+@import 'compass/css3'
+
+=state_styles
+  +border-radius(2px)
+  +inline-block
+  color: #555
+  font-size: 11px
+  margin: 10px 20px 0 0
+  padding: 1px 5px
+  text-transform: lowercase
+
+  &.draft
+    background: #e6f8c4
+
+  &.correcting
+    background: #a3def5
+
+  &.publishing
+    background: #deb5c8
+
+  &.published
+    background: #ebce94
+
+  &.fresh, &.restore
+    background: #cfeaa4
+
+  &.processing, &.accept
+    background: #c9d6f7
+
+  &.completed, &.complete
+    background: #d1d2d1
+
+  &.pending, &.cancel
+    background: #ffe699
+
+  &.rejected, &.refuse, &.canceled
+    background: #eab8ae
+
+.item_list
+  li.followed
+    background-image: url('/images/followed.png')
+    background-repeat: no-repeat
+    background-position: right top
+
+  li
+    +single-box-shadow(#eee, 0, 1px, 5px)
+    border-bottom: 1px solid #bbb
+    padding: 15px 20px
+
+    .follow, .unfollow
+      +single-box-shadow(none)
+      +inline-block
+      border: none
+      height: 16px
+      margin: 0 3px 0 0
+      padding: 0
+      text-indent: -9999px
+      width: 16px
+
+
+    .title
+      font-size: 15px
+
+    .state
+      +state_styles
+      float: left
+      clear: both
+      margin-top: 5px
+
+    .time_ago
+      +single-text-shadow(#ddd, 1px, 1px, 1px)
+      color: #666
+      font-size: 11px
+      float: right
+
+    .participants
+      +clearfix
+      +single-text-shadow(#ddd, 1px, 1px, 1px)
+      color: #666
+      margin: 5px 20px 0 0
+
+      .candidates
+        +single-text-shadow(none)
+        color: #aaa
+
+    .entry_title
+      +clearfix
+      +single-text-shadow(#eee, 1px, 1px, 1px)
+      +ellipsis
+      color: #888
+      font-size: 11px
+      height: 23px
+      line-height: 23px
+      padding: 0 20px
+
+    .actions
+      float: right
+      display: none
+
+    form.following
+      float: left
+      margin: 0 6px 0 0
+      width: 16px
+
+    form
+      ol
+        li
+          +single-box-shadow(none)
+          border: none
+          margin: 0
+          padding: 0
+
+
+    &:hover
+      background-color: #eee
+
+      .actions
+        display: block
+

@@ -1,0 +1,70 @@
+@import 'compass/css3'
+
+.sidebar
+  .nav
+    h5
+      +single-box-shadow(#ccc, 0, 0px, 10px)
+      border-bottom: 1px solid #ccc
+      border-top: 1px solid #ccc
+      color: #666
+      font-weight: bold
+      margin: 0 0 5px 0
+      padding: 5px 0
+      text-align: center
+
+    ul
+      li
+        font-size: 13px
+        padding: 7px
+
+        a
+          display: block
+
+        .counter
+          +border-radius(4px)
+          +single-text-shadow(#999, 1px, 1px, 1px)
+          background: #656b73
+          color: whitesmoke
+          font-weight: bold
+          float: right
+          padding: 1px 4px
+
+        &.selected
+          +background-image(linear-gradient(#95a1b4,#8391a5))
+          border-top: 1px solid #8391a5
+          a
+            color: whitesmoke
+
+          .counter
+            background: whitesmoke
+            color: #656b73
+
+    form
+      padding: 7px
+
+      .inputs
+        .optional
+          margin: 5px 0
+
+        .string
+          input
+            border: 1px solid #aaa
+            font-size: 13px
+            padding: 2px 3px
+            width: 175px
+
+      .bordered
+        .date
+          label
+            +inline-block
+            width: 18px
+
+          input
+            border: 1px solid #aaa
+            font-size: 13px
+            padding: 2px 3px
+            width: 120px
+
+      .buttons
+        padding: 10px 48px
+

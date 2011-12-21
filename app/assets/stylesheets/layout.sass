@@ -1,0 +1,67 @@
+@import 'compass/utilities'
+
+body, html
+  +min-width(960px)
+  margin: 0 auto
+  height: 100%
+
+  .main_container
+    background: #fcfcfc
+    height: 100%
+    margin-bottom: -20px
+    position: relative
+
+    .header
+      background: #dbe1e8
+      height: 50px
+      //position: relative
+      position: absolute
+      width: 100%
+      z-index: 2
+
+    .content_wrapper, .section
+      border-top: 3px solid #6a7685
+      bottom: 20px
+      left: 0
+      max-height: 100%
+      overflow-y: scroll
+      position: absolute
+      right: 0
+      top: 50px
+
+      &.with_sidebar
+        margin-right: 330px
+
+    .section
+      margin-left: 200px
+
+  .sidebar
+    +clearfix
+    background: #e9edf1
+    border-right: 3px solid #6a7685
+    height: 100%
+    overflow: auto
+    position: absolute
+    top: 0
+    width: 197px
+    z-index: 1
+
+    .nav
+      margin-top: 50px
+
+  .footer
+    background: #dbe1e8
+    font-size: 12px
+    height: 20px
+    line-height: 20px
+    margin-top: -20px
+    padding: 0 15px
+    position: relative
+    text-align: right
+    z-index: 2
+
+    .login_info
+      background: url('/images/noun_project_2.png') no-repeat left
+      float: right
+      padding: 0 0 0 11px
+

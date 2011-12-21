@@ -1,6 +1,7 @@
-@import "compass/css3"
+@import 'compass/css3'
 
 body
+  +single-text-shadow(#ccc, 1px, 1px, 1px)
   color: #444
   background-color: #fff
   font-size: 13px
@@ -16,10 +17,11 @@ $selected_background_color: #8D99AD
     font-family: Verdana, Tahoma, Arial, serif
 
 a
-  color: #0f37af
-  text-decoration: underline
+  color: #444
+  text-decoration: none
+
   &:hover
-    text-decoration: none
+    color: #646464
 
 b, strong
   font-weight: bold
@@ -60,10 +62,10 @@ small
 
 .ajax_loading
   padding-right: 20px
-  background: transparent image_url("ajax_loading.gif") no-repeat right
+  background: transparent url("../images/ajax_loading.gif") no-repeat right
 
 .inline-errors
-  background: transparent image_url("inline_error_arrow.png") no-repeat left center
+  background: url('/images/inline_error_arrow.png') no-repeat left center
   font-size: 12px
   color: #933
   padding: 0 0 0 18px

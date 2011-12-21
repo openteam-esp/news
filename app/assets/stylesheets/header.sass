@@ -1,4 +1,5 @@
 @import 'compass/utilities'
+@import 'list'
 
 .header
   +clearfix
@@ -7,29 +8,25 @@
     float: left
     margin: 7px 0 0 5px
 
-  .download
-    +clearfix
-    background: url('filesave.png') no-repeat
-    line-height: 50px
-    margin: 0 0 0 20px
-    padding: 0 0 0 20px
-
   form
     margin: 8px 0 0 200px
 
   .back_to_list
     +inline-block
-    background: #f6f7f9 url('back.png') no-repeat 12px center
+    background: #f6f7f9 url('/images/back.png') no-repeat 12px center
     height: 18px
     margin: 10px 0 0 0
     padding: 5px 10px 5px 38px
 
   .state
-    +inline-block
+    +state_styles
     margin: 10px 0 0 25px
 
   .composed_title
     +inline-block
+    margin: 10px 0 0 10px
+
+  .to_manage
     margin: 10px 0 0 10px
 
   .sign_in

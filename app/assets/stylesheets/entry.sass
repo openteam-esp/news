@@ -1,0 +1,358 @@
+@import 'compass/utilities'
+@import 'compass/css3'
+@import 'list'
+
+.content_wrapper
+  background: #818a97
+  padding: 0 0 0 10px
+
+  .article
+    +clearfix
+    +min-height(100%)
+    +single-text-shadow(none)
+    border-left: 3px solid #6a7685
+    background: #fcfcfc
+    padding: 0 35px
+
+    .top_stuff
+      +clearfix
+
+      div
+        border-left: 1px solid #aaa
+        float: left
+        margin: 0 50px 0 0
+        padding: 10px 0 5px 10px
+
+        span
+          color: #666
+          display: block
+          font-size: 11px
+          margin: 0 0 5px 0
+        li
+          input
+            width: 100px
+            border: 1px solid #aaa
+            font-size: 12px
+            font-family: Arial, Verdana, Tahoma, sans-serif
+            padding: 4px 5px
+          button
+            width: 16px
+            height: 16px
+            cursor: pointer
+            +inline-block
+            border: none
+            background-color: transparent
+            padding: 0
+            margin: 0 0 4px 0
+          fieldset
+            li
+              font-size: 12px
+              padding: 0
+              margin: 0
+
+    .title
+      color: #111
+      margin: 30px 0 15px
+
+    .annotation, .body p
+      margin: 0 0 20px 0
+
+    .annotation
+      color: #666
+      font-style: italic
+
+    .body
+      +clearfix
+      .float_left
+        float: left
+        margin: 0 10px 10px 0
+      .float_right
+        float: right
+        margin: 0 0 10px 10px
+
+    .entry .inputs
+      margin-top: 20px
+      li
+        margin-bottom: 20px
+      label
+        display: block
+        font-size: 12px
+        font-weight: bold
+      input
+        font-size: 14px
+        font-family: Arial, Verdana, Tahoma, sans-serif
+        width: 98.8%
+        border: 1px solid #D3D3D3
+        padding: 5px
+        +border-radius(5px)
+
+.side_stuff
+  +clearfix
+  +single-text-shadow(none)
+  background: #fcfcfc
+  float: right
+  height: 100%
+  overflow: auto
+  //position: absolute
+  position: relative
+  right: 0
+  width: 330px
+  z-index: 1
+
+  .top_border
+    border-top: 3px solid #6a7685
+    margin-top: 50px
+    position: fixed
+    width: 330px
+    z-index: 3
+
+  .big_margin_top
+    margin: 63px 0 0 10px
+
+  .positive_button
+    margin: 63px 0 0 10px
+
+  .cancel
+    margin: 63px 0 0 10px
+
+  .right_bottom
+    bottom: 30px
+    font-size: 11px
+    position: absolute
+    right: 10px
+    width: 156px
+
+  .lock_info
+    +clearfix
+    float: right
+    margin: 63px 10px 0 0
+    width: 140px
+
+    .locked_by
+      background: url('/images/lock.png') no-repeat left 2px
+      font-size: 12px
+      text-indent: 15px
+
+    .time_ago
+      color: #666
+      font-size: 11px
+
+  .tabs
+    +clearfix
+    font-size: 11px
+    padding: 10px 0 0 10px
+    position: relative
+    width: 320px
+    z-index: 2
+
+    li
+      border: 1px solid transparent
+      border-bottom: 0
+      float: left
+      padding: 7px 12px
+
+    a
+      color: #111
+
+    .active
+      background: #e4e4e4
+      border: 1px solid #aaa
+      border-bottom: 0
+
+    .notices
+      background: url('/images/notices.png') no-repeat left 6px
+      float: right
+      padding-left: 17px
+      margin: 0
+    #issues,
+    #file_upload_link
+      cursor: pointer
+
+  .under_tabs
+    border-top: 1px solid #aaa
+    float: left
+    margin-top: -1px
+    width: 100%
+    z-index: 1
+
+  .events
+    display: none
+
+    li
+      background: #fcfcfc !important
+
+  .issues, .events, .subtasks
+    +clearfix
+    background: #e4e4e4
+    clear: both
+    padding: 4px 0 0 0
+    margin-bottom: 20px
+
+    li
+      +clearfix
+      background: #f9f9f9
+      margin: 3px 0
+
+      &.current
+        background: #e3e3e3 !important
+
+      &.processing
+        border-top: 3px solid #3771c8
+        border-bottom: 3px solid #3771c8
+        background: #fcfcfc
+        margin-top: -3px
+        margin-bottom: -3px
+
+        .subtasks_wrapper
+          display: block
+
+        .title
+          background: url('/images/state_processing.png') no-repeat 8px 11px
+          color: #4d4d4d
+
+      &.pending
+        .title
+          background: url('/images/state_pending.png') no-repeat 8px 11px
+
+      &.completed
+        .title
+          background: url('/images/state_completed.png') no-repeat 8px 11px
+
+      &.fresh
+        .title
+          background: url('/images/state_fresh.png') no-repeat 8px 11px
+
+      &.refused
+        .title
+          background: url('/images/state_refused.png') no-repeat 8px 11px
+
+      &.canceled
+        .title
+          background: url('/images/state_canceled.png') no-repeat 8px 11px
+
+      .title
+        +clearfix
+        color: #808080
+        display: block
+        font-weight: bold
+        padding: 10px 10px 0px 30px
+        width: 290px
+
+        .state
+          +state_styles
+          margin: 0 10px 0 0
+
+        .version_link
+          background: url('/images/version.png') no-repeat left center
+          display: block
+          float: right
+          height: 12px
+          margin: 5px 0 0 0
+          text-indent: -9999px
+          width: 11px
+
+        .description
+          font-size: 12px
+          font-weight: normal
+
+      .time_ago
+        font-weight: normal
+        font-size: 10px
+        float: right
+        line-height: 18px
+
+      .margin-top
+        margin-top: 15px
+
+      .margin-bottom
+        margin-bottom: 10px
+
+      .executor, .initiator
+        font-size: 11px
+        margin: 15px 10px 5px 30px
+        width: 180px
+
+      .comment
+        font-style: italic
+        margin: 0 10px 10px 30px
+
+      .actions
+        +clearfix
+        margin: 0 10px 5px 10px
+
+        .add_subtask
+          +inline-block
+          border-bottom: 1px dashed #444
+          font-size: 11px
+          margin: -56px 0 0 200px
+
+        .refuse_form
+          margin-left: 110px
+          margin-top: -32px
+
+
+        form
+          float: left
+          margin: 0 10px 0 0
+          width: 320px
+
+          li
+            background: none
+
+          .comment_input
+            $default-box-shadow-inset: true
+            +single-box-shadow(#eee, 0, 3px, 4px)
+            border: 1px solid #aaa
+            font-size: 14px
+            height: 26px
+            margin: 0 0 5px 0
+            padding: 4px 5px
+            width: 295px
+
+          input::-webkit-input-placeholder
+            font-style: italic
+          input:-moz-placeholder
+            font-style: italic
+
+      .subtasks_wrapper
+        display: none
+
+        .subtasks
+          padding: 0
+
+          .refuse_form
+            margin-left: 150px
+            margin-top: -35px
+
+        form
+          ol
+            +clearfix
+
+          li
+            margin: 0
+            padding: 0 10px 10px
+
+          .commit
+            float: left
+
+          .cancel_link
+            +inline-block
+            border-bottom: 1px dashed #444
+            font-size: 11px
+            margin: 10px 0 5px 0
+
+          .select, .text
+            select, textarea
+              border: 1px solid #AAA
+              font-size: 14px
+              margin: 0 0 5px 0
+              padding: 4px 5px
+
+            select
+              height: 26px
+              width: 306px
+
+            textarea
+              height: 60px
+              width: 295px
+

@@ -1,0 +1,90 @@
+@import "fancy-buttons"
+
+button,
+a.button,
+input.button
+  +fancy-button
+  font-size: 12px
+  font-weight: normal
+  font-family: Helvetica, Verdana, sans-serif
+  margin: 0
+  vertical-align: middle
+
+  &.new_entry
+    $fb-gradient-style: matte
+    +fancy-button(#5E5E5E, 12px, 4px, 1px)
+    +fancy-button-padding(7px, 11px, 1px)
+
+  &.dark
+    $fb-gradient-style: matte
+    +fancy-button(#5E5E5E, 12px, 4px, 1px)
+    +fancy-button-padding(3px, 6px, 1px)
+
+  &.positive_button
+    $fb-gradient-style: matte
+    +fancy-button(#4A82D5, 13px, 4px, 1px)
+    +fancy-button-padding(10px, 15px, 1px)
+    background-repeat: no-repeat
+    background-position: 9px center
+    padding-left: 30px
+
+  &.complete, &.accept, &.add, &.search
+    $fb-gradient-style: matte
+    +fancy-button(#568CDC, 13px, 4px, 1px)
+    +fancy-button-padding(7px, 15px, 1px)
+    background-repeat: no-repeat
+    background-position: 9px center
+    padding-left: 30px
+
+  &.complete, &.complete:hover
+    background-image: url('/images/complete.png')
+
+  &.accept, &.accept:hover, &.positive_button, &.positive_button:hover, &.search, &.search:hover
+    background-image: url('/images/accept.png')
+
+  &.add, &.add:hover
+    background-image: url('/images/add.png')
+
+  &.cancel, &.refuse, &.restore, &.to_trash, &.revivify, &.follow, &.unfollow
+    $fb-gradient-style: matte
+    +fancy-button(#eaeaea, 11px, 4px, 1px)
+    +fancy-button-padding(5px, 9px, 1px)
+    font-weight: normal
+
+  &.to_trash, &.to_trash:hover
+    background: #efb9bb url('/images/trash.png') no-repeat 9px center
+    padding-left: 30px
+
+  &.to_trash:hover, &.to_trash:active
+    background-color: #e99da0
+
+  &.revivify, &.revivify:hover
+    background: #e0f4bd url('/images/revivify.png') no-repeat 9px center
+    padding-left: 30px
+
+  &.revivify:hover, &.revivify:active
+    background-color: #c5eb82
+
+  &.follow, &.follow:hover
+    background: url('/images/follow.png') no-repeat center center
+
+  &.unfollow, &.unfollow:hover
+    background: url('/images/unfollow.png') no-repeat center center
+
+  &.disabled
+    background: #EBEBEB url('/images/lock.png') no-repeat 10px 12px
+    color: #787878 !important
+    font-weight: normal
+    text-shadow: none
+
+    &:active
+      background: red
+
+    &:hover, &:active
+      +single-box-shadow(none)
+      background: #EBEBEB url('/images/lock.png') no-repeat 10px 12px
+      color: #787878
+      font-weight: normal
+      text-shadow: none
+
+
