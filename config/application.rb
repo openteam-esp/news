@@ -19,6 +19,7 @@ module News
     config.autoload_paths += %W(
                                 #{config.root}/app/navigation_renderers
                                 #{config.root}/app/models/tasks
+                                #{config.root}/lib
                                )
 
     config.autoload_paths += %W[#{config.root}/lib/legacy_models] unless Rails.env.production?

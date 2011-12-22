@@ -70,6 +70,10 @@ class Entry < ActiveRecord::Base
 
   default_value_for :initiator do User.current end
 
+  default_value_for :vfs_path do
+    "/news/#{Time.now.strftime('%Y/%m/%d/%H-%M')}-#{SecureRandom.hex(4)}"
+  end
+
   searchable do
     text   :title,      :boost => 3.0
     text   :annotation, :boost => 2.0

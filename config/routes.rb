@@ -41,6 +41,8 @@ News::Application.routes.draw do
 
   resources :followings, :only => [:create, :destroy]
 
+  mount ElVfsClient::Engine => '/'
+
   root :to => 'roots#index'
 end
 

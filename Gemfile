@@ -8,6 +8,7 @@ gem 'configliere'
 gem 'default_value_for'
 gem 'delayed_job'
 gem 'dynamic_form'
+gem 'el_vfs_client'
 gem 'fancy-buttons'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false

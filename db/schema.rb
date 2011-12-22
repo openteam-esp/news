@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111221150527) do
+ActiveRecord::Schema.define(:version => 20111222021245) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(:version => 20111221150527) do
     t.integer  "deleted_by_id"
     t.integer  "destroy_entry_job_id"
     t.string   "slug"
+    t.string   "vfs_path"
   end
 
   add_index "entries", ["deleted_by_id"], :name => "index_entries_on_deleted_by_id"

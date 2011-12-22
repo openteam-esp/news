@@ -36,4 +36,7 @@ News::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Enable identity map
+  config.active_record.identity_map = true
 end
