@@ -1,7 +1,8 @@
-class LegacyAsset < ActiveRecord::Base
-  set_inheritance_column :_type
+require 'secondbase/model'
 
-  establish_connection "legacy_#{Rails.env}"
+class LegacyAsset < SecondBase::Base
+
+  set_inheritance_column :_type
 
   set_table_name "attachments"
 
@@ -13,7 +14,7 @@ class LegacyAsset < ActiveRecord::Base
     if Rails.env.test?
       File.new(Rails.root.join "spec/fixtures/#{file_file_name}")
     else
-      File.new(Rails.root.join "public/.legacy/#{id}/original/#{file_file_name}")
+      File.new(Rails.root.join ".legacy/#{id}/original/#{file_file_name}")
     end
   end
 

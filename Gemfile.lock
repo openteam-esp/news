@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/openteam/secondbase
+  revision: 0025517b064112d3125811a0888b6de5ae826e8a
+  specs:
+    secondbase (0.4.3)
+
+GIT
+  remote: git://github.com/openteam/secondbase
+  revision: 0025517b064112d3125811a0888b6de5ae826e8a
+  specs:
+    secondbase (0.4.3)
+
+GIT
   remote: git://github.com/pshoukry/ckeditor.git
   revision: d9b2ca104e8ebd91cc8eb6446ac1682c974f6af3
   specs:
@@ -299,7 +311,7 @@ DEPENDENCIES
   cancan
   ckeditor!
   coffee-rails
-  compass (~> 0.12.alpha.2)
+  compass (>= 0.12.alpha.2)
   configliere
   default_value_for
   delayed_job
@@ -311,7 +323,7 @@ DEPENDENCIES
   forgery
   formtastic
   formtastic_date_as_string
-  friendly_id (= 4.0.0.rc2)
+  friendly_id (>= 4.0.0.rc2)
   gilenson
   guard-rspec
   guard-spork
@@ -335,6 +347,7 @@ DEPENDENCIES
   ryba
   sanitize
   sass-rails
+  secondbase!
   shoulda-matchers
   simple-navigation
   spork (>= 0.9.0.rc9)

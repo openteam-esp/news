@@ -1,17 +1,20 @@
-production: &normal
-  adapter: postgresql
-  database: espnews
-
 development:
-  <<: *normal
+  adapter: sqlite3
+  database: db/development.sqlite3
+
+production:
+  adapter: sqlite3
+  database: db/production.sqlite3
 
 test:
-  adapter:  nulldb
+  adapter: sqlite3
+  database: db/test.sqlite3
 
-legacy_development:
-  adapter: postgresql
-  database: atonews
+secondbase:
+  development:
+    adapter: sqlite3
+    database: db/legacy_development.sqlite3
 
-legacy_test:
-  adapter:  nulldb
-  schema:   db/legacy_schema.rb
+  test:
+    adapter: sqlite3
+    database: db/legacy_test.sqlite3

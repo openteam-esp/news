@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-if false
 Fabricator(:legacy_entry) do
   title         'Соглашение между администрацией Томской области и ОАО «ТВЭЛ» подписано'
   annotation    'В конце минувшей недели подписано соглашение о сотрудничестве между администрацией ' +
@@ -37,5 +36,4 @@ Fabricator(:legacy_entry) do
   end_date_time "2011-07-21 06:00:00"
   status        "blank"
   target_id     1
-end
 end

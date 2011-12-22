@@ -1,12 +1,12 @@
 # encoding: utf-8
 
+require 'secondbase/model'
 require 'rdiscount'
-require Rails.root.join('app/models/entry')
 
 include ActionView::Helpers::TagHelper
 include ActionView::Helpers::AssetTagHelper
 include ActionView::Helpers::TextHelper
-include Rails.application.routes.url_helpers
+
 
 if false
   class Asset
@@ -45,27 +45,25 @@ if false
       %Q{Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: #{old_to_html}}.html_safe
     end
   end
-end
 
-class Entry
-  def assets_html
-    "".tap do | assets_html |
-      attachments.each do | attachment |
+  class Entry
+    def assets_html
+      "".tap do | assets_html |
+        attachments.each do | attachment |
         assets_html << content_tag(:p, attachment.to_html)
-      end
+        end
       audios.each do | audio |
         assets_html << content_tag(:p, audio.to_html)
       end
       if images.any?
         assets_html << content_tag(:p, images.map(&:to_html).join("\n").html_safe)
       end
+      end
     end
   end
 end
 
-class LegacyEntry < ActiveRecord::Base
-
-  establish_connection "legacy_#{Rails.env}"
+class LegacyEntry < SecondBase::Base
 
   set_table_name "events"
 
@@ -109,15 +107,15 @@ class LegacyEntry < ActiveRecord::Base
       entry.until         = end_date_time
       entry.save :validate => false
       entry.channels      = channels
-      legacy_assets.each do | legacy_asset |
-        asset = Asset.find_or_initialize_by_legacy_id legacy_asset.id
-        asset.entry = entry
-        asset.file = File.open(legacy_asset.file.path)
-        asset.description = legacy_asset.description
-        asset.save :validate => false
-        entry.assets << asset
-      end
-      entry.update_attribute :body, migrated_body + entry.assets_html
+      #legacy_assets.each do | legacy_asset |
+        #asset = Asset.find_or_initialize_by_legacy_id legacy_asset.id
+        #asset.entry = entry
+        #asset.file = File.open(legacy_asset.file.path)
+        #asset.description = legacy_asset.description
+        #asset.save :validate => false
+        #entry.assets << asset
+      #end
+      #entry.update_attribute :body, migrated_body + entry.assets_html
       entry.prepare.complete!
       if status.to_s != 'blank'
         entry.review.accept!
