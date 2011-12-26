@@ -58,3 +58,5 @@ module News
 
   end
 end
+
+require Rails.root.join 'app/models/tasks/task'

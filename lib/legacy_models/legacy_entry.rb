@@ -8,68 +8,19 @@ include ActionView::Helpers::AssetTagHelper
 include ActionView::Helpers::TextHelper
 
 
-if false
-  class Asset
-    attr_accessor :description
-    def path
-      asset_path id, file_name
-    end
-    def to_html
-      content_tag :a, self.to_s, :target => '_blank', :href => path
-    end
-    def to_s
-      description
-    end
-  end
-
-  class Image
-    def to_s
-      height = 150
-      if file_height > height
-        ratio = height / file_height.to_f
-        width = (file_width * ratio).to_i
-      else
-        height = file_height
-        width = file_width
-      end
-      tag :img, :src => image_path(id, width, height, file_name), :alt => description, :width => width, :height => height
-    end
-  end
-
-  class Audio
-    alias :old_to_html :to_html
-    def to_html
-      content_tag(:audio, deprecated_browser_message, :src => path, :controls => true)
-    end
-    def deprecated_browser_message
-      %Q{Ваш браузер не поддерживает тэг audio. Вы можете скачать файл: #{old_to_html}}.html_safe
-    end
-  end
-
-  class Entry
-    def assets_html
-      "".tap do | assets_html |
-        attachments.each do | attachment |
-        assets_html << content_tag(:p, attachment.to_html)
-        end
-      audios.each do | audio |
-        assets_html << content_tag(:p, audio.to_html)
-      end
-      if images.any?
-        assets_html << content_tag(:p, images.map(&:to_html).join("\n").html_safe)
-      end
-      end
-    end
-  end
-end
-
 class LegacyEntry < SecondBase::Base
 
   set_table_name "events"
 
-  has_many :legacy_assets, :foreign_key => 'event_id'
-
   default_scope order('id desc')
+
+  has_many :assets, :foreign_key => 'event_id', :class_name => 'LegacyAsset'
+
+  %w[audio image attachment].each do | type |
+    define_method "#{type.pluralize}" do
+      assets.select(&:"#{type}?")
+    end
+  end
 
   def migrated_body
     RDiscount.new(body.chomp).to_html
@@ -107,15 +58,7 @@ class LegacyEntry < SecondBase::Base
       entry.until         = end_date_time
       entry.save :validate => false
       entry.channels      = channels
-      #legacy_assets.each do | legacy_asset |
-        #asset = Asset.find_or_initialize_by_legacy_id legacy_asset.id
-        #asset.entry = entry
-        #asset.file = File.open(legacy_asset.file.path)
-        #asset.description = legacy_asset.description
-        #asset.save :validate => false
-        #entry.assets << asset
-      #end
-      #entry.update_attribute :body, migrated_body + entry.assets_html
+      entry.update_attribute :body, migrated_body + assets_html
       entry.prepare.complete!
       if status.to_s != 'blank'
         entry.review.accept!
@@ -130,6 +73,24 @@ class LegacyEntry < SecondBase::Base
   end
 
   private
+    def assets_html
+      "".tap do | assets_html |
+        attachments.each do | attachment |
+          assets_html << content_tag(:p, attachment.to_html)
+        end
+        audios.each do | audio |
+          assets_html << content_tag(:p, audio.to_html)
+        end
+        if images.any?
+          assets_html << content_tag(:p, images.map(&:to_html).join("\n").html_safe)
+        end
+      end
+    end
+
+    def add_image(file)
+
+    end
+
     def initiator
       @initiator ||= User.find_or_initialize_by_email('migrator@pressa.tomsk.gov.ru').tap do | user |
                         user.name = 'Мигратор'
