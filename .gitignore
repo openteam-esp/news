@@ -26,3 +26,5 @@
 # Solr
 /solr/data
 /solr/pids
+
+/.legacy

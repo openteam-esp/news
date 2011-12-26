@@ -25,7 +25,6 @@ User.where(:email => nil).destroy_all
 20.times {
   user = User.new
   user.name = Ryba::Name.full_name
-  user.password = user.password_confirmation = '123123'
   if rand(3).zero?
     user.roles << :corrector
     @correctors << user
@@ -40,29 +39,20 @@ User.where(:email => nil).destroy_all
 
 User.find_or_initialize_by_email('cp@demo.de').tap do | user |
   if user.new_record?
-    user.update_attributes :password => '123123',
-                           :password_confirmation => '123123',
-                           :name => Ryba::Name.full_name,
-                           :roles => [:corrector, :publisher]
+    user.update_attributes :name => Ryba::Name.full_name
   end
 end
 
 (1..2).each do |index|
   User.find_or_initialize_by_email("corrector#{index}@demo.de").tap do | user |
     if user.new_record?
-      user.update_attributes :password => '123123',
-                             :password_confirmation => '123123',
-                             :name => Ryba::Name.full_name,
-                             :roles => [:corrector]
+      user.update_attributes :name => Ryba::Name.full_name
     end
     @correctors << user
   end
   User.find_or_initialize_by_email("publisher#{index}@demo.de").tap do | user |
     if user.new_record?
-      user.update_attributes :password => '123123',
-                             :password_confirmation => '123123',
-                             :name => Ryba::Name.full_name,
-                             :roles => [:publisher]
+      user.update_attributes :name => Ryba::Name.full_name
     end
     @publishers << user
   end
@@ -70,6 +60,7 @@ end
 
 def as(user, &block)
   User.current = user
+  user.roles = [:publisher, :corrector]
   yield
 end
 
@@ -99,11 +90,8 @@ end
 
 Entry.destroy_all
 
-require 'lib/legacy_models/legacy_entry'
-
 YAML.load_file('db/entries.yml').each do | legacy_id, hash |
   as User.sample do
-    LegacyEntry.new hash.merge :author => Ryba::Name.full_name
     Entry.find_or_create_by_legacy_id(legacy_id).tap do | entry |
       entry.update_attributes hash.merge :author => Ryba::Name.full_name
       random = rand(10)
