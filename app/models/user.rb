@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -75,6 +76,7 @@ end
 #  phone              :text
 #  urls               :text
 #  raw_info           :text
+#  roles              :text
 #  sign_in_count      :integer         default(0)
 #  current_sign_in_at :datetime
 #  last_sign_in_at    :datetime

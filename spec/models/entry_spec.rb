@@ -180,6 +180,7 @@ describe Entry do
 end
 
 
+
 # == Schema Information
 #
 # Table name: entries
@@ -201,5 +202,6 @@ end
 #  deleted_by_id        :integer
 #  destroy_entry_job_id :integer
 #  slug                 :string(255)
+#  vfs_path             :string(255)
 #
 
