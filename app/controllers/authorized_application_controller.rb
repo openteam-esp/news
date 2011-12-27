@@ -2,9 +2,8 @@ class AuthorizedApplicationController < ApplicationController
   before_filter :authenticate_user!
   inherit_resources
 
-  before_filter :check_ability, :except => :index
-
   before_filter :set_current_user
+  before_filter :check_ability, :except => :index
 
   protected
 
