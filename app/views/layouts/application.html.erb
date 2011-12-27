@@ -29,7 +29,7 @@
         <div class="login_info">
           <%= current_user.name %>
           <%= "[#{current_user.human_roles.join(', ')}]" if current_user.roles.any? %>
-          <%= link_to t("logout"), destroy_user_session_path, :method => :delete %>
+          <%= link_to t("logout"), destroy_user_session_path %>
         </div>
       <% end %>
     </div>
