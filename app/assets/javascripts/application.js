@@ -10,7 +10,6 @@
  *= require jquery.ui.datepicker.ru.js
  *= require jquery.ui.timepicker.js
  *= require jquery.ui.timepicker.ru.js
- *= require ckeditor/ckeditor.js
  */
 
 var CKEDITOR_BASEPATH = '/assets/ckeditor/';
@@ -208,11 +207,9 @@ $(function() {
   adding_subtaks();
   asset_upload();
   commit_form_entry();
+  preload_images([
+    "/assets/ajax_loading.gif",
+    "/assets/jquery_ui/calendar.png"
+  ]);
 });
 /*////*/
-
-preload_images([
-  "/assets/ajax_loading.gif",
-  "/assets/jquery_ui/calendar.png"
-]);
-

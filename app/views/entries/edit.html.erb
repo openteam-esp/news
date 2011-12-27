@@ -24,6 +24,8 @@
         </div>
       </div>
 
+      <%= javascript_include_tag "ckeditor/ckeditor" %>
+
       <%= form.inputs :class => "inputs common_fields" do %>
         <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
         <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => 100 } %>
