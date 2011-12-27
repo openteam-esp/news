@@ -36,7 +36,7 @@ gem 'sunspot_rails'
 
 group :assets do
   gem 'coffee-rails'
-  gem 'therubyracer'
+  gem 'therubyracer'                                                        unless RUBY_PLATFORM =~ /freebsd/
   gem 'uglifier'
 end
 
@@ -59,6 +59,7 @@ end
 group :production do
   gem 'hoptoad_notifier'
   gem 'pg',                                       :require => false
+  gem 'unicorn',                                  :require => false         unless ENV['SHARED_DATABASE_URL']
 end
 
 group :test do
