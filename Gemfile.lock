@@ -45,13 +45,6 @@ GEM
     builder (3.0.0)
     cancan (1.6.7)
     chunky_png (1.2.5)
-    coffee-rails (3.1.1)
-      coffee-script (>= 2.2.0)
-      railties (~> 3.1.0)
-    coffee-script (2.2.0)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.2.0)
     compass (0.12.alpha.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -135,7 +128,7 @@ GEM
     jquery-rails (1.0.19)
       railties (~> 3.0)
       thor (~> 0.14)
-    json (1.6.3)
+    json (1.6.4)
     json_pure (1.6.3)
     kaminari (0.12.4)
       rails (>= 3.0.0)
@@ -299,7 +292,6 @@ DEPENDENCIES
   attribute_normalizer
   cancan
   ckeditor!
-  coffee-rails
   compass (>= 0.12.alpha.2)
   configliere
   default_value_for

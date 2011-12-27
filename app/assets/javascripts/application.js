@@ -4,9 +4,13 @@
  * It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
  * the compiled file.
  *
- *= require jquery
- *= require jquery-ui
- *= require jquery_ujs
+ *= require jquery.js
+ *= require jquery-ui.js
+ *= require jquery_ujs.js
+ *= require jquery.ui.datepicker.ru.js
+ *= require jquery.ui.timepicker.js
+ *= require jquery.ui.timepicker.ru.js
+ *= require ckeditor/ckeditor.js
  */
 
 var CKEDITOR_BASEPATH = '/assets/ckeditor/';
@@ -36,7 +40,7 @@ function initialize_flash_block() {
 
 function initialize_datepicker() {
   if ($.fn.datepicker) {
-    $("form.formtastic li.date input.date").datepicker({
+    $("form.formtastic li.date_picker input.date_picker").datepicker({
       showOn: "button",
       buttonText: "выбрать",
       buttonImage: "/assets/jquery_ui/calendar.png",

@@ -35,7 +35,6 @@ gem 'sunspot_matchers',                           :require => false
 gem 'sunspot_rails'
 
 group :assets do
-  gem 'coffee-rails'
   gem 'therubyracer'                                                        unless RUBY_PLATFORM =~ /freebsd/
   gem 'uglifier'
 end
