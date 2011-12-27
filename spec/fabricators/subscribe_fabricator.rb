@@ -1,2 +1,0 @@
-Fabricator(:subscribe) do
-end

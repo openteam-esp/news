@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111222021245) do
+ActiveRecord::Schema.define(:version => 20111227113332) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -113,17 +113,6 @@ ActiveRecord::Schema.define(:version => 20111222021245) do
 
   add_index "followings", ["follower_id"], :name => "index_followings_on_follower_id"
   add_index "followings", ["target_id"], :name => "index_followings_on_target_id"
-
-  create_table "messages", :force => true do |t|
-    t.integer  "event_id"
-    t.integer  "user_id"
-    t.text     "text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "messages", ["event_id"], :name => "index_messages_on_event_id"
-  add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
 
   create_table "recipients", :force => true do |t|
     t.string   "email"

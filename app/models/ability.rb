@@ -81,13 +81,6 @@ class Ability
     end
 
     ##################################
-    ###          Messages          ###
-    ##################################
-
-    can [:read, :destroy], Message
-    can [:create, :destroy], Subscribe
-
-    ##################################
     ###           Event            ###
     ##################################
     can :read, Event

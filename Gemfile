@@ -47,7 +47,7 @@ group :development do
   gem 'libnotify',                                :require => false
   gem 'rb-inotify',                               :require => false
   gem 'rdiscount',                                :require => false
-  gem 'ruby-graphviz',                            :require => false
+  gem 'rails-erd'
   gem 'secondbase'
   gem 'spork',                  '>= 0.9.0.rc9',   :require => false
   gem 'sunspot_solr',                             :require => false
