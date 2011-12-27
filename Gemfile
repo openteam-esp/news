@@ -49,7 +49,7 @@ group :development do
   gem 'rb-inotify',                               :require => false
   gem 'rdiscount',                                :require => false
   gem 'ruby-graphviz',                            :require => false
-  gem 'secondbase',                               :git => 'git://github.com/openteam/secondbase'
+  gem 'secondbase'
   gem 'spork',                  '>= 0.9.0.rc9',   :require => false
   gem 'sunspot_solr',                             :require => false
   gem 'unicorn',                                  :require => false
@@ -64,7 +64,7 @@ end
 group :test do
   gem 'fabrication'
   gem 'rspec-rails',            '~> 2.6.0',       :require => false
-  gem 'secondbase',                               :git => 'git://github.com/openteam/secondbase'
+  gem 'secondbase'
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
 end

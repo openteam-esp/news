@@ -27,4 +27,8 @@
 /solr/data
 /solr/pids
 
+# Rails 3.1 assets
+/public/assets
+
+# Legacy data
 /.legacy

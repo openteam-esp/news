@@ -56,7 +56,9 @@ module News
       generators.fixture_replacement  :fabrication
     end
 
+    config.to_prepare do
+      require_dependency Rails.root.join("app/models/tasks/task").to_s
+    end
   end
 end
 
-require Rails.root.join 'app/models/tasks/task'

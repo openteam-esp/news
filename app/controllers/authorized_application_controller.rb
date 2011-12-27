@@ -4,10 +4,15 @@ class AuthorizedApplicationController < ApplicationController
 
   before_filter :check_ability, :except => :index
 
+  before_filter :set_current_user
+
   protected
 
+    def set_current_user
+      User.current = current_user.reload
+    end
+
     def check_ability
-      User.current = current_user
       case action = params[:action].to_sym
       when :show
         action = :read
