@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111227113332) do
+ActiveRecord::Schema.define(:version => 20111227113731) do
 
   create_table "assets", :force => true do |t|
     t.string   "type"
@@ -124,19 +124,6 @@ ActiveRecord::Schema.define(:version => 20111227113332) do
   end
 
   add_index "recipients", ["channel_id"], :name => "index_recipients_on_channel_id"
-
-  create_table "subscribes", :force => true do |t|
-    t.integer  "subscriber_id"
-    t.integer  "initiator_id"
-    t.integer  "entry_id"
-    t.string   "kind"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "subscribes", ["entry_id"], :name => "index_subscribes_on_entry_id"
-  add_index "subscribes", ["initiator_id"], :name => "index_subscribes_on_initiator_id"
-  add_index "subscribes", ["subscriber_id"], :name => "index_subscribes_on_subscriber_id"
 
   create_table "tasks", :force => true do |t|
     t.integer  "entry_id"

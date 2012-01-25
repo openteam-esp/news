@@ -12,8 +12,6 @@
  *= require jquery.ui.timepicker.ru.js
  */
 
-var CKEDITOR_BASEPATH = '/assets/ckeditor/';
-
 function preload_images(images) {
   $("<div />")
     .addClass("images_preload")

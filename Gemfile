@@ -2,7 +2,6 @@ source :rubygems
 
 gem 'attribute_normalizer'
 gem 'cancan'
-gem 'ckeditor',                                   :git => 'git://github.com/pshoukry/ckeditor.git'
 gem 'compass',                  '>= 0.12.alpha.2'
 gem 'configliere'
 gem 'default_value_for'
@@ -10,6 +9,7 @@ gem 'delayed_job'
 gem 'devise-russian'
 gem 'dynamic_form'
 gem 'el_vfs_client'
+gem 'esp-ckeditor'
 gem 'fancy-buttons'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
