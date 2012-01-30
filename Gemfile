@@ -10,6 +10,7 @@ gem 'devise-russian'
 gem 'dynamic_form'
 gem 'el_vfs_client'
 gem 'esp-ckeditor'
+gem 'esp-permissions'
 gem 'fancy-buttons'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
