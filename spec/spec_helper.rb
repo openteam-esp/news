@@ -23,7 +23,6 @@ Spork.prefork do
     config.use_transactional_fixtures = true
     config.after do User.current = nil end
     config.before(:all) do
-      require Rails.root.join 'app/models/tasks/task'
       Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
     end
   end
