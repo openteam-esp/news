@@ -12,7 +12,6 @@ gem 'esp-ckeditor'
 gem 'esp-commons'
 gem 'esp-auth'
 gem 'fancy-buttons'
-gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
 gem 'formtastic'
 gem 'formtastic_date_as_string'
