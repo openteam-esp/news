@@ -14,7 +14,7 @@ class Manage::TasksController < Manage::ApplicationController
       rescue => e
         flash[:alert] = I18n.t('News is not complete')
       end
-      redirect_to entry_path(@task.entry) and return
+      redirect_to manage_entry_path(@task.entry) and return
     }
   end
 

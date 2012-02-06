@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-class Public::EntriesController < ApplicationController
+class EntriesController < ApplicationController
   inherit_resources
 
   respond_to :html, :json
@@ -13,8 +11,7 @@ class Public::EntriesController < ApplicationController
 
   protected
     def resolve_layout
-      return 'public/entry' if action_name == 'show'
-      'public/list'
+      action_name == 'show' ? 'public/entry' : 'public/list'
     end
 
     def collection

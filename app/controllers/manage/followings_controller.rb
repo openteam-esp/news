@@ -2,11 +2,11 @@ class Manage::FollowingsController < Manage::ApplicationController
   actions :create, :destroy
 
   def create
-    create! { tasks_path(:fresh) }
+    create! { manage_tasks_path(:fresh) }
   end
 
   def destroy
-    destroy! { tasks_path(:fresh) }
+    destroy! { manage_tasks_path(:fresh) }
   end
 
   protected

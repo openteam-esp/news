@@ -15,6 +15,6 @@
  *= require entry
  *= require flash
  *= require pagination
- *= require esp_permissions/shared
- *= require esp_permissions
+ *= require esp_auth/shared
+ *= require esp_auth
  */

@@ -1,12 +1,12 @@
 <%= content_for :header do %>
-  <%= link_to t(:to_entries_list), public_entries_path, :class => 'back_to_list' %>
+  <%= link_to t(:to_entries_list), entries_path, :class => 'back_to_list' %>
 
   <div class="composed_title">
     <%= composed_title(@entry) %>
   </div>
 
   <% if current_user %>
-    <%= link_to "Управление новостью", entry_path(@entry), :class => "button to_manage" %>
+    <%= link_to "Управление новостью", manage_entry_path(@entry), :class => "button to_manage" %>
   <% end %>
 <% end  %>
 

@@ -33,16 +33,16 @@ News::Application.routes.draw do
 
     resources :followings, :only => [:create, :destroy]
 
-    root :to => 'roots#index'
+    root :to => 'entries#index', :folder => :fresh
   end
 
-  namespace :public do
+  resources :entries, :only => [:index, :show]
+
+  resources :channels, :only => [] do
     resources :entries, :only => [:index, :show]
-
-    resources :channels, :only => [] do
-      resources :entries, :only => [:index, :show]
-    end
   end
+
+  root :to => 'entries#index'
 
   mount ElVfsClient::Engine => '/'
 

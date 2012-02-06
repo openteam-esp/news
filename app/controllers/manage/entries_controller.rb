@@ -10,7 +10,7 @@ class Manage::EntriesController < Manage::ApplicationController
   has_searcher
 
   def destroy
-    destroy! { root_path }
+    destroy! { manage_root_path }
   end
 
   def edit
@@ -20,7 +20,7 @@ class Manage::EntriesController < Manage::ApplicationController
   end
 
   def create
-    create! { edit_entry_path(@entry) }
+    create! { manage_edit_entry_path(@entry) }
   end
 
   def revivify

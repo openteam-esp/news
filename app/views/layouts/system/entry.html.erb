@@ -1,5 +1,5 @@
 <%= content_for :header do %>
-  <%= link_to t(:to_task_list), tasks_path(:fresh), :class => 'back_to_list' %>
+  <%= link_to t(:to_task_list), manage_tasks_path(:fresh), :class => 'back_to_list' %>
   <div class='state <%= @entry.state %>'>
     <%= I18n.t "state_machine.entry.state.#{@entry.state}" %>
   </div>

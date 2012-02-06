@@ -1,12 +1,12 @@
 <% content_for :header do %>
-  <h1><%= link_to t("News system"), root_path %></h1>
+  <h1><%= link_to t("News system"), manage_root_path %></h1>
 <% end %>
 
 <% content_for :sidebar do %>
   <div class="sidebar">
     <div class="nav">
       <h5><%= t("sidebar.archive.title") %></h5>
-      <%= semantic_search_form_for :entry, :url => public_entries_path do | form | %>
+      <%= semantic_search_form_for :entry, :url => entries_path do | form | %>
         <%= form.inputs do %>
           <%= form.input :keywords, :as => :string %>
           <%= form.input :channel_ids, :as => :check_boxes, :collection => Channel.all %>

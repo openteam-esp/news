@@ -9,9 +9,9 @@
         <div class="title floatl">
           <!-- #TODO remove this stinky code-->
           <% if task.is_a?(Subtask) %>
-            <%= link_to task.truncated_description, entry_path(task.entry) %>
+            <%= link_to task.truncated_description, manage_entry_path(task.entry) %>
           <% else %>
-            <%= link_to task.class.model_name.human, entry_path(task.entry) %>
+            <%= link_to task.class.model_name.human, manage_entry_path(task.entry) %>
           <% end %>
         </div>
 

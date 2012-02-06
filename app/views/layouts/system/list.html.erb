@@ -1,6 +1,6 @@
 <% content_for :header do %>
-  <h1><%= link_to t("News system"), root_path %></h1>
-  <%= semantic_form_for :entry, :url => entries_path do | form | %>
+  <h1><%= link_to t("News system"), manage_root_path %></h1>
+  <%= semantic_form_for :entry, :url => manage_entries_path do | form | %>
     <%= form.buttons do %>
       <%= form.commit_button t('new_entry'), :button_html => { :class => "button new_entry" } %>
     <% end %>

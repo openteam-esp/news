@@ -2,10 +2,9 @@ source :rubygems
 
 gem 'attribute_normalizer'
 gem 'cancan'
-gem 'compass',                  '~> 0.12.alpha.4'
+gem 'compass',                  '= 0.12.alpha.4'
 gem 'default_value_for'
 gem 'delayed_job'
-gem 'devise-russian'
 gem 'dynamic_form'
 gem 'el_vfs_client'
 gem 'esp-ckeditor'
