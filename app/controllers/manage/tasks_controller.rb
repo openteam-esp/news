@@ -1,4 +1,4 @@
-class TasksController < AuthorizedApplicationController
+class Manage::TasksController < Manage::ApplicationController
   actions :index
   custom_actions :resource => :fire_event
 

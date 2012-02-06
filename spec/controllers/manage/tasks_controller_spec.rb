@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe TasksController do
+describe Manage::TasksController do
 
   describe "POST fire_event" do
     before(:each) do

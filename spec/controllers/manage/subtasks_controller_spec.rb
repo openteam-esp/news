@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe SubtasksController do
+describe Manage::SubtasksController do
 
   describe "POST create" do
     before :each do

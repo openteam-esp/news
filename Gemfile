@@ -2,15 +2,15 @@ source :rubygems
 
 gem 'attribute_normalizer'
 gem 'cancan'
-gem 'compass',                  '>= 0.12.alpha.2'
-gem 'configliere'
+gem 'compass',                  '~> 0.12.alpha.4'
 gem 'default_value_for'
 gem 'delayed_job'
 gem 'devise-russian'
 gem 'dynamic_form'
 gem 'el_vfs_client'
 gem 'esp-ckeditor'
-gem 'esp-permissions'
+gem 'esp-commons'
+gem 'esp-auth'
 gem 'fancy-buttons'
 gem 'fog',                                        :require => false
 gem 'forgery',                                    :require => false
@@ -25,7 +25,6 @@ gem 'inherited_resources'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'rails'
-gem 'restfulie'
 gem 'russian'
 gem 'ryba',                                       :require => false
 gem 'sanitize'

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe EntriesController do
+describe Manage::EntriesController do
   before :each do
     set_current_user initiator
     sign_in initiator

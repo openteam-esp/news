@@ -1,4 +1,4 @@
-class FollowingsController < AuthorizedApplicationController
+class Manage::FollowingsController < Manage::ApplicationController
   actions :create, :destroy
 
   def create

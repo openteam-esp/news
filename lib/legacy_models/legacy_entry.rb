@@ -10,7 +10,7 @@ include ActionView::Helpers::TextHelper
 
 class LegacyEntry < SecondBase::Base
 
-  set_table_name "events"
+  self.table_name = "events"
 
   default_scope order('id desc')
 

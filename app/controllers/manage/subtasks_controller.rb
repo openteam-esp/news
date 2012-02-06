@@ -1,4 +1,4 @@
-class SubtasksController < AuthorizedApplicationController
+class Manage::SubtasksController < Manage::ApplicationController
   layout false
 
   actions :new, :create

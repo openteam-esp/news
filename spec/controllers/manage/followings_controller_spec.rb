@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe FollowingsController do
+describe Manage::FollowingsController do
   before(:each) do
     sign_in corrector
     set_current_user corrector

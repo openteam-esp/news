@@ -1,4 +1,4 @@
-class EntriesController < AuthorizedApplicationController
+class Manage::EntriesController < Manage::ApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
   custom_actions :resource => [:delete, :revivify, :unlock]
 

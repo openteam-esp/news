@@ -1,4 +1,4 @@
-class EventsController < AuthorizedApplicationController
+class Manage::EventsController < Manage::ApplicationController
   actions :show
 
   belongs_to :entry, :shallow => true
