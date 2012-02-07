@@ -28,7 +28,7 @@
         <%= render :partial => 'manage/tasks/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
 
         <div class="participants">
-          <%= render :partial => 'followings/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
+          <%= render :partial => 'manage/followings/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
           <%= task.initiator %>
           <%= raw "&rarr; #{task.executor}" if task.executor %>
           <% if task.initiator.followers.any? %>

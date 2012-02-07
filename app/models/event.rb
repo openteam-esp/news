@@ -11,8 +11,6 @@ class Event < ActiveRecord::Base
 
   before_create :save_and_serialize_entry
 
-  default_value_for :user do User.current end
-
   def versioned_entry
     Entry.new.from_json(serialized_entry) if serialized_entry
   end
@@ -23,21 +21,6 @@ class Event < ActiveRecord::Base
       self.serialized_entry = entry.to_json(:methods => [:channel_ids]) if event == 'complete'
     end
 end
-
-# == Schema Information
-#
-# Table name: events
-#
-#  id               :integer         not null, primary key
-#  event            :string(255)
-#  text             :text
-#  entry_id         :integer
-#  user_id          :integer
-#  created_at       :datetime
-#  updated_at       :datetime
-#  serialized_entry :text
-#  task_id          :integer
-#
 
 # == Schema Information
 #

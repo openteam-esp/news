@@ -1,12 +1,14 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
+
+  attr_accessor :current_user
+
   extend FriendlyId
 
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
   belongs_to :deleted_by, :class_name => 'User'
-  belongs_to :destroy_entry_job, :class_name => 'Delayed::Backend::ActiveRecord::Job'
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}, :uniq => true
 
@@ -18,6 +20,8 @@ class Entry < ActiveRecord::Base
   has_one :publish
 
   attr_accessor :locking
+
+  validates_presence_of :initiator
 
   after_validation :unlock, :if => :need_unlock?
 
@@ -44,16 +48,17 @@ class Entry < ActiveRecord::Base
 
   scope :not_deleted, where(:deleted_by_id => nil)
   scope :descending, ->(attribute) { order("#{attribute} desc") }
-  scope :self_initiated, -> { where(:initiator_id => User.current_id) }
+  scope :initiated_by, ->(user) { where(:initiator_id => user) }
   scope :processing, -> { where(:state => processing_states).not_deleted }
   scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
   scope :draft, -> { where(:state => :draft).not_deleted }
+  scope :stale, -> { where("delete_at >= '#{Time.now}'") }
 
-  def self.folder(folder)
+  def self.folder(folder, user)
     case folder.to_sym
-    when :processing  then User.current && User.current.have_permissions? ? processing : processing.self_initiated
-    when :draft       then draft.self_initiated
-    when :deleted     then where(:deleted_by_id => User.current_id)
+    when :processing  then user.have_permissions? ? processing : processing.initiated_by(user)
+    when :draft       then draft.initiated_by(user)
+    when :deleted     then where(:deleted_by_id => user)
     end.descending(:id)
   end
 
@@ -68,8 +73,6 @@ class Entry < ActiveRecord::Base
   after_create :create_tasks
   after_create :create_event
 
-  default_value_for :initiator do User.current end
-
   default_value_for :vfs_path do
     "/news/#{Time.now.strftime('%Y/%m/%d/%H-%M')}-#{SecureRandom.hex(4)}"
   end
@@ -79,7 +82,6 @@ class Entry < ActiveRecord::Base
     text   :annotation, :boost => 2.0
     text   :body,       :boost => 1.0
     date   :since
-    date   :until
     date   :updated_at
     string :state
     integer :channel_ids, :multiple => true
@@ -113,7 +115,7 @@ class Entry < ActiveRecord::Base
 
   def lock
     self.locking = true
-    update_attributes! :locked_at => DateTime.now, :locked_by => User.current
+    update_attributes! :locked_at => DateTime.now, :locked_by => current_user
   end
 
   def locked?
@@ -132,21 +134,18 @@ class Entry < ActiveRecord::Base
     deleted_by_id
   end
 
-  alias :destroy_without_trash :destroy
-
-  def destroy
+  def move_to_trash
     self.tap do | entry |
-      entry.update_attributes :deleted_by => User.current,
-                              :destroy_entry_job => Delayed::Job.enqueue(:run_at => 30.days.since, :payload_object => DestroyEntryJob.new(self.id))
-      entry.tasks.update_all(:deleted_at => Time.now)
+      entry.update_attributes :deleted_by => current_user, :delete_at => Time.now + 1.month
+      entry.tasks.update_all :deleted_at => Time.now
     end
   end
 
   def revivify
     self.tap do | entry |
       entry.destroy_entry_job.destroy
-      entry.update_attributes :deleted_by => nil, :destroy_entry_job => nil
-      entry.tasks.update_all(:deleted_at => nil)
+      entry.update_attributes :deleted_by => nil, :delete_at => nil
+      entry.tasks.update_all :deleted_at => nil
     end
   end
 
@@ -158,15 +157,6 @@ class Entry < ActiveRecord::Base
     tasks.where(['executor_id = ? OR initiator_id = ?', user, user]).exists?
   end
 
-  def distance_destroy_entry
-    distance = (self.destroy_entry_job.run_at - Time.now)
-    return nil if distance < 0
-    return I18n.t("destroy_entry_in_days", :count => ((distance/60/60/24).ceil)) if distance >= 86400
-    return I18n.t("destroy_entry_in_hours", :count => ((distance/60/60).ceil)) if distance >= 3600
-    return I18n.t("destroy_entry_in_minutes", :count => (distance.ceil/60)) if distance >= 60
-    return I18n.t("destroy_entry_less_minute")
-  end
-
   private
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
@@ -175,7 +165,7 @@ class Entry < ActiveRecord::Base
     end
 
     def create_event
-      events.create! :event => 'accept', :task => prepare
+      events.create! :event => 'accept', :task => prepare, :user => current_user
     end
 
     def set_since
@@ -194,23 +184,22 @@ end
 #
 # Table name: entries
 #
-#  id                   :integer         not null, primary key
-#  title                :text
-#  annotation           :text
-#  body                 :text
-#  since                :datetime
-#  until                :datetime
-#  state                :string(255)
-#  author               :string(255)
-#  initiator_id         :integer
-#  created_at           :datetime
-#  updated_at           :datetime
-#  legacy_id            :integer
-#  locked_at            :datetime
-#  locked_by_id         :integer
-#  deleted_by_id        :integer
-#  destroy_entry_job_id :integer
-#  slug                 :string(255)
-#  vfs_path             :string(255)
+#  id            :integer         not null, primary key
+#  delete_at     :datetime
+#  locked_at     :datetime
+#  since         :datetime
+#  deleted_by_id :integer
+#  initiator_id  :integer
+#  legacy_id     :integer
+#  locked_by_id  :integer
+#  author        :string(255)
+#  slug          :string(255)
+#  state         :string(255)
+#  vfs_path      :string(255)
+#  annotation    :text
+#  body          :text
+#  title         :text
+#  created_at    :datetime        not null
+#  updated_at    :datetime        not null
 #
 

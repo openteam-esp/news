@@ -10,10 +10,9 @@ class Manage::FollowingsController < Manage::ApplicationController
   end
 
   protected
-    def build_resource
-      @following = User.current.followings.build(params[:following])
-      @following.follower = User.current
-      @following
+
+    def begin_of_association_chain
+      current_user
     end
 
 

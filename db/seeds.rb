@@ -59,8 +59,6 @@ end
 end
 
 def as(user, &block)
-  User.current = user
-  user.roles = [:publisher, :corrector]
   yield
 end
 

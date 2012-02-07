@@ -29,11 +29,11 @@ class Issue < Task
     end
 
     def after_accept
-      update_attributes! :executor => User.current
+      update_attributes! :executor => current_user
     end
 
     def after_restore
-      update_attributes! :executor => User.current
+      update_attributes! :executor => current_user
       entry.down!
       next_task.try :suspend!
     end

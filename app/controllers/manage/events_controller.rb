@@ -2,6 +2,6 @@ class Manage::EventsController < Manage::ApplicationController
   actions :show
 
   belongs_to :entry, :shallow => true
-  layout 'system/entry'
+  layout 'manage/entry'
 
 end

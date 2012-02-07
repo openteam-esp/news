@@ -4,6 +4,6 @@
 <%= semantic_form_for @entry, :html => { :method => :delete } do | form |  %>
   <%= form.buttons do  %>
     <%= form.commit_button %>
-    <li><%= link_to t('cancel'), @entry %></li>
+    <li><%= link_to t('cancel'), [:manage, @entry] %></li>
   <% end %>
 <% end %>

@@ -4,8 +4,6 @@ class Subtask < Task
 
   belongs_to :issue
 
-  default_value_for :initiator do User.current end
-
   validates_presence_of :executor, :description, :entry
   validate :not_itself_assigned
 

@@ -43,11 +43,14 @@
           </div>
 
           <div class="executor">
-            <% if event.task.is_a?(Subtask) %>
-              <%= event.task.initiator %> &rarr;
+            <% if false %>
+              <% if event.task.is_a?(Subtask) %>
+                <%= event.task.initiator %> &rarr;
+              <% end %>
+              <%= event.task.executor %>
+            <% else %>
+              <%= event.user %>
             <% end %>
-
-            <%= event.task.executor %>
           </div>
 
           <div href="#" class='title margin-bottom'>

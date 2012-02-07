@@ -35,7 +35,7 @@ News::Application.routes.draw do
 
     resources :followings, :only => [:create, :destroy]
 
-    root :to => 'entries#index', :folder => 'draft'
+    root :to => 'tasks#index', :folder => 'fresh'
   end
 
   resources :entries, :only => [:index, :show]

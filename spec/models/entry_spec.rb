@@ -186,7 +186,7 @@ end
 # Table name: entries
 #
 #  id            :integer         not null, primary key
-#  deleted_at    :datetime
+#  delete_at     :datetime
 #  locked_at     :datetime
 #  since         :datetime
 #  deleted_by_id :integer

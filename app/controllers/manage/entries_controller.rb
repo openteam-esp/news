@@ -1,16 +1,22 @@
 class Manage::EntriesController < Manage::ApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
-  custom_actions :resource => [:delete, :revivify, :unlock]
+  custom_actions :resource => [:revivify, :unlock]
+
+  before_filter :set_current_user, :except => [:index, :show]
 
   layout :resolve_layout
 
-  has_scope :folder
+  has_scope :folder do | controller, scope, value |
+    scope.folder(value, controller.current_user)
+  end
+
   has_scope :page, :default => 1, :only => :index
 
   has_searcher
 
   def destroy
-    destroy! { manage_root_path }
+    resource.move_to_trash
+    redirect_to manage_root_path
   end
 
   def edit
@@ -20,7 +26,8 @@ class Manage::EntriesController < Manage::ApplicationController
   end
 
   def create
-    create! { edit_manage_entry_path(@entry) }
+    resource.initiator = current_user
+    create! { edit_manage_entry_path(resource) }
   end
 
   def revivify
@@ -76,9 +83,12 @@ class Manage::EntriesController < Manage::ApplicationController
 
     def resolve_layout
       return 'archive' if current_scopes[:state] == 'published'
-      return 'system/entry' if ['show', 'edit'].include?(action_name)
-      'system/list'
+      return 'manage/entry' if ['show', 'edit'].include?(action_name)
+      'manage/list'
     end
 
+    def set_current_user
+      resource.current_user = current_user
+    end
 end
 

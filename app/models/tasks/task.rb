@@ -1,14 +1,27 @@
 class Task < ActiveRecord::Base
+  attr_accessor :current_user
 
   belongs_to :entry
   belongs_to :initiator, :class_name => 'User'
   belongs_to :executor, :class_name => 'User'
 
-
-  scope :folder, lambda { |folder| User.current.try "#{folder}_tasks" }
   scope :ordered, order('id desc')
   scope :not_deleted, where(:deleted_at => nil)
   scope :processing, where(:state => :processing)
+
+  scope :folder, ->(folder, user) { send folder, user }
+  scope :fresh, ->(user) do
+    types = ['Subtask']
+    types << 'Review' if user.corrector?
+    types << 'Publish' if user.publisher?
+    Task.not_deleted.where(:type => types).where(:state => :fresh).where(['executor_id IS NULL OR executor_id = ?', user])
+  end
+  scope :processed_by_me, ->(user) do
+    Task.not_deleted.processing.where(:executor_id => user)
+  end
+  scope :initiated_by_me, ->(user) do
+    Task.not_deleted.where(:initiator_id => user).where("state <> 'pending'")
+  end
 
   default_scope ordered
 
@@ -27,14 +40,16 @@ class Task < ActiveRecord::Base
     self.class.human_state_events & state_events
   end
 
+
+
   protected
 
     def authorize_transition(transition)
-      Ability.new.authorize!(transition.event, self) if human_state_events.include? transition.event
+      Ability.new(current_user).authorize!(transition.event, self) if human_state_events.include? transition.event
     end
 
     def create_event(transition)
-      entry.events.create! :entry => entry, :task => self, :event => transition.event.to_s if self.class.human_state_events.include? transition.event
+      entry.events.create! :entry => entry, :task => self, :event => transition.event.to_s, :user => current_user if self.class.human_state_events.include? transition.event
     end
 
 end
