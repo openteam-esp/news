@@ -49,13 +49,11 @@ class LegacyEntry < SecondBase::Base
   end
 
   def migrate
-    User.current = initiator
     Entry.find_or_initialize_by_legacy_id(id).tap do |entry|
       entry.title         = title
       entry.annotation    = migrated_annotation
       entry.created_at    = created_at
       entry.since         = date_time
-      entry.until         = end_date_time
       entry.save :validate => false
       entry.channels      = channels
       entry.update_attribute :body, migrated_body + assets_html

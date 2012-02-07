@@ -7,11 +7,6 @@
       </div>
 
       <div>
-        <span>Переместить в архив</span>
-        <%= entry.until ? l(entry.until) : "никогда"  %>
-      </div>
-
-      <div>
         <span>Каналы</span>
         <%= entry.channels.any? ? entry.channels.map(&:title).join(', ') : "не указаны" %>
       </div>

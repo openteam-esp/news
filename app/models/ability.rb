@@ -1,9 +1,8 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user=nil)
-    user ||= (User.current || User.new)
-
+  def initialize(user)
+    can :manage, :all
     ##################################
     ###           Task             ###
     ##################################

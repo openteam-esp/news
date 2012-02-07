@@ -4,12 +4,10 @@ gem 'attribute_normalizer'
 gem 'cancan'
 gem 'compass',                  '= 0.12.alpha.4'
 gem 'default_value_for'
-gem 'delayed_job'
-gem 'delayed_job_active_record'
 gem 'dynamic_form'
 gem 'el_vfs_client'
 gem 'esp-ckeditor'
-gem 'esp-commons'
+gem 'esp-commons',                                :path => '../esp-commons'
 gem 'esp-auth',                                   :path => '../esp-auth'
 gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
@@ -39,7 +37,6 @@ group :assets do
 end
 
 group :development do
-  gem 'annotate',                                 :require => false
   gem 'hirb',                                     :require => false
   gem 'rdiscount',                                :require => false
   gem 'rails-erd'

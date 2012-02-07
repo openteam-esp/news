@@ -40,28 +40,11 @@ ActiveRecord::Schema.define(:version => 20120206171415) do
   add_index "contexts", ["ancestry"], :name => "index_contexts_on_ancestry"
   add_index "contexts", ["weight"], :name => "index_contexts_on_weight"
 
-  create_table "delayed_jobs", :force => true do |t|
-    t.integer  "priority",   :default => 0
-    t.integer  "attempts",   :default => 0
-    t.text     "handler"
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-  end
-
-  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
-
   create_table "entries", :force => true do |t|
+    t.datetime "delete_at"
     t.datetime "locked_at"
     t.datetime "since"
-    t.datetime "until"
     t.integer  "deleted_by_id"
-    t.integer  "destroy_entry_job_id"
     t.integer  "initiator_id"
     t.integer  "legacy_id"
     t.integer  "locked_by_id"
@@ -72,12 +55,12 @@ ActiveRecord::Schema.define(:version => 20120206171415) do
     t.text     "annotation"
     t.text     "body"
     t.text     "title"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
+  add_index "entries", ["delete_at"], :name => "index_entries_on_delete_at"
   add_index "entries", ["deleted_by_id"], :name => "index_entries_on_deleted_by_id"
-  add_index "entries", ["destroy_entry_job_id"], :name => "index_entries_on_destroy_entry_job_id"
   add_index "entries", ["initiator_id"], :name => "index_entries_on_initiator_id"
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"
   add_index "entries", ["locked_by_id"], :name => "index_entries_on_locked_by_id"

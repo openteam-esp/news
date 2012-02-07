@@ -185,23 +185,22 @@ end
 #
 # Table name: entries
 #
-#  id                   :integer         not null, primary key
-#  title                :text
-#  annotation           :text
-#  body                 :text
-#  since                :datetime
-#  until                :datetime
-#  state                :string(255)
-#  author               :string(255)
-#  initiator_id         :integer
-#  created_at           :datetime
-#  updated_at           :datetime
-#  legacy_id            :integer
-#  locked_at            :datetime
-#  locked_by_id         :integer
-#  deleted_by_id        :integer
-#  destroy_entry_job_id :integer
-#  slug                 :string(255)
-#  vfs_path             :string(255)
+#  id            :integer         not null, primary key
+#  deleted_at    :datetime
+#  locked_at     :datetime
+#  since         :datetime
+#  deleted_by_id :integer
+#  initiator_id  :integer
+#  legacy_id     :integer
+#  locked_by_id  :integer
+#  author        :string(255)
+#  slug          :string(255)
+#  state         :string(255)
+#  vfs_path      :string(255)
+#  annotation    :text
+#  body          :text
+#  title         :text
+#  created_at    :datetime        not null
+#  updated_at    :datetime        not null
 #
 

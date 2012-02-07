@@ -24,6 +24,16 @@ PATH
       sunspot_rails
       whenever
 
+PATH
+  remote: ../esp-commons
+  specs:
+    esp-commons (0.0.3)
+      airbrake
+      annotate (>= 2.4.1.beta1)
+      configliere
+      rails
+      russian
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -60,7 +70,7 @@ GEM
       builder
     ancestry (1.2.4)
       activerecord (>= 2.2.2)
-    annotate (2.4.0)
+    annotate (2.4.1.beta1)
     arel (3.0.0)
     attribute_normalizer (1.0.1)
     bcrypt-ruby (3.0.1)
@@ -76,11 +86,6 @@ GEM
       json
     curb (0.8.0)
     default_value_for (1.0.7)
-    delayed_job (3.0.1)
-      activesupport (~> 3.0)
-    delayed_job_active_record (0.3.2)
-      activerecord (> 2.1.0)
-      delayed_job (~> 3.0.0)
     devise (2.0.0)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -98,11 +103,6 @@ GEM
     esp-ckeditor (0.0.8)
       formtastic
       rails
-    esp-commons (0.0.3)
-      airbrake
-      configliere
-      rails
-      russian
     execjs (1.3.0)
       multi_json (~> 1.0)
     fabrication (1.2.0)
@@ -290,18 +290,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  annotate
   attribute_normalizer
   cancan
   compass (= 0.12.alpha.4)
   default_value_for
-  delayed_job
-  delayed_job_active_record
   dynamic_form
   el_vfs_client
   esp-auth!
   esp-ckeditor
-  esp-commons
+  esp-commons!
   fabrication
   fancy-buttons
   forgery

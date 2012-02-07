@@ -10,16 +10,12 @@
         <%= form.inputs do %>
           <%= form.input :keywords, :as => :string %>
           <%= form.input :channel_ids, :as => :check_boxes, :collection => Channel.all %>
-          <%= form.input :order_by, :required => false, :include_blank => false, :as => :select, :collection => {'по дате публикации' => 'since desc', 'по дате актуальности' => 'until asc' } %>
+          <%= form.input :order_by, :required => false, :include_blank => false, :as => :select, :collection => {'по дате публикации' => 'since desc' } %>
 
         <% end %>
         <%= form.inputs :since_details, :class => "inputs bordered" do %>
           <%= form.input :since_gt, :as => :date_picker %>
           <%= form.input :since_lt, :as => :date_picker %>
-        <% end %>
-        <%= form.inputs :until_details, :class => "inputs bordered" do %>
-          <%= form.input :until_gt, :as => :date_picker %>
-          <%= form.input :until_lt, :as => :date_picker %>
         <% end %>
         <%= form.buttons do %>
           <%= form.commit_button :button_html => { :class => "button search" } %>

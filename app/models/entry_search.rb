@@ -2,8 +2,6 @@ class EntrySearch < Search
   column :keywords,       :text
   column :since_lt,       :date
   column :since_gt,       :date
-  column :until_lt,       :date
-  column :until_gt,       :date
   column :channel_ids,    :string
   column :channel_slugs,  :string
   column :order_by,       :string
@@ -39,8 +37,6 @@ end
 #  keywords      :text
 #  since_lt      :date
 #  since_gt      :date
-#  until_lt      :date
-#  until_gt      :date
 #  channel_ids   :string
 #  channel_slugs :string
 #  order_by      :string

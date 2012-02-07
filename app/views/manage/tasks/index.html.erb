@@ -1,7 +1,7 @@
 <% if collection.any? %>
   <ul class='item_list'>
     <% collection.each do | task | %>
-      <li class='balnk <%= "followed" if task.initiator.followers.include?(User.current) %>'>
+      <li class='balnk <%= "followed" if task.initiator.followers.include?(current_user) %>'>
         <div class="time_ago">
           <%= time_ago_in_words(task.updated_at) %> назад
         </div>
@@ -25,7 +25,7 @@
           <%= I18n.t "state_machine.task.state.#{task.state}" %>
         </div>
 
-        <%= render :partial => 'tasks/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
+        <%= render :partial => 'manage/tasks/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>
 
         <div class="participants">
           <%= render :partial => 'followings/actions', :locals => {:task => task} if task.respond_to?(:fresh?) && task.fresh? %>

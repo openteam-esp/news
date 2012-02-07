@@ -1,19 +1,13 @@
 <div class="content_wrapper with_sidebar">
   <div class="article">
 
-    <%= semantic_form_for @entry do |form| %>
+    <%= semantic_form_for [:manage, @entry] do |form| %>
 
       <div class="top_stuff">
         <div>
           <span>Опубликовать</span>
           <ol>
             <%= form.input :since, :label => false, :as => :datetime_picker %>
-          </ol>
-        </div>
-        <div>
-          <span>Переместить в архив</span>
-          <ol>
-            <%= form.input :until, :label => false, :as => :datetime_picker %>
           </ol>
         </div>
         <div>
@@ -47,7 +41,7 @@
     <div class="top_border"></div>
 
     <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
-    <%= link_to t('cancel'), @entry, :class => 'button cancel', :id => "cancel_form_entry" %>
+    <%= link_to t('cancel'), [:manage, @entry], :class => 'button cancel', :id => "cancel_form_entry" %>
 
     <%= semantic_form_for @entry, :url => unlock_manage_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
       <%= form.buttons :class => "buttons" do %>
