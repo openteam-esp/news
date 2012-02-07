@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Public::EntriesController do
+describe EntriesController do
   describe "GET index" do
     def searcher
       controller.send(:searcher)

@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Prepare do
   describe "авторизованный пользователь с ролями публикатора и корректора может выполнять" do
-    before { User.current = initiator(:roles => [:corrector, :publisher]) }
+    before { User.current = another_corrector_and_publisher }
     describe "закрытие" do
       it { fresh_correcting.should be_correcting }
       it { fresh_correcting.review.should be_fresh }

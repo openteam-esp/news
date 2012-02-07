@@ -1,7 +1,7 @@
 PATH
   remote: ../esp-auth
   specs:
-    esp-auth (1.0.2)
+    esp-auth (1.0.3)
       ancestry
       cancan
       compass (>= 0.12.alpha.4)
@@ -220,19 +220,19 @@ GEM
     responders (0.6.5)
     rsolr (1.0.6)
       builder (>= 2.1.2)
-    rspec (2.6.0)
-      rspec-core (~> 2.6.0)
-      rspec-expectations (~> 2.6.0)
-      rspec-mocks (~> 2.6.0)
-    rspec-core (2.6.4)
-    rspec-expectations (2.6.0)
+    rspec (2.8.0)
+      rspec-core (~> 2.8.0)
+      rspec-expectations (~> 2.8.0)
+      rspec-mocks (~> 2.8.0)
+    rspec-core (2.8.0)
+    rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
-    rspec-mocks (2.6.0)
-    rspec-rails (2.6.1)
-      actionpack (~> 3.0)
-      activesupport (~> 3.0)
-      railties (~> 3.0)
-      rspec (~> 2.6.0)
+    rspec-mocks (2.8.0)
+    rspec-rails (2.8.1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec (~> 2.8.0)
     ruby-graphviz (0.9.21)
     russian (0.6.0)
       i18n (>= 0.5.0)
@@ -307,7 +307,7 @@ DEPENDENCIES
   forgery
   formtastic
   formtastic_date_as_string
-  friendly_id (>= 4.0.0.rc2)
+  friendly_id
   gilenson
   guard-rspec
   guard-spork
@@ -325,14 +325,14 @@ DEPENDENCIES
   rails-erd
   rb-inotify
   rdiscount
-  rspec-rails (~> 2.6.0)
+  rspec-rails
   russian
   ryba
   sanitize
   sass-rails
   shoulda-matchers
   simple-navigation
-  spork (>= 0.9.0.rc9)
+  spork (>= 1.0.0.rc1)
   sqlite3
   state_machine
   sunspot_matchers

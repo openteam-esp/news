@@ -14,6 +14,7 @@ describe Event do
 
   describe "должен создаваться" do
     def updated_entry(options={})
+      require 'ryba'
       @updated_entry ||= draft.tap do | entry |
                             as initiator do
                               if options[:channels]

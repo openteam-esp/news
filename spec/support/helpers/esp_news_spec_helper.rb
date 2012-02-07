@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module EspSpecHelper
+module EspNewsSpecHelper
 
   def set_current_user(user = nil)
     user ||= initiator
@@ -15,39 +15,43 @@ module EspSpecHelper
     result
   end
 
-  def another_initiator(options={})
-    @another_initiator ||= create_user(options)
+  def another_initiator
+    @another_initiator ||= another_user
   end
 
-  def initiator(options={})
-    @initiator ||= create_user(options)
+  def initiator
+    @initiator ||= user
   end
 
   def corrector
-    @corrector ||= create_user(:roles => :corrector)
+    @corrector ||= corrector_of(root)
   end
 
   def another_corrector
-    @another_corrector ||= create_user(:roles => :corrector)
+    @another_corrector ||= another_corrector_of(root)
   end
 
   def publisher
-    @publisher ||= create_user(:roles => :publisher)
+    @publisher ||= publisher_of(root)
   end
 
   def another_publisher
-    @another_publisher ||= create_user(:roles => :publisher)
+    @another_publisher ||= another_publisher_of(root)
   end
 
   def corrector_and_publisher
-    @corrector_and_publisher ||= create_user(:roles => [:corrector, :publisher])
+    @corrector_and_publisher ||= user.tap do |user|
+      user.permissions.create!(:context => root, :role => :corrector) unless user.corrector_of?(root)
+      user.permissions.create!(:context => root, :role => :publisher) unless user.publisher_of?(root)
+    end
   end
 
-  def create_user(options={})
-    Fabricate(:user, options)
+  def another_corrector_and_publisher
+    @another_corrector_and_publisher ||= another_user.tap do |user|
+      user.permissions.create!(:context => root, :role => :corrector) unless user.corrector_of?(root)
+      user.permissions.create!(:context => root, :role => :publisher) unless user.publisher_of?(root)
+    end
   end
-
-
   def channel
     @channel ||= Fabricate(:channel)
   end

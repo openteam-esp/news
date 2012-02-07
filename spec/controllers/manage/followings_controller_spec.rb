@@ -12,7 +12,7 @@ describe Manage::FollowingsController do
       post :create, :following => { :target_id => initiator.id }
     end
     assigns(:following).should be_persisted
-    response.should redirect_to(tasks_path(:fresh))
+    response.should redirect_to(manage_tasks_path(:fresh))
   end
 
   it "DELETE destroy" do
@@ -22,6 +22,6 @@ describe Manage::FollowingsController do
       delete :destroy, :id => following.id
     end
     assigns(:following).should_not be_persisted
-    response.should redirect_to(tasks_path(:fresh))
+    response.should redirect_to(manage_tasks_path(:fresh))
   end
 end

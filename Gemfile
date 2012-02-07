@@ -15,7 +15,7 @@ gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
 gem 'formtastic'
 gem 'formtastic_date_as_string'
-gem 'friendly_id',              '>= 4.0.0.rc2'
+gem 'friendly_id'
 gem 'gilenson'
 gem 'has_enum'
 gem 'has_scope'
@@ -40,14 +40,9 @@ end
 
 group :development do
   gem 'annotate',                                 :require => false
-  gem 'guard-rspec',                              :require => false
-  gem 'guard-spork',                              :require => false
   gem 'hirb',                                     :require => false
-  gem 'libnotify',                                :require => false
-  gem 'rb-inotify',                               :require => false
   gem 'rdiscount',                                :require => false
   gem 'rails-erd'
-  gem 'spork',                  '>= 0.9.0.rc9',   :require => false
   gem 'sunspot_solr',                             :require => false
   gem 'unicorn',                                  :require => false
   gem 'ya2yaml',                                  :require => false
@@ -61,8 +56,13 @@ end
 
 group :test do
   gem 'fabrication'
-  gem 'rspec-rails',            '~> 2.6.0',       :require => false
+  gem 'guard-rspec',                              :require => false
+  gem 'guard-spork',                              :require => false
+  gem 'libnotify',                                :require => false
+  gem 'rb-inotify',                               :require => false
+  gem 'rspec-rails',                              :require => false
   gem 'shoulda-matchers',                         :require => false
+  gem 'spork',                  '>= 1.0.0.rc1',   :require => false
   gem 'sqlite3',                                  :require => false
 end
 

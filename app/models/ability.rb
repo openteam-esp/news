@@ -63,7 +63,7 @@ class Ability
     end
 
     can :read, Entry do | entry |
-      user.permissions.exists? && !entry.draft?
+      user.have_permissions? && !entry.draft?
     end
     can :read, Entry do | entry |
       entry.has_participant?(user)
@@ -88,7 +88,7 @@ class Ability
     ##################################
     ###           Following        ###
     ##################################
-    if user.permissions.exists?
+    if user.have_permissions?
       can [:create, :destroy], Following do | following |
         following.follower == user
       end

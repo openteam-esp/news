@@ -51,20 +51,20 @@ describe Entry do
     end
 
     describe "для корректора" do
-      before { set_current_user(initiator(:roles => :corrector)) }
+      before { set_current_user(corrector) }
       it_behaves_like "личные"
       it_behaves_like "общие в работе"
     end
 
 
     describe "публикатора" do
-      before { set_current_user(initiator(:roles => :publisher)) }
+      before { set_current_user(publisher) }
       it_behaves_like "личные"
       it_behaves_like "общие в работе"
     end
 
     describe "корректора и публикатора" do
-      before { set_current_user(initiator(:roles => [:corrector, :publisher])) }
+      before { set_current_user(corrector_and_publisher) }
       it_behaves_like "личные"
       it_behaves_like "общие в работе"
     end
