@@ -1,3 +1,29 @@
+PATH
+  remote: ../esp-auth
+  specs:
+    esp-auth (1.0.2)
+      ancestry
+      cancan
+      compass (>= 0.12.alpha.4)
+      curb
+      default_value_for
+      devise
+      devise-russian
+      formtastic
+      has_enum
+      has_scope
+      has_searcher
+      inherited_resources
+      kaminari
+      omniauth
+      omniauth-oauth2
+      progress_bar
+      rails
+      sass
+      sass-rails
+      sunspot_rails
+      whenever
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -69,28 +95,6 @@ GEM
       rails
     erubis (2.7.0)
     escape (0.0.4)
-    esp-auth (1.0.2)
-      ancestry
-      cancan
-      compass (>= 0.12.alpha.4)
-      curb
-      default_value_for
-      devise
-      devise-russian
-      formtastic
-      has_enum
-      has_scope
-      has_searcher
-      inherited_resources
-      kaminari
-      omniauth
-      omniauth-oauth2
-      progress_bar
-      rails
-      sass
-      sass-rails
-      sunspot_rails
-      whenever
     esp-ckeditor (0.0.8)
       formtastic
       rails
@@ -240,7 +244,6 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    secondbase (0.5.0)
     shoulda-matchers (1.0.0)
     simple-navigation (3.6.0)
       activesupport (>= 2.3.2)
@@ -296,7 +299,7 @@ DEPENDENCIES
   delayed_job_active_record
   dynamic_form
   el_vfs_client
-  esp-auth
+  esp-auth!
   esp-ckeditor
   esp-commons
   fabrication
@@ -327,7 +330,6 @@ DEPENDENCIES
   ryba
   sanitize
   sass-rails
-  secondbase
   shoulda-matchers
   simple-navigation
   spork (>= 0.9.0.rc9)
