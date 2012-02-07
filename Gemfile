@@ -5,6 +5,7 @@ gem 'cancan'
 gem 'compass',                  '= 0.12.alpha.4'
 gem 'default_value_for'
 gem 'delayed_job'
+gem 'delayed_job_active_record'
 gem 'dynamic_form'
 gem 'el_vfs_client'
 gem 'esp-ckeditor'
@@ -28,7 +29,6 @@ gem 'ryba',                                       :require => false
 gem 'sanitize'
 gem 'sass-rails'
 gem 'simple-navigation'
-gem 'sso_client'
 gem 'state_machine'
 gem 'sunspot_matchers',                           :require => false
 gem 'sunspot_rails'
@@ -47,7 +47,7 @@ group :development do
   gem 'rb-inotify',                               :require => false
   gem 'rdiscount',                                :require => false
   gem 'rails-erd'
-  gem 'secondbase'
+  #gem 'secondbase'
   gem 'spork',                  '>= 0.9.0.rc9',   :require => false
   gem 'sunspot_solr',                             :require => false
   gem 'unicorn',                                  :require => false

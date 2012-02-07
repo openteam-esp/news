@@ -1,0 +1,9 @@
+ru:
+  activerecord:
+    attributes:
+      permission:
+        role_enum:
+          manager:              Менеджер
+          corrector:            Корректор
+          publisher:            Публикатор
+

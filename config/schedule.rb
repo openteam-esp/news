@@ -1,4 +1,6 @@
-require File.expand_path('../boot', __FILE__)
-require File.expand_path('../environment', __FILE__)
+set :job_template, "/usr/local/bin/bash -l -c ':job'" if RUBY_PLATFORM =~ /freebsd/
 
-every(1.minutes, 'trash.clean')  { Entry.stale.delete_all }
+every :day do
+  rake 'esp_auth:sync'
+  Entry.stale.destroy_all
+end

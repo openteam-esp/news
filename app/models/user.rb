@@ -1,21 +1,21 @@
 class User < ActiveRecord::Base
-  devise :omniauthable, :trackable, :timeoutable
-  attr_accessible :name, :email, :nickname, :first_name, :last_name, :location, :description, :image, :phone, :urls, :raw_info
+  attr_accessible :name, :email, :nickname, :name, :first_name, :last_name, :location, :description, :image, :phone, :urls, :raw_info, :uid
+
+  validates_presence_of :uid
 
   has_many :followings, :foreign_key => :follower_id
   has_many :followers_following,  :foreign_key => :target_id, :order => :follower_id, :class_name => 'Following'
   has_many :followers,  :through => :followers_following
+  has_many :permissions
 
-  has_enum :roles, [:corrector, :publisher], :multiple => true
+  default_value_for :sign_in_count, 0
 
-  def to_s
-    name
-  end
+  devise :omniauthable, :trackable, :timeoutable
 
-  %w[corrector publisher].each do |role|
-    define_method "#{role}?" do
-      roles.map(&:to_s).include?(role)
-    end
+  searchable do
+    integer :uid
+    text :term do [name, email, nickname].join(' ') end
+    integer :permissions_count do permissions.count end
   end
 
   def self.current
@@ -30,10 +30,24 @@ class User < ActiveRecord::Base
     Thread.current[:user] = user
   end
 
-  def self.from_omniauth(hash)
-    User.find_or_initialize_by_uid(hash['uid']).tap do |user|
-      user.update_attributes hash['info']
+  Permission.enums[:role].each do | role |
+    define_method "#{role}_of?" do |context|
+      permissions.for_role(role).for_context_and_ancestors(context).exists?
     end
+    define_method "#{role}?" do
+      permissions.for_role(role).exists?
+    end
+  end
+
+  def contexts
+    permissions.map(&:context).uniq
+  end
+
+  def contexts_tree
+    contexts.flat_map{|c| c.respond_to?(:subtree) ? c.subtree : c}
+            .uniq
+            .flat_map{|c| c.respond_to?(:subcontexts) ? [c] + c.subcontexts : c }
+            .uniq
   end
 
   def fresh_tasks
@@ -76,13 +90,12 @@ end
 #  phone              :text
 #  urls               :text
 #  raw_info           :text
-#  roles              :text
 #  sign_in_count      :integer         default(0)
 #  current_sign_in_at :datetime
 #  last_sign_in_at    :datetime
 #  current_sign_in_ip :string(255)
 #  last_sign_in_ip    :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
+#  created_at         :datetime        not null
+#  updated_at         :datetime        not null
 #
 

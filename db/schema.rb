@@ -11,33 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111227113731) do
-
-  create_table "assets", :force => true do |t|
-    t.string   "type"
-    t.integer  "entry_id"
-    t.string   "file_name"
-    t.string   "file_mime_type"
-    t.integer  "file_size"
-    t.datetime "file_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "deleted_at"
-    t.string   "file_uid"
-    t.integer  "file_width"
-    t.integer  "file_height"
-    t.integer  "legacy_id"
-  end
-
-  add_index "assets", ["entry_id"], :name => "index_assets_on_entry_id"
-  add_index "assets", ["legacy_id"], :name => "index_assets_on_legacy_id"
+ActiveRecord::Schema.define(:version => 20120206171415) do
 
   create_table "channels", :force => true do |t|
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.datetime "deleted_at"
     t.string   "slug"
+    t.string   "title"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "channels_entries", :id => false, :force => true do |t|
@@ -48,6 +29,17 @@ ActiveRecord::Schema.define(:version => 20111227113731) do
   add_index "channels_entries", ["channel_id"], :name => "index_channels_entries_on_channel_id"
   add_index "channels_entries", ["entry_id"], :name => "index_channels_entries_on_entry_id"
 
+  create_table "contexts", :force => true do |t|
+    t.string   "title"
+    t.string   "ancestry"
+    t.string   "weight"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "contexts", ["ancestry"], :name => "index_contexts_on_ancestry"
+  add_index "contexts", ["weight"], :name => "index_contexts_on_weight"
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -57,30 +49,31 @@ ActiveRecord::Schema.define(:version => 20111227113731) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "entries", :force => true do |t|
-    t.text     "title"
-    t.text     "annotation"
-    t.text     "body"
+    t.datetime "locked_at"
     t.datetime "since"
     t.datetime "until"
-    t.string   "state"
-    t.string   "author"
-    t.integer  "initiator_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "legacy_id"
-    t.datetime "locked_at"
-    t.integer  "locked_by_id"
     t.integer  "deleted_by_id"
     t.integer  "destroy_entry_job_id"
+    t.integer  "initiator_id"
+    t.integer  "legacy_id"
+    t.integer  "locked_by_id"
+    t.string   "author"
     t.string   "slug"
+    t.string   "state"
     t.string   "vfs_path"
+    t.text     "annotation"
+    t.text     "body"
+    t.text     "title"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   add_index "entries", ["deleted_by_id"], :name => "index_entries_on_deleted_by_id"
@@ -90,14 +83,14 @@ ActiveRecord::Schema.define(:version => 20111227113731) do
   add_index "entries", ["locked_by_id"], :name => "index_entries_on_locked_by_id"
 
   create_table "events", :force => true do |t|
-    t.string   "event"
-    t.text     "text"
     t.integer  "entry_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "serialized_entry"
     t.integer  "task_id"
+    t.integer  "user_id"
+    t.string   "event"
+    t.text     "serialized_entry"
+    t.text     "text"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   add_index "events", ["entry_id"], :name => "index_events_on_entry_id"
@@ -107,36 +100,54 @@ ActiveRecord::Schema.define(:version => 20111227113731) do
   create_table "followings", :force => true do |t|
     t.integer  "follower_id"
     t.integer  "target_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "followings", ["follower_id"], :name => "index_followings_on_follower_id"
   add_index "followings", ["target_id"], :name => "index_followings_on_target_id"
 
+  create_table "permissions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "context_id"
+    t.string   "context_type"
+    t.string   "role"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "permissions", ["user_id", "role", "context_id", "context_type"], :name => "by_user_and_role_and_context"
+
   create_table "recipients", :force => true do |t|
-    t.string   "email"
-    t.text     "description"
     t.boolean  "active"
     t.integer  "channel_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "email"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "recipients", ["channel_id"], :name => "index_recipients_on_channel_id"
 
+  create_table "subcontexts", :force => true do |t|
+    t.string   "title"
+    t.integer  "context_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "tasks", :force => true do |t|
+    t.datetime "deleted_at"
     t.integer  "entry_id"
-    t.integer  "initiator_id"
     t.integer  "executor_id"
+    t.integer  "initiator_id"
+    t.integer  "issue_id"
     t.string   "state"
     t.string   "type"
     t.text     "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "issue_id"
     t.text     "description"
-    t.datetime "deleted_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "tasks", ["entry_id"], :name => "index_tasks_on_entry_id"
@@ -157,14 +168,13 @@ ActiveRecord::Schema.define(:version => 20111227113731) do
     t.text     "phone"
     t.text     "urls"
     t.text     "raw_info"
-    t.text     "roles"
-    t.integer  "sign_in_count",      :default => 0
+    t.integer  "sign_in_count"
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   add_index "users", ["uid"], :name => "index_users_on_uid"
