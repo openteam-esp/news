@@ -20,7 +20,7 @@ class Manage::EntriesController < Manage::ApplicationController
   end
 
   def create
-    create! { manage_edit_entry_path(@entry) }
+    create! { edit_manage_entry_path(@entry) }
   end
 
   def revivify

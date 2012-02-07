@@ -93,6 +93,14 @@ class Ability
         following.follower == user
       end
     end
+
+    can :manage, :application do
+      true
+    end
+
+    can :manage, :permissions do
+      user.manager?
+    end
   end
 end
 

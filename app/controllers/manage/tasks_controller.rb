@@ -1,6 +1,7 @@
 class Manage::TasksController < Manage::ApplicationController
   actions :index
   custom_actions :resource => :fire_event
+  skip_authorize_resource :only => :index
 
   layout 'system/list'
   has_scope :folder

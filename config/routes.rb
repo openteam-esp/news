@@ -5,9 +5,9 @@ News::Application.routes.draw do
   namespace :manage do
     resources :entries, :except => :index do
       member do
-        get 'delete'
-        post 'revivify'
-        post 'unlock'
+        get  :delete
+        post :revivify
+        post :unlock
       end
       get '/:type/' => 'assets#index', :constraints => { :type => /(assets|images|audios|videos|attachments)/ }
       resources :assets, :only => [:create, :destroy]
@@ -25,7 +25,9 @@ News::Application.routes.draw do
       :as => :tasks,
       :constraints => { :folder => /(fresh|processed_by_me|initiated_by_me)/ }
 
-    post '/tasks/:id/fire_event' => 'tasks#fire_event', :as => :fire_event_task
+    resources :tasks, :only => [] do
+      post :fire_event, :on => :member
+    end
 
     resources :issues, :only => [] do
       resources :subtasks, :only => [:new, :create]
@@ -33,7 +35,7 @@ News::Application.routes.draw do
 
     resources :followings, :only => [:create, :destroy]
 
-    root :to => 'entries#index', :folder => :fresh
+    root :to => 'entries#index', :folder => 'draft'
   end
 
   resources :entries, :only => [:index, :show]

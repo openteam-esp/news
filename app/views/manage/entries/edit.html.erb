@@ -49,7 +49,7 @@
     <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
     <%= link_to t('cancel'), @entry, :class => 'button cancel', :id => "cancel_form_entry" %>
 
-    <%= semantic_form_for @entry, :url => manage_unlock_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
+    <%= semantic_form_for @entry, :url => unlock_manage_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
       <%= form.buttons :class => "buttons" do %>
         <%= form.commit_button t('cancel') %>
       <% end %>

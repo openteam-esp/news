@@ -3,7 +3,7 @@
     <% task.human_state_events.each do | event | %>
       <% if can?(event, task) %>
 
-      <%= semantic_form_for :task, :url => manage_fire_event_task_path(task), :html => { :method => :post, :class => "#{event}_form" } do | form | %>
+      <%= semantic_form_for :task, :url => fire_event_manage_task_path(task), :html => { :method => :post, :class => "#{event}_form" } do | form | %>
         <%= form.inputs do %>
           <%= form.input :event, :value => event, :as => :hidden %>
           <%= form.input :comment,
