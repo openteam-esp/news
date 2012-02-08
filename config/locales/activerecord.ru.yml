@@ -1,0 +1,84 @@
+ru:
+  activerecord:
+    errors:
+      messages:
+        taken: "Уже существует"
+        record_invalid: "Ошибки валидации: %{errors}"
+        invalid_transition: "Ошибка транзакции"
+      models:
+        user:
+          attributes:
+            email:
+              blank: "не введен"
+            password:
+              blank: "не введен"
+              confirmation: "^Пароли не совпадают. Пожалуйста, проверьте."
+              too_short: "слишком короткий"
+
+    models:
+      entry: "новость"
+      recipient: "подписчика"
+      task: Задача
+      prepare: Подготовить черновик
+      review: Откорректировать новость
+      publish: Подготовить к публикации
+
+    attributes:
+      user:
+        name: "ФИО"
+        email: "Email"
+
+      entry:
+        annotation: "Аннотация"
+        assets: "Вложения"
+        attachments: "Файлы"
+        audios: "Аудиофайлы"
+        body: "Текст"
+        channels: "Каналы"
+        events: "История"
+        images: "Изображения"
+        since: "Публиковать с"
+        state_enum:
+          draft: 'Подготавливается'
+          correcting: 'Корректируется'
+          publishing: 'Публикуется'
+          published: 'Обпубликовано'
+        title: "Заголовок"
+        until: "Публиковать до"
+        videos: "Видеофайлы"
+
+      entry_search:
+        keywords: Ключевые слова
+        channel_ids: Каналы
+        order_by: Сортировка
+        since_gt: с
+        since_lt: до
+        until_gt: с
+        until_lt: до
+
+        order_by_enum:
+          "since desc": по дате публикации
+          "until asc": по дате актуальности
+
+      asset:
+        file: "Файл"
+        description: "Описание"
+
+      event:
+        kind_enum:
+          accept_correcting:    Принять на корректуру
+          accept_publicating:   Принять на публикацию
+          discard:              Удалить
+          publish:              Опубликовать
+          recover:              Восстановить
+          request_correcting:   Отправить на корректуру
+          request_publicating:  Отправить на публикацию
+          request_reworking:    Вернуть на доработку
+          restore:              Отменить изменения
+          store:                Сохранить
+
+      recipient:
+        active: "Активен"
+        description: "Примечание"
+
+

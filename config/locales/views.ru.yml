@@ -1,0 +1,8 @@
+ru:
+  views:
+    pagination:
+      previous: "&larr;"
+      next: "&rarr;"
+      first: первая страница
+      last: последняя страница
+

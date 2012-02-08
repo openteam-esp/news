@@ -1,0 +1,24 @@
+ru:
+  "News is not complete": Новость заполнена не полностью
+  add: Добавить
+  cancel: Отменить
+  comment: Комментарий
+  save_entry: Сохранить новость
+  edit_entry: Изменить новость
+  unlock_entry: Разблокировать
+  revivify_entry: Восстановить новость
+  to_trash: "Переместить в корзину"
+  new_entry: "Создать новость"
+  edit: "Редактировать"
+  revivify: "Восттановить из корзины"
+  no_any_entries: "Нет новостей"
+  no_any_tasks: Нет задач
+  to_task_list: К списку задач
+  to_entries_list: К списку новостей
+  blank_entry_title: "(без заголовка)"
+  blank_entry_annotation: "(без аннотации)"
+  blank_entry_body: "(без текста)"
+  "News system": "Новости"
+
+  manage:
+    entries: Управление новостями

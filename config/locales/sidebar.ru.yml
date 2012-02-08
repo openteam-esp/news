@@ -1,0 +1,22 @@
+ru:
+  sidebar:
+    notifications: Уведомления
+
+    tasks:
+      title: Задачи
+      fresh: Новые
+      processed_by_me: Я выполняю
+      initiated_by_me: Я создал
+
+    entries:
+      title: Новости
+      draft: Черновики
+      processing: В работе
+      deleted: Корзина
+
+    archive:
+      title: Архив
+      last_day: За день
+      last_week: За неделю
+      last_month: За месяц
+      search: Поиск...

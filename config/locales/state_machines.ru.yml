@@ -1,0 +1,28 @@
+ru:
+  state_machine:
+    task:
+      state:
+        completed: 'Завершена'
+        fresh: 'Новая'
+        pending: 'Ожидает выполнения предыдущей задачи'
+        processing: 'В работе'
+        canceled: 'Отменена'
+      event:
+        accept: Взять в работу
+        cancel: Отменить
+        complete: Закрыть
+        restore: Возобновить
+        refuse: Отказаться
+      state_for_activity:
+        accept: Взята в работу
+        cancel: Отмена
+        complete: Закрыта
+        restore: Возобновлена
+        refuse: Отказ
+
+    entry:
+      state:
+        draft: 'Черновик'
+        correcting: 'Корректура'
+        publishing: 'Публикация'
+        published: 'Опубликована'

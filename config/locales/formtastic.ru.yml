@@ -1,0 +1,15 @@
+ru:
+  formtastic:
+    required: "обязательное поле"
+    titles:
+      since_details: "Дата публикации"
+      until_details: "Актуально"
+    actions:
+      create: "Создать %{model}"
+      update: "Сохранить"
+      entry_search:
+        create: Поиск
+    labels:
+      event:
+        text: "Комментарий"
+
