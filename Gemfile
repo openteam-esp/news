@@ -12,7 +12,6 @@ gem 'esp-auth',                                   :path => '../esp-auth'
 gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
 gem 'formtastic'
-gem 'formtastic_date_as_string'
 gem 'friendly_id'
 gem 'gilenson'
 gem 'has_enum'

@@ -6,7 +6,7 @@
   </div>
 
   <% if current_user %>
-    <%= link_to "Управление новостью", manage_entry_path(@entry), :class => "button to_manage" %>
+    <%= link_to "Управление новостью", manage_news_entry_path(@entry), :class => "button to_manage" %>
   <% end %>
 <% end  %>
 

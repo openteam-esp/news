@@ -28,8 +28,12 @@ class EntriesController < ApplicationController
         headers['X-Total-Pages'] = results.total_pages.to_s
         results
       else
-        end_of_association_chain.published.page(paginate_options[:page]).per(paginate_options[:per_page])
+        end_of_association_chain.page(paginate_options[:page]).per(paginate_options[:per_page])
       end
+    end
+
+    def end_of_association_chain
+      Entry.published
     end
 
     def paginate_options

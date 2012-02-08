@@ -1,0 +1,19 @@
+<% if can?(:create, current_user.followings.build(:target => task.initiator)) && !task.initiator.followers.include?(current_user) %>
+  <%= semantic_form_for [:manage, :news, current_user.followings.build(:target => task.initiator)] do |form| %>
+    <%= form.inputs do %>
+      <%= form.input :target_id, :as => :hidden %>
+    <% end %>
+    <%= form.buttons do %>
+      <%= form.commit_button "Отмечать задачи от этого пользователя",
+                             :button_html => {:class => 'button follow', :title => 'Отмечать задачи от этого пользователя'} %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if task.initiator.followers.include?(current_user) %>
+  <%= link_to 'Не выделять для меня задачи этого пользователя',
+    [:manage, :news, current_user.following_for(task.initiator)],
+    :method => :delete,
+    :class => 'button unfollow',
+    :title => 'Не выделять для меня задачи этого пользователя' %>
+<% end %>

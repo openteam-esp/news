@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120206171415) do
+ActiveRecord::Schema.define(:version => 20120208121357) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(:version => 20120206171415) do
 
   add_index "recipients", ["channel_id"], :name => "index_recipients_on_channel_id"
 
-  create_table "subcontexts", :force => true do |t|
+  create_table "sites", :force => true do |t|
     t.string   "title"
     t.integer  "context_id"
     t.datetime "created_at", :null => false

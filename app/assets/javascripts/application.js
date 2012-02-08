@@ -151,7 +151,7 @@ function adding_subtaks() {
       add_link.parent().after('<img src="/assets/ajax_loading.gif" height="16" widht="16" style="margin-left: 152px; margin-top: 10px;"/>');
 
       $.ajax({
-        url: '/manage/issues/'+issue_id+'/subtasks/new',
+        url: '/manage/news/issues/'+issue_id+'/subtasks/new',
         success: function(data){
           add_link.parent().next('img').remove();
           $(data).hide().prependTo(subtasks_id).slideDown('slow');

@@ -1,0 +1,32 @@
+<ul class="issues">
+  <% entry.issues.each do |issue| %>
+    <li class='<%= issue.state %>'>
+
+      <div class='title'>
+        <%= issue.description %>
+        <span class="time_ago"><%= time_ago_in_words(issue.created_at) %> назад</span>
+      </div>
+
+      <div class="executor">
+        <%= issue.executor if issue.executor %>
+      </div>
+
+      <% if issue.comment %>
+        <div class="comment">
+          <%= issue.comment %>
+        </div>
+      <% end %>
+
+      <%= render :partial => 'manage/news/tasks/actions', :locals => { :task => issue } %>
+
+      <div class='subtasks_wrapper'>
+        <ul class="subtasks" id='<%= issue.class.name.downcase %>'>
+          <% issue.subtasks_opened.each do | subtask | %>
+            <%= render subtask %>
+          <% end %>
+        </ul>
+      </div>
+
+    </li>
+  <% end %>
+</ul>

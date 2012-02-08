@@ -143,7 +143,6 @@ class Entry < ActiveRecord::Base
 
   def revivify
     self.tap do | entry |
-      entry.destroy_entry_job.destroy
       entry.update_attributes :deleted_by => nil, :delete_at => nil
       entry.tasks.update_all :deleted_at => nil
     end

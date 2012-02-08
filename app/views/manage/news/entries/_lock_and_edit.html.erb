@@ -1,0 +1,30 @@
+<% if entry.locked_by %>
+  <div class="lock_info">
+    <div class="locked_by">
+      <%= entry.locked_by %>
+    </div>
+
+    <div class="time_ago">
+      <%= time_ago_in_words(entry.locked_at) %> назад
+    </div>
+    <%= semantic_form_for entry, :url => unlock_manage_news_entry_path(entry), :html => {:method => :post} do | form | %>
+      <%= form.buttons :class => "buttons" do %>
+        <%= form.commit_button t('unlock_entry'), :button_html => {:class => "button"} %>
+      <% end %>
+    <% end if can?(:unlock, entry) %>
+  </div>
+<% end %>
+
+<%= link_to t('edit_entry'), edit_manage_news_entry_path(entry), :class => "button positive_button #{ability_to(:update, entry)}" %>
+
+<% if @entry.deleted? %>
+  <%= semantic_form_for :entry, :url => revivify_manage_news_entry_path(entry), :html => {:class => 'right_bottom'} do | form | %>
+    <%= form.buttons do %>
+      <%= form.commit_button t('revivify_entry'), :button_html => {:class => 'button revivify'} %>
+      <%= content_tag :li, will_be_destroed_in(entry) %>
+    <% end %>
+  <% end if can?(:revivify, entry) %>
+<% else %>
+  <%= link_to t('to_trash'), manage_news_entry_path, :method => :delete, :class => 'button to_trash right_bottom' if can?(:destroy, entry) %>
+<% end %>
+
