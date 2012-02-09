@@ -1,11 +1,11 @@
 <%= link_to t('.add'), new_manage_channels_channel_path  %>
-<% if contexts_with_channels.any? %>
+<% if collection.any? %>
   <ul class='item_list'>
-    <% contexts_with_channels.each_pair do |context, channels| %>
+    <% collection.each do |context| %>
       <li class='context'>
         <%= context %>
         <ul>
-          <% channels.each do |channel| %>
+          <% context.channels.each do |channel| %>
             <li class='channel'>
               <%= '&nbsp;'.html_safe * channel.ancestry_depth * 2 %> <%= channel %>
               <%= link_to t('commons.delete'), manage_channels_channel_path(channel), :method => :delete, :confirm => t('commons.confirm') %>
@@ -15,6 +15,7 @@
       </li>
     <% end %>
   </ul>
+  <%= paginate collection %>
 <% else %>
   <h2 class='empty'><%= t('.empty_list') %></h2>
 <% end %>

@@ -27,7 +27,7 @@ ru:
     channels:
       title:  Управление каналами
 
-      channels:
+      contexts:
         index:
           empty_list:   Нет каналов
           add:          Добавить канал

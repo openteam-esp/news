@@ -11,6 +11,8 @@ class Permission < ActiveRecord::Base
   end
   scope :for_context, ->(context) { where(:context_id => context.id, :context_type => context.class) }
 
+  scope :for_context_type, ->(context_type) { where(:context_type => context_type) }
+
   scope :for_context_and_ancestors, ->(context) do
     if context.respond_to?(:ancestor_ids)
       for_context_ancestors(context, context.ancestor_ids + [context.id])
