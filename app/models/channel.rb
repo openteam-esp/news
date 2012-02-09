@@ -7,13 +7,16 @@ class Channel < ActiveRecord::Base
   has_many :recipients
   has_and_belongs_to_many :entries, :uniq => true
 
-  validates_presence_of :title, :polymorphic_context
+  validates_presence_of :title, :context, :polymorphic_context
 
-  before_validation :set_context
+  before_validation :set_context_and_parent
+  before_save :set_ancestry_path
 
-  default_scope order('ancestry_depth').order('title')
+  default_scope order(:weight)
 
-  has_ancestry :cache_depth => true
+  has_ancestry
+
+  alias_method :ancestry_depth, :depth
 
   def depth
     ancestry_depth + context.depth + 1
@@ -23,14 +26,31 @@ class Channel < ActiveRecord::Base
 
   protected
 
-    def set_context
+    def set_context_and_parent
       context_type, context_id = polymorphic_context.split('_')
-      if context_type == 'context'
+      case context_type
+      when 'context'
         self.context_id = context_id
-      else
+      when 'channel'
         self.parent_id = context_id
         self.context_id = parent.context_id
       end
+    end
+
+    def set_ancestry_path
+      if parent
+        self.weight = parent.weight + "/" + (parent.children.last.try(:next_position) || "00")
+      else
+        self.weight = context.subcontexts.where(:ancestry => nil).last.try(:next_position) || "00"
+      end
+    end
+
+    def next_position
+      sprintf("%02d", [position + 1, 99].min)
+    end
+
+    def position
+      weight.split('/').last.to_i
     end
 end
 

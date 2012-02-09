@@ -15,13 +15,17 @@ ActiveRecord::Schema.define(:version => 20120208121356) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
-    t.integer  "ancestry_depth"
     t.integer  "context_id"
     t.string   "ancestry"
     t.string   "title"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.text     "weight"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
+
+  add_index "channels", ["ancestry"], :name => "index_channels_on_ancestry"
+  add_index "channels", ["context_id"], :name => "index_channels_on_context_id"
+  add_index "channels", ["weight"], :name => "index_channels_on_weight"
 
   create_table "channels_entries", :id => false, :force => true do |t|
     t.integer "channel_id"

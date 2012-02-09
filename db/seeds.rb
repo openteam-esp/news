@@ -106,4 +106,6 @@ end
 
 end
 
-User.find_or_create_by_uid(1).permissions.create! :context => Context.first, :role => :manager
+User.find_or_create_by_uid(1).tap do | user |
+  user.permissions.create! :context => Context.first, :role => :manager unless user.manager_of?(Context.first)
+end
