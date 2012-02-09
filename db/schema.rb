@@ -11,14 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120208121357) do
+ActiveRecord::Schema.define(:version => 20120208121356) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
-    t.string   "slug"
+    t.integer  "ancestry_depth"
+    t.integer  "context_id"
+    t.string   "ancestry"
     t.string   "title"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "channels_entries", :id => false, :force => true do |t|
@@ -111,13 +113,6 @@ ActiveRecord::Schema.define(:version => 20120208121357) do
   end
 
   add_index "recipients", ["channel_id"], :name => "index_recipients_on_channel_id"
-
-  create_table "sites", :force => true do |t|
-    t.string   "title"
-    t.integer  "context_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "tasks", :force => true do |t|
     t.datetime "deleted_at"

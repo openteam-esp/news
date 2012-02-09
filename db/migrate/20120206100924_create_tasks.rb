@@ -1,15 +1,15 @@
 class CreateTasks < ActiveRecord::Migration
   def change
     create_table :tasks, :force => true do |t|
-      t.datetime :deleted_at
-      t.integer  :entry_id
-      t.integer  :executor_id
-      t.integer  :initiator_id
-      t.integer  :issue_id
-      t.string   :state
-      t.string   :type
-      t.text     :comment
-      t.text     :description
+      t.datetime    :deleted_at
+      t.references  :entry
+      t.references  :executor
+      t.references  :initiator
+      t.references  :issue
+      t.string      :state
+      t.string      :type
+      t.text        :comment
+      t.text        :description
       t.timestamps
     end
 

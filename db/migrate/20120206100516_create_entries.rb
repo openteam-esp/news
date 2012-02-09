@@ -1,20 +1,20 @@
 class CreateEntries < ActiveRecord::Migration
   def change
     create_table :entries, :force => true do |t|
-      t.datetime :delete_at
-      t.datetime :locked_at
-      t.datetime :since
-      t.integer  :deleted_by_id
-      t.integer  :initiator_id
-      t.integer  :legacy_id
-      t.integer  :locked_by_id
-      t.string   :author
-      t.string   :slug
-      t.string   :state
-      t.string   :vfs_path
-      t.text     :annotation
-      t.text     :body
-      t.text     :title
+      t.datetime    :delete_at
+      t.datetime    :locked_at
+      t.datetime    :since
+      t.references  :deleted_by
+      t.references  :initiator
+      t.references  :legacy
+      t.references  :locked_by
+      t.string      :author
+      t.string      :slug
+      t.string      :state
+      t.string      :vfs_path
+      t.text        :annotation
+      t.text        :body
+      t.text        :title
       t.timestamps
     end
 

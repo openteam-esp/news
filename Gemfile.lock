@@ -115,8 +115,8 @@ GEM
     fattr (2.2.1)
     ffi (1.0.11)
     forgery (0.5.0)
-    formtastic (2.0.2)
-      rails (~> 3.0)
+    formtastic (2.1.0.beta1)
+      actionpack (~> 3.0)
     friendly_id (4.0.0)
     fssm (0.2.8.1)
     gilenson (1.2.2)
@@ -128,7 +128,7 @@ GEM
     guard-spork (0.5.2)
       guard (>= 0.10.0)
       spork (>= 0.8.4)
-    has_enum (0.10.0)
+    has_enum (0.10.1)
       rails (> 3.0.0)
     has_scope (0.5.1)
     has_searcher (0.0.11)
@@ -300,7 +300,7 @@ DEPENDENCIES
   fabrication
   fancy-buttons
   forgery
-  formtastic
+  formtastic (>= 2.1.0.beta1)
   friendly_id
   gilenson
   guard-rspec

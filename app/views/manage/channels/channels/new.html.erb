@@ -1,0 +1,10 @@
+<%= semantic_form_for [:manage, :channels, resource] do | form | %>
+  <%= form.inputs do %>
+    <%= polymorphic_context_tree_for(form) %>
+    <%= form.input :title %>
+  <% end %>
+  <%= form.actions do %>
+    <%= form.action :submit %>
+    <%= form.action :cancel, :url => manage_channels_root_path %>
+  <% end %>
+<% end %>

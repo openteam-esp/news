@@ -10,9 +10,9 @@
   </head>
   <body>
     <% content_for :esp_auth_manage_links do %>
-      <% controller_namespace = controller_path.split('/').map(&:inquiry) %>
-      <%= link_to t('manage.entries'), manage_root_path, :class => controller_namespace[1].news? ? 'selected' : nil %>
-      <%= link_to t('manage.sites'), manage_sites_root_path, :class => controller_namespace[1].sites? ? 'selected' : nil %>
+      <% subnamespace = controller_path.split('/').second.to_s.inquiry %>
+      <%= link_to t('manage.entries.title'), manage_root_path, :class => subnamespace.news? ? 'selected' : nil %>
+      <%= link_to t('manage.channels.title'), manage_channels_root_path, :class => subnamespace.channels? ? 'selected' : nil %>
     <% end %>
     <%= render :partial => "esp_auth/shared/header" %>
     <% flash.each do |name, msg| %>

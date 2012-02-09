@@ -32,9 +32,9 @@ News::Application.routes.draw do
         :as => :tasks
       root :to => 'tasks#index', :folder => 'fresh'
     end
-    namespace :sites do
-      resources :sites
-      root :to => 'sites#index'
+    namespace :channels do
+      resources :channels
+      root :to => 'channels#index'
     end
 
     root :to => 'news/tasks#index', :folder => 'fresh'

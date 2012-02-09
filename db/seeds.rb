@@ -1,4 +1,6 @@
 # encoding: utf-8
+
+if false
 require 'ryba'
 require 'forgery'
 
@@ -102,3 +104,6 @@ YAML.load_file('db/entries.yml').each do | legacy_id, hash |
   end
 end
 
+end
+
+User.find_or_create_by_uid(1).permissions.create! :context => Context.first, :role => :manager

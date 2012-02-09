@@ -1,10 +1,10 @@
 class CreateRecipients < ActiveRecord::Migration
   def change
     create_table :recipients, :force => true do |t|
-      t.boolean  :active
-      t.integer  :channel_id
-      t.string   :email
-      t.text     :description
+      t.boolean     :active
+      t.references  :channel
+      t.string      :email
+      t.text        :description
       t.timestamps
     end
 

@@ -1,8 +1,8 @@
 class CreateChannelsEntries < ActiveRecord::Migration
   def change
     create_table :channels_entries, :id => false, :force => true do |t|
-      t.integer :channel_id
-      t.integer :entry_id
+      t.references :channel
+      t.references :entry
     end
 
     add_index :channels_entries, :channel_id

@@ -4,7 +4,7 @@ class Context < ActiveRecord::Base
 
   attr_accessible :id, :title, :ancestry, :weight, :parent
 
-  has_many :subcontexts
+  has_many :subcontexts, :class_name => 'Channel'
   has_many :permissions, :as => :context
 
 

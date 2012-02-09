@@ -21,5 +21,13 @@ ru:
   "News system": "Новости"
 
   manage:
-    entries:  Управление новостями
-    sites:    Управление сайтами и каналами
+    entries:
+      title:  Управление новостями
+
+    channels:
+      title:  Управление каналами
+
+      channels:
+        index:
+          empty_list:   Нет каналов
+          add:          Добавить канал

@@ -1,8 +1,8 @@
 class CreateFollowings < ActiveRecord::Migration
   def change
     create_table :followings, :force => true do |t|
-      t.integer  :follower_id
-      t.integer  :target_id
+      t.references  :follower
+      t.references  :target
       t.timestamps
     end
 

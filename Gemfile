@@ -11,7 +11,7 @@ gem 'esp-commons',                                :path => '../esp-commons'
 gem 'esp-auth',                                   :path => '../esp-auth'
 gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
-gem 'formtastic'
+gem 'formtastic',               '>= 2.1.0.beta1'
 gem 'friendly_id'
 gem 'gilenson'
 gem 'has_enum'
