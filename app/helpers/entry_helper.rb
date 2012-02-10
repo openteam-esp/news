@@ -65,4 +65,9 @@ module EntryHelper
     content
   end
 
+  def image_for(entry)
+    if entry.file_url?
+      content_tag :div, image_tag(entry.file_url.gsub(%r{files/(\d+)/}, 'files/\1/100-100/'), :alt => entry.title), :class => 'entry_image'
+    end
+  end
 end

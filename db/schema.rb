@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20120208121356) do
     t.string   "slug"
     t.string   "state"
     t.string   "vfs_path"
+    t.string   "file_url"
     t.text     "annotation"
     t.text     "body"
     t.text     "title"

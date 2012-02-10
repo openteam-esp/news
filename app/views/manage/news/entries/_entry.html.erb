@@ -14,11 +14,13 @@
 
     <%= presented_header entry %>
 
+
     <div class="annotation">
       <%= presented_html entry, :annotation %>
     </div>
 
     <div class="body">
+      <%= image_for entry %>
       <%= presented_html entry, :body %>
     </div>
 

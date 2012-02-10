@@ -1,4 +1,7 @@
 ru:
+  file: Файл
+  choose_file: Выберите файл
+  file_not_selected: Файл не выбран
   "News is not complete": Новость заполнена не полностью
   add: Добавить
   cancel: Отменить

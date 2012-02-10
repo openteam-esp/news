@@ -1,0 +1,16 @@
+<%= form.input :file_url, :as => :hidden, :input_html => {:id => 'file_url'} %>
+<li class='attached_file'>
+  <label class='label'><%= t('file') %> <abbr title="обязательное поле">*</abbr></label>
+  <div class='wrapper'>
+    <% if form.object.file_url.present? %>
+      <% file_name, name, sg, type = URI.decode(form.object.file_url).match(/([^\/.]+)(\.(.{3}))?$/).to_a %>
+      <%= link_to content_tag(:span)+name, form.object.file_url, :class => type %>
+      <%= link_to t('commons.delete'), '#', :class => 'button icon remove danger delete_file' %>
+    <% else %>
+      <span><%= t('file_not_selected') %></span>
+    <% end %>
+  </div>
+  <%= form.semantic_errors :file_url %>
+</li>
+<%= link_to t('choose_file'), '#', :class => 'choose_file button icon settings', :id => Time.now.to_i %>
+

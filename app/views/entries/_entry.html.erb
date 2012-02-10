@@ -9,6 +9,10 @@
 
     <%= presented_header entry %>
 
+    <% if entry.file_url? %>
+      <%= image_tag entry.file_url %>
+    <% end %>
+
     <div class="annotation">
       <%= presented_html entry, :annotation %>
     </div>
@@ -16,6 +20,7 @@
     <div class="body">
       <%= presented_html entry, :body %>
     </div>
+
   </div>
 </div>
 

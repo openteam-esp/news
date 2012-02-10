@@ -10,6 +10,7 @@
  *= require jquery.ui.datepicker.ru.js
  *= require jquery.ui.timepicker.js
  *= require jquery.ui.timepicker.ru.js
+ *= require info_plugin.js
  */
 
 function preload_images(images) {
@@ -194,6 +195,43 @@ function disabled_link(){
   });
 };
 
+function choose_file(){
+  $('.choose_file').click(function(){
+    var link = $(this);
+    var origin_id = 'file_url';
+    var input = $('#'+origin_id);
+
+    var dialog = link.create_or_return_dialog('elfinder_picture_dialog');
+
+    dialog.attr('id_data', origin_id);
+
+    dialog.load_iframe();
+
+    input.change(function(){
+      var attached_file_wrapper = $('.attached_file');
+      var file_url              = input.val();
+      var file_name = decodeURIComponent(file_url).match(/([^\/.]+)(\.(.{3}))?$/);
+
+      attached_file_wrapper
+        .children('.wrapper')
+        .html('<a href="'+file_url+'" class="'+file_name[3]+'"><span></span>'+file_name[1]+'</a> <a href="#" class="button icon remove danger delete_file">Удалить</a>');
+
+      input.unbind('change');
+    });
+
+    return false;
+  });
+};
+
+function delete_file(){
+  $('.delete_file').live('click', function(){
+      $('.attached_file .wrapper').html('<span>Файл не выбран</span>');
+      $('#file_url').val('');
+
+      return false;
+    });
+};
+
 /* вызов функций после построения полной структуры документа */
 $(function() {
   $("input.focus_first:first").focus();
@@ -209,5 +247,7 @@ $(function() {
     "/assets/ajax_loading.gif",
     "/assets/jquery_ui/calendar.png"
   ]);
+  choose_file();
+  delete_file();
 });
 /*////*/
