@@ -1,18 +1,6 @@
 class User < ActiveRecord::Base
-
-  esp_authable
-
-  has_many :followings, :foreign_key => :follower_id
-  has_many :followers_following,  :foreign_key => :target_id, :order => :follower_id, :class_name => 'Following'
-  has_many :followers,  :through => :followers_following
-
-  def following_for(target)
-    followings.where(:target_id => target).first
-  end
-
+  esp_auth_user
 end
-
-
 
 # == Schema Information
 #

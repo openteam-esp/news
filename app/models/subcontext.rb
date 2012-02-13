@@ -1,15 +1,14 @@
-class Context < ActiveRecord::Base
-  esp_auth_context
+class Subcontext < ActiveRecord::Base
+  esp_auth_subcontext
 end
 
 # == Schema Information
 #
-# Table name: contexts
+# Table name: subcontexts
 #
 #  id         :integer         not null, primary key
 #  title      :string(255)
-#  ancestry   :string(255)
-#  weight     :string(255)
+#  context_id :integer
 #  created_at :datetime        not null
 #  updated_at :datetime        not null
 #
