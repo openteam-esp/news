@@ -1,6 +1,6 @@
 <%= form.input :file_url, :as => :hidden, :input_html => {:id => 'file_url'} %>
 <li class='attached_file'>
-  <label class='label'><%= t('file') %> <abbr title="обязательное поле">*</abbr></label>
+  <label class='label'><%= t('file') %></label>
   <div class='wrapper'>
     <% if form.object.file_url.present? %>
       <% file_name, name, sg, type = URI.decode(form.object.file_url).match(/([^\/.]+)(\.(.{3}))?$/).to_a %>
