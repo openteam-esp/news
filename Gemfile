@@ -6,7 +6,7 @@ gem 'el_vfs_client'
 gem 'esp-ckeditor'
 gem 'esp-commons'
 gem 'esp-auth'
-gem 'compass'
+gem 'compass-rails'
 gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
 gem 'friendly_id'
