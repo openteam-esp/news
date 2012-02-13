@@ -156,6 +156,10 @@ class Entry < ActiveRecord::Base
     tasks.where(['executor_id = ? OR initiator_id = ?', user, user]).exists?
   end
 
+  def as_json(options={})
+    super(options.merge(:only => [:annotation, :author, :body, :slug, :title, :updated_at]))
+  end
+
   private
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator

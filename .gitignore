@@ -32,3 +32,4 @@
 
 # Legacy data
 /.legacy
+log/sunspot-solr-development.log.lck
