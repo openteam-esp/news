@@ -1,10 +1,4 @@
 ru:
-  time:
-    formats:
-      default: "%d.%m.%Y, %H:%M"
-      datetime: "%d.%m.%Y %H:%M"
-      short: "%d.%m.%Y"
-
   destroy_entry_in_days:
     one: Будет автоматически удалена через %{count} день
     few: Будет автоматически удалена через %{count} дня
