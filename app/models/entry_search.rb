@@ -3,7 +3,6 @@ class EntrySearch < Search
   column :since_lt,       :date
   column :since_gt,       :date
   column :channel_ids,    :string
-  column :channel_slugs,  :string
   column :order_by,       :string
   column :per_page,       :integer
   column :state,          :string
