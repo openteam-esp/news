@@ -1,7 +1,7 @@
 class EntriesController < ApplicationController
   inherit_resources
 
-  respond_to :html, :json
+  respond_to :html, :json, :rss
 
   actions :index, :show
 
