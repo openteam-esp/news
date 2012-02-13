@@ -290,7 +290,6 @@ PLATFORMS
 
 DEPENDENCIES
   attribute_normalizer
-  compass
   compass-rails
   dynamic_form
   el_vfs_client
