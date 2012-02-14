@@ -36,7 +36,6 @@ end
 #  since_lt      :date
 #  since_gt      :date
 #  channel_ids   :string
-#  channel_slugs :string
 #  order_by      :string
 #  per_page      :integer
 #  state         :string
