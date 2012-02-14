@@ -1,5 +1,6 @@
 ru:
   file: Файл
+  image_file: Изображение к новости
   choose_file: Выберите файл
   file_not_selected: Файл не выбран
   "News is not complete": Новость заполнена не полностью

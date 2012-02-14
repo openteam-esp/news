@@ -1,6 +1,7 @@
 <%= form.input :image_url, :as => :hidden, :input_html => {:id => 'image_url'} %>
+<%= form.input :image_description %>
 <li class='attached_file'>
-  <label class='label'><%= t('file') %></label>
+  <label class='label'><%= t('image_file') %></label>
   <div class='wrapper'>
     <% if form.object.image_url? %>
       <% file_name, name, sg, type = URI.decode(form.object.image_url).match(/([^\/.]+)(\.(.{3}))?$/).to_a %>

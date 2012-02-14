@@ -37,7 +37,10 @@ ru:
         channels: "Каналы"
         events: "История"
         images: "Изображения"
+        image_description: Описание изображения
         since: "Публиковать с"
+        source: Название Источника
+        source_link: Ссылка на источник
         state_enum:
           draft: 'Подготавливается'
           correcting: 'Корректируется'

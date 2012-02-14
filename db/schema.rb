@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120214023137) do
+ActiveRecord::Schema.define(:version => 20120214082116) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
@@ -62,10 +62,11 @@ ActiveRecord::Schema.define(:version => 20120214023137) do
     t.text     "annotation"
     t.text     "body"
     t.text     "title"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.string   "source"
     t.string   "source_link"
+    t.string   "image_description"
   end
 
   add_index "entries", ["delete_at"], :name => "index_entries_on_delete_at"
