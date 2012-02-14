@@ -157,7 +157,32 @@ class Entry < ActiveRecord::Base
     super(options.merge(:only => [:annotation, :author, :body, :slug, :title, :updated_at]))
   end
 
+  def resized_image_url(options)
+    @resized_image_url ||= begin
+                             width = options[:width]
+                             height = options[:height]
+
+                             dimentions = image_dimentions(file_url)
+                             ar = dimentions[:width].to_f / dimentions[:height].to_f
+
+                             if ar > 1
+                               height = (width / ar).to_i
+                             else
+                               width = (height * ar).to_i
+                             end
+
+                             file_url.gsub(%r{files/(\d+)/([\d-]+)/}, "files/\\1/#{width}-#{height}/")
+                           end
+  end
+
+
+  def image_dimentions(url)
+    width, height = url.match(%r{files/\d+/(\d+)-(\d+)})[1..2]
+    {:width => width, :height => height}
+  end
+
   private
+
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
       create_review :initiator => initiator, :entry => self
