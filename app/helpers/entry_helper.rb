@@ -65,10 +65,10 @@ module EntryHelper
     content
   end
 
-  def image_for(entry, options={})
+  def image_for(entry, options)
     if entry.file_url?
-      resized_url = entry.resized_image_url(options)
-      content_tag :div, image_tag(resized_url, entry.image_dimentions(resized_url).merge(:alt => entry.title)), :class => 'entry_image'
+      entry.resize_image(options)
+      content_tag :div, image_tag(entry.resized_image_url, entry.resized_dimentions.merge(:alt => entry.title)), :class => 'entry_image'
     end
   end
 

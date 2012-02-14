@@ -15,7 +15,7 @@ class EntriesController < ApplicationController
     end
 
     def collection
-      get_collection_ivar || set_collection_ivar(search_and_paginate_collection)
+      get_collection_ivar || set_collection_ivar(paginated_collection_with_resized_image_urls)
     end
 
     def search_and_paginate_collection
@@ -30,6 +30,12 @@ class EntriesController < ApplicationController
         results
       else
         end_of_association_chain.page(paginate_options[:page]).per(paginate_options[:per_page])
+      end
+    end
+
+    def paginated_collection_with_resized_image_urls
+      search_and_paginate_collection.tap do | collection |
+        collection.map{|entry| entry.resize_image(params[:entries_params])} if params[:format] == 'json'
       end
     end
 

@@ -2,7 +2,7 @@
 
 class Entry < ActiveRecord::Base
 
-  attr_accessor :current_user
+  attr_accessor :locking, :current_user, :resized_image_url
 
   extend FriendlyId
 
@@ -19,7 +19,6 @@ class Entry < ActiveRecord::Base
   has_one :review
   has_one :publish
 
-  attr_accessor :locking
 
   validates_presence_of :initiator
 
@@ -154,34 +153,43 @@ class Entry < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super(options.merge(:only => [:annotation, :author, :body, :file_url, :slug, :source, :source_link, :title, :updated_at]))
+    super(options.merge(:only => [:annotation, :author, :body, :slug, :source, :source_link, :title, :updated_at], :methods => :resized_image_url))
   end
 
-  def resized_image_url(options)
-    @resized_image_url ||= begin
-                             width = options[:width]
-                             height = options[:height]
+  def resize_image(options)
+    options ||= {}
 
-                             dimentions = image_dimentions(file_url)
-                             ar = dimentions[:width].to_f / dimentions[:height].to_f
+    width = options[:width].to_i
+    height = options[:height].to_i
 
-                             if ar > 1
-                               height = (width / ar).to_i
-                             else
-                               width = (height * ar).to_i
-                             end
+    width = height = 100 if width.zero? && height.zero?
 
-                             file_url.gsub(%r{files/(\d+)/([\d-]+)/}, "files/\\1/#{width}-#{height}/")
-                           end
+    aspect_ratio = image_dimentions[:width].to_f / image_dimentions[:height].to_f
+
+    if width.zero?
+      width = (height * aspect_ratio).to_i
+    else
+      height = (width / aspect_ratio).to_i
+    end
+
+    self.resized_image_url = file_url.gsub(%r{files/(\d+)/([\d-]+)/}, "files/\\1/#{width}-#{height}/")
+  end
+
+  def image_dimentions
+    @image_dimentions ||= get_image_dimentions(file_url)
   end
 
 
-  def image_dimentions(url)
-    width, height = url.match(%r{files/\d+/(\d+)-(\d+)})[1..2]
-    {:width => width, :height => height}
+  def resized_image_dimentions
+    @resized_image_dimentions ||= get_image_dimentions(resized_image_url)
   end
 
   private
+
+    def get_image_dimentions(url)
+      width, height = url.match(%r{files/\d+/(\d+)-(\d+)})[1..2]
+      {:width => width, :height => height}
+    end
 
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
