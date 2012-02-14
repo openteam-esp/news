@@ -157,6 +157,7 @@ class Entry < ActiveRecord::Base
   end
 
   def resize_image(options)
+    return unless image_url?
     options ||= {}
 
     width = options[:width].to_i
