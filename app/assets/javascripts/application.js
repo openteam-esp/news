@@ -198,7 +198,7 @@ function disabled_link(){
 function choose_file(){
   $('.choose_file').click(function(){
     var link = $(this);
-    var origin_id = 'file_url';
+    var origin_id = 'image_url';
     var input = $('#'+origin_id);
 
     var dialog = link.create_or_return_dialog('elfinder_picture_dialog');
@@ -209,12 +209,12 @@ function choose_file(){
 
     input.change(function(){
       var attached_file_wrapper = $('.attached_file');
-      var file_url              = input.val();
-      var file_name = decodeURIComponent(file_url).match(/([^\/.]+)(\.(.{3}))?$/);
+      var image_url              = input.val();
+      var file_name = decodeURIComponent(image_url).match(/([^\/.]+)(\.(.{3}))?$/);
 
       attached_file_wrapper
         .children('.wrapper')
-        .html('<a href="'+file_url+'" class="'+file_name[3]+'"><span></span>'+file_name[1]+'</a> <a href="#" class="button icon remove danger delete_file">Удалить</a>');
+        .html('<a href="'+image_url+'" class="'+file_name[3]+'"><span></span>'+file_name[1]+'</a> <a href="#" class="button icon remove danger delete_file">Удалить</a>');
 
       input.unbind('change');
     });
@@ -226,7 +226,7 @@ function choose_file(){
 function delete_file(){
   $('.delete_file').live('click', function(){
       $('.attached_file .wrapper').html('<span>Файл не выбран</span>');
-      $('#file_url').val('');
+      $('#image_url').val('');
 
       return false;
     });

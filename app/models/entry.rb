@@ -172,11 +172,11 @@ class Entry < ActiveRecord::Base
       height = (width / aspect_ratio).to_i
     end
 
-    self.resized_image_url = file_url.gsub(%r{files/(\d+)/([\d-]+)/}, "files/\\1/#{width}-#{height}/")
+    self.resized_image_url = image_url.gsub(%r{files/(\d+)/([\d-]+)/}, "files/\\1/#{width}-#{height}/")
   end
 
   def image_dimentions
-    @image_dimentions ||= get_image_dimentions(file_url)
+    @image_dimentions ||= get_image_dimentions(image_url)
   end
 
 
@@ -229,7 +229,7 @@ end
 #  slug          :string(255)
 #  state         :string(255)
 #  vfs_path      :string(255)
-#  file_url      :string(255)
+#  image_url      :string(255)
 #  annotation    :text
 #  body          :text
 #  title         :text

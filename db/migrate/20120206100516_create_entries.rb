@@ -12,7 +12,7 @@ class CreateEntries < ActiveRecord::Migration
       t.string      :slug
       t.string      :state
       t.string      :vfs_path
-      t.string      :file_url
+      t.string      :image_url
       t.text        :annotation
       t.text        :body
       t.text        :title

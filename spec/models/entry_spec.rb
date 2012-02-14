@@ -197,7 +197,7 @@ end
 #  slug          :string(255)
 #  state         :string(255)
 #  vfs_path      :string(255)
-#  file_url      :string(255)
+#  image_url      :string(255)
 #  annotation    :text
 #  body          :text
 #  title         :text
