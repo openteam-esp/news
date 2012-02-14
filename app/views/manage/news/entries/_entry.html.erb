@@ -24,6 +24,12 @@
       <%= presented_html entry, :body %>
     </div>
 
+    <% if entry.source.present? %>
+      <div class="source_info">
+        Источник: <%= link_to entry.source, entry.source_link %>
+      </div>
+    <% end %>
+
   </div>
 </div>
 
