@@ -9,6 +9,11 @@ class EntriesController < ApplicationController
 
   belongs_to :channel, :optional => true
 
+  def show
+    resource.resize_image(params[:entries_params]) if params[:entries_params]
+    show!
+  end
+
   protected
     def resolve_layout
       action_name == 'show' ? 'public/entry' : 'public/list'
