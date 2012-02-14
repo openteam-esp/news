@@ -19,7 +19,6 @@ class Entry < ActiveRecord::Base
   has_one :review
   has_one :publish
 
-
   validates_presence_of :initiator
 
   after_validation :unlock, :if => :need_unlock?
@@ -77,9 +76,13 @@ class Entry < ActiveRecord::Base
   end
 
   searchable do
-    text   :title,      :boost => 3.0
-    text   :annotation, :boost => 2.0
-    text   :body,       :boost => 1.0
+    text   :title,      :boost => 3.0, :more_like_this => true
+    text   :annotation, :boost => 2.0, :more_like_this => true do
+      annotation.to_s.strip_html
+    end
+    text   :body,       :boost => 1.0, :more_like_this => true do
+      body.to_s.strip_html
+    end
     date   :since
     date   :updated_at
     string :state
