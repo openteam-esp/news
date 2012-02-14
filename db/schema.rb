@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120208121356) do
+ActiveRecord::Schema.define(:version => 20120214023137) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(:version => 20120208121356) do
     t.text     "title"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.string   "source"
+    t.string   "source_link"
   end
 
   add_index "entries", ["delete_at"], :name => "index_entries_on_delete_at"
