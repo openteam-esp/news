@@ -34,9 +34,9 @@ class EntriesController < ApplicationController
     end
 
     def paginated_collection_with_resized_image_urls
-      search_and_paginate_collection.tap do | collection |
-        collection.map{|entry| entry.resize_image(params[:entries_params])} if params[:format] == 'json'
-      end
+      entries = search_and_paginate_collection
+      entries.each{|entry| entry.resize_image(params[:entries_params])} if params[:format] == 'json'
+      entries
     end
 
     def end_of_association_chain
