@@ -60,14 +60,6 @@ class Entry < ActiveRecord::Base
     end.descending(:id)
   end
 
-  def truncated_title
-    title.split(/\s+/)[0..4].compact.join(' ') if title
-  end
-
-  def processing_issue
-    issues.select(&:processing?).first
-  end
-
   after_create :create_tasks
   after_create :create_event
 
@@ -89,11 +81,23 @@ class Entry < ActiveRecord::Base
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
   end
 
+  alias_method :sunspot_more_like_this, :more_like_this
+
+  attr_accessor :more_like_this
+
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
   normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
 
   def issues
     [prepare, review, publish]
+  end
+
+  def truncated_title
+    title.split(/\s+/)[0..4].compact.join(' ') if title
+  end
+
+  def processing_issue
+    issues.select(&:processing?).first
   end
 
   def self.all_states
@@ -156,7 +160,8 @@ class Entry < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super(options.merge(:only => [:annotation, :author, :body, :image_description, :slug, :source, :source_link, :title, :since], :methods => :resized_image_url))
+    super options.merge(:only => [:annotation, :author, :body, :image_description, :slug, :source, :source_link, :title, :since],
+                        :methods => [:resized_image_url, :more_like_this])
   end
 
   def resize_image(options)
@@ -186,6 +191,10 @@ class Entry < ActiveRecord::Base
 
   def resized_image_dimentions
     @resized_image_dimentions ||= get_image_dimentions(resized_image_url)
+  end
+
+  def find_more_like_this
+    self.more_like_this = self.sunspot_more_like_this{with(:state, :published)}.results
   end
 
   private
