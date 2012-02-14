@@ -227,5 +227,7 @@ end
 #  title         :text
 #  created_at    :datetime        not null
 #  updated_at    :datetime        not null
+#  source        :string(255)
+#  source_link   :string(255)
 #
 
