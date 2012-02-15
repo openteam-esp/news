@@ -11,6 +11,7 @@ gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
 gem 'friendly_id'
 gem 'gilenson'
+gem 'has_scope'
 gem 'sanitize'
 gem 'sass-rails'
 gem 'simple-navigation'

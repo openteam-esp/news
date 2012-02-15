@@ -7,6 +7,8 @@ class EntriesController < ApplicationController
 
   layout :resolve_layout
 
+  has_scope :by_state, :default => 'published'
+
   belongs_to :channel, :optional => true
 
   def show
@@ -45,10 +47,6 @@ class EntriesController < ApplicationController
       entries = search_and_paginate_collection
       entries.each{|entry| entry.resize_image(params[:entries_params])} if params[:entries_params]
       entries
-    end
-
-    def end_of_association_chain
-      Entry.published
     end
 
     def paginate_options

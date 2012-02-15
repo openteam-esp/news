@@ -303,6 +303,7 @@ DEPENDENCIES
   gilenson
   guard-rspec
   guard-spork
+  has_scope
   jquery-rails
   libnotify
   rails-erd

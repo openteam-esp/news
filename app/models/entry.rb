@@ -44,6 +44,8 @@ class Entry < ActiveRecord::Base
     end
   end
 
+  scope :by_state, ->(state) { where(:state => state) }
+
   scope :not_deleted, where(:deleted_by_id => nil)
   scope :descending, ->(attribute) { order("#{attribute} desc") }
   scope :initiated_by, ->(user) { where(:initiator_id => user) }
