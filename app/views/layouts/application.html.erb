@@ -16,6 +16,7 @@
     <% end %>
     <%= render :partial => "esp_auth/shared/header" %>
     <% flash.each do |name, msg| %>
+      <% next unless %w[notice alert error].include?(name.to_s) %>
       <div class="flash_wrapper" style='display:none;'>
         <%= content_tag :div, msg, :id => "flash_#{name}", :class => "flash_block" %>
         <a href='#' class='close_link'>Закрыть</a>
