@@ -198,7 +198,11 @@ class Entry < ActiveRecord::Base
   def find_more_like_this(options)
     if options[:count].to_i > 0
       self.more_like_this = self.sunspot_more_like_this do
-        boost_by_relevance true
+        boost_by_relevance          true
+        maximum_query_terms         50
+        minimum_document_frequency  2
+        minimum_term_frequency      1
+        minimum_word_length         3
         with(:state, :published)
         with(:channel_ids, options[:channel_id]) if options[:channel_id]
         paginate :per_page => options[:count].to_i
