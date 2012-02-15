@@ -12,10 +12,8 @@ class EntriesController < ApplicationController
   belongs_to :channel, :optional => true
 
   def show
-    if entries_params = params[:entries_params]
-      resource.resize_image(entries_params) if entries_params[:width] || entries_params[:height]
-      resource.find_more_like_this if entries_params[:more_like_this]
-    end
+    resource.resize_image(params[:entries_params]) if params[:entries_params]
+    resource.find_more_like_this(params[:more_like_this].merge(:channel_id => params[:channel_id])) if params[:more_like_this]
     show!
   end
 

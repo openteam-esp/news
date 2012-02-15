@@ -195,8 +195,16 @@ class Entry < ActiveRecord::Base
     @resized_image_dimentions ||= get_image_dimentions(resized_image_url)
   end
 
-  def find_more_like_this
-    self.more_like_this = self.sunspot_more_like_this{with(:state, :published)}.results
+  def find_more_like_this(options)
+    if options[:count].to_i > 0
+      self.more_like_this = self.sunspot_more_like_this do
+        boost_by_relevance true
+        with(:state, :published)
+        with(:channel_ids, options[:channel_id]) if options[:channel_id]
+        paginate :per_page => options[:count].to_i
+      end.results
+      self.more_like_this.each{|entry| entry.resize_image :width => options[:width], :height => options[:height]}
+    end
   end
 
   private
