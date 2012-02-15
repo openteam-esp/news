@@ -64,12 +64,11 @@
         border: 1px solid #ccc
         +border-radius(3px)
 
-    .annotation
-
     .annotation, .body p
       margin: 0 0 20px 0
 
     .annotation
+      +clearfix
       color: #666
       font-style: italic
 
@@ -99,6 +98,17 @@
         border: 1px solid #D3D3D3
         padding: 5px
         +border-radius(5px)
+
+.entry_image
+  +clearfix
+  color: #666
+  float: left
+  font-size: 11px
+  font-style: italic
+
+  img
+    border: none
+    display: block
 
 .side_stuff
   +clearfix
