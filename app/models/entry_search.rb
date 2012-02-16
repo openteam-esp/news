@@ -11,7 +11,7 @@ class EntrySearch < Search
   has_enum :order_by
 
   default_value_for :order_by, 'since desc'
-  default_value_for :channel_ids do Channel.all.map(&:id) end
+  default_value_for :channel_ids do Channel.scoped.pluck(:id) - Channel.without_entries.pluck('id') end
 
   def state
     'published'

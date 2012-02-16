@@ -2,7 +2,7 @@ class AddTypeToEntries < ActiveRecord::Migration
   def up
     add_column :entries, :type, :string
     Entry.update_all :type => 'NewsEntry'
-    Entry.all.map(&:touch)
+    Entry.reindex
   end
 
   def down

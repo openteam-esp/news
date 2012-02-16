@@ -13,7 +13,7 @@
         <div>
           <span>Каналы</span>
           <ol>
-            <%= form.input :channels, :as => :check_boxes, :collection => available_channels, :label => false %>
+            <%= form.input :channels, :as => :check_boxes, :collection => available_channels, :label => false, :member_label => :title_path %>
           </ol>
         </div>
       </div>

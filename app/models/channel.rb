@@ -11,8 +11,11 @@ class Channel < ActiveRecord::Base
 
   before_validation :set_context_and_parent
   before_save :set_ancestry_path
+  before_save :set_title_path
 
   default_scope order(:weight)
+
+  scope :without_entries, where('entry_type IS NULL')
 
   has_ancestry
 
@@ -41,14 +44,18 @@ class Channel < ActiveRecord::Base
 
     def set_ancestry_path
       if parent
-        self.weight = parent.weight + "/" + (parent.children.last.try(:next_position) || "00")
+        self.weight = parent.weight + '/' + (parent.children.last.try(:next_position) || '00')
       else
-        self.weight = context.subcontexts.where(:ancestry => nil).last.try(:next_position) || "00"
+        self.weight = context.subcontexts.where(:ancestry => nil).last.try(:next_position) || '00'
       end
     end
 
+    def set_title_path
+      self.title_path = [parent.try(:title_path), title].compact.join('/')
+    end
+
     def next_position
-      sprintf("%02d", [position + 1, 99].min)
+      sprintf('%02d', [position + 1, 99].min)
     end
 
     def position

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120216031857) do
+ActiveRecord::Schema.define(:version => 20120216080606) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20120216031857) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "entry_type"
+    t.text     "title_path"
   end
 
   add_index "channels", ["ancestry"], :name => "index_channels_on_ancestry"

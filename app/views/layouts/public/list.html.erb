@@ -9,9 +9,14 @@
       <%= semantic_search_form_for :entry, :url => entries_path do | form | %>
         <%= form.inputs do %>
           <%= form.input :keywords, :as => :string %>
-          <%= form.input :channel_ids, :as => :check_boxes, :collection => available_channels %>
+          <%= form.input :channel_ids,
+                          :as => :select,
+                          :multiple => true,
+                          :collection => Channel.all,
+                          :member_label => ->(c) { ("&nbsp;" * c.ancestry_depth * 2).html_safe + c.title},
+                          :disabled => Channel.without_entries.pluck(:id)
+                        %>
           <%= form.input :order_by, :required => false, :include_blank => false, :as => :select, :collection => {'по дате публикации' => 'since desc' } %>
-
         <% end %>
         <%= form.inputs :since_details, :class => "inputs bordered" do %>
           <%= form.input :since_gt, :as => :date_picker %>
