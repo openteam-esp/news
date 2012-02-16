@@ -163,7 +163,7 @@ class Entry < ActiveRecord::Base
 
   def as_json(options={})
     super options.merge(:only => [:annotation, :author, :body, :image_description, :slug, :source, :source_link, :title, :since],
-                        :methods => [:resized_image_url, :more_like_this])
+                        :methods => [:resized_image_url, :more_like_this] + [*options[:methods]])
   end
 
   def resize_image(options)

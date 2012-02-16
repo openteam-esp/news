@@ -2,6 +2,10 @@
 class Occurrence < Entry
   has_many :occurrence_properties
   accepts_nested_attributes_for :occurrence_properties
+
+  def as_json(options={})
+    super options.merge(:methods => :occurrence_properties)
+  end
 end
 # == Schema Information
 #
