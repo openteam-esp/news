@@ -2,7 +2,7 @@ class AddEntryTypeToChannel < ActiveRecord::Migration
   def up
     add_column :channels, :entry_type, :string
     Channel.all.each do | channel |
-      channel.update_attribute :entry_type, 'EntryNews' if channel.children.empty?
+      channel.update_attribute :entry_type, 'news_entry' if channel.children.empty?
     end
   end
 
