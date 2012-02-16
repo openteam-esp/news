@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120215055633) do
+ActiveRecord::Schema.define(:version => 20120216031857) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20120215055633) do
     t.text     "weight"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "entry_type"
   end
 
   add_index "channels", ["ancestry"], :name => "index_channels_on_ancestry"
@@ -100,6 +101,15 @@ ActiveRecord::Schema.define(:version => 20120215055633) do
 
   add_index "followings", ["follower_id"], :name => "index_followings_on_follower_id"
   add_index "followings", ["target_id"], :name => "index_followings_on_target_id"
+
+  create_table "occurrence_properties", :force => true do |t|
+    t.datetime "since"
+    t.datetime "until"
+    t.integer  "occurrence_id"
+    t.text     "location"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"
