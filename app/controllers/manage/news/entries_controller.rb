@@ -14,6 +14,8 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
   has_searcher
 
+  helper_method :available_channels
+
   def destroy
     resource.move_to_trash
     redirect_to manage_news_root_path
@@ -91,6 +93,10 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
     def set_current_user
       resource.current_user = current_user
+    end
+
+    def available_channels
+      Channel.where(:entry_type => resource.class.model_name.underscore)
     end
 end
 

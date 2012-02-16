@@ -9,7 +9,7 @@
       <%= semantic_search_form_for :entry, :url => entries_path do | form | %>
         <%= form.inputs do %>
           <%= form.input :keywords, :as => :string %>
-          <%= form.input :channel_ids, :as => :check_boxes, :collection => Channel.all %>
+          <%= form.input :channel_ids, :as => :check_boxes, :collection => available_channels %>
           <%= form.input :order_by, :required => false, :include_blank => false, :as => :select, :collection => {'по дате публикации' => 'since desc' } %>
 
         <% end %>

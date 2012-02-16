@@ -43,8 +43,8 @@ News::Application.configure do
   end
 
   config.to_prepare do
-    %w[entry occurrence].each do |model|
-      require_or_load Rails.root.join("app/models/entries/#{model}.rb").to_s
+    Dir[Rails.root.join('app/models/entries/*')].each do |model_path|
+      require_or_load model_path.to_s
     end
   end
 end

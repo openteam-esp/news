@@ -11,6 +11,8 @@ class EntriesController < ApplicationController
 
   belongs_to :channel, :optional => true
 
+  helper_method :available_channels
+
   def show
     resource.resize_image(params[:entries_params]) if params[:entries_params]
     resource.find_more_like_this(params[:more_like_this].merge(:channel_id => params[:channel_id])) if params[:more_like_this]
@@ -52,5 +54,9 @@ class EntriesController < ApplicationController
         :page       => params[:page],
         :per_page   => [[(params[:per_page] || 10).to_i,  1].max, 10].min
       }
+    end
+
+    def available_channels
+      Channel.where("entry_type is not null")
     end
 end

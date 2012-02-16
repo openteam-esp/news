@@ -77,6 +77,15 @@ ActiveRecord::Schema.define(:version => 20120216031857) do
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"
   add_index "entries", ["locked_by_id"], :name => "index_entries_on_locked_by_id"
 
+  create_table "event_entry_properties", :force => true do |t|
+    t.datetime "since"
+    t.datetime "until"
+    t.integer  "event_entry_id"
+    t.text     "location"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "events", :force => true do |t|
     t.integer  "entry_id"
     t.integer  "task_id"
@@ -101,15 +110,6 @@ ActiveRecord::Schema.define(:version => 20120216031857) do
 
   add_index "followings", ["follower_id"], :name => "index_followings_on_follower_id"
   add_index "followings", ["target_id"], :name => "index_followings_on_target_id"
-
-  create_table "occurrence_properties", :force => true do |t|
-    t.datetime "since"
-    t.datetime "until"
-    t.integer  "occurrence_id"
-    t.text     "location"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"

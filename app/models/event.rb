@@ -11,14 +11,22 @@ class Event < ActiveRecord::Base
 
   before_create :save_and_serialize_entry
 
+  scope :with_serialized_entry, where("serialized_entry is not null")
+
   def versioned_entry
-    Entry.new.from_json(serialized_entry) if serialized_entry
+    return unless serialized_entry?
+    attributes = JSON.parse(serialized_entry).symbolize_keys
+    if event_entry_properties = attributes.delete(:event_entry_properties)
+      event_entry_properties.each{ |o| o.delete('id')}
+      attributes[:event_entry_properties_attributes] = event_entry_properties
+    end
+    attributes.delete(:type).constantize.new(attributes)
   end
 
   private
 
     def save_and_serialize_entry
-      self.serialized_entry = entry.to_json(:methods => [:channel_ids]) if event == 'complete'
+      self.serialized_entry = entry.to_json if event == 'complete'
     end
 end
 

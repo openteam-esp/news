@@ -1,7 +1,7 @@
 <div class="content_wrapper with_sidebar">
   <div class="article">
 
-    <%= semantic_nested_form_for @entry, :as => :entry, :html => {:class => 'entry'}, :url => manage_news_entry_path(@entry) do |form| %>
+    <%= semantic_nested_form_for @entry, :as => :entry, :url => manage_news_entry_path(@entry) do |form| %>
 
       <div class="top_stuff">
         <div>
@@ -13,7 +13,7 @@
         <div>
           <span>Каналы</span>
           <ol>
-            <%= form.input :channels, :as => :check_boxes, :collection => Channel.all.to_a, :label => false %>
+            <%= form.input :channels, :as => :check_boxes, :collection => available_channels, :label => false %>
           </ol>
         </div>
       </div>
@@ -34,7 +34,7 @@
         <%= form.commit_button %>
       <% end %>
 
-      <%= render :partial => "occurrence_fields", :locals => { :form => form } if @entry.is_a?(Occurrence) %>
+      <%= render :partial => "event_entry_fields", :locals => { :form => form } if @entry.is_a?(EventEntry) %>
     <% end %>
   </div>
 
@@ -48,7 +48,7 @@
     <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
     <%= link_to t('cancel'), manage_news_entry_path(@entry), :class => 'button cancel', :id => "cancel_form_entry" %>
 
-    <%= semantic_form_for @entry, :url => unlock_manage_news_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
+    <%= semantic_form_for @entry, :as => :entry, :url => unlock_manage_news_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
       <%= form.buttons :class => "buttons" do %>
         <%= form.commit_button t('cancel') %>
       <% end %>

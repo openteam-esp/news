@@ -162,7 +162,7 @@ class Entry < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super options.merge(:only => [:annotation, :author, :body, :image_description, :slug, :source, :source_link, :title, :since],
+    super options.merge(:only => [:annotation, :author, :body, :image_description, :since, :slug, :source, :source_link, :title, :type],
                         :methods => [:resized_image_url, :more_like_this] + [*options[:methods]])
   end
 

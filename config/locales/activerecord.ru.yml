@@ -1,72 +1,53 @@
 ru:
   activerecord:
-    errors:
-      messages:
-        taken: "Уже существует"
-        record_invalid: "Ошибки валидации: %{errors}"
-        invalid_transition: "Ошибка транзакции"
-      models:
-        user:
-          attributes:
-            email:
-              blank: "не введен"
-            password:
-              blank: "не введен"
-              confirmation: "^Пароли не совпадают. Пожалуйста, проверьте."
-              too_short: "слишком короткий"
-
     models:
-      entry:      Новость
-      occurrence: Событие
-      recipient:  подписчика
-      task:       Задача
-      prepare:    Подготовить черновик
-      review:     Откорректировать новость
-      publish:    Подготовить к публикации
+      channel:                  Канал
+      entry:                    Запись
+      event_entry:              Событие
+      news_entry:               Новость
+      prepare:                  Подготовить черновик
+      publish:                  Подготовить к публикации
+      review:                   Откорректировать новость
+      task:                     Задача
 
     attributes:
-      user:
-        name: "ФИО"
-        email: "Email"
+      channel:
+        polymorphic_context:    Родитель
+        title:                  Заголовок
+        entry_type:             Тип записи
+        entry_type_enum:
+          event_entry:          событие
+          news_entry:           новость
 
       entry:
-        annotation: "Аннотация"
-        assets: "Вложения"
-        attachments: "Файлы"
-        audios: "Аудиофайлы"
-        body: "Текст"
-        channels: "Каналы"
-        events: "История"
-        images: "Изображения"
-        image_description: Описание изображения
-        since: "Публиковать с"
-        source: Название Источника
-        source_link: Ссылка на источник
+        annotation:             Аннотация
+        body:                   Текст
+        channels:               Каналы
+        events:                 История
+        image_description:      Описание изображения
+        since:                  Публиковать с
+        source:                 Название источника
+        source_link:            Ссылка на источник
         state_enum:
-          draft: 'Подготавливается'
-          correcting: 'Корректируется'
-          publishing: 'Публикуется'
-          published: 'Обпубликовано'
-        title: "Заголовок"
-        until: "Публиковать до"
-        videos: "Видеофайлы"
+          draft:                Подготавливается
+          correcting:           Корректируется
+          publishing:           Публикуется
+          published:            Опубликовано
+        title:                  Заголовок
+        until:                  Публиковать до
 
       entry_search:
-        keywords: Ключевые слова
-        channel_ids: Каналы
-        order_by: Сортировка
-        since_gt: с
-        since_lt: до
-        until_gt: с
-        until_lt: до
+        keywords:               Ключевые слова
+        channel_ids:            Каналы
+        order_by:               Сортировка
+        since_gt:               с
+        since_lt:               до
+        until_gt:               с
+        until_lt:               до
 
         order_by_enum:
-          "since desc": по дате публикации
-          "until asc": по дате актуальности
-
-      asset:
-        file: "Файл"
-        description: "Описание"
+          "since desc":         по дате публикации
+          "until asc":          по дате актуальности
 
       event:
         kind_enum:
@@ -80,9 +61,5 @@ ru:
           request_reworking:    Вернуть на доработку
           restore:              Отменить изменения
           store:                Сохранить
-
-      recipient:
-        active: "Активен"
-        description: "Примечание"
 
 

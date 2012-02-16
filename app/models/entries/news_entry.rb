@@ -1,0 +1,2 @@
+class NewsEntry < Entry
+end

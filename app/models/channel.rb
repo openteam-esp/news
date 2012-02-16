@@ -16,6 +16,8 @@ class Channel < ActiveRecord::Base
 
   has_ancestry
 
+  has_enums
+
   alias_method :ancestry_depth, :depth
 
   def depth

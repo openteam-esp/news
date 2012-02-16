@@ -1,7 +1,8 @@
 <%= semantic_form_for [:manage, :channels, resource] do | form | %>
   <%= form.inputs do %>
-    <%= polymorphic_context_tree_for(form) %>
     <%= form.input :title %>
+    <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a %>
+    <%= polymorphic_context_tree_for(form) %>
   <% end %>
   <%= form.actions do %>
     <%= form.action :submit %>

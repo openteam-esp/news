@@ -1,6 +1,6 @@
 <%= content_for :additional do %>
   <%= content_tag :ul do %>
-    <% occurrence.occurrence_properties.each do | property | %>
+    <% event_entry.event_entry_properties.each do | property | %>
       <%= content_tag :li do %>
         <%= l(property.since) %>
         <%= l(property.until) %>
@@ -8,6 +8,4 @@
       <% end %>
     <% end %>
   <% end %>
-<% end if occurrence.occurrence_properties.exists? %>
-
-<%= render :partial => 'entry', :object => occurrence %>
+<% end if event_entry.event_entry_properties.exists? %>

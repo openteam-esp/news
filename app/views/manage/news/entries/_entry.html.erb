@@ -69,7 +69,7 @@
             <span class="state <%= event.event %>">
               <%= t "state_machine.task.state_for_activity.#{event.event}" %>
             </span>
-            <%= link_to 'версия', manage_news_event_path(event), :class => 'version_link' if event.versioned_entry %>
+            <%= link_to 'версия', manage_news_event_path(event), :class => 'version_link' if event.serialized_entry %>
             <span class="description">
               <%= event.task.description %>
             </span>
