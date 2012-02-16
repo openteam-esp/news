@@ -11,6 +11,7 @@
  *= require jquery.ui.timepicker.js
  *= require jquery.ui.timepicker.ru.js
  *= require info_plugin.js
+ *= require jquery_nested_form.js
  */
 
 function preload_images(images) {
@@ -38,7 +39,7 @@ function initialize_flash_block() {
 
 function initialize_datepicker() {
   if ($.fn.datepicker) {
-    $("form.formtastic li.date_picker input.date_picker").datepicker({
+    $("form.formtastic input.date_picker").datepicker({
       showOn: "button",
       buttonText: "выбрать",
       buttonImage: "/assets/jquery_ui/calendar.png",
@@ -47,7 +48,7 @@ function initialize_datepicker() {
     });
   };
   if ($.fn.datetimepicker) {
-    $("form.formtastic li.datetime_picker input.datetime_picker").datetimepicker({
+    $("form.formtastic input.datetime_picker").datetimepicker({
       showOn: "button",
       buttonText: "выбрать",
       buttonImage: "/assets/jquery_ui/calendar.png",
@@ -249,5 +250,8 @@ $(function() {
   ]);
   choose_file();
   delete_file();
+  $('form').live('nested:fieldAdded', function() {
+    initialize_datepicker();
+  });
 });
 /*////*/

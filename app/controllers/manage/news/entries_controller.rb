@@ -26,6 +26,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
   end
 
   def create
+    resource.type ||= params['type'].classify
     resource.initiator = current_user
     create! { edit_manage_news_entry_path(resource) }
   end
@@ -33,7 +34,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
   def revivify
     revivify! do
       resource.revivify
-      redirect_to smart_resource_url and return
+      redirect_to manage_news_root_path(resource) and return
     end
   end
 
@@ -41,10 +42,10 @@ class Manage::News::EntriesController < Manage::ApplicationController
     update! do |success, failure|
       success.html {
         if request.xhr?
-          @entry.reload
+          resource.reload
           render :edit, :layout => false and return
         end
-        redirect_to smart_resource_url and return
+        redirect_to manage_news_entry_path(resource) and return
       }
     end
   end
@@ -52,7 +53,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
   def unlock
     unlock! do
       @entry.unlock
-      redirect_to smart_resource_url and return
+      redirect_to manage_news_entry_path(resource) and return
     end
   end
 

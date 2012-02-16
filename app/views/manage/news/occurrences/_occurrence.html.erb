@@ -1,0 +1,10 @@
+<%= render :partial => 'entry', :object => occurrence %>
+<%= content_tag :ul do %>
+  <% occurrence.occurrence_properties.each do | property | %>
+    <%= content_tag :li do %>
+      <%= t(property.since) %>
+      <%= t(property.until) %>
+      <%= t(property.location) %>
+    <% end %>
+  <% end %>
+<% end if occurrence.occurrence_properties.exists? %>

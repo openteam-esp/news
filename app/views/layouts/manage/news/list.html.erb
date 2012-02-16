@@ -1,8 +1,13 @@
 <% content_for :header do %>
   <h1><%= link_to t("News system"), manage_news_root_path %></h1>
   <%= semantic_form_for :entry, :url => manage_news_entries_path do | form | %>
-    <%= form.buttons do %>
-      <%= form.commit_button t('new_entry'), :button_html => { :class => "button new_entry" } %>
+    <%= form.actions do %>
+      <%= form.submit t('new_entry'), :button_html => { :class => "button new_entry" } %>
+    <% end %>
+  <% end %>
+  <%= semantic_form_for :occurrence, :url => manage_news_entries_path(:type => :occurrence) do | form | %>
+    <%= form.actions do %>
+      <%= form.submit t('new_occurrence'), :button_html => { :class => "button new_occurrence" } %>
     <% end %>
   <% end %>
 <% end %>

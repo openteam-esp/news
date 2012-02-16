@@ -18,6 +18,7 @@ module News
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(
                                 #{config.root}/app/navigation_renderers
+                                #{config.root}/app/models/entries
                                 #{config.root}/app/models/tasks
                                 #{config.root}/lib
                                )

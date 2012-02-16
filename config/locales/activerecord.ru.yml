@@ -16,12 +16,13 @@ ru:
               too_short: "слишком короткий"
 
     models:
-      entry: "новость"
-      recipient: "подписчика"
-      task: Задача
-      prepare: Подготовить черновик
-      review: Откорректировать новость
-      publish: Подготовить к публикации
+      entry:      Новость
+      occurrence: Событие
+      recipient:  подписчика
+      task:       Задача
+      prepare:    Подготовить черновик
+      review:     Откорректировать новость
+      publish:    Подготовить к публикации
 
     attributes:
       user:

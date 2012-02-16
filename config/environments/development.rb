@@ -42,4 +42,9 @@ News::Application.configure do
     generators.stylesheet_engine    :sass
   end
 
+  config.to_prepare do
+    %w[entry occurrence].each do |model|
+      require_or_load Rails.root.join("app/models/entries/#{model}.rb").to_s
+    end
+  end
 end

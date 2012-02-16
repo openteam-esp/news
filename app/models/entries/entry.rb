@@ -4,8 +4,6 @@ class Entry < ActiveRecord::Base
 
   attr_accessor :locking, :current_user, :resized_image_url
 
-  extend FriendlyId
-
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
   belongs_to :deleted_by, :class_name => 'User'
@@ -23,6 +21,7 @@ class Entry < ActiveRecord::Base
 
   after_validation :unlock, :if => :need_unlock?
 
+  extend FriendlyId
   friendly_id :truncated_title, :use => :slugged
 
   state_machine :initial => :draft do
@@ -95,7 +94,8 @@ class Entry < ActiveRecord::Base
   end
 
   def truncated_title
-    title.split(/\s+/)[0..4].compact.join(' ') if title
+    return nil unless title
+    self.class.model_name.human + " " + title.truncate(100, :ommission => '', :separator => ' ')
   end
 
   def processing_issue

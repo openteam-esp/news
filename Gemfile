@@ -1,17 +1,18 @@
 source :rubygems
 
 gem 'attribute_normalizer'
+gem 'compass-rails'
 gem 'dynamic_form'
 gem 'el_vfs_client'
+gem 'esp-auth'
 gem 'esp-ckeditor'
 gem 'esp-commons'
-gem 'esp-auth'
-gem 'compass-rails'
 gem 'fancy-buttons'
 gem 'forgery',                                    :require => false
 gem 'friendly_id'
 gem 'gilenson'
 gem 'has_scope'
+gem 'nested_form'
 gem 'sanitize'
 gem 'sass-rails'
 gem 'simple-navigation'
