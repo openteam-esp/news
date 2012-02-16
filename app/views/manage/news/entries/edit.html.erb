@@ -13,7 +13,14 @@
         <div>
           <span>Каналы</span>
           <ol>
-            <%= form.input :channels, :as => :check_boxes, :collection => available_channels, :label => false, :member_label => :title_path %>
+            <%= form.input  :channels,
+                            :label => false,
+                            :as => :select,
+                            :multiple => true,
+                            :collection => available_channels,
+                            :member_label => ->(c) { ("&nbsp;" * c.ancestry_depth * 2).html_safe + c.title},
+                            :disabled => disabled_channels
+            %>
           </ol>
         </div>
       </div>

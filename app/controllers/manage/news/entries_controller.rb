@@ -14,7 +14,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
   has_searcher
 
-  helper_method :available_channels
+  helper_method :available_channels, :disabled_channels
 
   def destroy
     resource.move_to_trash
@@ -96,7 +96,11 @@ class Manage::News::EntriesController < Manage::ApplicationController
     end
 
     def available_channels
-      Channel.where(:entry_type => resource.class.model_name.underscore)
+      @available_channels ||= current_user.contexts_tree.select{|c| c.is_a?(Channel) && (!c.entry_type || c.entry_type == resource.class.model_name.underscore) }
+    end
+
+    def disabled_channels
+      @disabled_channels ||= p available_channels.reject(&:entry_type).map(&:id)
     end
 end
 
