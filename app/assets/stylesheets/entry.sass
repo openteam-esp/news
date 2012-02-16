@@ -12,7 +12,7 @@
     +single-text-shadow(none)
     border-left: 3px solid #6a7685
     background: #fcfcfc
-    padding: 0 35px
+    padding: 0 35px 20px
 
     .top_stuff
       +clearfix
@@ -73,13 +73,24 @@
       font-style: italic
 
     .body
-      +clearfix
       .float_left
         float: left
         margin: 0 10px 10px 0
       .float_right
         float: right
         margin: 0 0 10px 10px
+
+    .event_entry_properties
+
+      li
+        margin: 0 0 10px 0
+
+    .additional
+      margin: 20px 0 0 0
+
+      h4
+        font-size: 14px
+        margin: 0 0 10px 0
 
     .entry .inputs
       +clearfix
@@ -99,16 +110,58 @@
         padding: 5px
         +border-radius(5px)
 
+    .attached_file
+      float: left
+      margin: 0 20px 0 0
+
+    .choose_file
+      margin: 10px 0 0 0
+
+    .fields
+      +clearfix
+
+      .remove_nested_fields
+        margin: 35px 0 0 20px
+
+      .inputs
+        float: left
+
+        li
+          +clearfix
+
+        input
+          width: 115px
+
+        button
+          background: transparent
+          border: none
+          height: 16px
+          margin: 0 0 0 5px
+          padding: 0
+          width: 16px
+
+        .text
+          float: left !important
+          margin: 0 20px 0 0
+
+          textarea
+            border: 1px solid lightGrey
+            height: 93px
+            width: 400px
+
 .entry_image
   +clearfix
   color: #666
   float: left
   font-size: 11px
   font-style: italic
+  margin: 0 20px 0 0
+  width: 104px
 
   img
-    border: none
-    display: block
+    padding: 1px
+    border: 1px solid #ccc
+    +border-radius(3px)
 
 .side_stuff
   +clearfix

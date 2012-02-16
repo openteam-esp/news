@@ -69,7 +69,7 @@ module EntryHelper
     if entry.image_url?
       entry.resize_image(options)
       content_tag :div, :class => 'entry_image' do
-        image_tag(entry.resized_image_url, entry.resized_image_dimentions.merge(:alt => entry.image_description)) + entry.image_description
+        image_tag(entry.resized_image_url, entry.resized_image_dimentions.merge(:alt => entry.image_description)) + "#{entry.image_description if options[:title]}"
       end
     end
   end

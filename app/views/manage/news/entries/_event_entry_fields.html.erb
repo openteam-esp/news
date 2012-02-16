@@ -1,7 +1,9 @@
 <%= form.semantic_fields_for :event_entry_properties do | property_form | %>
-  <%= property_form.input :since, :as => :datetime_picker %>
-  <%= property_form.input :until, :as => :datetime_picker %>
-  <%= property_form.input :location %>
+  <%= property_form.inputs do %>
+    <%= property_form.input :location %>
+    <%= property_form.input :since, :as => :datetime_picker %>
+    <%= property_form.input :until, :as => :datetime_picker %>
+  <% end %>
   <%= property_form.link_to_remove t('remove'), :class => 'button trash icon' %>
 <% end %>
 <p><%= form.link_to_add t('add_properties'), :event_entry_properties, :class => 'button icon add' %></p>

@@ -36,6 +36,11 @@ ru:
         title:                  Заголовок
         until:                  Публиковать до
 
+      event_entry_property:
+        since:                  Начало мероприятия
+        until:                  Окончание мероприятия
+        location:               Место проведения
+
       entry_search:
         keywords:               Ключевые слова
         channel_ids:            Каналы

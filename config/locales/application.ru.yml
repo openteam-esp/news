@@ -1,12 +1,14 @@
 ru:
   file: Файл
-  image_file: Изображение к новости
+  image_file: Изображение к публикации
   choose_file: Выберите файл
   file_not_selected: Файл не выбран
   "News is not complete": Новость заполнена не полностью
   add: Добавить
+  add_properties: Добавить время меропрятия
   cancel: Отменить
   comment: Комментарий
+  remove: Удалить
   save_entry: Сохранить новость
   edit_entry: Изменить новость
   unlock_entry: Разблокировать

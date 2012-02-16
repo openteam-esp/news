@@ -1,11 +1,19 @@
 <%= content_for :additional do %>
-  <%= content_tag :ul do %>
-    <% event_entry.event_entry_properties.each do | property | %>
-      <%= content_tag :li do %>
-        <%= l(property.since) %>
-        <%= l(property.until) %>
-        <%= property.location %>
+  <div class="additional">
+    <h4>Место и время проведения</h4>
+    <%= content_tag :ul, :class => 'event_entry_properties' do %>
+      <% event_entry.event_entry_properties.each do | property | %>
+        <%= content_tag :li do %>
+          <div class="time">
+            <span>Начиная с</span>
+            <%= l(property.since, :format => :long) %>
+            <%= "по #{l(property.until, :format => :long)}" if property.until %>
+          </div>
+          <div class="location">
+            <%= property.location %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
+  </div>
 <% end if event_entry.event_entry_properties.exists? %>
