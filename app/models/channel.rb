@@ -77,5 +77,7 @@ end
 #  weight     :text
 #  created_at :datetime        not null
 #  updated_at :datetime        not null
+#  entry_type :string(255)
+#  title_path :text
 #
 
