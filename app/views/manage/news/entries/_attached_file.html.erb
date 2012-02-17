@@ -6,12 +6,12 @@
     <% if form.object.image_url? %>
       <% file_name, name, sg, type = URI.decode(form.object.image_url).match(/([^\/.]+)(\.(.{3}))?$/).to_a %>
       <%= link_to content_tag(:span)+name, form.object.image_url, :class => type %>
-      <%= link_to t('commons.delete'), '#', :class => 'button icon remove danger delete_file' %>
+      <%= link_to t('commons.delete'), '#', :class => 'button simple icon remove danger delete_file' %>
     <% else %>
       <span><%= t('file_not_selected') %></span>
     <% end %>
   </div>
   <%= form.semantic_errors :image_url %>
 </li>
-<%= link_to t('choose_file'), '#', :class => 'choose_file button icon settings', :id => Time.now.to_i %>
+<%= link_to t('choose_file'), '#', :class => 'choose_file button simple icon settings', :id => Time.now.to_i %>
 

@@ -2,12 +2,12 @@
   <h1><%= link_to t("News system"), manage_news_root_path %></h1>
   <%= semantic_form_for :entry, :url => manage_news_entries_path(:type => :news_entry) do | form | %>
     <%= form.actions do %>
-      <%= form.submit t('new_entry'), :button_html => { :class => "button new_news_entry" } %>
+      <%= form.action :submit, :label => t('new_entry'), :button_html => { :class => "button new_news_entry simple" } %>
     <% end %>
   <% end %>
   <%= semantic_form_for :event_entry, :url => manage_news_entries_path(:type => :event_entry) do | form | %>
     <%= form.actions do %>
-      <%= form.submit t('new_event_entry'), :button_html => { :class => "button new_event_entry" } %>
+      <%= form.action :submit, :label => t('new_event_entry'), :button_html => { :class => "button new_event_entry simple" } %>
     <% end %>
   <% end %>
 <% end %>

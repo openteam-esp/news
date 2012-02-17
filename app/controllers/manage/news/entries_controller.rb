@@ -87,7 +87,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
     def resolve_layout
       return 'archive' if current_scopes[:state] == 'published'
-      return 'manage/news/entry' if ['show', 'edit'].include?(action_name)
+      return 'manage/news/entry' if ['show', 'edit', 'update'].include?(action_name)
       'manage/news/list'
     end
 
