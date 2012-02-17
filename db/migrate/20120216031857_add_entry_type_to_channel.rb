@@ -1,12 +1,5 @@
 class AddEntryTypeToChannel < ActiveRecord::Migration
-  def up
+  def change
     add_column :channels, :entry_type, :string
-    Channel.all.each do | channel |
-      channel.update_attribute :entry_type, 'news_entry' if channel.children.empty?
-    end
-  end
-
-  def down
-    remove_column :channels, :entry_type
   end
 end
