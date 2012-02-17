@@ -4,6 +4,7 @@ ru:
       permission:
         role_enum:
           manager:              Менеджер
-          corrector:            Корректор
           publisher:            Публикатор
+          corrector:            Корректор
+          initiaror:            Инициатор
 
