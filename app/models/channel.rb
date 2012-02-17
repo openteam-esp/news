@@ -27,6 +27,10 @@ class Channel < ActiveRecord::Base
     ancestry_depth + context.depth + 1
   end
 
+  def as_json(options)
+    super(:only => [:id, :title], :methods => :ancestry_depth)
+  end
+
   alias_attribute :to_s, :title
 
   protected

@@ -56,6 +56,8 @@ News::Application.routes.draw do
     resources :entries, :only => [:index, :show]
   end
 
+  resources :channels, :only => [:index], :format => :json
+
   root :to => 'entries#index'
 
   mount ElVfsClient::Engine => '/'
