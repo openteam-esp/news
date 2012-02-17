@@ -1,6 +1,7 @@
-<%= link_to t('.add'), new_manage_channels_channel_path  %>
+<%= link_to t('.add'), new_manage_channels_channel_path, :class => 'button add' %>
+
 <% if collection.any? %>
-  <ul class='item_list'>
+  <ul class='channel_list'>
     <% collection.each do |context| %>
       <li class='context'>
         <%= context %>
@@ -8,7 +9,7 @@
           <% context.channels.each do |channel| %>
             <li class='channel'>
               <%= '&nbsp;'.html_safe * channel.ancestry_depth * 2 %> <%= channel %>
-              <%= link_to t('commons.delete'), manage_channels_channel_path(channel), :method => :delete, :confirm => t('commons.confirm') %>
+              <%= link_to t('commons.delete'), manage_channels_channel_path(channel), :method => :delete, :confirm => t('commons.confirm'), :class => 'button delete simple' %>
             </li>
           <% end %>
         </ul>

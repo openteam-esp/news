@@ -1,0 +1,52 @@
+@import 'compass/utilities'
+@import 'compass/css3'
+
+.channels
+  a.add
+    margin: 20px 0
+
+  .formtastic.channel
+    margin: 20px 0
+
+    .inputs
+      +clearfix
+      margin-top: 20px
+
+      li
+        margin-bottom: 20px
+
+      label
+        display: block
+        font-size: 12px
+        font-weight: bold
+
+      input
+        +border-radius(5px)
+        border: 1px solid #D3D3D3
+        font-family: Arial, Verdana, Tahoma, sans-serif
+        font-size: 14px
+        padding: 5px
+        width: 646px
+
+      #channel_entry_type_input
+        float: left
+        margin: 0 25px 0 0
+        width: 80px
+
+      #channel_polymorphic_context_input
+        select
+          width: 555px
+
+    .actions
+      width: 660px
+
+      ol
+        +clearfix
+        float: right
+
+      #channel_submit_action
+        float: left
+        margin: 0 25px 0 0
+
+      #channel_cancel_action
+        +clearfix

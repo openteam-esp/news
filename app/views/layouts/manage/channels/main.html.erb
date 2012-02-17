@@ -1,7 +1,13 @@
-<% content_for :content do %>
-  <div class='section'>
+<%= content_for :header do %>
+  <%= link_to t(:to_entries_list), entries_path, :class => 'back_to_list' %>
+<% end  %>
+
+<%= content_for :content do %>
+  <div class='content_wrapper'>
     <div class='article'>
-      <%= yield %>
+      <div class="channels">
+        <%= yield %>
+      </div>
     </div>
   </div>
 <% end %>

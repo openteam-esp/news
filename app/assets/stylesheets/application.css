@@ -13,6 +13,7 @@
  *= require header
  *= require buttons
  *= require entry
+ *= require channels
  *= require flash
  *= require pagination
  *= require esp_auth/shared

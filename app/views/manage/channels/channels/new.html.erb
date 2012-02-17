@@ -5,7 +5,7 @@
     <%= polymorphic_context_tree_for(form) %>
   <% end %>
   <%= form.actions do %>
-    <%= form.action :submit %>
-    <%= form.action :cancel, :url => manage_channels_root_path %>
+    <%= form.action :submit, :button_html => { :class => 'button simple'} %>
+    <%= form.action :cancel, :url => manage_channels_root_path, :button_html => { :class => 'button simple' } %>
   <% end %>
 <% end %>
