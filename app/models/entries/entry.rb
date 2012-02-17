@@ -43,7 +43,7 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  scope :by_state, ->(state) { where(:state => state) }
+  scope :by_state, ->(state) { where(:state => state).order('since DESC') }
 
   scope :not_deleted, where(:deleted_by_id => nil)
   scope :descending, ->(attribute) { order("#{attribute} desc") }
