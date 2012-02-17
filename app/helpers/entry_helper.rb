@@ -71,7 +71,28 @@ module EntryHelper
       content_tag :div, :class => 'entry_image' do
         image_tag(entry.resized_image_url, entry.resized_image_dimentions.merge(:alt => entry.image_description)) + "#{entry.image_description if options[:title]}"
       end
+    else
+      ''
     end
   end
 
+  def rss_description(entry)
+    description = ''
+    description << image_for(entry, :width => 100, :height => 100)
+    description += entry.annotation
+    description += entry.body
+    description += content_tag :div do
+      content = ''
+      content += "Время и место проведения: "
+      list = ''
+      entry.event_entry_properties.each do |event|
+        list += content_tag :div, event.interval
+        list += content_tag :div, event.location
+      end
+      content += content_tag :ul, list.html_safe
+      content.html_safe
+
+    end if entry.is_a?(EventEntry)
+    description
+  end
 end
