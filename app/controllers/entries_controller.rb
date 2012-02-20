@@ -7,7 +7,8 @@ class EntriesController < ApplicationController
 
   layout :resolve_layout
 
-  has_scope :by_state, :default => 'published'
+  has_scope :published, :type => :boolean, :default => true
+  has_scope :not_deleted, :type => :boolean, :default => true
 
   belongs_to :channel, :optional => true
 
@@ -30,6 +31,7 @@ class EntriesController < ApplicationController
 
     def search_and_paginate_collection
       if params[:utf8]
+        searcher.deleted = false
         searcher.channel_ids = [params[:channel_id]] if params[:channel_id]
         searcher.per_page = paginate_options[:per_page]
         searcher.pagination.merge! paginate_options

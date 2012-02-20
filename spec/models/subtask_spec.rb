@@ -3,58 +3,36 @@ require 'spec_helper'
 
 describe Subtask do
 
-  before do
-    @entry = draft
-    @prepare = draft.prepare
-  end
+  context 'родительская задача' do
+    subject { processing_correcting.review.subtasks.create!(:description => "подзадача", :executor => another_initiator) }
+    alias_method :subtask, :subject
+    alias_method :create_subtask, :subtask
+    before { create_subtask }
 
-  shared_examples_for "не изменяет задачу и новость" do
-    it "не изменяет задачу" do
-      draft.prepare.should == @prepare
-    end
-
-    it "не изменяет новость" do
-      draft == @entry
-    end
-  end
-
-  describe "создание подзадачи" do
-    before do
-      prepare_subtask_for(another_initiator)
-    end
-    it_behaves_like "не изменяет задачу и новость"
-  end
-
-  describe "принятие подзадачи" do
-    before { as another_initiator do prepare_subtask_for(another_initiator).accept! end }
-    it_behaves_like "не изменяет задачу и новость"
-  end
-
-  describe "выполнение подзадачи" do
-    before do
-      as another_initiator do
-        prepare_subtask_for(another_initiator).accept!
-        prepare_subtask_for(another_initiator).complete!
+    shared_examples 'отменяется' do
+      context 'при закрытии родительской задачи' do
+        before { processing_correcting.review.complete! }
+        it { should be_canceled }
+      end
+      context 'при отказе от выполнения родительской задачи' do
+        before { processing_correcting.review.refuse! }
+        it { should be_canceled }
       end
     end
-    it_behaves_like "не изменяет задачу и новость"
+
+    context "подзадача новая" do
+      it_behaves_like 'отменяется'
+    end
+
+    context "подзадача принятая" do
+      before { subtask.accept! }
+      it_behaves_like 'отменяется'
+    end
   end
 
-  describe "отказ от подзадачи" do
-    before { as another_initiator do prepare_subtask_for(another_initiator).refuse! end }
-    it_behaves_like "не изменяет задачу и новость"
-  end
-
-  describe "отмена подзадачи" do
-    before { as initiator do prepare_subtask_for(another_initiator).cancel! end }
-    it_behaves_like "не изменяет задачу и новость"
-  end
-
-  describe "доступные действия" do
+  describe "#human_state_events" do
     it { Subtask.new(:state => 'fresh').human_state_events.should == [:accept, :refuse, :cancel] }
-    it { Subtask.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == [] }
     it { Subtask.new(:state => 'processing').human_state_events.should == [:complete, :refuse, :cancel] }
-    it { Subtask.new(:state => 'processing', :deleted_at => Time.now()).human_state_events.should == [] }
     it { Subtask.new(:state => 'completed').human_state_events.should == [] }
     it { Subtask.new(:state => 'refused').human_state_events.should == [] }
     it { Subtask.new(:state => 'canceled').human_state_events.should == [] }

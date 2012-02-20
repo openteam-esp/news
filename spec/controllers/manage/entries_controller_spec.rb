@@ -2,9 +2,8 @@
 
 require 'spec_helper'
 
-describe Manage::EntriesController do
+describe Manage::News::EntriesController do
   before :each do
-    set_current_user initiator
     sign_in initiator
   end
 
@@ -35,7 +34,7 @@ describe Manage::EntriesController do
     it "should unlock entry" do
       draft.lock
       post :unlock, :id => draft.id
-      response.should redirect_to(assigns(:entry))
+      response.should redirect_to(manage_news_entry_path(draft))
       assigns(:entry).should_not be_locked
     end
   end
@@ -50,14 +49,14 @@ describe Manage::EntriesController do
 
   describe "POST create" do
       it "assigns a newly created entry as @entry" do
-        post :create
+        post :create, :type => :news_entry
         assigns(:entry).should be_a(Entry)
         assigns(:entry).should be_persisted
       end
 
       it "redirects to the editing form of created entry" do
-        post :create
-        response.should redirect_to([:edit, assigns(:entry)])
+        post :create, :type => :news_entry
+        response.should redirect_to(edit_manage_news_entry_path(assigns(:entry)))
       end
   end
 
@@ -69,10 +68,10 @@ describe Manage::EntriesController do
   end
 
   describe "POST revivify" do
-    let(:deleted_draft) { draft.destroy }
+    let(:deleted_draft) { draft.move_to_trash }
     it "restores deleted entry" do
       post :revivify, :id => deleted_draft.id
-      response.should redirect_to(assigns(:entry))
+      response.should redirect_to(manage_news_entry_path(deleted_draft))
       assigns(:entry).should_not be_deleted
     end
   end

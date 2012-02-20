@@ -43,7 +43,6 @@ class Task < ActiveRecord::Base
   end
 
 
-
   protected
 
     delegate :current_user, :to => :entry
@@ -51,7 +50,6 @@ class Task < ActiveRecord::Base
     def set_initiator
       self.initiator = entry.current_user
     end
-
 
     def authorize_transition(transition)
       Ability.new(current_user).authorize!(transition.event, self) if human_state_events.include? transition.event

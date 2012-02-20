@@ -3,19 +3,20 @@ require 'spec_helper'
 
 describe Publish do
   let(:publish) { processing_publishing(:channels => [channel]).publish }
+
   describe "закрытие" do
-    before { as publisher do publish.complete! end }
+    before { publish.complete! }
     it { processing_publishing.should be_published }
   end
 
   describe 'отказ от выполнения' do
-    before { as publisher do publish.refuse! end }
+    before { publish.refuse! }
     it { publish.should be_fresh }
     it { processing_publishing.should be_publishing }
   end
 
   describe "восстановление" do
-    before { as publisher do published.publish.restore! end }
+    before { published.publish.restore! }
     it { published.should be_publishing }
     it { published.publish.should be_processing }
   end
@@ -27,6 +28,13 @@ describe Publish do
     it { Publish.new(:state => 'processing').human_state_events.should == [:complete, :refuse]}
     it { Publish.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
     it { published.publish.human_state_events.should == [:restore] }
+  end
+
+  context 'draft' do
+    subject { draft.publish }
+    its(:initiator) { should == initiator }
+    its(:executor)  { should == nil }
+    its(:state)     { should == 'pending' }
   end
 end
 

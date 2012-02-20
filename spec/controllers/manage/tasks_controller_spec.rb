@@ -1,12 +1,11 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Manage::TasksController do
+describe Manage::News::TasksController do
 
   describe "POST fire_event" do
     before(:each) do
       sign_in initiator
-      set_current_user initiator
     end
 
     subject { draft.prepare }

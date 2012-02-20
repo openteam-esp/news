@@ -2,26 +2,20 @@
 
 require 'spec_helper'
 
-describe Manage::FollowingsController do
-  before(:each) do
-    sign_in corrector
-    set_current_user corrector
-  end
+describe Manage::News::FollowingsController do
+  before { sign_in corrector }
+
   it "POST create" do
-    as corrector do
-      post :create, :following => { :target_id => initiator.id }
-    end
+    post :create, :following => { :target_id => initiator.id }
     assigns(:following).should be_persisted
-    response.should redirect_to(manage_tasks_path(:fresh))
+    response.should redirect_to(manage_news_tasks_path(:fresh))
   end
 
   it "DELETE destroy" do
     following = corrector.followings.create!(:target => initiator)
     following.follower = corrector
-    as corrector do
-      delete :destroy, :id => following.id
-    end
+    delete :destroy, :id => following.id
     assigns(:following).should_not be_persisted
-    response.should redirect_to(manage_tasks_path(:fresh))
+    response.should redirect_to(manage_news_tasks_path(:fresh))
   end
 end

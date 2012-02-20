@@ -4,19 +4,19 @@ require 'spec_helper'
 describe Review do
   describe "авторизованный пользователь с ролями публикатора и корректора может выполнять" do
     describe "закрытие" do
-      before { as corrector do processing_correcting.review.complete! end }
+      before { processing_correcting.review.complete! }
       it { processing_correcting.should be_publishing }
       it { processing_correcting.publish.should be_fresh }
     end
 
     describe 'отказ от выполнения' do
-      before { as corrector do processing_correcting.review.refuse! end }
+      before { processing_correcting.review.refuse! }
       it { processing_correcting.review.should be_fresh }
       it { processing_correcting.should be_correcting }
     end
 
     describe "восстановление" do
-      before { as corrector do fresh_publishing.review.restore! end }
+      before { fresh_publishing.review.restore! }
       it { fresh_publishing.should be_correcting }
       it { fresh_publishing.publish.should be_pending }
     end
@@ -33,6 +33,13 @@ describe Review do
       fresh_publishing.review.deleted_at = Time.now
       fresh_publishing.review.human_state_events.should == []
     }
+  end
+
+  context 'после создания новости' do
+    subject { draft.review }
+    its(:initiator) { should == initiator }
+    its(:executor)  { should == nil }
+    its(:state)     { should == 'pending' }
   end
 
 end

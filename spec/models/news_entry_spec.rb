@@ -17,10 +17,6 @@ describe NewsEntry do
   it { should normalize_attribute(:body).from("<p style='text-align: right;'>Signature</p>").to("<p style=\"text-align: right;\">Signature</p>") }
   it { should normalize_attribute(:body).from("<table class='bordered'><tr><td>I'm a table</td></tr></table>").to("<table class=\"bordered\">\n<tr>\n<td>I'm a&nbsp;table</td>\n</tr>\n</table>") }
 
-  it 'должна корректно сохранять и отображать дату' do
-    I18n.l(draft(:since => "19.07.2011 09:20").since).should == "19.07.2011 09:20"
-  end
-
   describe ".folder" do
     let(:folder_draft)       { Entry.folder(:draft, current_user) }
     let(:folder_processing)  { Entry.folder(:processing, current_user) }

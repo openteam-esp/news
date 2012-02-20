@@ -24,6 +24,7 @@ Spork.prefork do
     config.mock_with :rspec
     config.use_transactional_fixtures = true
     config.before(:all) do
+      ActiveRecord::IdentityMap.enabled = true
       Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
     end
   end

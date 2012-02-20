@@ -81,6 +81,7 @@ class Entry < ActiveRecord::Base
     date   :since
     date   :updated_at
     string :state
+    boolean :deleted do deleted_by? end
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
   end
 
@@ -206,6 +207,7 @@ class Entry < ActiveRecord::Base
         minimum_term_frequency      1
         minimum_word_length         3
         with(:state, :published)
+        with(:deleted, false)
         with(:channel_ids, options[:channel_id]) if options[:channel_id]
         paginate :per_page => options[:count].to_i
       end.results

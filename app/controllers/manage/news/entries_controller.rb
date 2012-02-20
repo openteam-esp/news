@@ -36,7 +36,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
   def revivify
     revivify! do
       resource.revivify
-      redirect_to manage_news_root_path(resource) and return
+      redirect_to manage_news_entry_path(resource) and return
     end
   end
 

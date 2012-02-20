@@ -5,6 +5,8 @@ class Manage::News::TasksController < Manage::ApplicationController
   custom_actions :resource => :fire_event
   skip_authorize_resource :only => :index
 
+  has_scope :not_deleted, :type => :boolean, :default => true
+
   has_scope :folder do | controller, scope, value |
     scope.folder(value, controller.current_user)
   end
@@ -14,7 +16,7 @@ class Manage::News::TasksController < Manage::ApplicationController
   def fire_event
     fire_event! {
       @task.comment = params[:task][:comment] if params[:task][:comment]
-      @task.current_user = current_user
+      @task.entry.current_user = current_user
       begin
         @task.fire_events! params[:task][:event].to_sym
       rescue => e

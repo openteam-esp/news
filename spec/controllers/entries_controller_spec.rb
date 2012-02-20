@@ -71,12 +71,12 @@ describe EntriesController do
     describe "GET show" do
       describe "должен отдавать результаты в формате" do
         it "xml" do
-          get :show, :id => draft, :format => :xml
+          get :show, :id => published, :format => :xml
           response.header["Content-Type"].should match(/xml/)
         end
 
         it "json" do
-          get :show, :id => draft, :format => :json
+          get :show, :id => published, :format => :json
           response.header["Content-Type"].should match(/json/)
         end
       end
@@ -88,12 +88,11 @@ describe EntriesController do
         end
 
         it "если нет новости в канале, то ошибку" do
-          channel = Fabricate(:channel)
-          expect {get(:show, :channel_id => channel.id, :id => 3)}.to raise_error
+          expect {get(:show, :channel_id => channel.id, :id => 0)}.to raise_error
         end
 
         it "если нет канала, то ошибку" do
-          expect {get(:show, :channel_id => 2, :id => 3)}.to raise_error
+          expect {get(:show, :channel_id => 0, :id => published)}.to raise_error
         end
 
       end

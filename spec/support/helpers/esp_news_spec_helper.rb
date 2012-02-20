@@ -74,11 +74,11 @@ module EspNewsSpecHelper
   end
 
   def prepare_subtask_for(executor)
-    @prepare_subtask_for ||= as initiator do draft.prepare.subtasks.create!(:description => "подзадача", :executor => executor) end
+    @prepare_subtask_for ||= draft.prepare.subtasks.create!(:description => "подзадача", :executor => executor)
   end
 
   def review_subtask_for(executor)
-    @review_subtask_for ||= as corrector do processing_correcting.review.subtasks.create!(:description => "подзадача", :executor => executor) end
+    @review_subtask_for ||= processing_correcting.review.subtasks.create!(:description => "подзадача", :executor => executor)
   end
 
 end

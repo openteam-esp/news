@@ -7,6 +7,8 @@ class Subtask < Task
   validates_presence_of :executor, :description, :entry
   validate :not_itself_assigned
 
+  before_validation :set_entry
+
   scope :opened, where(:state => [:fresh, :processing])
 
   state_machine :initial => :fresh do
@@ -50,6 +52,11 @@ class Subtask < Task
   end
 
   private
+
+    def set_entry
+      self.entry = issue.entry
+    end
+
     def not_itself_assigned
       self.errors[:executor_id] = 'Нелья назначить подзадачу себе' if executor_id == initiator_id
     end

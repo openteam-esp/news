@@ -6,6 +6,7 @@ class EntrySearch < Search
   column :order_by,       :string
   column :per_page,       :integer
   column :state,          :string
+  column :deleted,        :boolean
   column :updated_at_gt,  :date
 
   has_enum :order_by
