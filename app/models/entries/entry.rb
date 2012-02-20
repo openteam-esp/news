@@ -4,6 +4,8 @@ class Entry < ActiveRecord::Base
 
   attr_accessor :locking, :current_user, :resized_image_url
 
+  attr_protected :current_user, :initiator
+
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
   belongs_to :deleted_by, :class_name => 'User'
@@ -55,7 +57,7 @@ class Entry < ActiveRecord::Base
 
   def self.folder(folder, user)
     case folder.to_sym
-    when :processing  then user.have_permissions? ? processing : processing.initiated_by(user)
+    when :processing  then user.initiator? ? processing.initiated_by(user) : processing
     when :draft       then draft.initiated_by(user)
     when :deleted     then where(:deleted_by_id => user)
     end.descending(:id)

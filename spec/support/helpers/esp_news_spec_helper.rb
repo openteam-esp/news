@@ -2,43 +2,6 @@
 
 module EspNewsSpecHelper
 
-  def set_current_user(user = nil)
-    user ||= initiator
-    User.current = user
-  end
-
-  def as(user, &block)
-    logged_in = User.current
-    User.current = user
-    result = yield
-    User.current = logged_in
-    result
-  end
-
-  def another_initiator
-    @another_initiator ||= another_user
-  end
-
-  def initiator
-    @initiator ||= user
-  end
-
-  def corrector
-    @corrector ||= corrector_of(root)
-  end
-
-  def another_corrector
-    @another_corrector ||= another_corrector_of(root)
-  end
-
-  def publisher
-    @publisher ||= publisher_of(root)
-  end
-
-  def another_publisher
-    @another_publisher ||= another_publisher_of(root)
-  end
-
   def corrector_and_publisher
     @corrector_and_publisher ||= user.tap do |user|
       user.permissions.create!(:context => root, :role => :corrector) unless user.corrector_of?(root)
@@ -52,8 +15,9 @@ module EspNewsSpecHelper
       user.permissions.create!(:context => root, :role => :publisher) unless user.publisher_of?(root)
     end
   end
+
   def channel
-    @channel ||= Fabricate(:channel)
+    @channel ||= Fabricate(:channel, :polymorphic_context => "context_#{root.id}")
   end
 
   def draft(options={})
@@ -61,53 +25,54 @@ module EspNewsSpecHelper
   end
 
   def deleted_draft(options={})
-    @deleted_draft ||= draft(options).tap do | entry |
-                         as initiator do
-                           entry.destroy
-                         end
-                       end
+    @deleted_draft ||=  draft(options).tap do | entry |
+                          entry.move_to_trash
+                        end
   end
 
   def revivified_draft(options={})
     @revivified_draft ||= deleted_draft(options).tap do | entry |
-                          as initiator do entry.revivify end
-                        end
+                            entry.revivify
+                          end
   end
 
   def create_draft(options={})
-    as initiator do Fabricate(:entry, options) end
+    Fabricate :news_entry, {:current_user => initiator, :initiator => initiator}.merge(options)
   end
 
   def fresh_correcting(options={})
-    @fresh_correcting ||=  draft(options).tap do | entry |
-                            as initiator do entry.prepare.complete! end
-                           end
+    @fresh_correcting ||= draft(options).tap do | entry |
+                            entry.prepare.current_user = initiator
+                            entry.prepare.complete!
+                          end
   end
 
   def processing_correcting(options={})
-    @processing_correcting ||=  fresh_correcting(options).tap do | entry |
-                                  as corrector do entry.review.accept! end
+    @processing_correcting ||= fresh_correcting(options).tap do | entry |
+                                  entry.review.current_user = corrector
+                                  entry.review.accept!
                                 end
   end
 
   def fresh_publishing(options={})
     @fresh_publishing ||= processing_correcting(options).tap do | entry |
-                            as corrector do entry.review.complete! end
+                            entry.review.current_user = corrector
+                            entry.review.complete!
                           end
   end
 
   def processing_publishing(options={})
     @processing_publishing ||= fresh_publishing(options).tap do | entry |
-                                as publisher do entry.publish.accept! end
+                                entry.publish.current_user = publisher
+                                entry.publish.accept!
                                end
   end
 
   def published(options={})
     @published ||= processing_publishing(options).tap  do | entry |
-                     as publisher do
-                       entry.channels << channel
-                       entry.publish.complete!
-                     end
+                     entry.channels << channel
+                     entry.publish.current_user = publisher
+                     entry.publish.complete!
                    end
   end
 

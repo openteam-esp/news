@@ -5,20 +5,20 @@ RSpec::Matchers.define :have_entries do |attribute, kind|
   @sql_matchers = [/FROM "entries"/]
   @mess = []
 
-  chain :deleted_by_me do
-     @conditions[:deleted_by_id] = User.current_id
+  chain :deleted_by do | user |
+    @conditions[:deleted_by_id] = user.id
   end
-  chain :created_by_me do
-     @conditions[:initiator_id] = User.current_id
+  chain :created_by do | user |
+    @conditions[:initiator_id] = user.id
   end
   chain :not_deleted do
-     @conditions[:deleted_by_id] = nil
+    @conditions[:deleted_by_id] = nil
   end
   chain :with_state do | state |
-     @conditions[:state] = state
+    @conditions[:state] = state
   end
   chain :with_states do | *states |
-     @conditions[:state] = states
+    @conditions[:state] = states
   end
   chain :ordered_by do | attribute, kind |
     @sql_matchers << /ORDER BY #{attribute} #{kind}(\s|\Z)/

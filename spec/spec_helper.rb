@@ -23,7 +23,6 @@ Spork.prefork do
     config.include AttributeNormalizer::RSpecMatcher
     config.mock_with :rspec
     config.use_transactional_fixtures = true
-    config.after do User.current = nil end
     config.before(:all) do
       Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
     end
