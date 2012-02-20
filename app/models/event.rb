@@ -13,6 +13,8 @@ class Event < ActiveRecord::Base
 
   scope :with_serialized_entry, where("serialized_entry is not null")
 
+  validates_presence_of :user, :entry, :task
+
   def versioned_entry
     return unless serialized_entry?
     attributes = JSON.parse(serialized_entry).symbolize_keys

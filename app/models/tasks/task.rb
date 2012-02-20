@@ -1,9 +1,11 @@
 class Task < ActiveRecord::Base
-  attr_accessor :current_user
-
   belongs_to :entry
   belongs_to :initiator, :class_name => 'User'
   belongs_to :executor, :class_name => 'User'
+
+  validates_presence_of :entry, :initiator
+
+  before_validation :set_initiator
 
   scope :ordered, order('id desc')
   scope :not_deleted, where(:deleted_at => nil)
@@ -43,6 +45,13 @@ class Task < ActiveRecord::Base
 
 
   protected
+
+    delegate :current_user, :to => :entry
+
+    def set_initiator
+      self.initiator = entry.current_user
+    end
+
 
     def authorize_transition(transition)
       Ability.new(current_user).authorize!(transition.event, self) if human_state_events.include? transition.event

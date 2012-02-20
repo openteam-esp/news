@@ -42,28 +42,26 @@ module EspNewsSpecHelper
 
   def fresh_correcting(options={})
     @fresh_correcting ||= draft(options).tap do | entry |
-                            entry.prepare.current_user = initiator
                             entry.prepare.complete!
                           end
   end
 
   def processing_correcting(options={})
     @processing_correcting ||= fresh_correcting(options).tap do | entry |
-                                  entry.review.current_user = corrector
+                                  entry.current_user = corrector
                                   entry.review.accept!
                                 end
   end
 
   def fresh_publishing(options={})
     @fresh_publishing ||= processing_correcting(options).tap do | entry |
-                            entry.review.current_user = corrector
                             entry.review.complete!
                           end
   end
 
   def processing_publishing(options={})
     @processing_publishing ||= fresh_publishing(options).tap do | entry |
-                                entry.publish.current_user = publisher
+                                entry.current_user = publisher
                                 entry.publish.accept!
                                end
   end
@@ -71,7 +69,6 @@ module EspNewsSpecHelper
   def published(options={})
     @published ||= processing_publishing(options).tap  do | entry |
                      entry.channels << channel
-                     entry.publish.current_user = publisher
                      entry.publish.complete!
                    end
   end
