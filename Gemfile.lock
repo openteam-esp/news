@@ -88,7 +88,7 @@ GEM
       sass-rails
       sunspot_rails
       whenever
-    esp-ckeditor (0.0.9.1)
+    esp-ckeditor (0.0.9.2)
       formtastic
       rails
     esp-commons (0.0.6)
