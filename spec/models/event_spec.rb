@@ -13,9 +13,8 @@ describe Event do
 
   describe "должен создаваться" do
     def updated_entry(options={})
-      require 'ryba'
       @updated_entry ||=  draft.tap do | entry |
-                            entry.update_attributes :author => Ryba::Name.full_name
+                            entry.update_attributes :author => 'Сидорова Анна Матвеевна'
                             entry.prepare.complete!
                           end
     end

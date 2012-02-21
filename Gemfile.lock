@@ -88,10 +88,10 @@ GEM
       sass-rails
       sunspot_rails
       whenever
-    esp-ckeditor (0.0.9)
+    esp-ckeditor (0.0.9.1)
       formtastic
       rails
-    esp-commons (0.0.5)
+    esp-commons (0.0.6)
       airbrake
       ancestry
       annotate (>= 2.4.1.beta1)
