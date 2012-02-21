@@ -4,6 +4,7 @@ class Ability
   def initialize(user)
     return unless user
     can :manage, :all
+    return
     ##################################
     ###           Task             ###
     ##################################
