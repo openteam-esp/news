@@ -81,7 +81,7 @@ class Entry < ActiveRecord::Base
     date   :since
     date   :updated_at
     string :state
-    boolean :deleted do deleted_by? end
+    boolean :deleted do !!deleted_at end
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
   end
 
