@@ -4,7 +4,7 @@ gem 'attribute_normalizer'
 gem 'compass-rails'
 gem 'dynamic_form'
 gem 'el_vfs_client'
-gem 'esp-auth',                                   :path => '../esp-auth'
+gem 'esp-auth'
 gem 'esp-ckeditor'
 gem 'esp-commons'
 gem 'fancy-buttons'
@@ -30,11 +30,11 @@ group :development do
   gem 'sunspot_solr',                             :require => false
 end
 
-group :import do
-  gem 'ryba',                                     :require => false
-  gem 'ya2yaml',                                  :require => false
-  gem 'rdiscount',                                :require => false
-end
+#group :import do
+  #gem 'ryba',                                     :require => false
+  #gem 'ya2yaml',                                  :require => false
+  #gem 'rdiscount',                                :require => false
+#end
 
 group :test do
   gem 'fabrication'
