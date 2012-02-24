@@ -3,15 +3,10 @@ Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
-var array = window.location.pathname.split("/"),
-    entry_id = array[array.length - 2];
+var entry_id = $('#entry_id').val();
 
 if (entry_id == undefined) {
   alert('Entry ID is undefined!\nCheck esp-ckeditor/config.js');
-} else {
-  if (!entry_id.match(/\+d/)) {
-    alert('Entry ID is "' + entry_id + '". Not digest!\nCheck esp-ckeditor/config.js');
-  };
 };
 
 CKEDITOR.editorConfig = function( config )
