@@ -68,7 +68,6 @@ describe Manage::News::EntriesController do
   end
 
   describe "POST revivify" do
-    let(:deleted_draft) { draft.move_to_trash }
     it "restores deleted entry" do
       post :revivify, :id => deleted_draft.id
       response.should redirect_to(manage_news_entry_path(deleted_draft))

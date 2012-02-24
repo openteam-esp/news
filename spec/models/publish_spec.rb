@@ -2,32 +2,34 @@
 require 'spec_helper'
 
 describe Publish do
-  let(:publish) { processing_publishing(:channels => [channel]).publish }
+  subject { processing_publishing.tap{|e| e.update_attributes(:channels => [channel])}.publish }
 
   describe "закрытие" do
-    before { publish.complete! }
-    it { processing_publishing.should be_published }
+    before { subject.complete! }
+    it { should be_completed }
+    its(:entry) { should be_published }
   end
 
   describe 'отказ от выполнения' do
-    before { publish.refuse! }
-    it { publish.should be_fresh }
-    it { processing_publishing.should be_publishing }
+    before { subject.refuse! }
+    it { should be_fresh }
+    its(:entry) { should be_publishing }
   end
 
   describe "восстановление" do
-    before { published.publish.restore! }
-    it { published.should be_publishing }
-    it { published.publish.should be_processing }
+    subject { published.publish }
+    before { subject.restore! }
+    it { should be_processing }
+    its(:entry) { should be_publishing }
   end
 
   describe "доступные действия" do
-    it { Publish.new(:state => 'pending').human_state_events.should == [] }
-    it { Publish.new(:state => 'fresh').human_state_events.should == [:accept]}
-    it { Publish.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
-    it { Publish.new(:state => 'processing').human_state_events.should == [:complete, :refuse]}
-    it { Publish.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
-    it { published.publish.human_state_events.should == [:restore] }
+    specify { Publish.new(:state => 'pending').human_state_events.should == [] }
+    specify { Publish.new(:state => 'fresh').human_state_events.should == [:accept]}
+    specify { Publish.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
+    specify { Publish.new(:state => 'processing').human_state_events.should == [:complete, :refuse]}
+    specify { Publish.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
+    specify { published.publish.human_state_events.should == [:restore] }
   end
 
   context 'draft' do

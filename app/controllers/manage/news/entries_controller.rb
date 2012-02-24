@@ -28,7 +28,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
   end
 
   def create
-    resource.type ||= params['type'].classify
+    resource.type params[:type] == 'news_entry' ? 'NewsEntry' : 'EventEntry'
     resource.initiator = current_user
     create! { edit_manage_news_entry_path(resource) }
   end
@@ -100,7 +100,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
     end
 
     def disabled_channels
-      @disabled_channels ||= p available_channels.reject(&:entry_type).map(&:id)
+      @disabled_channels ||= available_channels.reject(&:entry_type).map(&:id)
     end
 end
 

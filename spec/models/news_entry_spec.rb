@@ -96,7 +96,7 @@ describe NewsEntry do
     end
 
     context 'заблокированная новость' do
-      subject { draft(:locked_at => Time.now)}
+      subject { draft.tap do |draft| draft.locked_at = Time.now end}
 
       describe '#save' do
         before { subject.save! }

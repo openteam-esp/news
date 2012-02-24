@@ -78,8 +78,7 @@ class Entry < ActiveRecord::Base
     text   :body,       :boost => 1.0, :more_like_this => true do
       body.to_s.strip_html
     end
-    date   :since
-    date   :updated_at
+    time   :since
     string :state
     boolean :deleted do !!delete_at end
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end

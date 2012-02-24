@@ -1,5 +1,5 @@
 class Context < ActiveRecord::Base
-  esp_auth_context :class_name => 'Channel'
+  esp_auth_context :subcontext => 'Channel'
 
   has_many :channels
 

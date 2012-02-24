@@ -5,5 +5,5 @@ Fabricator(:news_entry) do
   annotation  'Аннотация новости'
   body        'Текст новости'
   initiator
-  current_user
+  current_user {|e| e.initiator}
 end

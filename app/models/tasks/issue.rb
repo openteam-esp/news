@@ -18,7 +18,7 @@ class Issue < Task
 
     def cancel_subtasks
       subtasks_opened.each do |subtask|
-        subtask.cancel!
+        subtask.clear!
       end
     end
 

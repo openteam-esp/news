@@ -3,11 +3,12 @@
 class Subtask < Task
 
   belongs_to :issue
+  belongs_to :entry
 
   validates_presence_of :executor, :description, :entry
-  validate :not_itself_assigned
+  validate :not_itself_assigned, :on => :create
 
-  before_validation :set_entry
+  before_validation :set_entry, :unless => :entry
 
   scope :opened, where(:state => [:fresh, :processing])
 
@@ -35,6 +36,10 @@ class Subtask < Task
     end
 
     event :cancel do
+      transition [:fresh, :processing] => :canceled, :unless => :deleted?
+    end
+
+    event :clear do
       transition [:fresh, :processing] => :canceled, :unless => :deleted?
     end
   end

@@ -3,11 +3,45 @@ class Ability
 
   def initialize(user)
     return unless user
-    can :manage, :all
-    return
+
+    ## common
+    can :manage, Context do | context |
+      user.manager_of? context
+    end
+
+    can :manage, Permission do | permission |
+      permission.context && user.manager_of?(permission.context)
+    end
+
+    can [:new, :create], Permission do | permission |
+      !permission.context && user.manager?
+    end
+
+    can [:search, :index], User do
+      user.manager?
+    end
+
+    can :manage, :application do
+      user.have_permissions?
+    end
+
+    can :manage, :permissions do
+      user.manager?
+    end
+
+    ## app specific
+    can :manage, Channel do | channel |
+      user.manager_of? channel.context
+    end
+
+    can :manage, Channel do | channel |
+      user.manager_of? channel
+    end
+
     ##################################
     ###           Task             ###
     ##################################
+    can :manage, Task if user.manager?
     can :fire_event, Task do | task |
       can?(:read, task.entry) && !task.deleted?
     end
@@ -18,21 +52,21 @@ class Ability
     ##################################
     ###          Prepare           ###
     ##################################
-    can :restore, Prepare do | task |
-      task.executor == user
+    can :restore, Prepare do | prepare |
+      prepare.executor == user
     end
 
     ##################################
     ###          Review            ###
     ##################################
-    can [:accept, :restore], Review do | task |
+    can [:accept, :restore, :complete, :refuse], Review do | review |
       user.corrector?
     end
 
     ##################################
     ###          Publish           ###
     ##################################
-    can [:accept, :restore], Publish do | task |
+    can [:accept, :restore, :complete, :refuse], Publish do | publish |
       user.publisher?
     end
 
@@ -52,27 +86,23 @@ class Ability
     ##################################
     ###           Entry            ###
     ##################################
-    can :create, Entry do
-      user.persisted?
-    end
+    can :create, NewsEntry if user.context_tree_of(Channel).map(&:entry_type).include?("news_entry")
+    can :create, EventEntry if user.context_tree_of(Channel).map(&:entry_type).include?("news_entry")
 
     can :update, Entry do | entry |
       entry.has_processing_task_executed_by?(user) && entry.locked_by == user
     end
+
     can [:update, :destroy], Entry do | entry |
       entry.has_processing_task_executed_by?(user) && !entry.locked? && !entry.deleted?
     end
 
     can :read, Entry do | entry |
-      user.have_permissions? && !entry.draft?
+      (user.corrector? || user.publisher? || user.manager?) && !entry.draft?
     end
     can :read, Entry do | entry |
       entry.has_participant?(user)
     end
-    can :read, Entry do | entry |
-      entry.published?
-    end
-
     can :revivify, Entry do | entry |
       entry.deleted_by == user
     end
@@ -102,6 +132,6 @@ class Ability
     can :manage, :permissions do
       user.manager?
     end
+
   end
 end
-
