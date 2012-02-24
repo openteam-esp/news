@@ -1,0 +1,160 @@
+﻿/*
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.html or http://ckeditor.com/license
+*/
+
+var array = window.location.pathname.split("/"),
+    entry_id = array[array.length - 2];
+
+if (entry_id == undefined) {
+  alert('Entry ID is undefined!\nCheck esp-ckeditor/config.js');
+} else {
+  if (!entry_id.match(/\+d/)) {
+    alert('Entry ID is "' + entry_id + '". Not digest!\nCheck esp-ckeditor/config.js');
+  };
+};
+
+CKEDITOR.editorConfig = function( config )
+{
+  // Define changes to default configuration here. For example:
+  // config.language = 'fr';
+  // config.uiColor = '#AADC6E';
+
+  config.fillEmptyBlocks = false;
+
+  config.disableNativeSpellChecker = false;
+
+  config.baseFloatZIndex = 1000000;
+
+  config.startupOutlineBlocks = true;
+
+  /* Filebrowser routes */
+  // The location of an external file browser, that should be launched when "Browse Server" button is pressed.
+  config.filebrowserBrowseUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // The location of an external file browser, that should be launched when "Browse Server" button is pressed in the Flash dialog.
+  config.filebrowserFlashBrowseUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // The location of a script that handles file uploads in the Flash dialog.
+  config.filebrowserFlashUploadUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // The location of an external file browser, that should be launched when "Browse Server" button is pressed in the Link tab of Image dialog.
+  config.filebrowserImageBrowseLinkUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // The location of an external file browser, that should be launched when "Browse Server" button is pressed in the Image dialog.
+  config.filebrowserImageBrowseUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // The location of a script that handles file uploads in the Image dialog.
+  config.filebrowserImageUploadUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // The location of a script that handles file uploads.
+  config.filebrowserUploadUrl = "/el_finder/?entry_id=" + entry_id;
+
+  // Rails CSRF token
+  config.filebrowserParams = function(){
+    var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
+        csrf_param = jQuery('meta[name=csrf-param]').attr('content'),
+        params = new Object();
+
+    if (csrf_param !== undefined && csrf_token !== undefined) {
+      params[csrf_param] = csrf_token;
+    };
+
+    params[entry_id] = entry_id;
+
+    return params;
+  };
+
+  /* Toolbars */
+  config.toolbar = 'Full';
+
+  config.toolbar_Full = [
+    ['Source'],
+    ['Cut','Copy','Paste','PasteText','PasteFromWord'],
+    ['Undo','Redo','-','Find','Replace','-','SelectAll'],
+    ['Esp_link','Esp_unlink','Esp_anchor'],
+    ['Esp_image', 'Esp_attachment', 'Esp_video', 'Esp_audio', 'Table'],
+    '/',
+    ['Format','Styles','Esp_Blockquote'],
+    ['Bold','Italic','Underline','Strike','-','Subscript','Superscript','-','RemoveFormat'],
+    ['JustifyLeft','JustifyCenter','JustifyRight'],
+    ['NumberedList','BulletedList','-','Outdent','Indent'],
+    ['Maximize', 'Esp_ShowBlocks']
+  ];
+
+  /* Format tags */
+  config.format_tags = 'p;h1;h2;h3;div';
+
+  /* Style tags */
+  config.stylesSet = [
+    { name: 'Cite', element: 'cite' },
+    { name: 'Mark', element: 'mark' }
+  ];
+
+};
+
+CKEDITOR.on('instanceReady', function(ev) {
+
+  ev.editor.dataProcessor.writer.indentationChars = "  ";
+
+  var tags = new Array('h1','h2','h3','h4','h5','h6', 'td', 'li', 'caption', 'th');
+  for (var tag in tags) {
+    ev.editor.dataProcessor.writer.setRules(tags[tag], {
+      indent : false,
+      breakBeforeOpen : false,
+      breakAfterOpen : false,
+      breakBeforeClose : false,
+      breakAfterClose : true
+    });
+  };
+
+  tags = ['p', 'div', 'blockquote', 'pre', 'audio','video', 'source'];
+
+  for (var tag in tags) {
+    ev.editor.dataProcessor.writer.setRules(tags[tag], {
+      indent : true,
+      breakBeforeOpen : true,
+      breakAfterOpen : true,
+      breakBeforeClose : true,
+      breakAfterClose : true
+    });
+  };
+
+  ev.editor.dataProcessor.htmlFilter.addRules({
+    elements:
+    {
+      $: function (element) {
+        // Output dimensions of images as width and height
+        if (element.name == 'img') {
+          var style = element.attributes.style;
+          if (style) {
+            // Get the width from the style.
+            var match = /(?:^|\s)width\s*:\s*(\d+)px/i.exec(style),
+                width = match && match[1];
+            if (width) {
+              element.attributes.style = element.attributes.style.replace(/(?:^|\s)width\s*:\s*(\d+)px;?/i, '');
+              element.attributes.width = width;
+            }
+            // Get the height from the style.
+            match = /(?:^|\s)height\s*:\s*(\d+)px/i.exec(style);
+            var height = match && match[1];
+            if (height) {
+              element.attributes.style = element.attributes.style.replace(/(?:^|\s)height\s*:\s*(\d+)px;?/i, '');
+              element.attributes.height = height;
+            }
+            // Get the float from the style.
+            match = /(?:^|\s)float\s*:\s*([a-z]+);/i.exec(style);
+            var float = match && match[1];
+            if (float) {
+              element.attributes.class = "float_" + float;
+            }
+          }
+        }
+        if (!element.attributes.style)
+          delete element.attributes.style;
+        return element;
+      }
+    }
+  });
+
+});
