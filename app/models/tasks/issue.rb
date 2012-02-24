@@ -25,7 +25,10 @@ class Issue < Task
     def after_complete
       cancel_subtasks
       entry.up!
-      next_task.try :clear!
+      if next_task
+        next_task.entry.current_user = current_user
+        next_task.clear!
+      end
     end
 
     def after_accept
@@ -35,7 +38,10 @@ class Issue < Task
     def after_restore
       update_attributes! :executor => current_user
       entry.down!
-      next_task.try :suspend!
+      if next_task
+        next_task.entry.current_user = current_user
+        next_task.suspend!
+      end
     end
 
     def after_refuse

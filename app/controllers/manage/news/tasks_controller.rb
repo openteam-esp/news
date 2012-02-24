@@ -20,6 +20,7 @@ class Manage::News::TasksController < Manage::ApplicationController
       begin
         @task.fire_events! params[:task][:event].to_sym
       rescue => e
+        puts e.backtrace.join("\n")
         flash[:alert] = I18n.t('News is not complete')
       end
       redirect_to manage_news_entry_path(@task.entry) and return
