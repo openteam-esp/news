@@ -28,8 +28,6 @@ class Manage::News::EntriesController < Manage::ApplicationController
   end
 
   def create
-    resource.type params[:type] == 'news_entry' ? 'NewsEntry' : 'EventEntry'
-    resource.initiator = current_user
     create! { edit_manage_news_entry_path(resource) }
   end
 
@@ -60,6 +58,12 @@ class Manage::News::EntriesController < Manage::ApplicationController
   end
 
   protected
+    def build_resource
+      @entry ||= (params[:type] == 'news_entry' ? NewsEntry.new : EventEntry.new).tap do |entry|
+        entry.initiator = current_user
+      end
+    end
+
     def collection
       get_collection_ivar || set_collection_ivar(search_and_paginate_collection)
     end
@@ -96,7 +100,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
     end
 
     def available_channels
-      @available_channels ||= current_user.contexts_tree.select{|c| c.is_a?(Channel) && (!c.entry_type || c.entry_type == resource.class.model_name.underscore) }
+      @available_channels ||= current_user.context_tree.select{|c| c.is_a?(Channel) && (!c.entry_type || c.entry_type == resource.class.model_name.underscore) }
     end
 
     def disabled_channels
