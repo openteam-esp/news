@@ -18,7 +18,7 @@
                             :as => :select,
                             :multiple => true,
                             :collection => available_channels,
-                            :member_label => ->(c) { ("&nbsp;" * c.ancestry_depth * 2).html_safe + c.title},
+                            :member_label => ->(c) { ("&nbsp;" * c.depth * 2).html_safe + c.title},
                             :disabled => disabled_channels
             %>
           </ol>

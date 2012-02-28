@@ -21,14 +21,12 @@ class Channel < ActiveRecord::Base
 
   has_enums
 
-  alias_method :ancestry_depth, :depth
-
-  def depth
-    ancestry_depth + context.depth + 1
+  def absolute_depth
+    depth + context.depth + 1
   end
 
   def as_json(options)
-    super(:only => [:id, :title], :methods => :ancestry_depth)
+    super(:only => [:id, :title], :methods => :depth)
   end
 
   alias_attribute :to_s, :title

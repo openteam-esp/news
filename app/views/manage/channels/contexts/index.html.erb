@@ -8,7 +8,7 @@
         <ul>
           <% context.channels.each do |channel| %>
             <li class='channel'>
-              <%= '&nbsp;'.html_safe * channel.ancestry_depth * 2 %> <%= channel %>
+              <%= '&nbsp;'.html_safe * channel.depth * 2 %> <%= channel %>
               <%= link_to t('commons.delete'), manage_channels_channel_path(channel), :method => :delete, :confirm => t('commons.confirm'), :class => 'button delete simple' %>
             </li>
           <% end %>
