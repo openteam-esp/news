@@ -66,10 +66,9 @@ GEM
       rails
     erubis (2.7.0)
     escape (0.0.4)
-    esp-auth (1.1.0)
+    esp-auth (1.1.1)
       ancestry
       cancan
-      compass (>= 0.12.alpha.4)
       curb
       default_value_for
       devise
@@ -83,9 +82,6 @@ GEM
       omniauth
       omniauth-oauth2
       progress_bar
-      rails
-      sass
-      sass-rails
       sunspot_rails
       whenever
     esp-ckeditor (0.1.0)
