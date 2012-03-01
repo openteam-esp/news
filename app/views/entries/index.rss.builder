@@ -2,7 +2,7 @@ xml.instruct!
 
 xml.rss 'version' => '2.0' do
   xml.channel do
-    xml.title "#{t('title_rss_channel')} - #{@channel.try(:title)}"
+    xml.title "#{t('title_rss_channel')} - #{@channel.try(:title_path)}"
     xml.link root_url
     xml.description t('description_rss_channel')
 
