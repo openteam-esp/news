@@ -1,10 +1,11 @@
+#encoding: utf-8
+
 xml.instruct!
 
 xml.rss 'version' => '2.0' do
   xml.channel do
-    xml.title "#{t('title_rss_channel')} - #{@channel.try(:title_path)}"
+    xml.title @channel.try(:title_path).gsub('/', ' – ')
     xml.link root_url
-    xml.description t('description_rss_channel')
 
     collection.each do |news|
       xml.item do
