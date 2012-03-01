@@ -14,7 +14,7 @@ describe NewsEntry do
   it { should normalize_attribute(:annotation).from("<em><script>alert();</script>Hi</em>\ndas  asf\n").to("<em>alert();Hi</em>\ndas&nbsp;asf") }
   it { should normalize_attribute(:annotation).from('"Томск - как центр инновационной культуры"').to("&laquo;Томск &ndash; как&nbsp;центр инновационной культуры&raquo;") }
   it { should normalize_attribute(:body).from("<em><script>alert();</script>Hi</em>\ndas  asf\n").to("<em>alert();Hi</em>\ndas&nbsp;asf") }
-  it { should normalize_attribute(:body).from("<p style='text-align: right;'>Signature</p>").to("<p style=\"text-align: right;\">Signature</p>") }
+  it { should normalize_attribute(:body).from("\r<p style='text-align: right;'>&#13;Signature</p>").to('<p style="text-align: right;">Signature</p>') }
   it { should normalize_attribute(:body).from("<table class='bordered'><tr><td>I'm a table</td></tr></table>").to("<table class=\"bordered\">\n<tr>\n<td>I'm a&nbsp;table</td>\n</tr>\n</table>") }
 
   describe ".folder" do
