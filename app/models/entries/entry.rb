@@ -91,7 +91,7 @@ class Entry < ActiveRecord::Base
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
   normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
 
-  delegate :create_thumbnail, :to => :image, :allow_nil => true
+  delegate :create_thumbnail, :thumbnail, :to => :image, :allow_nil => true
 
   def issues
     [prepare, review, publish]
@@ -166,7 +166,7 @@ class Entry < ActiveRecord::Base
   end
 
   def as_json(options={})
-    methods = [*options[:methods]] + [:more_like_this, :image] - [*options[:except]]
+    methods = [*options[:methods]] + [:more_like_this, :image, :thumbnail] - [*options[:except]]
     super options.merge(:only => [:annotation, :author, :body, :since, :slug, :source, :source_link, :title, :type],
                         :methods => methods)
   end
