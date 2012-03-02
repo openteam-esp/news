@@ -38,7 +38,7 @@ class Channel < ActiveRecord::Base
   end
 
   def disabled_contexts
-    [self.polymorphic_context_value] + subtree.map(&:polymorphic_context_value) unless is_root?
+    [self.polymorphic_context_value] + descendants.map(&:polymorphic_context_value) unless new_record?
   end
 
   def selected_context
