@@ -5,7 +5,6 @@ require 'spec_helper'
 describe Manage::News::EntriesController do
   before :each do
     sign_in initiator
-    channel
   end
 
   describe "GET index" do
@@ -49,16 +48,18 @@ describe Manage::News::EntriesController do
   end
 
   describe "POST create" do
-      it "assigns a newly created entry as @entry" do
-        post :create, :type => :news_entry
-        assigns(:entry).should be_a(Entry)
-        assigns(:entry).should be_persisted
-      end
+    before { channel }
 
-      it "redirects to the editing form of created entry" do
-        post :create, :type => :news_entry
-        response.should redirect_to(edit_manage_news_entry_path(assigns(:entry)))
-      end
+    it "assigns a newly created entry as @entry" do
+      post :create, :type => :news_entry
+      assigns(:entry).should be_a(Entry)
+      assigns(:entry).should be_persisted
+    end
+
+    it "redirects to the editing form of created entry" do
+      post :create, :type => :news_entry
+      response.should redirect_to(edit_manage_news_entry_path(assigns(:entry)))
+    end
   end
 
   describe "DELETE destroy" do
