@@ -13,6 +13,8 @@ class Channel < ActiveRecord::Base
   before_save :set_ancestry_path
   before_save :set_title_path
 
+  after_update :set_subtree_weights, :if => :weight_changed?
+
   default_scope order(:weight)
 
   scope :without_entries, where('entry_type IS NULL')
@@ -31,22 +33,37 @@ class Channel < ActiveRecord::Base
 
   alias_attribute :to_s, :title
 
+  def polymorphic_context_value
+    "#{self.class.name.underscore}_#{self.id}"
+  end
+
+  def disabled_contexts
+    [self.polymorphic_context_value] + subtree.map(&:polymorphic_context_value) unless is_root?
+  end
+
+  def selected_context
+    parent ? parent.polymorphic_context_value : context ? context.polymorphic_context_value : nil
+  end
+
   protected
 
     def set_context_and_parent
       context_type, context_id = polymorphic_context.split('_')
+      self.parent = nil
+
       case context_type
-      when 'context'
-        self.context_id = context_id
-      when 'channel'
-        self.parent_id = context_id
-        self.context_id = parent.context_id
-      end
+        when 'context'
+          self.parent_id = nil
+          self.context_id = context_id
+        when 'channel'
+          self.parent_id = context_id
+          self.context_id = parent.context_id
+        end
     end
 
     def set_ancestry_path
       if parent
-        self.weight = parent.weight + '/' + (parent.children.last.try(:next_position) || '00')
+        self.weight = parent.weight + '/' + ((parent.children - [self]).last.try(:next_position) || '00')
       else
         self.weight = context.subcontexts.where(:ancestry => nil).last.try(:next_position) || '00'
       end
@@ -62,6 +79,12 @@ class Channel < ActiveRecord::Base
 
     def position
       weight.split('/').last.to_i
+    end
+
+    def set_subtree_weights
+      self.reload.descendants.each do |channel|
+        channel.update_attributes! :polymorphic_context => channel.parent ? channel.parent.polymorphic_context_value : channel.context.polymorphic_context_value
+      end
     end
 end
 

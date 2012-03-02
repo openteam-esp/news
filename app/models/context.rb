@@ -10,6 +10,9 @@ class Context < ActiveRecord::Base
 
   scope :with_channels, joins(:channels).uniq
 
+  def polymorphic_context_value
+    "#{self.class.name.underscore}_#{self.id}"
+  end
 end
 
 # == Schema Information

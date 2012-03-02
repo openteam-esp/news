@@ -43,7 +43,8 @@ News::Application.routes.draw do
     end
     namespace :channels do
       resources :contexts, :only => :index
-      resources :channels, :only => [:new, :create, :destroy]
+      resources :channels, :except => :show
+
       root :to => 'contexts#index'
     end
 
