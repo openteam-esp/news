@@ -66,10 +66,9 @@ module EntryHelper
   end
 
   def image_for(entry, options)
-    if entry.image_url?
-      entry.resize_image(options)
+    if thumb = entry.create_thumbnail(options)
       content_tag :div, :class => 'entry_image' do
-        image_tag(entry.resized_image_url, entry.resized_image_dimentions.merge(:alt => entry.image_description)) + "#{entry.image_description if options[:title]}"
+        image_tag(thumb.url, :width => thumb.width, :height => thumb.height, :alt => thumb.description) + "#{entry.image_description if options[:title]}"
       end
     else
       ''

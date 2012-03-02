@@ -2,7 +2,7 @@
 
 class Entry < ActiveRecord::Base
 
-  attr_accessor :locking, :current_user, :resized_image_url
+  attr_accessor :locking, :current_user
 
   attr_protected :current_user, :initiator
 
@@ -91,6 +91,8 @@ class Entry < ActiveRecord::Base
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
   normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
 
+  delegate :create_thumbnail, :to => :image, :allow_nil => true
+
   def issues
     [prepare, review, publish]
   end
@@ -164,37 +166,13 @@ class Entry < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super options.merge(:only => [:annotation, :author, :body, :image_description, :since, :slug, :source, :source_link, :title, :type],
-                        :methods => [:resized_image_url, :more_like_this] + [*options[:methods]])
+    methods = [*options[:methods]] + [:more_like_this, :image] - [*options[:except]]
+    super options.merge(:only => [:annotation, :author, :body, :since, :slug, :source, :source_link, :title, :type],
+                        :methods => methods)
   end
 
-  def resize_image(options)
-    return unless image_url?
-    options ||= {}
-
-    width = options[:width].to_i
-    height = options[:height].to_i
-
-    width = height = 100 if width.zero? && height.zero?
-
-    aspect_ratio = image_dimentions[:width].to_f / image_dimentions[:height].to_f
-
-    if width.zero?
-      width = (height * aspect_ratio).to_i
-    else
-      height = (width / aspect_ratio).to_i
-    end
-
-    self.resized_image_url = image_url.gsub(%r{files/(\d+)/([\d-]+)/}, "files/\\1/#{width}-#{height}/")
-  end
-
-  def image_dimentions
-    @image_dimentions ||= get_image_dimentions(image_url)
-  end
-
-
-  def resized_image_dimentions
-    @resized_image_dimentions ||= get_image_dimentions(resized_image_url)
+  def image
+    @image ||= EspCommons::Image.new(:url => image_url, :description => image_description).parse_url if image_url?
   end
 
   def find_more_like_this(options)
@@ -215,11 +193,6 @@ class Entry < ActiveRecord::Base
   end
 
   private
-
-    def get_image_dimentions(url)
-      width, height = url.match(%r{files/\d+/(\d+)-(\d+)})[1..2]
-      {:width => width, :height => height}
-    end
 
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator

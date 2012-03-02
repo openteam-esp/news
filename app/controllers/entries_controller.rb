@@ -15,7 +15,7 @@ class EntriesController < ApplicationController
   helper_method :available_channels
 
   def show
-    resource.resize_image(params[:entries_params]) if params[:entries_params]
+    resource.create_thumbnail(params[:entries_params]) if params[:entries_params]
     resource.find_more_like_this(params[:more_like_this].merge(:channel_id => params[:channel_id])) if params[:more_like_this]
     show!
   end
@@ -26,7 +26,7 @@ class EntriesController < ApplicationController
     end
 
     def collection
-      get_collection_ivar || set_collection_ivar(paginated_collection_with_resized_image_urls)
+      get_collection_ivar || set_collection_ivar(paginated_collection_with_thumbnails)
     end
 
     def search_and_paginate_collection
@@ -45,9 +45,9 @@ class EntriesController < ApplicationController
       end
     end
 
-    def paginated_collection_with_resized_image_urls
+    def paginated_collection_with_thumbnails
       entries = search_and_paginate_collection
-      entries.each{|entry| entry.resize_image(params[:entries_params])} if params[:entries_params]
+      entries.each{|entry| entry.create_thumbnail(params[:entries_params])} if params[:entries_params]
       entries
     end
 

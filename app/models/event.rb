@@ -28,7 +28,7 @@ class Event < ActiveRecord::Base
   private
 
     def save_and_serialize_entry
-      self.serialized_entry = entry.to_json if event == 'complete'
+      self.serialized_entry = entry.to_json(:except => :image) if event == 'complete'
     end
 end
 

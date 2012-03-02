@@ -8,9 +8,7 @@
         <div class="title">
           <%= link_to entry.title, entry_path(entry) %>
         </div>
-        <% if entry.image_url? %>
-          <%= image_for entry, :width => 100, :height => 100 %>
-        <% end %>
+        <%= image_for entry, :width => 100, :height => 100 %>
         <div class="annotation">
           <%= raw entry.annotation %>
         </div>
