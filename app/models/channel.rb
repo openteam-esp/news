@@ -94,15 +94,16 @@ end
 #
 # Table name: channels
 #
-#  id         :integer         not null, primary key
-#  deleted_at :datetime
-#  context_id :integer
-#  ancestry   :string(255)
-#  title      :string(255)
-#  weight     :text
-#  created_at :datetime        not null
-#  updated_at :datetime        not null
-#  entry_type :string(255)
-#  title_path :text
+#  id          :integer         not null, primary key
+#  deleted_at  :datetime
+#  context_id  :integer
+#  ancestry    :string(255)
+#  title       :string(255)
+#  weight      :text
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#  entry_type  :string(255)
+#  title_path  :text
+#  description :text
 #
 

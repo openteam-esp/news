@@ -38,6 +38,10 @@ class Ability
       user.manager_of? channel
     end
 
+    can :create, Channel do
+      user.manager?
+    end
+
     ##################################
     ###           Task             ###
     ##################################

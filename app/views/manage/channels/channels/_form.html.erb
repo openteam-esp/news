@@ -1,0 +1,14 @@
+<%= semantic_form_for [:manage, :channels, resource] do | form | %>
+  <%= form.inputs do %>
+    <%= form.input :title %>
+    <%= form.input :description  %>
+    <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a %>
+    <%= polymorphic_context_tree_for(form) %>
+  <% end %>
+  <%= form.actions do %>
+    <%= form.action :submit, :button_html => { :class => 'button simple'} %>
+    <%= form.action :cancel, :url => manage_channels_root_path, :button_html => { :class => 'button simple' } %>
+  <% end %>
+<% end %>
+
+
