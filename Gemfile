@@ -27,7 +27,6 @@ group :assets do
 end
 
 group :development do
-  gem 'hirb',                                     :require => false
   gem 'rails-erd'
   gem 'sunspot_solr',                             :require => false
 end
