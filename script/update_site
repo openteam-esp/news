@@ -9,7 +9,7 @@ bin/rake db:migrate
 if [ -f /usr/local/etc/rc.d/esp-${PROJECT} ]; then
   /usr/local/etc/rc.d/esp-${PROJECT} restart
 fi
-bin/rake assets:precomile
+bin/rake assets:precompile
 if [ -f /usr/local/etc/rc.d/esp-${PROJECT} ]; then
   /usr/local/etc/rc.d/esp-${PROJECT} restart
 fi

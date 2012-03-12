@@ -70,14 +70,11 @@ module EntryHelper
       content_tag :div, :class => 'entry_image' do
         image_tag_for(thumbnail) + "#{entry.image_description if options[:title]}"
       end
-    else
-      ''
     end
   end
 
   def rss_description(entry)
-    description = ''
-    description << image_for(entry, :width => 100, :height => 100)
+    description = image_for(entry, :width => 100, :height => 100) || ''
     description += entry.annotation
     description += entry.body
     description += content_tag :div do
