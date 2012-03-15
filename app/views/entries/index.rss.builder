@@ -13,7 +13,9 @@ xml.rss 'version' => '2.0' do
         xml.link        entry_url(news)
         xml.pubDate     news.since.rfc822
 
-        xml.description rss_description(news), :type => :html
+        xml.description do
+          xml.cdata!  rss_description(news)
+        end
       end
     end
   end

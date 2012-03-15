@@ -75,8 +75,8 @@ module EntryHelper
 
   def rss_description(entry)
     description = image_for(entry, :width => 100, :height => 100) || ''
-    description += entry.annotation
-    description += entry.body
+    description += entry.annotation.html_safe
+    description += entry.body.html_safe
     description += content_tag :div do
       content = ''
       content += "Время и место проведения: "
