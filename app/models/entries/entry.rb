@@ -79,6 +79,7 @@ class Entry < ActiveRecord::Base
       body.to_s.strip_html
     end
     time   :since
+    time   :updated_at
     string :state
     boolean :deleted do !!delete_at end
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
