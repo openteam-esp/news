@@ -70,8 +70,8 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
     def search_and_paginate_collection
       if params[:period]
-        searcher.order_by = 'updated_at desc'
-        searcher.updated_at_gt = 1.send(params[:period]).ago.to_date
+        searcher.order_by = 'since desc'
+        searcher.since_gt = 1.send(params[:period]).ago.to_date
       end
       if params[:utf8] || params[:period]
         searcher.per_page = paginate_options[:per_page]
