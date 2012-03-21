@@ -22,6 +22,7 @@ group :default do
   gem 'gilenson'
   gem 'has_scope'
   gem 'nested_form'
+  gem 'openteam-commons'
   gem 'sanitize'
   gem 'sass-rails'
   gem 'simple-navigation'
