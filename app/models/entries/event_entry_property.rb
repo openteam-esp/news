@@ -36,6 +36,7 @@ class EventEntryProperty < ActiveRecord::Base
       end
     end
 end
+
 # == Schema Information
 #
 # Table name: event_entry_properties

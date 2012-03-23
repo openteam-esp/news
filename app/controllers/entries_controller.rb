@@ -31,14 +31,18 @@ class EntriesController < ApplicationController
 
     def search_and_paginate_collection
       if params[:utf8]
-        searcher.deleted = false
-        searcher.channel_ids = [params[:channel_id]] if params[:channel_id]
-        searcher.per_page = paginate_options[:per_page]
+        searcher.deleted      = false
+        searcher.channel_ids  = [params[:channel_id]] if params[:channel_id]
+        searcher.per_page     = paginate_options[:per_page]
+
         searcher.pagination.merge! paginate_options
+
         results = searcher.results
+
         headers['X-Current-Page'] = results.current_page.to_s
         headers['X-Total-Pages'] = results.total_pages.to_s
         headers['X-Total-Count'] = results.total_count.to_s
+
         results
       else
         end_of_association_chain.page(paginate_options[:page]).per(paginate_options[:per_page])

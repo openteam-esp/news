@@ -71,17 +71,31 @@ class Entry < ActiveRecord::Base
   end
 
   searchable do
+    boolean :deleted do !!delete_at end
+
+    integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
+
     text   :title,      :boost => 3.0, :more_like_this => true
+
     text   :annotation, :boost => 2.0, :more_like_this => true do
       annotation.to_s.strip_html
     end
+
     text   :body,       :boost => 1.0, :more_like_this => true do
       body.to_s.strip_html
     end
-    time   :since
+
     string :state
-    boolean :deleted do !!delete_at end
-    integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
+
+    time   :since
+
+    time :event_entry_properties_since do
+      event_entry_properties.first.try :since
+    end
+
+    time :event_entry_properties_until do
+      event_entry_properties.last.try :until
+    end
   end
 
   alias_method :sunspot_more_like_this, :more_like_this
@@ -193,7 +207,6 @@ class Entry < ActiveRecord::Base
   end
 
   private
-
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
       create_review :initiator => initiator, :entry => self
@@ -207,7 +220,6 @@ class Entry < ActiveRecord::Base
     def set_since
       self.since ||= Time.now
     end
-
 end
 
 

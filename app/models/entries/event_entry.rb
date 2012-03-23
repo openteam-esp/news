@@ -1,12 +1,15 @@
 # encoding: utf-8
+
 class EventEntry < Entry
   has_many :event_entry_properties
+
   accepts_nested_attributes_for :event_entry_properties
 
   def as_json(options={})
     super options.merge(:methods => :event_entry_properties)
   end
 end
+
 # == Schema Information
 #
 # Table name: entries

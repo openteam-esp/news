@@ -9,6 +9,12 @@ class EntrySearch < Search
   column :deleted,        :boolean
   column :updated_at_gt,  :date
 
+  column :event_entry_properties_since_lt, :date
+  column :event_entry_properties_since_gt, :date
+
+  column :event_entry_properties_until_lt, :date
+  column :event_entry_properties_until_gt, :date
+
   has_enum :order_by
 
   attr_protected :state
@@ -20,7 +26,6 @@ class EntrySearch < Search
   def channel_ids
     self[:channel_ids].map(&:to_i) if self[:channel_ids]
   end
-
 end
 
 
