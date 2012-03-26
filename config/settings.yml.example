@@ -1,32 +1,21 @@
-hoptoad:
-  key:                key
-  host:               host
+app:
+  secret:       SECRET
 
-smtp_settings:
-  address:              'smtp.gmail.com'
-  port:                 '587'
-  domain:               'gmail.com'
-  user_name:            ''
-  password:             ''
-  authentication:       'plain'
-  enable_starttls_auto: true
-  default_from:         'no-reply@tomsk.gov.ru'
-  default_to:           ''
+errors:
+  key:          KEY
+  url:          http://errors.openteam.ru
 
-host: 'localhost:3000'
+#solr:
+#  url:          http://localhost:8982/solr
 
-omniauth:
-  twitter:
-    key:              key
-    secret:           secret
-  facebook:
-    key:              key
-    secret:           secret
-  vkontakte:
-    key:              key
-    secret:           secret
+#sso:
+#  key:          KEY
+#  secret:       SECRET
+#  url:          http://esp-sso.openteam.ru
 
-s3:
-  access_key_id:      key_id
-  secret_access_key:  secret_access_key
+#storage
+  #url:         http://esp-storage.openteam.ru
 
+unicorn:
+  workers:      2
+  timeout:      300
