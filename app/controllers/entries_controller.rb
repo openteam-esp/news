@@ -36,7 +36,6 @@ class EntriesController < ApplicationController
         searcher.per_page     = paginate_options[:per_page]
 
         searcher.pagination.merge! paginate_options
-
         results = searcher.results
 
         headers['X-Current-Page'] = results.current_page.to_s
