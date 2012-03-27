@@ -90,11 +90,11 @@ class Entry < ActiveRecord::Base
     time   :since
 
     time :event_entry_properties_since do
-      event_entry_properties.first.try :since
+      event_entry_properties.first.try(:since) if respond_to?(:event_entry_properties)
     end
 
     time :event_entry_properties_until do
-      event_entry_properties.last.try :until
+      event_entry_properties.last.try :until if respond_to?(:event_entry_properties)
     end
   end
 

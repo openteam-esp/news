@@ -9,11 +9,9 @@ class EntrySearch < Search
   column :deleted,        :boolean
   column :updated_at_gt,  :date
 
-  column :event_entry_properties_since_lt, :datetime
-  column :event_entry_properties_since_gt, :datetime
-
-  column :event_entry_properties_until_lt, :datetime
-  column :event_entry_properties_until_gt, :datetime
+  column :interval_year,  :integer
+  column :interval_month, :integer
+  column :interval_type,  :string
 
   has_enum :order_by
 
@@ -26,11 +24,28 @@ class EntrySearch < Search
   def channel_ids
     self[:channel_ids].map(&:to_i) if self[:channel_ids]
   end
+
+  protected
+    def additional_search(search)
+      case interval_type
+        when 'gone'
+          search.with(:event_entry_properties_until).greater_than(interval_start)
+          search.with(:event_entry_properties_until).less_than(interval_end)
+      end
+    end
+
+    def interval_start
+      Time.local(interval_year, interval_month, 1)
+    end
+
+    def interval_end
+      interval_start.end_of_month
+    end
+
+    def search_columns
+      super.reject{|c| c.starts_with?('interval_')}
+    end
 end
-
-
-
-
 
 # == Schema Information
 #

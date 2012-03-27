@@ -1,7 +1,4 @@
 class NewsEntry < Entry
-  def event_entry_properties
-    []
-  end
 end
 
 # == Schema Information
