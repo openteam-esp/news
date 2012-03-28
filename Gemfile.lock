@@ -135,7 +135,7 @@ GEM
     has_enum (0.10.1)
       rails (> 3.0.0)
     has_scope (0.5.1)
-    has_searcher (0.0.11)
+    has_searcher (0.0.13)
       rails
     hashie (1.2.0)
     highline (1.6.11)

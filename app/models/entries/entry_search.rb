@@ -27,10 +27,32 @@ class EntrySearch < Search
 
   protected
     def additional_search(search)
+      return unless interval_type
+
+      events_in_interval(search)
+
       case interval_type
         when 'gone'
-          search.with(:event_entry_properties_until).greater_than(interval_start)
-          search.with(:event_entry_properties_until).less_than(interval_end)
+          search.with(:event_entry_properties_until).less_than(DateTime.now)
+        when 'current'
+          search.with(:event_entry_properties_since).less_than(DateTime.now)
+          search.with(:event_entry_properties_until).greater_than(DateTime.now)
+        when 'coming'
+          search.with(:event_entry_properties_since).greater_than(DateTime.now)
+      end
+    end
+
+    def events_in_interval(search)
+      search.any_of do
+        all_of do
+          with(:event_entry_properties_since).greater_than(interval_start)
+          with(:event_entry_properties_since).less_than(interval_end)
+        end
+
+        all_of do
+          with(:event_entry_properties_until).greater_than(interval_start)
+          with(:event_entry_properties_until).less_than(interval_end)
+        end
       end
     end
 
@@ -43,7 +65,7 @@ class EntrySearch < Search
     end
 
     def search_columns
-      super.reject{|c| c.starts_with?('interval_')}
+      @entry_search_columns ||= super.reject{|c| c.starts_with?('interval_')}
     end
 end
 
