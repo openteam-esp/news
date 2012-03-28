@@ -53,7 +53,7 @@ class EntrySearch < Search
           with(:event_entry_properties_until).greater_than(interval_start)
           with(:event_entry_properties_until).less_than(interval_end)
         end
-      end
+      end if interval_year && interval_month
     end
 
     def interval_start

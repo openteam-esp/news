@@ -51,8 +51,9 @@ ru:
         until_lt:               до
 
         order_by_enum:
-          "since desc":         по дате публикации
-          "until asc":          по дате актуальности
+          "since desc":                         по дате публикации
+          "event_entry_properties_since asc":   по дате начала события
+          "event_entry_properties_until desc":  по актуальности события
 
       event:
         kind_enum:
