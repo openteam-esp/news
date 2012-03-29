@@ -32,13 +32,17 @@ class EntrySearch < Search
       events_in_interval(search)
 
       case interval_type
-        when 'gone'
-          search.with(:event_entry_properties_until).less_than(DateTime.now)
-        when 'current'
-          search.with(:event_entry_properties_since).less_than(DateTime.now)
-          search.with(:event_entry_properties_until).greater_than(DateTime.now)
-        when 'coming'
-          search.with(:event_entry_properties_since).greater_than(DateTime.now)
+      when 'gone'
+        search.with(:event_entry_properties_until).less_than(DateTime.now)
+      when 'current'
+        search.with(:event_entry_properties_since).less_than(DateTime.now)
+        search.with(:event_entry_properties_until).greater_than(DateTime.now)
+      when 'coming'
+        search.with(:event_entry_properties_since).greater_than(DateTime.now)
+      when 'all_coming'
+        search.with(:event_entry_properties_since).greater_than(Date.today)
+      when 'all_gone'
+        search.with(:event_entry_properties_since).less_than(Date.today - 1.second)
       end
     end
 
