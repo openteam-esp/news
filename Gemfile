@@ -1,10 +1,8 @@
 source :rubygems
 
 group :assets do
-  gem 'jquery-rails'
   gem 'therubyracer'                                                        unless RUBY_PLATFORM =~ /freebsd/
   gem 'uglifier'
-  gem 'compass-rails'
 end
 
 group :default do
@@ -21,6 +19,7 @@ group :default do
   gem 'friendly_id'
   gem 'gilenson'
   gem 'has_scope'
+  gem 'jquery-rails'
   gem 'nested_form'
   gem 'openteam-commons'
   gem 'sanitize'
