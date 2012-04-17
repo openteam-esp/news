@@ -14,7 +14,7 @@
 
     <%= presented_header entry %>
 
-    <%= image_for entry, :width => 100, :height => 100, :title => true %>
+    <%= image_for entry.images.first, :width => 100, :height => 100, :title => true if entry.images.any? %>
 
     <div class="annotation">
       <%= presented_html entry, :annotation %>
@@ -24,6 +24,13 @@
       <%= presented_html entry, :body %>
     </div>
 
+    <h3><%= t('gallery') %></h3>
+    <div class="gallery_wrapper">
+      <% entry.images.each do |image| %>
+        <%= image_for image, :width => 100, :height => 100, :title => true %>
+      <% end %>
+    </div>
+
     <% if entry.source.present? %>
       <div class="source_info">
         Источник: <%= link_to entry.source, entry.source_link %>
@@ -31,7 +38,6 @@
     <% end %>
 
     <%= yield(:additional) %>
-
   </div>
 </div>
 

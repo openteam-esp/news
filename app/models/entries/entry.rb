@@ -13,6 +13,7 @@ class Entry < ActiveRecord::Base
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}, :uniq => true
 
   has_many :events, :dependent => :destroy
+  has_many :images, :dependent => :destroy
   has_many :tasks, :dependent => :destroy
 
   has_one :prepare
@@ -20,6 +21,8 @@ class Entry < ActiveRecord::Base
   has_one :publish
 
   validates_presence_of :initiator
+
+  accepts_nested_attributes_for :images
 
   after_validation :unlock, :if => :need_unlock?
 
@@ -105,7 +108,6 @@ class Entry < ActiveRecord::Base
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
   normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
 
-  delegate :create_thumbnail, :thumbnail, :to => :image, :allow_nil => true
 
   def issues
     [prepare, review, publish]
@@ -180,13 +182,9 @@ class Entry < ActiveRecord::Base
   end
 
   def as_json(options={})
-    methods = [*options[:methods]] + [:more_like_this, :image, :thumbnail] - [*options[:except]]
+    methods = [*options[:methods]] + [:more_like_this, :images, :thumbnail] - [*options[:except]]
     super options.merge(:only => [:annotation, :author, :body, :since, :slug, :source, :source_link, :title, :type],
                         :methods => methods)
-  end
-
-  def image
-    @image ||= EspCommons::Image.new(:url => image_url, :description => image_description).parse_url if image_url?
   end
 
   def find_more_like_this(options)

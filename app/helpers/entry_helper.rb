@@ -65,10 +65,10 @@ module EntryHelper
     content
   end
 
-  def image_for(entry, options)
-    if thumbnail = entry.create_thumbnail(options)
+  def image_for(image, options)
+    if thumbnail = image.create_thumbnail(options)
       content_tag :div, :class => 'entry_image' do
-        image_tag_for(thumbnail) + "#{entry.image_description if options[:title]}"
+        image_tag_for(thumbnail) + "#{image.description if options[:title]}"
       end
     end
   end
