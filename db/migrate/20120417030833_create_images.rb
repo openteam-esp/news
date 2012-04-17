@@ -10,10 +10,9 @@ class CreateImages < ActiveRecord::Migration
 
     add_index :images, :entry_id
 
-    Entry.all.each do |entry|
-      puts "url = #{entry.image_url} description = #{entry.image_description}"
-      p entry.images.create!(:url => entry.image_url, :description => entry.image_description)
-    end if Entry.new.respond_to?(:image_url) && Entry.new.respond_to?(:image_description)
+    Entry.all.select(&:image_url?).each do |entry|
+      entry.images.create!(:url => entry.image_url, :description => entry.image_description)
+    end
 
     remove_column :entries, :image_url
     remove_column :entries, :image_description
