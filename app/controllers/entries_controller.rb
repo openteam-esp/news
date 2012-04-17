@@ -50,7 +50,7 @@ class EntriesController < ApplicationController
 
     def paginated_collection_with_thumbnails
       entries = search_and_paginate_collection
-      entries.select { |e| e.images.any? }.each { |entry| entry.images.first.create_thumbnail(params[:entries_params]) } if params[:entries_params]
+      entries.select { |e| e.images.any? }.each { |entry| entry.images.map { |i| i.create_thumbnail(params[:entries_params])} } if params[:entries_params]
       entries
     end
 
