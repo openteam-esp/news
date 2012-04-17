@@ -197,9 +197,10 @@ function disabled_link(){
 };
 
 function choose_file(){
-  $('.choose_file').click(function(){
+  $('.choose_file').live('click', function(){
     var link = $(this);
-    var origin_id = 'image_url';
+    var attached_file_wrapper = link.closest('.fields');
+    var origin_id = attached_file_wrapper.find('.image_url').attr('id');
     var input = $('#'+origin_id);
 
     var dialog = link.create_or_return_dialog('elfinder_picture_dialog');
@@ -209,13 +210,12 @@ function choose_file(){
     dialog.load_iframe();
 
     input.change(function(){
-      var attached_file_wrapper = $('.attached_file');
-      var image_url              = input.val();
+      var image_url = input.val();
       var file_name = decodeURIComponent(image_url).match(/([^\/.]+)(\.(.{3}))?$/);
 
       attached_file_wrapper
-        .children('.wrapper')
-        .html('<a href="'+image_url+'" class="'+file_name[3]+'"><span></span>'+file_name[1]+'</a> <a href="#" class="button icon remove danger delete_file">Удалить</a>');
+        .children('.image_wrapper')
+        .html('<a href="'+image_url+'"><img src="'+image_url+'" width="150" ></a>');
 
       input.unbind('change');
     });

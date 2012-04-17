@@ -35,7 +35,9 @@
         <%= form.input :body, :as => :ckeditor %>
         <%= form.input :source %>
         <%= form.input :source_link %>
-        <%= render :partial => 'attached_file', :locals => { :form => form } %>
+        <li class='images_wrapper'>
+          <%= render :partial => 'attached_file', :locals => { :form => form } %>
+        </li>
       <% end %>
 
       <%= form.buttons :class => "buttons hidden" do %>

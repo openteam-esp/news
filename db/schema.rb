@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120302064334) do
+ActiveRecord::Schema.define(:version => 20120417030833) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
@@ -61,15 +61,13 @@ ActiveRecord::Schema.define(:version => 20120302064334) do
     t.string   "slug"
     t.string   "state"
     t.string   "vfs_path"
-    t.string   "image_url"
     t.text     "annotation"
     t.text     "body"
     t.text     "title"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.string   "source"
     t.string   "source_link"
-    t.string   "image_description"
     t.string   "type"
   end
 
@@ -112,6 +110,16 @@ ActiveRecord::Schema.define(:version => 20120302064334) do
 
   add_index "followings", ["follower_id"], :name => "index_followings_on_follower_id"
   add_index "followings", ["target_id"], :name => "index_followings_on_target_id"
+
+  create_table "images", :force => true do |t|
+    t.text     "url"
+    t.text     "description"
+    t.integer  "entry_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "images", ["entry_id"], :name => "index_images_on_entry_id"
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"

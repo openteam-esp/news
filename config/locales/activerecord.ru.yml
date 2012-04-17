@@ -4,6 +4,7 @@ ru:
       channel:                  Канал
       entry:                    Запись
       event_entry:              Событие
+      image:                    Изображение
       news_entry:               Новость
       prepare:                  Подготовить черновик
       publish:                  Подготовить к публикации
@@ -67,5 +68,10 @@ ru:
           request_reworking:    Вернуть на доработку
           restore:              Отменить изменения
           store:                Сохранить
+
+
+      image:
+        url:                    Адрес
+        description:            Описание изображения
 
 

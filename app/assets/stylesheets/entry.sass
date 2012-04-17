@@ -152,6 +152,61 @@
             height: 93px
             width: 400px
 
+    .images_wrapper
+      +clearfix
+
+      .fields
+        border-bottom: 1px solid #ddd
+        padding: 0 0 10px 0
+
+        .image_wrapper
+          float: left
+          margin: 0 15px 0 0
+
+          a
+            display: block
+
+            img
+              display: block
+
+          span
+
+        .inputs
+          margin: 0 15px 0 0
+          padding: 0
+
+          ol
+            li
+              margin: 0
+              padding: 0
+              width: 300px
+
+              textarea
+                height: 92px
+                padding: 3px 7px
+                width: 284px
+
+            .hidden
+              display: none
+              margin: 0
+              padding: 0
+
+              input
+                display: none
+                margin: 0
+                padding: 0
+
+        .choose_file
+          float: left
+          clear: both
+          margin: 15px 15px 0 0
+
+        .trash
+          float: left
+          margin: 15px 0 0 0
+
+      .add_nested_fields
+
 .entry_image
   +clearfix
   color: #666

@@ -1,17 +1,21 @@
-<%= form.input :image_url, :as => :hidden, :input_html => {:id => 'image_url'} %>
-<%= form.input :image_description %>
-<li class='attached_file'>
-  <label class='label'><%= t('image_file') %></label>
-  <div class='wrapper'>
-    <% if form.object.image_url? %>
-      <% file_name, name, sg, type = URI.decode(form.object.image_url).match(/([^\/.]+)(\.(.{3}))?$/).to_a %>
-      <%= link_to content_tag(:span)+name, form.object.image_url, :class => type %>
-      <%= link_to t('commons.delete'), '#', :class => 'button simple icon remove danger delete_file' %>
+<%= form.semantic_fields_for :images do |image_form| %>
+
+  <div class='image_wrapper'>
+    <% if image_form.object.url? %>
+      <%= link_to image_tag(image_form.object.url, :width => '150', :title => image_form.object.description), image_form.object.url %>
     <% else %>
       <span><%= t('file_not_selected') %></span>
     <% end %>
   </div>
-  <%= form.semantic_errors :image_url %>
-</li>
-<%= link_to t('choose_file'), '#', :class => 'choose_file button simple icon settings', :id => Time.now.to_i %>
 
+  <%= image_form.inputs do %>
+    <%= image_form.input :url, :as => :hidden, :input_html => { :class => 'image_url' } %>
+    <%= image_form.input :description, :as => :text %>
+  <% end %>
+
+  <%= link_to t('choose_file'), '#', :class => 'choose_file button simple icon settings', :id => Time.now.to_i %>
+  <%= image_form.link_to_remove t('remove'), :class => 'button trash icon simple' %>
+
+<% end %>
+
+<%= form.link_to_add t('add_image'), :images, :class => 'button icon add' %>
