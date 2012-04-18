@@ -75,7 +75,7 @@ module EntryHelper
 
   def rss_description(entry)
     description = entry.images.any? ? image_for(entry.images.first, :width => 100, :height => 100) : ''
-    description += entry.annotation.html_safe
+    description += (entry.annotation || '').html_safe
     description += entry.body.html_safe
     description += content_tag :div do
       content = ''
