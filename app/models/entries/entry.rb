@@ -22,7 +22,7 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :initiator
 
-  accepts_nested_attributes_for :images
+  accepts_nested_attributes_for :images, :allow_destroy => true
 
   after_validation :unlock, :if => :need_unlock?
 
