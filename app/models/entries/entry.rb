@@ -200,7 +200,12 @@ class Entry < ActiveRecord::Base
         with(:channel_ids, options[:channel_id]) if options[:channel_id]
         paginate :per_page => options[:count].to_i
       end.results
-      self.more_like_this.each{|entry| entry.create_thumbnail(options.slice(:width, :height))}
+
+      self.more_like_this.each do |entry|
+        entry.images.each do |image|
+          create_thumbnail(options.slice(:width, :height))
+        end
+      end
     end
   end
 

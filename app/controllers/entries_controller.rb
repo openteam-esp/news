@@ -15,8 +15,9 @@ class EntriesController < ApplicationController
   helper_method :available_channels
 
   def show
-    resource.create_thumbnail(params[:entries_params]) if params[:entries_params]
+    resource.images.each { |image| image.create_thumbnail(params[:entries_params]) } if params[:entries_params]
     resource.find_more_like_this(params[:more_like_this].merge(:channel_id => params[:channel_id])) if params[:more_like_this]
+
     show!
   end
 
