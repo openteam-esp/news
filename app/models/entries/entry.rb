@@ -203,7 +203,7 @@ class Entry < ActiveRecord::Base
 
       self.more_like_this.each do |entry|
         entry.images.each do |image|
-          create_thumbnail(options.slice(:width, :height))
+          image.create_thumbnail(options.slice(:width, :height))
         end
       end
     end
