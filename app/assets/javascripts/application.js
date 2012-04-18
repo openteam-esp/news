@@ -215,7 +215,7 @@ function choose_file(){
 
       attached_file_wrapper
         .children('.image_wrapper')
-        .html('<a href="'+image_url+'"><img src="'+image_url+'" width="150" ></a>');
+        .html('<a href="'+image_url+'"><img src="'+image_url.replace(new RegExp(/\d+-\d+/), '150-150')+'" width="150" ></a>');
 
       input.unbind('change');
     });
