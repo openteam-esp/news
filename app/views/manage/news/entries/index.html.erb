@@ -6,8 +6,8 @@
           <%= time_ago_in_words(entry.updated_at) %> назад
         </div>
 
-        <% if entry.image_url? %>
-          <%= image_for entry, :width => 100, :height => 100, :title => false %>
+        <% if entry.images.any? %>
+          <%= image_for entry.images.first, :width => 100, :height => 100, :title => true %>
         <% end %>
 
         <div class="title">
