@@ -8,9 +8,9 @@
         <ul>
           <% context.channels.each do |channel| %>
             <li class='channel'>
-              <%= '&nbsp;'.html_safe * channel.depth * 2 %> <%= channel %>
-              <%= link_to t('commons.delete'), manage_channels_channel_path(channel), :method => :delete, :confirm => t('commons.confirm'), :class => 'button delete simple' %>
-              <%= link_to t('commons.edit'), edit_manage_channels_channel_path(channel) %>
+              <%= raw('&nbsp;' * channel.depth * 4) %> <%= channel %>
+              <%= link_to 'Изменить', edit_manage_channels_channel_path(channel), :class => 'button delete simple' %>
+              <%= link_to 'Удалить', manage_channels_channel_path(channel), :method => :delete, :confirm => t('commons.confirm') %>
             </li>
           <% end %>
         </ul>
