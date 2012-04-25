@@ -25,6 +25,20 @@ class EntrySearch < Search
     self[:channel_ids].map(&:to_i) if self[:channel_ids]
   end
 
+  def min_since_event_datetime
+    self.order_by = 'event_entry_properties_since asc'
+    self.per_page = 1
+
+    results.try(:first).try(:event_entry_properties).try(:first).try(:since) || DateTime.now
+  end
+
+  def max_until_event_datetime
+    self.order_by = 'event_entry_properties_until desc'
+    self.per_page = 1
+
+    results.try(:first).try(:event_entry_properties).try(:first).try(:until) || DateTime.now
+  end
+
   protected
     def additional_search(search)
       return unless interval_type
