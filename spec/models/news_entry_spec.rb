@@ -131,6 +131,30 @@ describe NewsEntry do
       end
     end
   end
+
+  describe 'should send message to queue <esp.news.cms>' do
+    let(:message) {
+      { :slug => 'novost-zagolovok-novosti', :channel_ids => [1] }
+    }
+
+    before { MessageMaker.stub(:make_message) }
+
+    describe 'with routing key <publish> when it publish' do
+      before { MessageMaker.should_receive(:make_message).with('esp.news.cms', 'publish', message) }
+
+      specify { published }
+    end
+
+    describe 'with routing key <remove> when it removed from publication' do
+      let(:publishing_entry) {
+        published.down
+      }
+
+      before { MessageMaker.should_receive(:make_message).with('esp.news.cms', 'remove', message) }
+
+      specify { publishing_entry }
+    end
+  end
 end
 
 

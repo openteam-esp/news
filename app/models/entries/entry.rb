@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
-
   attr_accessor :locking, :current_user
 
   attr_protected :current_user, :initiator
@@ -38,6 +37,10 @@ class Entry < ActiveRecord::Base
     end
 
     before_transition :publishing => :published, :do => :set_since
+
+    after_transition :publishing => :published, :do => :send_publish_message
+
+    after_transition :published => :publishing, :do => :send_unpublish_message
 
     event :up do
       transition :draft => :correcting, :correcting => :publishing, :publishing => :published
@@ -209,6 +212,10 @@ class Entry < ActiveRecord::Base
     end
   end
 
+  def message_for_queue
+    { :slug => slug, :channel_ids => channel_ids }
+  end
+
   private
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
@@ -222,6 +229,14 @@ class Entry < ActiveRecord::Base
 
     def set_since
       self.since ||= Time.now
+    end
+
+    def send_publish_message
+      MessageMaker.make_message 'esp.news.cms', 'publish', message_for_queue
+    end
+
+    def send_unpublish_message
+      MessageMaker.make_message 'esp.news.cms', 'remove', message_for_queue
     end
 end
 
