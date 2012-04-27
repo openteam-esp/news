@@ -213,7 +213,7 @@ class Entry < ActiveRecord::Base
   end
 
   def message_for_queue
-    { :slug => slug, :channel_ids => channel_ids }
+    { :slug => slug, :channel_ids => channels.map(&:id) }
   end
 
   private
