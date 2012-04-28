@@ -90,8 +90,9 @@ class Ability
     ##################################
     ###           Entry            ###
     ##################################
+    can :create, AnnouncementEntry if user.context_tree_of(Channel).map(&:entry_type).include?("announcement_entry")
+    can :create, EventEntry if user.context_tree_of(Channel).map(&:entry_type).include?("event_entry")
     can :create, NewsEntry if user.context_tree_of(Channel).map(&:entry_type).include?("news_entry")
-    can :create, EventEntry if user.context_tree_of(Channel).map(&:entry_type).include?("news_entry")
 
     can :update, Entry do | entry |
       entry.has_processing_task_executed_by?(user) && entry.locked_by == user

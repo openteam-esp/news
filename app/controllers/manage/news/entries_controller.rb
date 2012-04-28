@@ -58,8 +58,12 @@ class Manage::News::EntriesController < Manage::ApplicationController
   end
 
   protected
+    def class_of_resource
+      params[:type].classify.constantize
+    end
+
     def build_resource
-      @entry ||= (params[:type] == 'news_entry' ? NewsEntry.new : EventEntry.new).tap do |entry|
+      @entry ||= class_of_resource.new.tap do |entry|
         entry.initiator = current_user
       end
     end
