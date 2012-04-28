@@ -17,6 +17,7 @@ ru:
         title:                  Заголовок
         entry_type:             Тип записи
         entry_type_enum:
+          announcement_entry:   анонс
           event_entry:          событие
           news_entry:           новость
 
