@@ -21,11 +21,19 @@ Spork.prefork do
     config.include EspNewsSpecHelper
     config.include EspAuth::SpecHelper
     config.include AttributeNormalizer::RSpecMatcher
+
     config.mock_with :rspec
+
     config.use_transactional_fixtures = true
-    config.before(:all) do
+
+    config.before :all do
       ActiveRecord::IdentityMap.enabled = true
+
       Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
+    end
+
+    config.before do
+      stub_message_maker
     end
   end
 end

@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 module EspNewsSpecHelper
+  def stub_message_maker
+    MessageMaker.stub(:make_message)
+  end
 
   def corrector_and_publisher
     @corrector_and_publisher ||= user.tap do |user|
@@ -81,6 +84,5 @@ module EspNewsSpecHelper
                             entry.revivify
                           end
   end
-
 end
 
