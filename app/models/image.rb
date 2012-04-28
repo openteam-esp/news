@@ -13,3 +13,15 @@ class Image < ActiveRecord::Base
     super(:only => [:url, :description], :methods => [:width, :height, :thumbnail])
   end
 end
+# == Schema Information
+#
+# Table name: images
+#
+#  id          :integer         not null, primary key
+#  url         :text
+#  description :text
+#  entry_id    :integer
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#
+

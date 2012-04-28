@@ -91,31 +91,29 @@ end
 #
 # Table name: searches
 #
-#  keywords                        :text
-#  since_lt                        :date
-#  since_gt                        :date
-#  channel_ids                     :string
-#  order_by                        :string
-#  per_page                        :integer
-#  state                           :string
-#  deleted                         :boolean
-#  updated_at_gt                   :date
-#  event_entry_properties_since_lt :datetime
-#  event_entry_properties_since_gt :datetime
-#  event_entry_properties_until_lt :datetime
-#  event_entry_properties_until_gt :datetime
-#  keywords                        :text
-#  since_lt                        :date
-#  since_gt                        :date
-#  channel_ids                     :string
-#  order_by                        :string
-#  per_page                        :integer
-#  state                           :string
-#  deleted                         :boolean
-#  updated_at_gt                   :date
-#  event_entry_properties_since_lt :datetime
-#  event_entry_properties_since_gt :datetime
-#  event_entry_properties_until_lt :datetime
-#  event_entry_properties_until_gt :datetime
+#  keywords       :text
+#  since_lt       :date
+#  since_gt       :date
+#  channel_ids    :string
+#  order_by       :string
+#  per_page       :integer
+#  state          :string
+#  deleted        :boolean
+#  updated_at_gt  :date
+#  interval_year  :integer
+#  interval_month :integer
+#  interval_type  :string
+#  keywords       :text
+#  since_lt       :date
+#  since_gt       :date
+#  channel_ids    :string
+#  order_by       :string
+#  per_page       :integer
+#  state          :string
+#  deleted        :boolean
+#  updated_at_gt  :date
+#  interval_year  :integer
+#  interval_month :integer
+#  interval_type  :string
 #
 
