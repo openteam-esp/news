@@ -10,6 +10,14 @@
             <%= form.input :since, :label => false, :as => :datetime_picker %>
           </ol>
         </div>
+        <% if @entry.is_announce? %>
+          <div>
+            <span>Актуально до</span>
+            <ol>
+              <%= form.input :actuality_expired_at, :label => false, :as => :datetime_picker %>
+            </ol>
+          </div>
+        <% end %>
         <div>
           <span>Каналы</span>
           <ol>
@@ -32,7 +40,6 @@
         <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
         <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => 100 } %>
         <%= form.input :body, :as => :ckeditor %>
-        <%= form.input :actuality_expired_at, :as => :datetime_picker if @entry.is_a?(AnnouncementEntry) %>
         <%= form.input :source %>
         <%= form.input :source_link %>
         <li class='images_wrapper'>

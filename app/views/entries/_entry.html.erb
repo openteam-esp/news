@@ -5,6 +5,13 @@
         <span>Опубликовано</span>
         <%= l entry.since, :format => :short %>
       </div>
+
+      <% if entry.is_announce? %>
+        <div>
+          <span>Актуально до </span>
+          <%= l entry.actuality_expired_at, :format => :short %>
+        </div>
+      <% end %>
     </div>
 
     <%= presented_header entry %>
