@@ -34,6 +34,7 @@ class Entry < ActiveRecord::Base
     state :publishing
     state :published do
       validates_presence_of :title, :body, :channels, :since
+      validates_presence_of :actuality_expired_at, :if => :is_announce?
     end
 
     before_transition :publishing => :published, :do => :set_since
@@ -216,6 +217,10 @@ class Entry < ActiveRecord::Base
     { :slug => slug, :channel_ids => channels.map(&:id) }.to_json
   end
 
+  def is_announce?
+    false
+  end
+
   private
     def create_tasks
       create_prepare :initiator => initiator, :entry => self, :executor => initiator
@@ -239,12 +244,6 @@ class Entry < ActiveRecord::Base
       MessageMaker.make_message 'esp.news.cms', 'remove', message_for_queue
     end
 end
-
-
-
-
-
-
 
 # == Schema Information
 #

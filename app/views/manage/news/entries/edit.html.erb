@@ -25,7 +25,6 @@
         </div>
       </div>
 
-
       <%= javascript_include_tag "esp-ckeditor/application" %>
 
       <%= form.inputs :class => "inputs common_fields" do %>
@@ -33,6 +32,7 @@
         <%= form.input :title, :as => :string, :input_html => { :class => "focus_first" } %>
         <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => 100 } %>
         <%= form.input :body, :as => :ckeditor %>
+        <%= form.input :actuality_expired_at, :as => :datetime_picker if @entry.is_a?(AnnouncementEntry) %>
         <%= form.input :source %>
         <%= form.input :source_link %>
         <li class='images_wrapper'>

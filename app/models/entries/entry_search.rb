@@ -29,14 +29,22 @@ class EntrySearch < Search
     self.order_by = 'event_entry_properties_since asc'
     self.per_page = 1
 
-    results.try(:first).try(:event_entry_properties).try(:first).try(:since) || DateTime.now
+    if entry = results.try(:first)
+      entry.event_entry_properties.try(:first).try(:since) if entry.is_a?(EventEntry)
+    else
+      DateTime.now
+    end
   end
 
   def max_until_event_datetime
     self.order_by = 'event_entry_properties_until desc'
     self.per_page = 1
 
-    results.try(:first).try(:event_entry_properties).try(:first).try(:until) || DateTime.now
+    if entry = results.try(:first)
+      entry.event_entry_properties.try(:first).try(:until) if entry.is_a?(EventEntry)
+    else
+      DateTime.now
+    end
   end
 
   protected

@@ -1,5 +1,7 @@
 class AnnouncementEntry < Entry
-  #validates_presence_of :actuality_expired_at, :on => :update
+  def is_announce?
+    true
+  end
 end
 
 # == Schema Information

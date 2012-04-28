@@ -22,6 +22,7 @@ ru:
           news_entry:           новость
 
       entry:
+        actuality_expired_at:   Актуально до
         annotation:             Аннотация
         body:                   Текст
         channels:               Каналы
