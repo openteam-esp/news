@@ -21,6 +21,7 @@ Spork.prefork do
     config.include EspNewsSpecHelper
     config.include EspAuth::SpecHelper
     config.include AttributeNormalizer::RSpecMatcher
+    config.include SunspotMatchers
 
     config.mock_with :rspec
 

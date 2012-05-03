@@ -11,7 +11,9 @@ class EntrySearch < Search
 
   column :interval_year,  :integer
   column :interval_month, :integer
-  column :interval_type,  :string
+
+  column :entry_type,     :string
+  column :events_type,    :string
 
   has_enum :order_by
 
@@ -49,22 +51,33 @@ class EntrySearch < Search
 
   protected
     def additional_search(search)
-      return unless interval_type
+      #return unless events_type
 
-      events_in_interval(search)
+      archive_interval(search) if interval_year && interval_month
 
-      case interval_type
-      when 'gone'
-        search.with(:event_entry_properties_until).less_than(DateTime.now)
-      when 'current'
-        search.with(:event_entry_properties_since).less_than(DateTime.now)
-        search.with(:event_entry_properties_until).greater_than(DateTime.now)
-      when 'coming'
-        search.with(:event_entry_properties_since).greater_than(DateTime.now)
-      when 'all_coming'
-        search.with(:event_entry_properties_since).greater_than(Date.today)
-      when 'all_gone'
-        search.with(:event_entry_properties_since).less_than(Date.today - 1.second)
+      #case events_type
+      #when 'gone'
+        #search.with(:event_entry_properties_until).less_than(DateTime.now)
+      #when 'current'
+        #search.with(:event_entry_properties_since).less_than(DateTime.now)
+        #search.with(:event_entry_properties_until).greater_than(DateTime.now)
+      #when 'coming'
+        #search.with(:event_entry_properties_since).greater_than(DateTime.now)
+      #when 'all_coming'
+        #search.with(:event_entry_properties_since).greater_than(Date.today)
+      #when 'all_gone'
+        #search.with(:event_entry_properties_since).less_than(Date.today - 1.second)
+      #end
+    end
+
+
+    def archive_interval(search)
+      case entry_type
+      when 'news'
+        search.all_of do
+          with(:since).greater_than(interval_start)
+          with(:since).less_than(interval_end)
+        end
       end
     end
 
@@ -91,7 +104,7 @@ class EntrySearch < Search
     end
 
     def search_columns
-      @entry_search_columns ||= super.reject{|c| c.starts_with?('interval_')}
+      @entry_search_columns ||= super.reject{ |c| c.match /^(interval_|entry_)/ }
     end
 end
 

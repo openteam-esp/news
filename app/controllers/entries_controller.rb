@@ -33,7 +33,6 @@ class EntriesController < ApplicationController
     def search_and_paginate_collection
       if params[:utf8]
         searcher.deleted      = false
-        searcher.channel_ids  = [params[:channel_id]] if params[:channel_id]
         searcher.per_page     = paginate_options[:per_page]
 
         searcher.pagination.merge! paginate_options
@@ -61,7 +60,7 @@ class EntriesController < ApplicationController
     def paginate_options
       {
         :page       => params[:page],
-        :per_page   => [[(params[:per_page] || 10).to_i,  1].max, 10].min
+        :per_page   => [[(params[:per_page] || 10).to_i,  1].max, 50].min
       }
     end
 

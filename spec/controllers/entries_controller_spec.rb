@@ -26,16 +26,9 @@ describe EntriesController do
     end
 
     describe "search object должен" do
-
       it "отрабатывать если передан параметр utf8" do
         searcher.should_receive(:results).any_number_of_times.and_return(Sunspot::Search::PaginatedCollection.new([], 1, 10, 13))
         get :index, :utf8 => true
-      end
-
-      it "проставлять channel_ids из параметра channel_id" do
-        Channel.should_receive(:find).with('1').and_return(Channel.new)
-        get :index, :channel_id => '1', :utf8 => true
-        searcher.channel_ids.should == [1]
       end
 
       it "проставлять параметр keywords" do
@@ -53,11 +46,10 @@ describe EntriesController do
         searcher.pagination[:per_page].should == 1
       end
 
-      it "ограничивать per_page максимум 20" do
-        get :index, :per_page => 21, :utf8 => true
-        searcher.pagination[:per_page].should == 10
+      it "ограничивать per_page максимум 50" do
+        get :index, :per_page => 51, :utf8 => true
+        searcher.pagination[:per_page].should == 50
       end
-
     end
 
     it "при поиске должен проставлять HTTP заголовки X-Total-Count, X-Total-Pages" do
@@ -95,6 +87,33 @@ describe EntriesController do
           expect {get(:show, :channel_id => 0, :id => published)}.to raise_error
         end
 
+      end
+    end
+
+    describe 'поиск новостей для cms' do
+      it 'по умолчанию' do
+        get :index, :entry_search => {:channel_ids => [1], :entry_type => 'news'}, :per_page => 12, :page => 2, :utf8 => true
+
+        searcher = Sunspot.session.searches[-3]
+
+        searcher.should have_search_params(:with, :channel_ids, [1])
+        searcher.should have_search_params(:with, :state, 'published')
+        searcher.should have_search_params(:order_by, :since, :desc)
+        searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+      end
+
+      it 'для архива' do
+        get :index, :entry_search => {:channel_ids => [1], :entry_type => 'news', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
+
+        searcher = Sunspot.session.searches[-3]
+
+        searcher.should have_search_params(:with, :channel_ids, [1])
+        searcher.should have_search_params(:with, :state, 'published')
+        searcher.should have_search_params(:order_by, :since, :desc)
+        searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+
+        searcher.should have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
+        searcher.should have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
       end
     end
 
