@@ -134,7 +134,7 @@ describe EntriesController do
 
       it 'для архива' do
         Timecop.freeze(DateTime.now) do
-          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'news', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'announcements', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
 
           searcher = Sunspot.session.searches[-3]
 
@@ -146,6 +146,101 @@ describe EntriesController do
 
           searcher.should have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
           searcher.should have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
+        end
+      end
+    end
+
+    describe 'поиск мероприятий для cms' do
+      it 'текущие' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'events', :events_type => 'current'}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+        end
+      end
+
+      it 'текущие в архиве' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'events', :events_type => 'current', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
+
+          searcher.should have_search_params(:with, Proc.new {
+            any_of do
+              all_of do
+                with(:event_entry_properties_since).greater_than(Time.local(2012, 4, 1))
+                with(:event_entry_properties_since).less_than(Time.local(2012, 4, 1).end_of_month)
+              end
+
+              all_of do
+                with(:event_entry_properties_until).greater_than(Time.local(2012, 4, 1))
+                with(:event_entry_properties_until).less_than(Time.local(2012, 4, 1).end_of_month)
+              end
+            end
+          })
+
+        end
+      end
+
+      it 'прошедшие' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'events', :events_type => 'gone'}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :event_entry_properties_until, :desc)
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).less_than(DateTime.now) })
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+        end
+      end
+
+      it 'предстоящие' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'events', :events_type => 'coming'}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_since).greater_than(DateTime.now) })
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+        end
+      end
+
+      it 'текущие и предстоящие' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'events', :events_type => 'current_coming'}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
+          searcher.should have_search_params(:with, Proc.new { any_of do
+                                                with(:event_entry_properties_since).greater_than(DateTime.now)
+                                                with(:event_entry_properties_until).greater_than(DateTime.now)
+                                              end })
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
         end
       end
     end

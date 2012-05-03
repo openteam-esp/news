@@ -56,49 +56,52 @@ class EntrySearch < Search
     end
 
     def additional_search(search)
-      #return unless events_type
-
-      archive_interval(search) if is_archive?
       search.with(:actuality_expired_at).less_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
 
-      #case events_type
-      #when 'gone'
-        #search.with(:event_entry_properties_until).less_than(DateTime.now)
-      #when 'current'
-        #search.with(:event_entry_properties_since).less_than(DateTime.now)
-        #search.with(:event_entry_properties_until).greater_than(DateTime.now)
-      #when 'coming'
-        #search.with(:event_entry_properties_since).greater_than(DateTime.now)
-      #when 'all_coming'
-        #search.with(:event_entry_properties_since).greater_than(Date.today)
-      #when 'all_gone'
-        #search.with(:event_entry_properties_since).less_than(Date.today - 1.second)
-      #end
+      case events_type
+      when 'current'
+        self.order_by = 'event_entry_properties_since asc'
+        search.with(:event_entry_properties_since).less_than(DateTime.now)
+        search.with(:event_entry_properties_until).greater_than(DateTime.now)
+      when 'gone'
+        self.order_by = 'event_entry_properties_until desc'
+        search.with(:event_entry_properties_until).less_than(DateTime.now)
+      when 'coming'
+        self.order_by = 'event_entry_properties_since asc'
+        search.with(:event_entry_properties_since).greater_than(DateTime.now)
+      when 'current_coming'
+        self.order_by = 'event_entry_properties_since asc'
+        search.any_of do
+          with(:event_entry_properties_since).greater_than(DateTime.now)
+          with(:event_entry_properties_until).greater_than(DateTime.now)
+        end
+      end if entry_type == 'events'
+
+      archive_interval(search) if is_archive?
     end
 
 
     def archive_interval(search)
       case entry_type
-      when 'news'
+      when 'news', 'announcements'
         search.all_of do
           with(:since).greater_than(interval_start)
           with(:since).less_than(interval_end)
         end
+
+      when 'events'
+        search.any_of do
+          all_of do
+            with(:event_entry_properties_since).greater_than(interval_start)
+            with(:event_entry_properties_since).less_than(interval_end)
+          end
+
+          all_of do
+            with(:event_entry_properties_until).greater_than(interval_start)
+            with(:event_entry_properties_until).less_than(interval_end)
+          end
+        end
       end
-    end
-
-    def events_in_interval(search)
-      search.any_of do
-        all_of do
-          with(:event_entry_properties_since).greater_than(interval_start)
-          with(:event_entry_properties_since).less_than(interval_end)
-        end
-
-        all_of do
-          with(:event_entry_properties_until).greater_than(interval_start)
-          with(:event_entry_properties_until).less_than(interval_end)
-        end
-      end if interval_year && interval_month
     end
 
     def interval_start
@@ -110,7 +113,7 @@ class EntrySearch < Search
     end
 
     def search_columns
-      @entry_search_columns ||= super.reject{ |c| c.match /^(interval_|entry_)/ }
+      @entry_search_columns ||= super.reject{ |c| c.match /^(interval_|entry_|events_)/ }
     end
 end
 
