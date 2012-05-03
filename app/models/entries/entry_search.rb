@@ -50,10 +50,16 @@ class EntrySearch < Search
   end
 
   protected
+
+    def is_archive?
+      interval_year && interval_month
+    end
+
     def additional_search(search)
       #return unless events_type
 
-      archive_interval(search) if interval_year && interval_month
+      archive_interval(search) if is_archive?
+      search.with(:actuality_expired_at).less_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
 
       #case events_type
       #when 'gone'

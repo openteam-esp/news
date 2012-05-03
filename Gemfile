@@ -44,5 +44,6 @@ group :test do
   gem 'shoulda-matchers',                         :require => false
   gem 'spork',                  '>= 1.0.0.rc2',   :require => false
   gem 'sqlite3',                                  :require => false
+  gem 'timecop'
 end
 

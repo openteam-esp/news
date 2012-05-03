@@ -117,6 +117,38 @@ describe EntriesController do
       end
     end
 
+    describe 'поиск анонсов для cms' do
+      it 'по умолчанию' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'announcements'}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :since, :desc)
+          searcher.should have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+        end
+      end
+
+      it 'для архива' do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'news', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-3]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :since, :desc)
+          searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+
+          searcher.should have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
+          searcher.should have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
+        end
+      end
+    end
   end
 end
 

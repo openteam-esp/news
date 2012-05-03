@@ -103,6 +103,8 @@ class Entry < ActiveRecord::Base
     time :event_entry_properties_until do
       event_entry_properties.last.try :until if respond_to?(:event_entry_properties)
     end
+
+    time :actuality_expired_at
   end
 
   alias_method :sunspot_more_like_this, :more_like_this
