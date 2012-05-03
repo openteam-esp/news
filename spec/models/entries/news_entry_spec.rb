@@ -134,7 +134,7 @@ describe NewsEntry do
 
   describe 'should send message to queue <esp.news.cms>' do
     let(:message) {
-      { :slug => 'novost-zagolovok-novosti', :channel_ids => [1] }.to_json
+      { :slug => 'novost-zagolovok-novosti', :channel_ids => [1] }
     }
 
     before { MessageMaker.stub(:make_message) }
