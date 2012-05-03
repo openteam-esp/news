@@ -2,7 +2,7 @@
   <%= form.inputs do %>
     <%= form.input :title %>
     <%= form.input :description  %>
-    <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a %>
+    <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a, :required => false %>
     <%= polymorphic_context_tree_for(form) %>
   <% end %>
   <%= form.actions do %>

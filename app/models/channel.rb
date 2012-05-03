@@ -28,7 +28,7 @@ class Channel < ActiveRecord::Base
   end
 
   def as_json(options)
-    super(:only => [:id, :title], :methods => :depth)
+    super(:only => [:id, :title, :entry_type], :methods => :depth)
   end
 
   alias_attribute :to_s, :title
