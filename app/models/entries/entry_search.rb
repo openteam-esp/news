@@ -14,6 +14,7 @@ class EntrySearch < Search
 
   column :entry_type,     :string
   column :events_type,    :string
+  column :interval_archive_query,    :string
 
   has_enum :order_by
 
@@ -27,27 +28,48 @@ class EntrySearch < Search
     self[:channel_ids].map(&:to_i) if self[:channel_ids]
   end
 
-  def min_since_event_datetime
-    #self.order_by = 'event_entry_properties_since asc'
-    #self.per_page = 1
+  def min_archive_date
+    self.interval_archive_query = true
+    self.per_page = 1
 
-    results.try(:first)
-    #if entry = results.try(:first)
-      #entry.event_entry_properties.try(:first).try(:since) if entry.is_a?(EventEntry)
-    #else
+    case entry_type
+    when 'news', 'announcements'
+      self.order_by = 'since asc'
+    when 'events'
+      self.order_by = 'event_entry_properties_since asc'
+    end
+
+    if entry = results.try(:first)
+      if entry.is_a?(EventEntry)
+        entry.event_entry_properties.try(:first).try(:since)
+      else
+        entry.since
+      end
+    else
       DateTime.now - 60.days
-    #end
+    end
   end
 
-  def max_until_event_datetime
-    #self.order_by = 'event_entry_properties_until desc'
-    #self.per_page = 1
-    results.try(:first)
-    #if entry = results.try(:first)
-      #entry.event_entry_properties.try(:first).try(:until) if entry.is_a?(EventEntry)
-    #else
-      DateTime.now + 10.days
-    #end
+  def max_archive_date
+    self.interval_archive_query = true
+    self.per_page = 1
+
+    case entry_type
+    when 'news', 'announcements'
+      self.order_by = 'since desc'
+    when 'events'
+      self.order_by = 'event_entry_properties_until desc'
+    end
+
+    if entry = results.try(:first)
+      if entry.is_a?(EventEntry)
+        entry.event_entry_properties.try(:first).try(:until)
+      else
+        entry.since
+      end
+    else
+      DateTime.now 
+    end
   end
 
   protected
@@ -57,6 +79,8 @@ class EntrySearch < Search
     end
 
     def additional_search(search)
+      return if interval_archive_query
+
       search.with(:actuality_expired_at).greater_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
 
       case events_type

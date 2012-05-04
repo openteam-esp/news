@@ -115,6 +115,34 @@ describe EntriesController do
         searcher.should have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
         searcher.should have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
       end
+
+      it 'для получение минимальной даты архива' do
+        get :index, :entry_search => {:channel_ids => [1], :entry_type => 'news', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
+
+        searcher = Sunspot.session.searches[-2]
+
+        searcher.should have_search_params(:with, :channel_ids, [1])
+        searcher.should have_search_params(:with, :state, 'published')
+        searcher.should have_search_params(:order_by, :since, :asc)
+        searcher.should have_search_params(:paginate, :page => 1, :per_page => 1)
+
+        searcher.should_not have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
+        searcher.should_not have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
+      end
+
+      it 'для получение максимальной даты архива' do
+        get :index, :entry_search => {:channel_ids => [1], :entry_type => 'news', :interval_year => 2012, :interval_month => 4}, :per_page => 12, :page => 2, :utf8 => true
+
+        searcher = Sunspot.session.searches[-1]
+
+        searcher.should have_search_params(:with, :channel_ids, [1])
+        searcher.should have_search_params(:with, :state, 'published')
+        searcher.should have_search_params(:order_by, :since, :desc)
+        searcher.should have_search_params(:paginate, :page => 1, :per_page => 1)
+
+        searcher.should_not have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
+        searcher.should_not have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
+      end
     end
 
     describe 'поиск анонсов для cms' do
@@ -241,6 +269,21 @@ describe EntriesController do
                                                 with(:event_entry_properties_until).greater_than(DateTime.now)
                                               end })
           searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
+        end
+      end
+
+      it "получение минимальной даты для архива" do
+        Timecop.freeze(DateTime.now) do
+          get :index, :entry_search => {:channel_ids => [1], :entry_type => 'events', :events_type => 'current'}, :per_page => 12, :page => 2, :utf8 => true
+
+          searcher = Sunspot.session.searches[-2]
+
+          searcher.should have_search_params(:with, :channel_ids, [1])
+          searcher.should have_search_params(:with, :state, 'published')
+          searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
+          searcher.should_not have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
+          searcher.should_not have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
+          searcher.should have_search_params(:paginate, :page => 1, :per_page => 1)
         end
       end
     end
