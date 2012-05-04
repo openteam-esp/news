@@ -53,7 +53,7 @@ News::Application.routes.draw do
 
   resources :entries, :only => [:index, :show]
 
-  resources :channels, :only => [] do
+  resources :channels, :only => [:show] do
     resources :entries, :only => [:index, :show]
   end
 
