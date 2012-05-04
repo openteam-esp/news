@@ -31,6 +31,7 @@ class EntrySearch < Search
     #self.order_by = 'event_entry_properties_since asc'
     #self.per_page = 1
 
+    results.try(:first)
     #if entry = results.try(:first)
       #entry.event_entry_properties.try(:first).try(:since) if entry.is_a?(EventEntry)
     #else
@@ -41,7 +42,7 @@ class EntrySearch < Search
   def max_until_event_datetime
     #self.order_by = 'event_entry_properties_until desc'
     #self.per_page = 1
-
+    results.try(:first)
     #if entry = results.try(:first)
       #entry.event_entry_properties.try(:first).try(:until) if entry.is_a?(EventEntry)
     #else
@@ -56,7 +57,7 @@ class EntrySearch < Search
     end
 
     def additional_search(search)
-      search.with(:actuality_expired_at).less_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
+      search.with(:actuality_expired_at).greater_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
 
       case events_type
       when 'current'

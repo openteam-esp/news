@@ -127,7 +127,7 @@ describe EntriesController do
           searcher.should have_search_params(:with, :channel_ids, [1])
           searcher.should have_search_params(:with, :state, 'published')
           searcher.should have_search_params(:order_by, :since, :desc)
-          searcher.should have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:actuality_expired_at).greater_than(DateTime.now) })
           searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
         end
       end
@@ -142,7 +142,7 @@ describe EntriesController do
           searcher.should have_search_params(:with, :state, 'published')
           searcher.should have_search_params(:order_by, :since, :desc)
           searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
-          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).greater_than(DateTime.now) })
 
           searcher.should have_search_params(:with, Proc.new { with(:since).greater_than(Time.local(2012, 4, 1)) })
           searcher.should have_search_params(:with, Proc.new { with(:since).less_than(Time.local(2012, 4, 1).end_of_month) })
@@ -160,7 +160,7 @@ describe EntriesController do
           searcher.should have_search_params(:with, :channel_ids, [1])
           searcher.should have_search_params(:with, :state, 'published')
           searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
-          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).greater_than(DateTime.now) })
           searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
           searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
           searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
@@ -176,7 +176,7 @@ describe EntriesController do
           searcher.should have_search_params(:with, :channel_ids, [1])
           searcher.should have_search_params(:with, :state, 'published')
           searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
-          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).greater_than(DateTime.now) })
           searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
           searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
           searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
@@ -207,7 +207,7 @@ describe EntriesController do
           searcher.should have_search_params(:with, :channel_ids, [1])
           searcher.should have_search_params(:with, :state, 'published')
           searcher.should have_search_params(:order_by, :event_entry_properties_until, :desc)
-          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).less_than(DateTime.now) })
+          searcher.should_not have_search_params(:with, Proc.new { with(:actuality_expired_at).greater_than(DateTime.now) })
           searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).less_than(DateTime.now) })
           searcher.should have_search_params(:paginate, :page => 2, :per_page => 12)
         end
