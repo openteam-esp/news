@@ -9,7 +9,7 @@
       <% if entry.is_announce? %>
         <div>
           <span>Актуально до </span>
-          <%= entry.actuality_expired_at ? l(announcement_entry.actuality_expired_at) : 'не указано' %>
+          <%= entry.actuality_expired_at ? l(entry.actuality_expired_at) : 'не указано' %>
         </div>
       <% end %>
 
