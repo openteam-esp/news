@@ -28,25 +28,25 @@ class EntrySearch < Search
   end
 
   def min_since_event_datetime
-    self.order_by = 'event_entry_properties_since asc'
-    self.per_page = 1
+    #self.order_by = 'event_entry_properties_since asc'
+    #self.per_page = 1
 
-    if entry = results.try(:first)
-      entry.event_entry_properties.try(:first).try(:since) if entry.is_a?(EventEntry)
-    else
-      DateTime.now
-    end
+    #if entry = results.try(:first)
+      #entry.event_entry_properties.try(:first).try(:since) if entry.is_a?(EventEntry)
+    #else
+      DateTime.now - 60.days
+    #end
   end
 
   def max_until_event_datetime
-    self.order_by = 'event_entry_properties_until desc'
-    self.per_page = 1
+    #self.order_by = 'event_entry_properties_until desc'
+    #self.per_page = 1
 
-    if entry = results.try(:first)
-      entry.event_entry_properties.try(:first).try(:until) if entry.is_a?(EventEntry)
-    else
-      DateTime.now
-    end
+    #if entry = results.try(:first)
+      #entry.event_entry_properties.try(:first).try(:until) if entry.is_a?(EventEntry)
+    #else
+      DateTime.now + 10.days
+    #end
   end
 
   protected

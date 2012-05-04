@@ -42,8 +42,8 @@ class EntriesController < ApplicationController
         headers['X-Total-Pages'] = results.total_pages.to_s
         headers['X-Total-Count'] = results.total_count.to_s
 
-        headers['X-Min-Event-Since'] = searcher.dup.min_since_event_datetime.to_s
-        headers['X-Max-Event-Until'] = searcher.dup.max_until_event_datetime.to_s
+        headers['X-Min-Date'] = searcher.dup.min_since_event_datetime.to_s
+        headers['X-Max-Date'] = searcher.dup.max_until_event_datetime.to_s
 
         results
       else
