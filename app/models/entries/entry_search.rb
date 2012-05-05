@@ -79,19 +79,21 @@ class EntrySearch < Search
     end
 
     def additional_search(search)
+
+
       case events_type
       when 'current'
-        self.order_by = 'event_entry_properties_since asc'
+        self.order_by = 'event_entry_properties_since asc' unless interval_archive_query
         search.with(:event_entry_properties_since).less_than(DateTime.now)
         search.with(:event_entry_properties_until).greater_than(DateTime.now)
       when 'gone'
-        self.order_by = 'event_entry_properties_until desc'
+        self.order_by = 'event_entry_properties_until desc' unless interval_archive_query
         search.with(:event_entry_properties_until).less_than(DateTime.now)
       when 'coming'
-        self.order_by = 'event_entry_properties_since asc'
+        self.order_by = 'event_entry_properties_since asc' unless interval_archive_query
         search.with(:event_entry_properties_since).greater_than(DateTime.now)
       when 'current_coming'
-        self.order_by = 'event_entry_properties_since asc'
+        self.order_by = 'event_entry_properties_since asc' unless interval_archive_query
         search.any_of do
           with(:event_entry_properties_since).greater_than(DateTime.now)
           with(:event_entry_properties_until).greater_than(DateTime.now)
