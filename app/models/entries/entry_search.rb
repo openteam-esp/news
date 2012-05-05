@@ -68,7 +68,7 @@ class EntrySearch < Search
         entry.since
       end
     else
-      DateTime.now 
+      DateTime.now
     end
   end
 
@@ -79,10 +79,6 @@ class EntrySearch < Search
     end
 
     def additional_search(search)
-      return if interval_archive_query
-
-      search.with(:actuality_expired_at).greater_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
-
       case events_type
       when 'current'
         self.order_by = 'event_entry_properties_since asc'
@@ -101,6 +97,10 @@ class EntrySearch < Search
           with(:event_entry_properties_until).greater_than(DateTime.now)
         end
       end if entry_type == 'events'
+
+      return if interval_archive_query
+
+      search.with(:actuality_expired_at).greater_than(DateTime.now) if entry_type == 'announcements' && !is_archive?
 
       archive_interval(search) if is_archive?
     end

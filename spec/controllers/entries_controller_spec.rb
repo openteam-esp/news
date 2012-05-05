@@ -281,8 +281,8 @@ describe EntriesController do
           searcher.should have_search_params(:with, :channel_ids, [1])
           searcher.should have_search_params(:with, :state, 'published')
           searcher.should have_search_params(:order_by, :event_entry_properties_since, :asc)
-          searcher.should_not have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
-          searcher.should_not have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_since).less_than(DateTime.now) })
+          searcher.should have_search_params(:with, Proc.new { with(:event_entry_properties_until).greater_than(DateTime.now) })
           searcher.should have_search_params(:paginate, :page => 1, :per_page => 1)
         end
       end
