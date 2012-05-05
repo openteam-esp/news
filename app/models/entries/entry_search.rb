@@ -46,7 +46,7 @@ class EntrySearch < Search
         entry.since
       end
     else
-      DateTime.now - 60.days
+      DateTime.now
     end
   end
 
