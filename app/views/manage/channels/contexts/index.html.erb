@@ -18,6 +18,7 @@
     <% end %>
   </ul>
   <%= paginate collection %>
+  <%= link_to t('.add'), new_manage_channels_channel_path, :class => 'button add' %>
 <% else %>
   <h2 class='empty'><%= t('.empty_list') %></h2>
 <% end %>
