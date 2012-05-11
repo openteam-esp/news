@@ -16,6 +16,7 @@ AttributeNormalizer.configure do |config|
   html_formatter.glyph = Gilenson::GLYPHS.inject({}) do | hash, pair | hash[pair.first] = "&#{pair.first};"; hash end
   html_formatter.glyph[:nob_open] = Gilenson::GLYPHS[:nob_open]
   html_formatter.glyph[:nob_close] = Gilenson::GLYPHS[:nob_close]
+  html_formatter.settings["(c)"] = false
 
   config.normalizers[:gilensize_as_text] = ->(value, options) do
     value.to_s.gilensize(:html => false, :raw_output => true).strip_html

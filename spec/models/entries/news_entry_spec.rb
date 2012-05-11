@@ -16,6 +16,10 @@ describe NewsEntry do
   it { should normalize_attribute(:body).from("<em><script>alert();</script>Hi</em>\ndas  asf\n").to("<em>alert();Hi</em>\ndas&nbsp;asf") }
   it { should normalize_attribute(:body).from("\r<p style='text-align: right;'>&#13;Signature</p>").to('<p style="text-align: right;">Signature</p>') }
   it { should normalize_attribute(:body).from("<table class='bordered'><tr><td>I'm a table</td></tr></table>").to("<table class=\"bordered\">\n<tr>\n<td>I'm a&nbsp;table</td>\n</tr>\n</table>") }
+  it { should normalize_attribute(:body).from("(C)").to("(C)") }
+  it { should normalize_attribute(:body).from("(R)").to("(R)") }
+  it { should normalize_attribute(:body).from("(TM)").to("(TM)") }
+  it { should normalize_attribute(:body).from("(P)").to("(P)") }
 
   describe ".folder" do
     let(:folder_draft)       { Entry.folder(:draft, current_user) }
