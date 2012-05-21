@@ -69,7 +69,7 @@ describe Ability do
         it { should_not be_able_to(:manage, another_channel(child_1)) }
         it { should_not be_able_to(:manage, another_channel(child_1_1)) }
         it { should_not be_able_to(:manage, another_channel(child_2)) }
-        it { should     be_able_to(:manage, channel(child_1)) }
+        it { should_not be_able_to(:manage, channel(child_1)) }
       end
 
       context 'управление правами доступа' do

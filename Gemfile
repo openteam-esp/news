@@ -12,7 +12,6 @@ group :default do
   gem 'el_vfs_client'
   gem 'esp-auth'
   gem 'esp-ckeditor'
-  gem 'esp-commons'
   gem 'esp-gems'
   gem 'fancy-buttons'
   gem 'forgery',                                    :require => false
