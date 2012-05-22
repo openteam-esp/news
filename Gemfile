@@ -25,6 +25,8 @@ group :default do
   gem 'sass-rails'
   gem 'simple-navigation'
   gem 'state_machine'
+
+  gem 'timecop'
 end
 
 group :development do
