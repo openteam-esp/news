@@ -11,9 +11,12 @@ task :import => :environment do
   user = User.find_or_create_by_uid '1'
 
   hashes.each do |hash|
-    unless Entry.where(:vfs_path => hash['vfs_path']).exists?
-      entry = nil
-
+    if (entry = Entry.where(:vfs_path => hash['vfs_path']).first)
+      ActiveRecord::Base.record_timestamps = false
+      hash.delete 'type'
+      entry.update_attributes hash
+      ActiveRecord::Base.record_timestamps = true
+    else
       Timecop.freeze hash['created_at'] do
         type = hash.delete('type')
         entry = type.constantize.folder(:draft, user).new hash
