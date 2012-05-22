@@ -42,7 +42,7 @@ module EntryHelper
   end
 
   def presented_html(entry, attribute)
-    if entry.send(attribute).to_s.strip_html.presence
+    if entry.send(attribute).presence
       content_tag :div, raw(entry.send(attribute))
     else
       content_tag :div, empty_message(attribute), :class => :empty
