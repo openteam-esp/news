@@ -113,7 +113,7 @@ class Ability
     end
 
     can :unlock, Entry do |entry|
-      [entry.locked_by, entry.processing_issue.executor].include? user
+      [entry.locked_by, entry.processing_issue.try(:executor)].include? user
     end
 
     ##################################
