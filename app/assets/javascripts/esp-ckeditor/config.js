@@ -74,6 +74,7 @@ CKEDITOR.editorConfig = function( config )
     ['Bold','Italic','Underline','Strike','-','Subscript','Superscript','-','RemoveFormat'],
     ['JustifyLeft','JustifyCenter','JustifyRight'],
     ['NumberedList','BulletedList','-','Outdent','Indent'],
+    ['SpecialChar'],
     ['Maximize', 'Esp_ShowBlocks']
   ];
 
