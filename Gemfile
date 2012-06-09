@@ -25,13 +25,12 @@ group :default do
   gem 'sass-rails'
   gem 'simple-navigation'
   gem 'state_machine'
-
-  gem 'timecop'
+  gem 'sunspot_rails',   '>= 2.0.0.pre.120417'
 end
 
 group :development do
   gem 'rails-erd'
-  gem 'sunspot_solr',                             :require => false
+  gem 'sunspot_solr',     '>= 2.0.0.pre.120417',  :require => false
 end
 
 group :test do
