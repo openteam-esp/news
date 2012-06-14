@@ -46,4 +46,3 @@ group :test do
   gem 'sqlite3',                                  :require => false
   gem 'timecop'
 end
-

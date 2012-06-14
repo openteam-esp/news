@@ -22,6 +22,8 @@ describe NewsEntry do
   it { should normalize_attribute(:body).from("(R)").to("(R)") }
   it { should normalize_attribute(:body).from("(TM)").to("(TM)") }
   it { should normalize_attribute(:body).from("(P)").to("(P)") }
+  it { should normalize_attribute(:body).from('<video poster="file.jpg"></video>').to('<video poster="file.jpg"></video>') }
+  it { should normalize_attribute(:body).from('<source src="file.mp4" type="video/mp4" />').to('<source src="file.mp4" type="video/mp4"></source>') }
 
   describe ".folder" do
     let(:folder_draft)       { Entry.folder(:draft, current_user) }
