@@ -93,7 +93,7 @@ CKEDITOR.on('instanceReady', function(ev) {
 
   ev.editor.dataProcessor.writer.indentationChars = "  ";
 
-  var tags = new Array('h1','h2','h3','h4','h5','h6', 'td', 'li', 'caption', 'th');
+  var tags = new Array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'th', 'td', 'li', 'caption', 'th');
   for (var tag in tags) {
     ev.editor.dataProcessor.writer.setRules(tags[tag], {
       indent : false,
@@ -104,7 +104,7 @@ CKEDITOR.on('instanceReady', function(ev) {
     });
   };
 
-  tags = ['p', 'div', 'blockquote', 'pre', 'audio','video', 'source'];
+  tags = ['div', 'blockquote', 'pre', 'audio','video'];
 
   for (var tag in tags) {
     ev.editor.dataProcessor.writer.setRules(tags[tag], {
@@ -115,6 +115,14 @@ CKEDITOR.on('instanceReady', function(ev) {
       breakAfterClose : true
     });
   };
+
+  ev.editor.dataProcessor.writer.setRules('source', {
+    indent : true,
+    breakBeforeOpen : false,
+    breakAfterOpen : true,
+    breakBeforeClose : false,
+    breakAfterClose : false
+  });
 
   ev.editor.dataProcessor.htmlFilter.addRules({
     elements:
