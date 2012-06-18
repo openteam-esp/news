@@ -202,6 +202,7 @@ class Entry < ActiveRecord::Base
         minimum_term_frequency      1
         minimum_word_length         3
         with(:state, :published)
+        with(:since).greater_than(1.month.ago)
         with(:deleted, false)
         with(:channel_ids, options[:channel_id]) if options[:channel_id]
         paginate :per_page => options[:count].to_i
