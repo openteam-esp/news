@@ -60,7 +60,7 @@ class Entry < ActiveRecord::Base
   scope :processing, -> { where(:state => processing_states).not_deleted }
   scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
   scope :draft, -> { where(:state => :draft).not_deleted }
-  scope :stale, -> { where("delete_at >= '#{Time.now}'") }
+  scope :stale, -> { where("delete_at <= ?", 1.month.ago) }
 
   def self.folder(folder, user)
     case folder.to_sym
