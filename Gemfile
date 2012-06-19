@@ -15,6 +15,7 @@ group :default do
   gem 'esp-gems'
   gem 'fancy-buttons'
   gem 'forgery',                                    :require => false
+  gem 'formtastic',       '< 2.2.0'
   gem 'friendly_id'
   gem 'gilenson'
   gem 'has_scope'
@@ -25,7 +26,7 @@ group :default do
   gem 'sass-rails'
   gem 'simple-navigation'
   gem 'state_machine'
-  gem 'sunspot_rails',   '>= 2.0.0.pre.120417'
+  gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
 end
 
 group :development do
@@ -34,7 +35,7 @@ group :development do
 end
 
 group :test do
-  gem 'fabrication'
+  gem 'fabrication',      '< 2.0.0'
   gem 'guard-rspec',                              :require => false
   gem 'guard-spork',                              :require => false
   gem 'sunspot_matchers',                         :require => false

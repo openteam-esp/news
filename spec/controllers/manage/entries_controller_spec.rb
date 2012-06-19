@@ -39,14 +39,6 @@ describe Manage::News::EntriesController do
     end
   end
 
-  describe "GET delete" do
-    it "assigns the requested entry as @entry" do
-      get :delete, :id => draft.id
-      assigns(:entry).should == draft
-      assigns(:entry).should_not be_locked
-    end
-  end
-
   describe "POST create" do
     before { channel }
 
