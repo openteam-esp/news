@@ -114,6 +114,7 @@ class Entry < ActiveRecord::Base
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
   normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
 
+  audited
 
   def issues
     [prepare, review, publish]

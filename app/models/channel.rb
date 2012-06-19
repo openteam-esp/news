@@ -23,6 +23,8 @@ class Channel < ActiveRecord::Base
 
   has_enums
 
+  audited
+
   def absolute_depth
     depth + context.depth + 1
   end
