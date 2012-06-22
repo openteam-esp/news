@@ -75,17 +75,18 @@ module EntryHelper
 
   def rss_description(entry)
     description = entry.images.any? ? image_for(entry.images.first, :width => 100, :height => 100) : ''
-    description += (entry.annotation || '').html_safe
+    description = description || ''
+    description += entry.annotation.blank? ? '' : entry.annotation.html_safe
     description += entry.body.html_safe
     description += content_tag :div do
       content = ''
-      content += "Время и место проведения: "
+      content += content_tag :h3, "Время и место проведения:"
       list = ''
       entry.event_entry_properties.each do |event|
-        list += content_tag :div, event.interval
-        list += content_tag :div, event.location
+        list += content_tag :p, event.interval
+        list += content_tag :p, event.location
       end
-      content += content_tag :ul, list.html_safe
+      content += content_tag :div, list.html_safe
       content.html_safe
 
     end if entry.is_a?(EventEntry)
