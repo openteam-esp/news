@@ -80,16 +80,65 @@ module EntryHelper
     description += entry.body.html_safe
     description += content_tag :div do
       content = ''
-      content += content_tag :h3, "Время и место проведения:"
-      list = ''
       entry.event_entry_properties.each do |event|
-        list += content_tag :p, event.interval
-        list += content_tag :p, event.location
+        content += content_tag :h4, "Дата и время проведения"
+        content += content_tag :p, interval_for(event)
+        content += content_tag :h4, "Место проведения" unless event.location.blank?
+        content += content_tag :p, event.location unless event.location.blank?
       end
-      content += content_tag :div, list.html_safe
       content.html_safe
-
     end if entry.is_a?(EventEntry)
     description
   end
+
+  def interval_for(event)
+    since_date, since_time = l(event.since.to_datetime, :format => '%d.%B.%Y %H:%M').split(' ')
+    until_date, until_time = l(event.until.to_datetime, :format => '%d.%B.%Y %H:%M').split(' ')
+
+    since_date.gsub!(".", " ")
+    since_date.gsub!(" #{Date.today.year}", "")
+    until_date.gsub!('.', ' ')
+    until_date.gsub!(" #{Date.today.year}", "")
+
+    since_arr = []
+    until_arr = []
+
+    since_arr << content_tag(:span, since_date, :class => 'nobr')
+    until_arr << content_tag(:span, until_date, :class => 'nobr') if since_date != until_date
+
+
+    if since_time != '00:00'
+      since_arr << ", #{since_time}"
+      if until_time != '00:00' && until_time != '23:59'
+        if since_time != until_time
+          if until_arr.empty?
+            until_arr << until_time
+          else
+            until_arr << ", #{until_time}"
+          end
+        else
+          unless until_arr.empty?
+            until_arr << ", #{until_time}"
+          end
+        end
+      end
+    else
+      if until_time != '00:00' && until_time != '23:59'
+        unless until_arr.empty?
+          until_arr << ", #{until_time}"
+        end
+      end
+    end
+
+    res = since_arr.join
+
+    unless until_arr.empty?
+      res += ' &mdash; '
+      res += until_arr.join
+    end
+
+    res.html_safe
+
+  end
+
 end
