@@ -4,6 +4,7 @@ ru:
       channel:                  Канал
       entry:                    Запись
       event_entry:              Событие
+      announcement_entry:       Анонс
       image:                    Изображение
       news_entry:               Новость
       prepare:                  Подготовить черновик
