@@ -3,8 +3,8 @@
     <%= form.inputs do %>
       <%= form.input :target_id, :as => :hidden %>
     <% end %>
-    <%= form.buttons do %>
-      <%= form.commit_button "Отмечать задачи от этого пользователя",
+    <%= form.actions :class => "buttons" do %>
+      <%= form.action :submit, :label => "Отмечать задачи от этого пользователя",
                              :button_html => {:class => 'button follow', :title => 'Отмечать задачи от этого пользователя'} %>
     <% end %>
   <% end %>

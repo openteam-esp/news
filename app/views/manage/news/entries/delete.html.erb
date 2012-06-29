@@ -2,8 +2,8 @@
 <%= composed_title @entry %>
 
 <%= semantic_form_for @entry, :html => { :method => :delete } do | form |  %>
-  <%= form.buttons do  %>
-    <%= form.commit_button %>
+  <%= form.actions :class => "buttons" do  %>
+    <%= form.action :submit %>
     <li><%= link_to t('cancel'), [:manage, :news, @entry] %></li>
   <% end %>
 <% end %>

@@ -47,8 +47,8 @@
         </li>
       <% end %>
 
-      <%= form.buttons :class => "buttons hidden" do %>
-        <%= form.commit_button %>
+      <%= form.actions :class => "buttons hidden" do %>
+        <%= form.action :submit %>
       <% end %>
 
       <%= render :partial => "event_entry_fields", :locals => { :form => form } if @entry.is_a?(EventEntry) %>
@@ -66,8 +66,8 @@
     <%= link_to t('cancel'), manage_news_entry_path(@entry), :class => 'button cancel', :id => "cancel_form_entry" %>
 
     <%= semantic_form_for @entry, :as => :entry, :url => unlock_manage_news_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
-      <%= form.buttons :class => "buttons" do %>
-        <%= form.commit_button t('cancel') %>
+      <%= form.actions :class => "buttons" do %>
+        <%= form.action :submit, :label => t('cancel') %>
       <% end %>
     <% end %>
   </div>

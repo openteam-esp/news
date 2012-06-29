@@ -22,8 +22,8 @@
           <%= form.input :since_gt, :as => :date_picker %>
           <%= form.input :since_lt, :as => :date_picker %>
         <% end %>
-        <%= form.buttons do %>
-          <%= form.commit_button :button_html => { :class => "button search" } %>
+        <%= form.actions do %>
+          <%= form.action :submit, :button_html => { :class => "button search" } %>
         <% end %>
       <% end %>
     </div>

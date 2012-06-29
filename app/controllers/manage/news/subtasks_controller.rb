@@ -13,4 +13,13 @@ class Manage::News::SubtasksController < Manage::ApplicationController
     end
   end
 
+  private
+
+    alias_method :old_build_resource, :build_resource
+
+    def build_resource
+      resource = old_build_resource
+      resource.initiator = current_user
+      resource
+    end
 end
