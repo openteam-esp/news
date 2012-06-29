@@ -5,6 +5,7 @@
  *= require_self
  *= require reset
  *= require error
+ *= require colorbox
  *= require layout
  *= require jquery_ui
  *= require text

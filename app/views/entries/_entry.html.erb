@@ -29,6 +29,7 @@
     <% if entry.images.exists? %>
       <h3><%= t('gallery') %></h3>
       <div class="gallery_wrapper">
+        <% entry.images.shift %>
         <% entry.images.each do |image| %>
           <%= image_for image, :width => 100, :height => 100, :title => true %>
         <% end %>
@@ -44,4 +45,3 @@
     <%= yield(:additional) %>
   </div>
 </div>
-

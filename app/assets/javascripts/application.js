@@ -12,6 +12,7 @@
  *= require jquery.ui.timepicker.ru.js
  *= require info_plugin.js
  *= require jquery_nested_form.js
+ *= require colorbox
  */
 
 function preload_images(images) {
@@ -253,5 +254,6 @@ $(function() {
   $('form').live('nested:fieldAdded', function() {
     initialize_datepicker();
   });
+  init_colorbox()
 });
 /*////*/
