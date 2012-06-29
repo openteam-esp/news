@@ -31,10 +31,10 @@
       <%= presented_html entry, :body %>
     </div>
 
-    <% if entry.images.exists? %>
+    <% entry.images.shift %>
+    <% unless entry.images.blank? %>
       <h3><%= t('gallery') %></h3>
       <div class="gallery_wrapper">
-        <% entry.images.shift %>
         <% entry.images.each do |image| %>
           <%= image_for image, :width => 100, :height => 100, :title => true %>
         <% end %>
