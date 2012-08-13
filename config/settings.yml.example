@@ -13,7 +13,7 @@ errors:
 #  secret:       SECRET
 #  url:          http://esp-sso.openteam.ru
 
-#storage
+#storage:
   #url:         http://esp-storage.openteam.ru
 
 unicorn:

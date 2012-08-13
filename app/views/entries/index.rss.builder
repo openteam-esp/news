@@ -10,7 +10,7 @@ xml.rss 'version' => '2.0' do
     collection.each do |news|
       xml.item do
         xml.title       news.title
-        xml.link        entry_url(news)
+        xml.link        params[:path_param] ? "#{params[:path_param]}/-/#{news.slug}" : entry_url(news)
         xml.pubDate     news.since.rfc822
 
         xml.description do
