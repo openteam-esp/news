@@ -21,7 +21,7 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :initiator
 
-  accepts_nested_attributes_for :images, :allow_destroy => true
+  accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
 
   after_validation :unlock, :if => :need_unlock?
 
