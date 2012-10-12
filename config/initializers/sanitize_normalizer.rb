@@ -20,7 +20,7 @@ AttributeNormalizer.configure do |config|
   html_formatter.settings["(c)"] = false
 
   config.normalizers[:gilensize_as_text] = ->(value, options) do
-    value.to_s.gilensize(:html => false, :raw_output => true).strip_html
+    value.to_s.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, '')
   end
 
   config.normalizers[:gilensize_as_html] = ->(value, options) do
