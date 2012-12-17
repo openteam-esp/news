@@ -31,12 +31,12 @@ class Ability
       user.manager?
     end
 
-    can :manage, :audits do
-      user.manager_of? Context.first
-    end
+    #can :manage, :audits do
+      #user.manager_of? Context.first
+    #end
 
     ## app specific
-    can :manage, :channels if user.permissions.for_role(:manager).for_context_type(Context).exists?
+    can :manage, :channels if user.permissions.for_role(:manager).exists?
 
     can :manage, Channel do |channel|
       user.manager_of? channel.context

@@ -7,9 +7,8 @@ class Channel < ActiveRecord::Base
   has_many :recipients
   has_and_belongs_to_many :entries, :uniq => true
 
-  validates_presence_of :title, :context, :polymorphic_context
+  validates_presence_of :title
 
-  before_validation :set_context_and_parent
   before_save :set_ancestry_path
   before_save :set_title_path
 
@@ -19,6 +18,11 @@ class Channel < ActiveRecord::Base
 
   scope :without_entries, where('entry_type IS NULL')
 
+  scope :with_manager_permissions_for, ->(user) {
+    context_ids = user.permissions.for_role(:manager).pluck('distinct context_id')
+    where(:id => Channel.where(:id => context_ids).flat_map(&:subtree_ids))
+  }
+
   has_ancestry
 
   has_enums
@@ -26,7 +30,9 @@ class Channel < ActiveRecord::Base
   audited
 
   def absolute_depth
-    depth + context.depth + 1
+    dept = depth + 1
+    dept += parent.depth if parent
+    dept
   end
 
   def as_json(options)
@@ -49,26 +55,9 @@ class Channel < ActiveRecord::Base
 
   protected
 
-    def set_context_and_parent
-      context_type, context_id = polymorphic_context.split('_')
-      self.parent = nil
-
-      case context_type
-        when 'context'
-          self.parent_id = nil
-          self.context_id = context_id
-        when 'channel'
-          self.parent_id = context_id
-          self.context_id = parent.context_id
-        end
-    end
-
     def set_ancestry_path
-      if parent
-        self.weight = parent.weight + '/' + ((parent.children - [self]).last.try(:next_position) || '00')
-      else
-        self.weight = context.subcontexts.where(:ancestry => nil).last.try(:next_position) || '00'
-      end
+      self.weight = '00'
+      self.weight = parent.weight + '/' + ((parent.children - [self]).last.try(:next_position) || '00') if parent
     end
 
     def set_title_path

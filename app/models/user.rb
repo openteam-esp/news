@@ -7,8 +7,11 @@ class User < ActiveRecord::Base
 
   def following_for(target)
     followings.where(:target_id => target).first
-  end
+   end
 
+  def contexts
+    permissions.map(&:channel).uniq.compact
+  end
 end
 
 # == Schema Information

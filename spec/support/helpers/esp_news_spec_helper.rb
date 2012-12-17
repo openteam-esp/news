@@ -20,11 +20,13 @@ module EspNewsSpecHelper
   end
 
   def channel(parent=root)
-    @channel ||= Fabricate(:channel, :entry_type => 'news_entry', :polymorphic_context => "#{parent.class.model_name.underscore}_#{parent.id}")
+    #@channel ||= Fabricate(:channel, :entry_type => 'news_entry', :polymorphic_context => "#{parent.class.model_name.underscore}_#{parent.id}")
+    @channel ||= Fabricate(:channel, :entry_type => 'news_entry')
   end
 
   def another_channel(parent=root)
-    @another_channel ||= Fabricate(:channel, :entry_type => 'event_entry', :polymorphic_context => "#{parent.class.model_name.underscore}_#{parent.id}")
+    #@another_channel ||= Fabricate(:channel, :entry_type => 'event_entry', :polymorphic_context => "#{parent.class.model_name.underscore}_#{parent.id}")
+    @another_channel ||= Fabricate(:channel, :entry_type => 'event_entry')
   end
 
   def create_entry(state, prefix=nil)

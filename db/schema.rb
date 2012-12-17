@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120619093341) do
+ActiveRecord::Schema.define(:version => 20121217063856) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(:version => 20120619093341) do
 
   create_table "channels", :force => true do |t|
     t.datetime "deleted_at"
-    t.integer  "context_id"
     t.string   "ancestry"
     t.string   "title"
     t.text     "weight"
@@ -48,7 +47,6 @@ ActiveRecord::Schema.define(:version => 20120619093341) do
   end
 
   add_index "channels", ["ancestry"], :name => "index_channels_on_ancestry"
-  add_index "channels", ["context_id"], :name => "index_channels_on_context_id"
   add_index "channels", ["weight"], :name => "index_channels_on_weight"
 
   create_table "channels_entries", :id => false, :force => true do |t|
@@ -58,17 +56,6 @@ ActiveRecord::Schema.define(:version => 20120619093341) do
 
   add_index "channels_entries", ["channel_id"], :name => "index_channels_entries_on_channel_id"
   add_index "channels_entries", ["entry_id"], :name => "index_channels_entries_on_entry_id"
-
-  create_table "contexts", :force => true do |t|
-    t.string   "title"
-    t.string   "ancestry"
-    t.string   "weight"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "contexts", ["ancestry"], :name => "index_contexts_on_ancestry"
-  add_index "contexts", ["weight"], :name => "index_contexts_on_weight"
 
   create_table "entries", :force => true do |t|
     t.datetime "delete_at"

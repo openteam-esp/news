@@ -3,7 +3,13 @@
     <%= form.input :title %>
     <%= form.input :description  %>
     <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a, :required => false %>
-    <%= polymorphic_context_tree_for(form) %>
+    <%= form.input :parent_id, :as => :select,
+                               :collection => current_user.context_tree,
+                               :member_label => ->(c) { ('&nbsp;' * 2 * c.absolute_depth + c.title).html_safe },
+                               :include_blank => t('commons.not_selected'),
+                               :selected => form.object.respond_to?(:selected_context) ? form.object.selected_context : nil,
+                               :disabled => form.object.respond_to?(:disabled_contexts) ? form.object.disabled_contexts : [] %>
+
   <% end %>
   <%= form.actions do %>
     <%= form.action :submit, :button_html => { :class => 'button simple'} %>
