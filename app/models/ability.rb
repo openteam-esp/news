@@ -5,9 +5,9 @@ class Ability
     return unless user
 
     ## common
-    can :manage, Context do |context|
-      user.manager_of? context
-    end
+    #can :manage, Context do |context|
+      #user.manager_of? context
+    #end
 
     can :manage, Permission do |permission|
       user.manager_of?(permission.context)
