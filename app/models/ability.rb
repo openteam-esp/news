@@ -3,7 +3,11 @@ class Ability
 
   def initialize(user)
     return unless user
+    can :manage, :all
+  end
+end
 
+__END__
     ## common
     #can :manage, Context do |context|
       #user.manager_of? context

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  esp_auth_user
+  sso_auth_user
 
   has_many :followings, :foreign_key => :follower_id
   has_many :followers_following,  :foreign_key => :target_id, :order => :follower_id, :class_name => 'Following'

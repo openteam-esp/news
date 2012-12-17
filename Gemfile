@@ -7,12 +7,13 @@ end
 
 group :default do
   gem 'attribute_normalizer'
+  gem 'audited-activerecord'
   gem 'compass-rails'
   gem 'dynamic_form'
   gem 'el_vfs_client'
-  gem 'esp-auth'
   gem 'esp-ckeditor'
   gem 'esp-gems'
+  gem 'esp-views'
   gem 'fancy-buttons'
   gem 'forgery',                                    :require => false
   gem 'formtastic',       '< 2.2.0'
@@ -25,6 +26,7 @@ group :default do
   gem 'sanitize'
   gem 'sass-rails'
   gem 'simple-navigation'
+  gem 'sso-auth'
   gem 'state_machine'
   gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
 end

@@ -1,5 +1,5 @@
 class Permission < ActiveRecord::Base
-  esp_auth_permission
+  sso_auth_permission :roles => [:manager, :publisher, :corrector, :initiator]
 
   def channel
     context.is_a?(Channel) ? context : nil

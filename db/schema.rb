@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121217063856) do
+ActiveRecord::Schema.define(:version => 20121217101407) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -132,14 +132,11 @@ ActiveRecord::Schema.define(:version => 20121217063856) do
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "context_id"
-    t.string   "context_type"
+    t.integer  "channel_id"
     t.string   "role"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
-
-  add_index "permissions", ["user_id", "role", "context_id", "context_type"], :name => "by_user_and_role_and_context"
 
   create_table "recipients", :force => true do |t|
     t.boolean  "active"
