@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121217101407) do
+ActiveRecord::Schema.define(:version => 20121218055351) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(:version => 20121217101407) do
   add_index "channels_entries", ["entry_id"], :name => "index_channels_entries_on_entry_id"
 
   create_table "entries", :force => true do |t|
-    t.datetime "delete_at"
+    t.datetime "deleted_at"
     t.datetime "locked_at"
     t.datetime "since"
     t.integer  "deleted_by_id"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(:version => 20121217101407) do
     t.datetime "actuality_expired_at"
   end
 
-  add_index "entries", ["delete_at"], :name => "index_entries_on_delete_at"
+  add_index "entries", ["deleted_at"], :name => "index_entries_on_delete_at"
   add_index "entries", ["deleted_by_id"], :name => "index_entries_on_deleted_by_id"
   add_index "entries", ["initiator_id"], :name => "index_entries_on_initiator_id"
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"

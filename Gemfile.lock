@@ -121,7 +121,11 @@ GEM
     friendly_id (4.0.7)
     fssm (0.2.9)
     gilenson (1.2.2)
+    has_enum (0.10.1)
+      rails (> 3.0.0)
     has_scope (0.5.1)
+    has_searcher (0.0.17)
+      rails
     hashie (1.2.0)
     highline (1.6.13)
     hike (1.2.1)
@@ -309,7 +313,9 @@ DEPENDENCIES
   formtastic (< 2.2.0)
   friendly_id
   gilenson
+  has_enum
   has_scope
+  has_searcher (< 0.0.90)
   hirb
   inherited_resources
   jquery-rails
