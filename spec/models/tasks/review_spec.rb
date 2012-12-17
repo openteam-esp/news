@@ -44,23 +44,21 @@ describe Review do
 
 end
 
-
-
 # == Schema Information
 #
 # Table name: tasks
 #
-#  id           :integer         not null, primary key
+#  comment      :text
+#  created_at   :datetime         not null
+#  deleted_at   :datetime
+#  description  :text
 #  entry_id     :integer
-#  initiator_id :integer
 #  executor_id  :integer
+#  id           :integer          not null, primary key
+#  initiator_id :integer
+#  issue_id     :integer
 #  state        :string(255)
 #  type         :string(255)
-#  comment      :text
-#  created_at   :datetime
-#  updated_at   :datetime
-#  issue_id     :integer
-#  description  :text
-#  deleted_at   :datetime
+#  updated_at   :datetime         not null
 #
 

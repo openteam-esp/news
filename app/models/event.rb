@@ -36,14 +36,14 @@ end
 #
 # Table name: events
 #
-#  id               :integer         not null, primary key
-#  event            :string(255)
-#  text             :text
+#  created_at       :datetime         not null
 #  entry_id         :integer
-#  user_id          :integer
-#  created_at       :datetime
-#  updated_at       :datetime
+#  event            :string(255)
+#  id               :integer          not null, primary key
 #  serialized_entry :text
 #  task_id          :integer
+#  text             :text
+#  updated_at       :datetime         not null
+#  user_id          :integer
 #
 

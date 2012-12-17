@@ -148,29 +148,33 @@ end
 #
 # Table name: searches
 #
-#  keywords       :text
-#  since_lt       :date
-#  since_gt       :date
-#  channel_ids    :string
-#  order_by       :string
-#  per_page       :integer
-#  state          :string
-#  deleted        :boolean
-#  updated_at_gt  :date
-#  interval_year  :integer
-#  interval_month :integer
-#  interval_type  :string
-#  keywords       :text
-#  since_lt       :date
-#  since_gt       :date
-#  channel_ids    :string
-#  order_by       :string
-#  per_page       :integer
-#  state          :string
-#  deleted        :boolean
-#  updated_at_gt  :date
-#  interval_year  :integer
-#  interval_month :integer
-#  interval_type  :string
+#  channel_ids            :string
+#  channel_ids            :string
+#  deleted                :boolean
+#  deleted                :boolean
+#  entry_type             :string
+#  entry_type             :string
+#  events_type            :string
+#  events_type            :string
+#  interval_archive_query :string
+#  interval_archive_query :string
+#  interval_month         :integer
+#  interval_month         :integer
+#  interval_year          :integer
+#  interval_year          :integer
+#  keywords               :text
+#  keywords               :text
+#  order_by               :string
+#  order_by               :string
+#  per_page               :integer
+#  per_page               :integer
+#  since_gt               :date
+#  since_gt               :date
+#  since_lt               :date
+#  since_lt               :date
+#  state                  :string
+#  state                  :string
+#  updated_at_gt          :date
+#  updated_at_gt          :date
 #
 

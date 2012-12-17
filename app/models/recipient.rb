@@ -10,18 +10,16 @@ class Recipient < ActiveRecord::Base
 
 end
 
-
-
 # == Schema Information
 #
 # Table name: recipients
 #
-#  id          :integer         not null, primary key
-#  email       :string(255)
-#  description :text
 #  active      :boolean
 #  channel_id  :integer
-#  created_at  :datetime
-#  updated_at  :datetime
+#  created_at  :datetime         not null
+#  description :text
+#  email       :string(255)
+#  id          :integer          not null, primary key
+#  updated_at  :datetime         not null
 #
 

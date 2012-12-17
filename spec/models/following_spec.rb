@@ -14,10 +14,10 @@ end
 #
 # Table name: followings
 #
-#  id          :integer         not null, primary key
+#  created_at  :datetime         not null
 #  follower_id :integer
+#  id          :integer          not null, primary key
 #  target_id   :integer
-#  created_at  :datetime
-#  updated_at  :datetime
+#  updated_at  :datetime         not null
 #
 

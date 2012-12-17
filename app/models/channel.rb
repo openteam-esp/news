@@ -90,22 +90,20 @@ class Channel < ActiveRecord::Base
     end
 end
 
-
-
 # == Schema Information
 #
 # Table name: channels
 #
-#  id          :integer         not null, primary key
-#  deleted_at  :datetime
-#  context_id  :integer
 #  ancestry    :string(255)
-#  title       :string(255)
-#  weight      :text
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-#  entry_type  :string(255)
-#  title_path  :text
+#  context_id  :integer
+#  created_at  :datetime         not null
+#  deleted_at  :datetime
 #  description :text
+#  entry_type  :string(255)
+#  id          :integer          not null, primary key
+#  title       :string(255)
+#  title_path  :text
+#  updated_at  :datetime         not null
+#  weight      :text
 #
 

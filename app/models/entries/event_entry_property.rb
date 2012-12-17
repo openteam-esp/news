@@ -41,12 +41,12 @@ end
 #
 # Table name: event_entry_properties
 #
-#  id             :integer         not null, primary key
+#  created_at     :datetime         not null
+#  event_entry_id :integer
+#  id             :integer          not null, primary key
+#  location       :text
 #  since          :datetime
 #  until          :datetime
-#  event_entry_id :integer
-#  location       :text
-#  created_at     :datetime        not null
-#  updated_at     :datetime        not null
+#  updated_at     :datetime         not null
 #
 
