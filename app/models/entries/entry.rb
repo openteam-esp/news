@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
+  attr_accessible :title, :body
   attr_accessor :locking, :current_user
 
   attr_protected :current_user, :initiator
@@ -54,13 +55,14 @@ class Entry < ActiveRecord::Base
 
   scope :by_state, ->(state) { where(:state => state) }
 
+  scope :deleted, where('deleted_by_id IS NOT NULL')
   scope :not_deleted, where(:deleted_by_id => nil)
   scope :descending, ->(attribute) { order("#{attribute} desc") }
   scope :initiated_by, ->(user) { where(:initiator_id => user) }
   scope :processing, -> { where(:state => processing_states).not_deleted }
   scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
   scope :draft, -> { where(:state => :draft).not_deleted }
-  scope :stale, -> { where("delete_at <= ?", 1.month.ago) }
+  scope :stale, -> { deleted.where('deleted_at <= ?', 1.month.ago) }
 
   def self.folder(folder, user)
     case folder.to_sym
@@ -77,8 +79,8 @@ class Entry < ActiveRecord::Base
     "/news/#{Time.now.strftime('%Y/%m/%d/%H-%M')}-#{SecureRandom.hex(4)}"
   end
 
-  searchable do
-    boolean :deleted do !!delete_at end
+  searchable(:include => [:channels]) do
+    boolean :deleted
 
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
 
@@ -162,21 +164,17 @@ class Entry < ActiveRecord::Base
     update_attributes :locked_at => nil, :locked_by => nil
   end
 
-  def deleted?
-    deleted_by_id
-  end
-
   def move_to_trash
-    self.tap do | entry |
-      entry.update_attributes :deleted_by => current_user, :delete_at => Time.now + 1.month
-      entry.tasks.update_all :deleted_at => Time.now
+    transaction do
+      update_attributes!({:deleted_by => current_user, :deleted_at => DateTime.now}, :without_protection => true)
+      tasks.update_all :deleted_at => self.updated_at
     end
   end
 
   def revivify
-    self.tap do | entry |
-      entry.update_attributes :deleted_by => nil, :delete_at => nil
-      entry.tasks.update_all :deleted_at => nil
+    transaction do
+      update_attributes!({:deleted_by => nil, :deleted_at => nil}, :without_protection => true)
+      tasks.update_all :deleted_at => nil
     end
   end
 
@@ -224,6 +222,12 @@ class Entry < ActiveRecord::Base
   def is_announce?
     false
   end
+
+  def deleted?
+    !!deleted_by_id
+  end
+
+  alias_method :deleted, :deleted?
 
   private
     def create_tasks

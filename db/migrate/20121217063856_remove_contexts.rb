@@ -4,8 +4,14 @@ class Context < ActiveRecord::Base
   has_many :channels
 end
 
+class Channel < ActiveRecord::Base
+  belongs_to :context
+  has_ancestry
+end
+
 class RemoveContexts < ActiveRecord::Migration
   def up
+
     root_channels = Channel.all.select { |c| c.parent != nil }
     root_channels.each do |c| c.context = nil; c.save! end
 
