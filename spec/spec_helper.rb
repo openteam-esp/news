@@ -16,7 +16,7 @@ Dir[Rails.root.join("spec/support/matchers/*.rb")].each {|f| require f}
 RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
   config.include EspNewsSpecHelper
-  config.include EspAuth::SpecHelper
+  config.include SsoAuth::SpecHelper
   config.include AttributeNormalizer::RSpecMatcher
   config.include SunspotMatchers
 

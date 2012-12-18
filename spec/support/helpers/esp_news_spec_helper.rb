@@ -7,31 +7,29 @@ module EspNewsSpecHelper
 
   def corrector_and_publisher
     @corrector_and_publisher ||= user.tap do |user|
-      user.permissions.create!(:context => root, :role => :corrector) unless user.corrector_of?(root)
-      user.permissions.create!(:context => root, :role => :publisher) unless user.publisher_of?(root)
+      user.permissions.create!(:context => channel, :role => :corrector) unless user.corrector_of?(channel)
+      user.permissions.create!(:context => channel, :role => :publisher) unless user.publisher_of?(channel)
     end
   end
 
   def another_corrector_and_publisher
     @another_corrector_and_publisher ||= another_user.tap do |user|
-      user.permissions.create!(:context => root, :role => :corrector) unless user.corrector_of?(root)
-      user.permissions.create!(:context => root, :role => :publisher) unless user.publisher_of?(root)
+      user.permissions.create!(:context => channel, :role => :corrector) unless user.corrector_of?(channel)
+      user.permissions.create!(:context => channel, :role => :publisher) unless user.publisher_of?(channel)
     end
   end
 
-  def channel(parent=root)
-    #@channel ||= Fabricate(:channel, :entry_type => 'news_entry', :polymorphic_context => "#{parent.class.model_name.underscore}_#{parent.id}")
+  def channel
     @channel ||= Fabricate(:channel, :entry_type => 'news_entry')
   end
 
-  def another_channel(parent=root)
-    #@another_channel ||= Fabricate(:channel, :entry_type => 'event_entry', :polymorphic_context => "#{parent.class.model_name.underscore}_#{parent.id}")
+  def another_channel
     @another_channel ||= Fabricate(:channel, :entry_type => 'event_entry')
   end
 
   def create_entry(state, prefix=nil)
     @entries ||= {}
-    @entries["#{prefix}#{state}"] ||= Fabricate :news_entry, :initiator => user_with_role(:initiator, root, prefix)
+    @entries["#{prefix}#{state}"] ||= Fabricate :news_entry, :initiator => user_with_role(:initiator, channel, prefix)
   end
 
   [nil, 'another_'].each do | prefix |
