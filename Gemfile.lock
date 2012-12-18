@@ -14,6 +14,9 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.3)
+    active_attr (0.7.0)
+      activemodel (>= 3.0.2, < 4.1)
+      activesupport (>= 3.0.2, < 4.1)
     activemodel (3.2.6)
       activesupport (= 3.2.6)
       builder (~> 3.0.0)
@@ -31,10 +34,16 @@ GEM
     airbrake (3.1.2)
       activesupport
       builder
+    amq-client (0.9.10)
+      amq-protocol (>= 0.9.4)
+      eventmachine
+    amq-protocol (1.0.1)
+    amqp (0.9.8)
+      amq-client (~> 0.9.5)
+      amq-protocol (>= 0.9.4)
+      eventmachine
     ancestry (1.3.0)
       activerecord (>= 2.3.14)
-    annotate (2.5.0.pre1)
-      rake
     arel (3.0.2)
     attribute_normalizer (1.1.0)
     audited (3.0.0)
@@ -43,6 +52,7 @@ GEM
       audited (= 3.0.0)
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
+    bunny (0.8.0)
     cancan (1.6.8)
     capistrano (2.13.5)
       highline
@@ -52,6 +62,13 @@ GEM
       net-ssh-gateway (>= 1.1.0)
     chronic (0.6.7)
     chunky_png (1.2.5)
+    coffee-rails (3.2.2)
+      coffee-script (>= 2.2.0)
+      railties (~> 3.2.0)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.4.0)
     compass (0.12.1)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -61,12 +78,15 @@ GEM
     configliere (0.4.8)
       json
     curb (0.8.0)
+    daemons (1.1.9)
     default_value_for (2.0.1)
     devise (2.1.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
+    devise-russian (2.0.1.1)
+      devise
     diff-lcs (1.1.3)
     dynamic_form (1.1.4)
     el_vfs_client (0.3.5)
@@ -77,21 +97,17 @@ GEM
     esp-ckeditor (0.1.2)
       formtastic
       rails
-    esp-gems (0.0.2)
-      ancestry
-      annotate (>= 2.4.1.beta1)
-      compass-rails (>= 1.0.0.rc.3)
-      default_value_for
-      formtastic
-      has_enum
-      has_searcher
-      inherited_resources
-      kaminari
-      pg
-      russian
-      sunspot_rails
+    esp-commons (0.5.2)
+      active_attr
+      amqp
+      bunny
+      curb
+      daemons
+      openteam-commons
+      rails
     esp-views (0.0.2)
       sso-auth
+    eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
     fabrication (1.4.1)
@@ -99,26 +115,13 @@ GEM
       compass (>= 0.11)
     faraday (0.8.4)
       multipart-post (~> 1.1)
-    ffi (1.0.11)
     forgery (0.5.0)
     formtastic (2.1.1)
       actionpack (~> 3.0)
     friendly_id (4.0.7)
     fssm (0.2.9)
     gilenson (1.2.2)
-    guard (1.1.1)
-      listen (>= 0.4.2)
-      thor (>= 0.14.6)
-    guard-rspec (1.1.0)
-      guard (>= 1.1)
-    guard-spork (1.0.1)
-      guard (>= 1.0.0)
-      spork (>= 0.8.4)
-    has_enum (0.10.1)
-      rails (> 3.0.0)
     has_scope (0.5.1)
-    has_searcher (0.0.13)
-      rails
     hashie (1.2.0)
     highline (1.6.13)
     hike (1.2.1)
@@ -135,18 +138,11 @@ GEM
     json (1.7.3)
     jwt (0.1.5)
       multi_json (>= 1.0)
-    kaminari (0.13.0)
+    kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-      railties (>= 3.0.0)
     kgio (2.7.4)
-    libnotify (0.7.4)
-      ffi (~> 1.0.11)
     libv8 (3.3.10.4)
-    listen (0.4.5)
-      rb-fchange (~> 0.0.5)
-      rb-fsevent (~> 0.9.1)
-      rb-inotify (~> 0.8.8)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -213,14 +209,9 @@ GEM
       thor (>= 0.14.6, < 2.0)
     raindrops (0.10.0)
     rake (0.9.2.2)
-    rb-fchange (0.0.5)
-      ffi
-    rb-fsevent (0.9.1)
-    rb-inotify (0.8.8)
-      ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
-    responders (0.9.1)
+    responders (0.9.3)
       railties (~> 3.1)
     rsolr (1.0.8)
       builder (>= 2.1.2)
@@ -253,7 +244,6 @@ GEM
       activesupport (>= 3.0.0)
     simple-navigation (3.7.0)
       activesupport (>= 2.3.2)
-    spork (1.0.0rc3)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -300,13 +290,18 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ancestry
   attribute_normalizer
   audited-activerecord
+  coffee-rails
   compass-rails
+  default_value_for
+  devise
+  devise-russian
   dynamic_form
   el_vfs_client
   esp-ckeditor
-  esp-gems
+  esp-commons
   esp-views
   fabrication (< 2.0.0)
   fancy-buttons
@@ -314,23 +309,22 @@ DEPENDENCIES
   formtastic (< 2.2.0)
   friendly_id
   gilenson
-  guard-rspec
-  guard-spork
   has_scope
   hirb
+  inherited_resources
   jquery-rails
-  libnotify
+  kaminari
   nested_form
   openteam-commons
+  pg
   rails-erd
-  rb-inotify
   rspec-rails
+  russian
   rvm-capistrano
   sanitize
   sass-rails
   shoulda-matchers
   simple-navigation
-  spork (>= 1.0.0.rc2)
   sqlite3
   sso-auth
   state_machine
