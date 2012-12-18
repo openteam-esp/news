@@ -27,7 +27,7 @@ group :default do
   gem 'gilenson'
   gem 'has_enum'
   gem 'has_scope'
-  gem 'has_searcher', '< 0.0.90'
+  gem 'has_searcher',     '< 0.0.90'
   gem 'inherited_resources'
   gem 'jquery-rails'
   gem 'kaminari'
