@@ -2,6 +2,7 @@
 
 Fabricator(:channel) do
   title       'Название канала'
+  parent      nil
 end
 
 # == Schema Information

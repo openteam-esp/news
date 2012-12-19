@@ -43,6 +43,7 @@ group :default do
 end
 
 group :development do
+  gem 'debugger'
   gem 'hirb',                                     :require => false
   gem 'rails-erd'
   gem 'rvm-capistrano'

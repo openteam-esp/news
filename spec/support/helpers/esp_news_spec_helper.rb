@@ -29,7 +29,7 @@ module EspNewsSpecHelper
 
   def create_entry(state, prefix=nil)
     @entries ||= {}
-    @entries["#{prefix}#{state}"] ||= Fabricate :news_entry, :initiator => user_with_role(:initiator, channel, prefix)
+    @entries["#{prefix}#{state}"] ||= Fabricate :news_entry, :initiator => initiator_of(channel)
   end
 
   [nil, 'another_'].each do | prefix |

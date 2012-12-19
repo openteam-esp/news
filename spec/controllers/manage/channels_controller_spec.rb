@@ -3,10 +3,9 @@
 require 'spec_helper'
 
 describe Manage::Channels::ChannelsController do
-  let(:organy_vlasty) { Fabricate :context }
-  let(:channel_1) { Channel.create! :title => 'channel1', :polymorphic_context => organy_vlasty.polymorphic_context_value }
-  let(:channel_2) { Channel.create! :title => 'channel2', :polymorphic_context => channel_1.polymorphic_context_value }
-  let(:channel_3) { Channel.create! :title => 'channel3', :polymorphic_context => channel_2.polymorphic_context_value }
+  let(:channel_1) { Fabricate :channel, :title => 'channel1' }
+  let(:channel_2) { Fabricate :channel, :title => 'channel2', :parent => channel_1 }
+  let(:channel_3) { Fabricate :channel, :title => 'channel3', :parent => channel_2 }
 
   def prepare_data
     channel_3
@@ -19,12 +18,12 @@ describe Manage::Channels::ChannelsController do
   before :each do
     prepare_data
 
-    sign_in manager_of(organy_vlasty)
+    sign_in manager_of(channel_1)
   end
 
   describe 'PUT update' do
     before do
-      put :update, :id => channel_2.id, :channel => { :polymorphic_context => organy_vlasty.polymorphic_context_value }
+      put :update, :id => channel_2.id, :channel => {:parent_id => nil}
     end
 
     it { should redirect_to manage_channels_root_path }
@@ -32,7 +31,6 @@ describe Manage::Channels::ChannelsController do
     it { channel_1.reload.children.should be_empty }
 
     it { channel_2.reload.parent.should be_nil }
-    it { channel_2.reload.context.should == organy_vlasty }
     it { channel_2.reload.weight.should == '01' }
 
     it { channel_3.reload.ancestors.should == [channel_2] }

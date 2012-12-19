@@ -69,6 +69,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
+    columnize (0.3.6)
     compass (0.12.1)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -79,6 +80,13 @@ GEM
       json
     curb (0.8.0)
     daemons (1.1.9)
+    debugger (1.2.2)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.1.1)
+      debugger-ruby_core_source (~> 1.1.5)
+    debugger-linecache (1.1.2)
+      debugger-ruby_core_source (>= 1.1.1)
+    debugger-ruby_core_source (1.1.5)
     default_value_for (2.0.1)
     devise (2.1.2)
       bcrypt-ruby (~> 3.0)
@@ -299,6 +307,7 @@ DEPENDENCIES
   audited-activerecord
   coffee-rails
   compass-rails
+  debugger
   default_value_for
   devise
   devise-russian
