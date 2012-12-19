@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+__END__
+
 require 'spec_helper'
 
 describe Ability, 'возможность' do

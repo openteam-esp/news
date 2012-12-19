@@ -12,13 +12,6 @@ module EspNewsSpecHelper
     end
   end
 
-  def another_corrector_and_publisher
-    @another_corrector_and_publisher ||= another_user.tap do |user|
-      user.permissions.create!(:context => channel, :role => :corrector) unless user.corrector_of?(channel)
-      user.permissions.create!(:context => channel, :role => :publisher) unless user.publisher_of?(channel)
-    end
-  end
-
   def channel
     @channel ||= Fabricate(:channel, :entry_type => 'news_entry')
   end
@@ -27,50 +20,41 @@ module EspNewsSpecHelper
     @another_channel ||= Fabricate(:channel, :entry_type => 'event_entry')
   end
 
-  def create_entry(state, prefix=nil)
-    @entries ||= {}
-    @entries["#{prefix}#{state}"] ||= Fabricate :news_entry, :initiator => initiator_of(channel)
+  def draft
+    Fabricate :news_entry, :initiator => initiator_of(channel)
   end
 
-  [nil, 'another_'].each do | prefix |
-    class_eval <<-END
-      def #{prefix}draft
-        create_entry('draft', "#{prefix}")
-      end
+  def fresh_correcting
+    @fresh_correcting ||= draft.tap do | entry |
+      entry.prepare.complete!
+    end
+  end
 
-      def #{prefix}fresh_correcting
-        @#{prefix}fresh_correcting ||= #{prefix}draft.tap do | entry |
-                                entry.prepare.complete!
-                              end
-      end
+  def processing_correcting
+    @processing_correcting ||= fresh_correcting.tap do | entry |
+      entry.current_user = corrector_of(channel)
+      entry.review.accept!
+    end
+  end
 
-      def #{prefix}processing_correcting
-        @#{prefix}processing_correcting ||= #{prefix}fresh_correcting.tap do | entry |
-                                      entry.current_user = #{prefix}corrector
-                                      entry.review.accept!
-                                    end
-      end
+  def fresh_publishing
+    @fresh_publishing ||= processing_correcting.tap do | entry |
+      entry.review.complete!
+    end
+  end
 
-      def #{prefix}fresh_publishing
-        @#{prefix}fresh_publishing ||= #{prefix}processing_correcting.tap do | entry |
-                                entry.review.complete!
-                              end
-      end
+  def processing_publishing
+    @processing_publishing ||= fresh_publishing.tap do | entry |
+      entry.current_user = publisher_of(channel)
+      entry.publish.accept!
+    end
+  end
 
-      def #{prefix}processing_publishing
-        @#{prefix}processing_publishing ||= #{prefix}fresh_publishing.tap do | entry |
-                                    entry.current_user = #{prefix}publisher
-                                    entry.publish.accept!
-                                   end
-      end
-
-      def #{prefix}published
-        @#{prefix}published ||= #{prefix}processing_publishing.tap  do | entry |
-                         entry.channels << channel
-                         entry.publish.complete!
-                       end
-      end
-    END
+  def published
+    @published ||= processing_publishing.tap  do | entry |
+      entry.channels << channel
+      entry.publish.complete!
+    end
   end
 
   def deleted_draft

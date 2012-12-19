@@ -3,57 +3,14 @@ class Ability
 
   def initialize(user)
     return unless user
-    can :manage, :all
-  end
-end
 
-__END__
-    ## common
-    #can :manage, Context do |context|
-      #user.manager_of? context
-    #end
-
-    can :manage, Permission do |permission|
-      user.manager_of?(permission.context)
-    end
-
-    can :manage, Permission do |permission|
-      permission.context.is_a?(Channel) && user.manager_of?(permission.context.context)
-    end
-
-    can [:new, :create], Permission do |permission|
-      !permission.context && user.manager?
-    end
-
-    can [:search, :index], User if user.manager?
-
-    can :manage, :application do
-      user.have_permissions?
-    end
-
-    can :manage, :permissions do
-      user.manager?
-    end
-
-    #can :manage, :audits do
-      #user.manager_of? Context.first
-    #end
+    can :manage, :application
 
     ## app specific
-    can :manage, :channels if user.permissions.for_role(:manager).exists?
-
-    can :manage, Channel do |channel|
-      user.manager_of? channel.context
-    end
-
-    can [:new, :create], Channel do |channel|
-      !channel.context && user.manager?
-    end
 
     ##################################
     ###           Task             ###
     ##################################
-    can :manage, Task if user.manager?
     can :fire_event, Task do |task|
       can?(:read, task.entry) && !task.deleted?
     end
@@ -98,9 +55,9 @@ __END__
     ##################################
     ###           Entry            ###
     ##################################
-    can :create, AnnouncementEntry if user.context_tree_of(Channel).map(&:entry_type).include?("announcement_entry")
-    can :create, EventEntry if user.context_tree_of(Channel).map(&:entry_type).include?("event_entry")
-    can :create, NewsEntry if user.context_tree_of(Channel).map(&:entry_type).include?("news_entry")
+    can :create, AnnouncementEntry if Channel.subtree_for(user).where(:entry_type => 'announcement_entry').any?
+    can :create, EventEntry if Channel.subtree_for(user).where(:entry_type => 'event_entry').any?
+    can :create, NewsEntry if Channel.subtree_for(user).where(:entry_type => 'news_entry').any?
 
     can :update, Entry do |entry|
       entry.has_processing_task_executed_by?(user) && entry.locked_by == user
@@ -113,9 +70,11 @@ __END__
     can :read, Entry do |entry|
       (user.corrector? || user.publisher? || user.manager?) && !entry.draft?
     end
+
     can :read, Entry do |entry|
       entry.has_participant?(user)
     end
+
     can :revivify, Entry do |entry|
       entry.deleted_by == user
     end
@@ -132,19 +91,10 @@ __END__
     ##################################
     ###           Following        ###
     ##################################
-    if user.have_permissions?
+    if user.permissions.any?
       can [:create, :destroy], Following do |following|
         following.follower == user
       end
     end
-
-    can :manage, :application do
-      true
-    end
-
-    can :manage, :permissions do
-      user.manager?
-    end
-
   end
 end
