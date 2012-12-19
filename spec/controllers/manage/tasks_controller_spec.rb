@@ -5,7 +5,7 @@ describe Manage::News::TasksController do
 
   describe "POST fire_event" do
     before(:each) do
-      sign_in initiator
+      sign_in initiator_of(channel)
     end
 
     subject { draft.prepare }

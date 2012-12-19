@@ -6,7 +6,7 @@ describe Manage::News::SubtasksController do
 
   describe "POST create" do
     before :each do
-      sign_in initiator
+      sign_in initiator_of(channel)
     end
     it "assigns a newly created subtask as @subtask" do
       post :create, :issue_id => draft.prepare.id, :subtask => { :description => "kjkjk", :executor_id => another_initiator.id } rescue nil

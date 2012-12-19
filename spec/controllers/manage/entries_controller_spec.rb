@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Manage::News::EntriesController do
   before :each do
-    sign_in initiator
+    sign_in initiator_of(channel)
   end
 
   describe "GET index" do
