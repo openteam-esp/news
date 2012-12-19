@@ -4,8 +4,8 @@ require 'spec_helper'
 describe Prepare do
   context "после создания новости" do
     subject { draft.prepare }
-    its(:initiator) { should == initiator }
-    its(:executor)  { should == initiator }
+    its(:initiator) { should == initiator_of(channel) }
+    its(:executor)  { should == initiator_of(channel) }
     its(:state)     { should == 'processing' }
   end
 

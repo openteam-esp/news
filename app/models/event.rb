@@ -22,7 +22,7 @@ class Event < ActiveRecord::Base
       event_entry_properties.each{ |o| o.delete('id')}
       attributes[:event_entry_properties_attributes] = event_entry_properties
     end
-    attributes.delete(:type).constantize.new(attributes)
+    attributes.delete(:type).constantize.new(attributes, :without_protection => true)
   end
 
   private

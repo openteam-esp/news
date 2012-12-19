@@ -5,12 +5,10 @@ class User < ActiveRecord::Base
   has_many :followers_following,  :foreign_key => :target_id, :order => :follower_id, :class_name => 'Following'
   has_many :followers,  :through => :followers_following
 
+  has_many :root_channels, :class_name => 'Channel', :through => :permissions, :source => :context, :source_type => 'Channel'
+
   def following_for(target)
     followings.where(:target_id => target).first
-   end
-
-  def contexts
-    permissions.map(&:channel).uniq.compact
   end
 end
 

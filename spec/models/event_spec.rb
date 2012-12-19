@@ -14,7 +14,7 @@ describe Event do
   describe "должен создаваться" do
     def updated_entry(options={})
       @updated_entry ||=  draft.tap do | entry |
-                            entry.update_attributes :author => 'Сидорова Анна Матвеевна'
+                            entry.update_attributes({:author => 'Сидорова Анна Матвеевна'}, :without_protection => true)
                             entry.prepare.complete!
                           end
     end
@@ -29,7 +29,7 @@ describe Event do
       end
 
       it { updated_entry.events.should have(2).items }
-      it { last_event.user.should == initiator }
+      it { last_event.user.should == initiator_of(channel) }
       it { last_event.event.should == 'complete' }
       it { last_event.versioned_entry.author.should == updated_entry.author }
     end

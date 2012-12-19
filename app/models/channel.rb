@@ -1,39 +1,34 @@
 class Channel < ActiveRecord::Base
-
-  attr_accessor :polymorphic_context
-
-  belongs_to :context
+  attr_accessible :title, :parent_id
 
   has_many :recipients
   has_and_belongs_to_many :entries, :uniq => true
 
   validates_presence_of :title
 
+  has_ancestry
+
   before_save :set_ancestry_path
   before_save :set_title_path
-
-  after_update :set_subtree_weights, :if => :weight_changed?
+  after_update :set_subtree_weights, :if => :weight_changed?, :unless => :ancestry_callbacks_disabled?
 
   default_scope order(:weight)
 
   scope :without_entries, where('entry_type IS NULL')
 
-  scope :with_manager_permissions_for, ->(user) {
-    context_ids = user.permissions.for_role(:manager).pluck('distinct context_id')
-    where(:id => Channel.where(:id => context_ids).flat_map(&:subtree_ids))
-  }
-
-  has_ancestry
-
   has_enums
 
   audited
 
-  def absolute_depth
-    dept = depth + 1
-    dept += parent.depth if parent
-    dept
-  end
+  # TODO: rewrite with squeel sifter
+  scope :subtree_for, ->(user) {
+    channel_table = Channel.arel_table
+    Channel.where(
+      channel_table[:id].in(user.root_channels.map(&:id)).or(
+        channel_table[:ancestry].matches_any(user.root_channels.map{|c| "#{c.child_ancestry}/%"})
+      )
+    )
+  }
 
   def as_json(options)
     super(:only => [:id, :title, :entry_type, :description], :methods => :depth)
@@ -41,24 +36,21 @@ class Channel < ActiveRecord::Base
 
   alias_attribute :to_s, :title
 
-  def polymorphic_context_value
-    "#{self.class.name.underscore}_#{self.id}"
-  end
-
-  def disabled_contexts
-    [self.polymorphic_context_value] + descendants.map(&:polymorphic_context_value) unless new_record?
-  end
-
-  def selected_context
-    parent ? parent.polymorphic_context_value : context ? context.polymorphic_context_value : nil
-  end
-
   protected
 
     def set_ancestry_path
-      self.weight = '00'
-      self.weight = parent.weight + '/' + ((parent.children - [self]).last.try(:next_position) || '00') if parent
+      if parent
+        self.weight = parent.weight + '/' + ((parent.children - [self]).last.try(:next_position) || '00')
+      else
+        if root = Channel.roots.last
+          self.weight = sprintf "%02d", root.weight.to_i + 1
+        else
+          self.weight = '00'
+        end
+      end
     end
+
+  private
 
     def set_title_path
       self.title_path = [parent.try(:title_path), title].compact.join('/')
@@ -72,9 +64,17 @@ class Channel < ActiveRecord::Base
       weight.split('/').last.to_i
     end
 
+    # Update descendants with new weight
+    # Skip this if callbacks are disabled
+    # If node is not a new record and weight was updated and the new ancestry is sane ...
     def set_subtree_weights
-      self.reload.descendants.each do |channel|
-        channel.update_attributes! :polymorphic_context => channel.parent ? channel.parent.polymorphic_context_value : channel.context.polymorphic_context_value
+      # ... for each descendant ...
+      reload.send(:unscoped_descendants).each do |descendant|
+        # ... replace old weight with new weight
+        descendant.without_ancestry_callbacks do
+          descendant.set_ancestry_path
+          descendant.save
+        end
       end
     end
 end

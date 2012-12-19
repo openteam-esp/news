@@ -100,7 +100,7 @@ describe NewsEntry do
       before { draft.lock }
       it { should be_locked }
       its(:locked_at) { should > Time.now - 5.seconds }
-      its(:locked_by) { should == initiator }
+      its(:locked_by) { should == initiator_of(channel) }
     end
 
     context 'заблокированная новость' do

@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe Publish do
-  subject { processing_publishing.tap{|e| e.update_attributes(:channels => [channel])}.publish }
+  subject { processing_publishing.tap{|e| e.update_attributes({:channels => [channel]}, :without_protection => true)}.publish }
 
   describe "закрытие" do
     before { subject.complete! }
@@ -34,7 +34,7 @@ describe Publish do
 
   context 'draft' do
     subject { draft.publish }
-    its(:initiator) { should == initiator }
+    its(:initiator) { should == initiator_of(channel) }
     its(:executor)  { should == nil }
     its(:state)     { should == 'pending' }
   end

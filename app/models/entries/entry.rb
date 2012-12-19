@@ -149,7 +149,7 @@ class Entry < ActiveRecord::Base
 
   def lock
     self.locking = true
-    update_attributes! :locked_at => DateTime.now, :locked_by => current_user
+    update_attributes!({:locked_at => DateTime.now, :locked_by => current_user}, :without_protection => true)
   end
 
   def locked?
@@ -161,7 +161,7 @@ class Entry < ActiveRecord::Base
   end
 
   def unlock
-    update_attributes :locked_at => nil, :locked_by => nil
+    update_attributes({:locked_at => nil, :locked_by => nil}, :without_protection => true)
   end
 
   def move_to_trash

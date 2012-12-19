@@ -37,7 +37,7 @@ describe Review do
 
   context 'после создания новости' do
     subject { draft.review }
-    its(:initiator) { should == initiator }
+    its(:initiator) { should == initiator_of(channel) }
     its(:executor)  { should == nil }
     its(:state)     { should == 'pending' }
   end

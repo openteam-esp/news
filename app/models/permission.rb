@@ -1,9 +1,5 @@
 class Permission < ActiveRecord::Base
   sso_auth_permission :roles => [:manager, :publisher, :corrector, :initiator]
-
-  def channel
-    context.is_a?(Channel) ? context : nil
-  end
 end
 
 # == Schema Information
