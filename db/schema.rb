@@ -132,11 +132,14 @@ ActiveRecord::Schema.define(:version => 20121218055351) do
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "channel_id"
+    t.integer  "context_id"
+    t.string   "context_type"
     t.string   "role"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
+
+  add_index "permissions", ["user_id", "role", "context_id", "context_type"], :name => "by_user_and_role_and_context"
 
   create_table "recipients", :force => true do |t|
     t.boolean  "active"
