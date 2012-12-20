@@ -21,11 +21,13 @@ class Channel < ActiveRecord::Base
   audited
 
   # TODO: rewrite with squeel sifter
-  scope :subtree_for, ->(user) {
+  scope :subtree_for, ->(user, options={}) {
+    channels = user.root_channels
+    channels = channels.where(:permissions => {:role => options[:role]}) if options[:role]
     channel_table = Channel.arel_table
     Channel.where(
-      channel_table[:id].in(user.root_channels.map(&:id)).or(
-        channel_table[:ancestry].matches_any(user.root_channels.map{|c| "#{c.child_ancestry}/%"})
+      channel_table[:id].in(channels.map(&:id)).or(
+        channel_table[:ancestry].matches_any(channels.map{|c| "#{c.child_ancestry}/%"})
       )
     )
   }

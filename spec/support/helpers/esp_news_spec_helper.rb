@@ -12,6 +12,12 @@ module EspNewsSpecHelper
     end
   end
 
+  def manager_of(channel)
+    initiator_of(channel).tap do |user|
+      user.permissions << Permission.new(:context => channel, :role => :manager)
+    end
+  end
+
   def channel
     @channel ||= Fabricate(:channel, :entry_type => 'news_entry')
   end
@@ -21,7 +27,7 @@ module EspNewsSpecHelper
   end
 
   def draft
-    Fabricate :news_entry, :initiator => initiator_of(channel)
+    @draft ||= Fabricate :news_entry, :initiator => initiator_of(channel)
   end
 
   def fresh_correcting

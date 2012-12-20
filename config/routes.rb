@@ -41,11 +41,8 @@ News::Application.routes.draw do
       root :to => 'tasks#index', :folder => 'fresh'
 
     end
-    namespace :channels do
-      resources :channels, :except => :show
 
-      root :to => 'channels#index'
-    end
+    resources :channels, :except => :show
 
     root :to => 'news/tasks#index', :folder => 'fresh'
   end

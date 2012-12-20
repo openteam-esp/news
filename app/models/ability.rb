@@ -4,9 +4,9 @@ class Ability
   def initialize(user)
     return unless user
 
-    can :manage, :application
+    can :manage, :all if user.manager?
 
-    ## app specific
+    can :manage, :application
 
     ##################################
     ###           Task             ###
@@ -68,7 +68,7 @@ class Ability
     end
 
     can :read, Entry do |entry|
-      (user.corrector? || user.publisher? || user.manager?) && !entry.draft?
+      (user.corrector? || user.publisher?) && !entry.draft?
     end
 
     can :read, Entry do |entry|

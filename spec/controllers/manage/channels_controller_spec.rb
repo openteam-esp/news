@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Manage::Channels::ChannelsController do
+describe Manage::ChannelsController do
   let(:channel_1) { Fabricate :channel, :title => 'channel1' }
   let(:channel_2) { Fabricate :channel, :title => 'channel2', :parent => channel_1 }
   let(:channel_3) { Fabricate :channel, :title => 'channel3', :parent => channel_2 }
@@ -18,7 +18,7 @@ describe Manage::Channels::ChannelsController do
   before :each do
     prepare_data
 
-    sign_in manager_of(channel_1)
+    sign_in manager
   end
 
   describe 'PUT update' do
@@ -26,7 +26,7 @@ describe Manage::Channels::ChannelsController do
       put :update, :id => channel_2.id, :channel => {:parent_id => nil}
     end
 
-    it { should redirect_to manage_channels_root_path }
+    it { should redirect_to manage_channels_path }
 
     it { channel_1.reload.children.should be_empty }
 

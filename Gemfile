@@ -56,9 +56,9 @@ end
 
 group :test do
   gem 'fabrication',      '< 2.0.0'
-  gem 'sunspot_matchers',                         :require => false
   gem 'rspec-rails',                              :require => false
   gem 'shoulda-matchers',                         :require => false
   gem 'sqlite3',                                  :require => false
+  gem 'sunspot_matchers',                         :require => false
   gem 'timecop'
 end

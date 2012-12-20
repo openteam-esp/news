@@ -1,4 +1,4 @@
-<%= semantic_form_for [:manage, :channels, resource] do | form | %>
+<%= semantic_form_for [:manage, resource] do | form | %>
   <%= form.inputs do %>
     <%= form.input :title %>
     <%= form.input :description  %>
@@ -13,7 +13,7 @@
   <% end %>
   <%= form.actions do %>
     <%= form.action :submit, :button_html => { :class => 'button simple'} %>
-    <%= form.action :cancel, :url => manage_channels_root_path, :button_html => { :class => 'button simple' } %>
+    <%= form.action :cancel, :url => manage_channels_path, :button_html => { :class => 'button simple' } %>
   <% end %>
 <% end %>
 
