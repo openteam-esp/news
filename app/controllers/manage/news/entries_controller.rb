@@ -104,7 +104,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
     end
 
     def available_channels
-      @available_channels ||= current_user.context_tree.select{|c| c.is_a?(Channel) && (!c.entry_type || c.entry_type == resource.class.model_name.underscore) }
+      @available_channels ||= Channel.subtree_for(current_user).where(:entry_type => resource.class.model_name.underscore)
     end
 
     def disabled_channels

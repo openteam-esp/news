@@ -18,9 +18,9 @@ ru:
         title:                  Заголовок
         entry_type:             Тип записи
         entry_type_enum:
-          announcement_entry:   анонс
-          event_entry:          событие
           news_entry:           новость
+          event_entry:          событие
+          announcement_entry:   анонс
 
       entry:
         actuality_expired_at:   Актуально до

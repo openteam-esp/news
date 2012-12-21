@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Subtask < Task
-
   belongs_to :issue
   belongs_to :entry
 
@@ -13,8 +12,6 @@ class Subtask < Task
   scope :opened, where(:state => [:fresh, :processing])
 
   state_machine :initial => :fresh do
-
-    before_transition :authorize_transition
     after_transition :create_event
 
     state :fresh

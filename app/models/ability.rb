@@ -6,13 +6,13 @@ class Ability
 
     can :manage, :all if user.manager?
 
-    can :manage, :application
+    can :manage, :application if user.permissions.any?
 
     ##################################
     ###           Task             ###
     ##################################
-    can :fire_event, Task do |task|
-      can?(:read, task.entry) && !task.deleted?
+    can :update, Task do |task|
+      can?(:read, task.entry) && !task.deleted? && can?(task.state_event, task)
     end
     can [:complete, :refuse], Task do |task|
       task.executor == user
@@ -55,9 +55,14 @@ class Ability
     ##################################
     ###           Entry            ###
     ##################################
-    can :create, AnnouncementEntry if Channel.subtree_for(user).where(:entry_type => 'announcement_entry').any?
-    can :create, EventEntry if Channel.subtree_for(user).where(:entry_type => 'event_entry').any?
-    can :create, NewsEntry if Channel.subtree_for(user).where(:entry_type => 'news_entry').any?
+
+    Channel.enums[:entry_type].each do |entry_type|
+      can :create, entry_type if Channel.subtree_for(user).where(:entry_type => entry_type).any?
+    end
+
+    can :create, Entry do |entry|
+      can? :create, entry.type.underscore
+    end
 
     can :update, Entry do |entry|
       entry.has_processing_task_executed_by?(user) && entry.locked_by == user

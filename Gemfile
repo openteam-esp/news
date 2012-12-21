@@ -40,6 +40,7 @@ group :default do
   gem 'sso-auth'
   gem 'state_machine'
   gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
+  gem 'decent_exposure'
 end
 
 group :development do

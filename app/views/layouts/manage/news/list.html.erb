@@ -1,21 +1,13 @@
 <% content_for :header do %>
   <h1><%= link_to t("News system"), manage_news_root_path %></h1>
 
-  <%= semantic_form_for :entry, :url => manage_news_entries_path(:type => :news_entry) do | form | %>
-    <%= form.actions do %>
-      <%= form.action :submit, :label => t('new_entry'), :button_html => { :class => "button new_news_entry simple" } %>
-    <% end %>
-  <% end %>
-
-  <%= semantic_form_for :event_entry, :url => manage_news_entries_path(:type => :event_entry) do | form | %>
-    <%= form.actions do %>
-      <%= form.action :submit, :label => t('new_event_entry'), :button_html => { :class => "button new_event_entry simple" } %>
-    <% end %>
-  <% end %>
-
-  <%= semantic_form_for :announcement_entry, :url => manage_news_entries_path(:type => :announcement_entry) do | form | %>
-    <%= form.actions do %>
-      <%= form.action :submit, :label => t('new_announcement_entry'), :button_html => { :class => "button new_announcement_entry simple" } %>
+  <% Channel.enums[:entry_type].each do |entry_type| %>
+    <% if can?(:create, entry_type) %>
+      <%= semantic_form_for :entry, :url => manage_news_entries_path(:type => entry_type) do | form | %>
+        <%= form.actions do %>
+          <%= form.action :submit, :label => t("new_#{entry_type}"), :button_html => { :class => "button new_#{entry_type} simple" } %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

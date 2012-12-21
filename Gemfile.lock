@@ -87,6 +87,7 @@ GEM
     debugger-linecache (1.1.2)
       debugger-ruby_core_source (>= 1.1.1)
     debugger-ruby_core_source (1.1.5)
+    decent_exposure (2.0.1)
     default_value_for (2.0.1)
     devise (2.1.2)
       bcrypt-ruby (~> 3.0)
@@ -308,6 +309,7 @@ DEPENDENCIES
   coffee-rails
   compass-rails
   debugger
+  decent_exposure
   default_value_for
   devise
   devise-russian

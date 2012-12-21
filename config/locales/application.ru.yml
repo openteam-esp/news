@@ -16,9 +16,9 @@ ru:
   unlock_entry: Разблокировать
   revivify_entry: Восстановить новость
   to_trash: "Переместить в корзину"
-  new_entry: "Создать новость"
   title_rss_channel: Администрация томской области
   description_rss_channel: Обзор событий от пресс-службы Администрации Томской области
+  new_news_entry: Создать новость
   new_event_entry: Создать мероприятие
   new_announcement_entry: Создать анонс
   edit: "Редактировать"

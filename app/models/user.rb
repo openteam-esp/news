@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
   def following_for(target)
     followings.where(:target_id => target).first
   end
+
+  def to_s
+    name
+  end
 end
 
 # == Schema Information

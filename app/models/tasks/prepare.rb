@@ -1,8 +1,6 @@
 class Prepare < Issue
   has_many :tasks
   state_machine :initial => :processing do
-
-    before_transition :authorize_transition
     after_transition :create_event
     after_transition :on => :complete, :do => :after_complete
     after_transition :on => :accept, :do => :after_accept

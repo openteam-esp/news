@@ -14,9 +14,7 @@ News::Application.routes.draw do
         resources :assets, :only => [:create, :destroy]
       end
 
-      resources :tasks, :only => [] do
-        post :fire_event, :on => :member
-      end
+      resources :tasks, :only => :update
 
       resources :issues, :only => [] do
         resources :subtasks, :only => [:new, :create]

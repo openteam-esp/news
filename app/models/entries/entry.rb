@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
-  attr_accessible :title, :body
+  attr_accessible :title, :body, :since, :channel_ids, :id, :annotation, :source, :source_link, :images_attributes
   attr_accessor :locking, :current_user
 
   attr_protected :current_user, :initiator
