@@ -20,6 +20,7 @@
 
 # Ignore configs
 /config/database.yml
+/config/deploy.yml
 /config/settings.yml
 /config/sunspot.yml
 
