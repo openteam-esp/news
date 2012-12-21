@@ -32,6 +32,9 @@ ru:
   blank_entry_body: "(без текста)"
   "News system": "Новости"
 
+  commons:
+    edit:   Изменить
+
   manage:
     entries:
       title:  Управление новостями
@@ -39,7 +42,6 @@ ru:
     channels:
       title:  Управление каналами
 
-      contexts:
-        index:
-          empty_list:   Нет каналов
-          add:          Добавить канал
+      index:
+        empty_list:   Нет каналов
+        add:          Добавить канал

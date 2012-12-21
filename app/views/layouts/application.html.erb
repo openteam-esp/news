@@ -12,7 +12,7 @@
     <% content_for :esp_views_manage_links do %>
       <% subnamespace = controller_path.split('/').second.to_s.inquiry %>
       <%= link_to t('manage.entries.title'), manage_root_path, :class => subnamespace.news? ? 'selected' : nil %>
-      <%= link_to(t('manage.channels.title'), manage_root_path, :class => subnamespace.channels? ? 'selected' : nil) if can?(:manage, :channels)  %>
+      <%= link_to(t('manage.channels.title'), manage_channels_path, :class => subnamespace.channels? ? 'selected' : nil) if can?(:manage, :channels)  %>
     <% end %>
     <%= render :partial => "esp/views/header" %>
     <% flash.each do |name, msg| %>
