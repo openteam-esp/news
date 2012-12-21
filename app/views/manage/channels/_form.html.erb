@@ -7,7 +7,7 @@
                             :collection => Channel.subtree_for(current_user),
                             :member_label => ->(c) { ('&nbsp;' * 2 * c.depth + c.title).html_safe },
                             :include_blank => t('commons.not_selected'),
-                            :selected => form.object.parent.id,
+                            :selected => form.object.parent,
                             :disabled => form.object.respond_to?(:disabled_contexts) ? form.object.disabled_contexts : [] %>
 
   <% end %>
