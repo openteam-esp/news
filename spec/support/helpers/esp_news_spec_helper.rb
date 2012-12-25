@@ -45,7 +45,7 @@ module EspNewsSpecHelper
 
   def processing_publishing
     @processing_publishing ||= fresh_publishing.tap do |entry|
-      entry.set_current_user(corrector_of(channel))
+      entry.set_current_user(publisher_of(channel))
       entry.publish.accept!
     end
   end
