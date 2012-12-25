@@ -12,12 +12,6 @@ module EspNewsSpecHelper
     end
   end
 
-  def manager_of(channel)
-    initiator_of(channel).tap do |user|
-      user.permissions << Permission.new(:context => channel, :role => :manager)
-    end
-  end
-
   def channel
     @channel ||= Fabricate(:channel, :entry_type => 'news_entry')
   end
@@ -27,52 +21,52 @@ module EspNewsSpecHelper
   end
 
   def draft
-    @draft ||= Fabricate :news_entry, :initiator => initiator_of(channel)
+     @draft ||= NewsEntry.create!({:current_user => initiator_of(channel), :title => 'title', :body => 'body'}, :without_protection => true)
   end
 
   def fresh_correcting
-    @fresh_correcting ||= draft.tap do | entry |
+    @fresh_correcting ||= draft.tap do |entry|
       entry.prepare.complete!
     end
   end
 
   def processing_correcting
-    @processing_correcting ||= fresh_correcting.tap do | entry |
-      entry.current_user = corrector_of(channel)
+    @processing_correcting ||= fresh_correcting.tap do |entry|
+      entry.set_current_user(corrector_of(channel))
       entry.review.accept!
     end
   end
 
   def fresh_publishing
-    @fresh_publishing ||= processing_correcting.tap do | entry |
+    @fresh_publishing ||= processing_correcting.tap do |entry|
       entry.review.complete!
     end
   end
 
   def processing_publishing
-    @processing_publishing ||= fresh_publishing.tap do | entry |
-      entry.current_user = publisher_of(channel)
+    @processing_publishing ||= fresh_publishing.tap do |entry|
+      entry.set_current_user(corrector_of(channel))
       entry.publish.accept!
     end
   end
 
   def published
-    @published ||= processing_publishing.tap  do | entry |
+    @published ||= processing_publishing.tap do |entry|
       entry.channels << channel
       entry.publish.complete!
     end
   end
 
   def deleted_draft
-    @deleted_draft ||=  draft.tap do | entry |
-                          entry.move_to_trash
-                        end
+    @deleted_draft ||=  draft.tap do |entry|
+      entry.move_to_trash
+    end
   end
 
   def revivified_draft
-    @revivified_draft ||= deleted_draft.tap do | entry |
-                            entry.revivify
-                          end
+    @revivified_draft ||= deleted_draft.tap do |entry|
+      entry.revivify
+    end
   end
 end
 

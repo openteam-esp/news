@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 class Entry < ActiveRecord::Base
-  attr_accessible :title, :body, :since, :channel_ids, :id, :annotation, :source, :source_link, :images_attributes
+  attr_accessible :title, :body, :since, :channel_ids, :annotation, :source, :source_link, :images_attributes
   attr_accessor :locking, :current_user
-
-  attr_protected :current_user, :initiator
 
   belongs_to :initiator, :class_name => 'User'
   belongs_to :locked_by, :class_name => 'User'
@@ -20,7 +18,7 @@ class Entry < ActiveRecord::Base
   has_one :review
   has_one :publish
 
-  validates_presence_of :initiator
+  validates_presence_of :current_user
 
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
 
@@ -71,6 +69,8 @@ class Entry < ActiveRecord::Base
     when :deleted     then where(:deleted_by_id => user)
     end.descending(:id)
   end
+
+  before_create :set_initiator
 
   after_create :create_tasks
   after_create :create_event
@@ -229,28 +229,42 @@ class Entry < ActiveRecord::Base
 
   alias_method :deleted, :deleted?
 
+  def set_current_user(current_user)
+    self.current_user = current_user
+    if persisted?
+      prepare.current_user = current_user
+      review.current_user = current_user
+      publish.current_user = current_user
+    end
+  end
+
   private
-    def create_tasks
-      create_prepare :initiator => initiator, :entry => self, :executor => initiator
-      create_review :initiator => initiator, :entry => self
-      create_publish :initiator => initiator, :entry => self
-    end
 
-    def create_event
-      events.create! :event => 'accept', :task => prepare, :user => current_user
-    end
+  def create_tasks
+    create_prepare!({:current_user => current_user}, :without_protection => true)
+    create_review!({:current_user => current_user}, :without_protection => true)
+    create_publish!({:current_user => current_user}, :without_protection => true)
+  end
 
-    def set_since
-      self.since ||= Time.now
-    end
+  def create_event
+    events.create! :event => 'accept', :task => prepare, :user => current_user
+  end
 
-    def send_publish_message
-      MessageMaker.make_message 'esp.news.cms', 'publish', message_for_queue
-    end
+  def set_since
+    self.since ||= Time.now
+  end
 
-    def send_unpublish_message
-      MessageMaker.make_message 'esp.news.cms', 'remove', message_for_queue
-    end
+  def send_publish_message
+    MessageMaker.make_message 'esp.news.cms', 'publish', message_for_queue
+  end
+
+  def send_unpublish_message
+    MessageMaker.make_message 'esp.news.cms', 'remove', message_for_queue
+  end
+
+  def set_initiator
+    self.initiator = current_user
+  end
 end
 
 # == Schema Information

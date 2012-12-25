@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Subtask do
 
   context 'родительская задача' do
-    subject { processing_correcting.review.subtasks.create!(:description => "подзадача", :executor => another_corrector) }
+    subject { processing_correcting.review.subtasks.create!({:description => "подзадача", :executor => another_corrector, :current_user => corrector}, :without_protection => true) }
     alias_method :create_subtask, :subject
     before { create_subtask }
 
@@ -29,12 +29,16 @@ describe Subtask do
     end
   end
 
+  def subtask(state)
+    Subtask.new({:state => state}, :without_protection => true)
+  end
+
   describe "#human_state_events" do
-    specify { Subtask.new(:state => 'fresh').human_state_events.should == [:accept, :refuse, :cancel] }
-    specify { Subtask.new(:state => 'processing').human_state_events.should == [:complete, :refuse, :cancel] }
-    specify { Subtask.new(:state => 'completed').human_state_events.should == [] }
-    specify { Subtask.new(:state => 'refused').human_state_events.should == [] }
-    specify { Subtask.new(:state => 'canceled').human_state_events.should == [] }
+    specify { subtask('fresh').human_state_events.should == [:accept, :refuse, :cancel] }
+    specify { subtask('processing').human_state_events.should == [:complete, :refuse, :cancel] }
+    specify { subtask('completed').human_state_events.should == [] }
+    specify { subtask('refused').human_state_events.should == [] }
+    specify { subtask('canceled').human_state_events.should == [] }
   end
 end
 

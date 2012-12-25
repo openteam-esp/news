@@ -3,6 +3,8 @@
 include ActionView::Helpers::DateHelper
 
 class Event < ActiveRecord::Base
+  attr_accessible :entry, :user, :task, :event
+
   belongs_to :entry
   belongs_to :user
   belongs_to :task

@@ -12,7 +12,7 @@ describe Manage::News::FollowingsController do
   end
 
   it "DELETE destroy" do
-    following = corrector.followings.create!(:target => initiator)
+    following = corrector.followings.create!({:target => initiator}, :without_protection => true)
     following.follower = corrector
     delete :destroy, :id => following.id
     assigns(:following).should_not be_persisted

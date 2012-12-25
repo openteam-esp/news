@@ -13,6 +13,7 @@ ru:
       task:                     Задача
 
     attributes:
+
       channel:
         parent_id:              Родительский канал
         title:                  Заголовок
@@ -23,6 +24,7 @@ ru:
           announcement_entry:   анонс
 
       entry:
+        current_user:           Текущий пользователь
         actuality_expired_at:   Актуально до
         annotation:             Аннотация
         body:                   Текст
@@ -77,4 +79,5 @@ ru:
         url:                    Адрес
         description:            Описание изображения
 
-
+      task:
+        current_user:           Текущий пользователь

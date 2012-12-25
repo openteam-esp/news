@@ -1,4 +1,5 @@
 class Following < ActiveRecord::Base
+  attr_accessible :target_id
   belongs_to :follower, :class_name => 'User'
   belongs_to :target, :class_name => 'User'
   validates_presence_of :follower_id, :target_id

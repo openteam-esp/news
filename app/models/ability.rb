@@ -65,7 +65,7 @@ class Ability
     end
 
     can :update, Entry do |entry|
-      entry.has_processing_task_executed_by?(user) && entry.locked_by == user
+      entry.has_processing_task_executed_by?(user) && entry.locked? && entry.locked_by == user
     end
 
     can [:update, :destroy], Entry do |entry|
@@ -96,10 +96,8 @@ class Ability
     ##################################
     ###           Following        ###
     ##################################
-    if user.permissions.any?
-      can [:create, :destroy], Following do |following|
-        following.follower == user
-      end
+    can [:create, :destroy], Following do |following|
+      following.follower == user
     end
   end
 end

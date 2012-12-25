@@ -23,12 +23,16 @@ describe Publish do
     its(:entry) { should be_publishing }
   end
 
+  def publish(options={})
+    Publish.new(options, :without_protection => true)
+  end
+
   describe "доступные действия" do
-    specify { Publish.new(:state => 'pending').human_state_events.should == [] }
-    specify { Publish.new(:state => 'fresh').human_state_events.should == [:accept]}
-    specify { Publish.new(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
-    specify { Publish.new(:state => 'processing').human_state_events.should == [:complete, :refuse]}
-    specify { Publish.new(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
+    specify { publish(:state => 'pending').human_state_events.should == [] }
+    specify { publish(:state => 'fresh').human_state_events.should == [:accept]}
+    specify { publish(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
+    specify { publish(:state => 'processing').human_state_events.should == [:complete, :refuse]}
+    specify { publish(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
     specify { published.publish.human_state_events.should == [:restore] }
   end
 

@@ -6,7 +6,6 @@ class Manage::News::SubtasksController < Manage::ApplicationController
   belongs_to :issue
 
   def create
-    @issue.entry.current_user = current_user
     create! do | success, failure |
       success.html { render :partial => @subtask }
       failure.html { render :new }
@@ -19,7 +18,8 @@ class Manage::News::SubtasksController < Manage::ApplicationController
 
     def build_resource
       resource = old_build_resource
-      resource.initiator = current_user
+      resource.current_user = current_user
+      resource.entry.set_current_user(current_user)
       resource
     end
 end

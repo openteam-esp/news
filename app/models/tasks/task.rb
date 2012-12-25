@@ -1,11 +1,15 @@
 class Task < ActiveRecord::Base
   attr_accessor :current_user
 
+  attr_accessible :comment, :state_event
+
   belongs_to :entry
   belongs_to :initiator, :class_name => 'User'
   belongs_to :executor, :class_name => 'User'
 
-  validates_presence_of :initiator
+  before_create :set_initiator
+
+  validates_presence_of :current_user
 
   scope :ordered, order('id desc')
   scope :not_deleted, where(:deleted_at => nil)
@@ -42,11 +46,21 @@ class Task < ActiveRecord::Base
     self.class.human_state_events & state_events
   end
 
+  def next_task
+  end
 
   protected
 
   def create_event(transition)
     entry.events.create! :entry => entry, :task => self, :event => transition.event.to_s, :user => current_user if self.class.human_state_events.include? transition.event
+  end
+
+  def set_initiator
+    self.initiator = current_user
+  end
+
+  def set_current_user_on_entry
+    entry.set_current_user current_user
   end
 
 end

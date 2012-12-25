@@ -117,17 +117,17 @@ describe Ability do
 
   context 'following' do
     context 'initiator' do
-      it { ability_for(corrector).should_not be_able_to(:create, Following.new(:follower => another_corrector)) }
+      it { ability_for(corrector).should_not be_able_to(:create, another_corrector.followings.new) }
     end
     describe "создание" do
-      it { ability_for(corrector).should_not be_able_to(:create, Following.new(:follower => another_corrector)) }
-      it { ability_for(corrector).should be_able_to(:create, Following.new(:follower => corrector)) }
-      it { ability_for(publisher).should be_able_to(:create, Following.new(:follower => publisher)) }
+      it { ability_for(corrector).should_not be_able_to(:create, another_corrector.followings.new) }
+      it { ability_for(corrector).should be_able_to(:create, corrector.followings.new) }
+      it { ability_for(publisher).should be_able_to(:create, publisher.followings.new) }
     end
     describe "удаление" do
-      it { ability_for(corrector).should_not be_able_to(:destroy, Following.new(:follower => another_corrector)) }
-      it { ability_for(corrector).should be_able_to(:destroy, Following.new(:follower => corrector)) }
-      it { ability_for(publisher).should be_able_to(:destroy, Following.new(:follower => publisher)) }
+      it { ability_for(corrector).should_not be_able_to(:destroy, another_corrector.followings.new) }
+      it { ability_for(corrector).should be_able_to(:destroy, corrector.followings.new) }
+      it { ability_for(publisher).should be_able_to(:destroy, publisher.followings.new) }
     end
   end
 end

@@ -1,10 +1,11 @@
 class Prepare < Issue
-  has_many :tasks
+  before_create :set_executor
+
   state_machine :initial => :processing do
+    before_transition :set_current_user_on_entry
     after_transition :create_event
     after_transition :on => :complete, :do => :after_complete
-    after_transition :on => :accept, :do => :after_accept
-    after_transition :on => :restore, :do => :after_restore
+    after_transition :on => :restore, :do => [:change_executor, :after_restore]
 
     state :processing
     state :completed
@@ -22,6 +23,11 @@ class Prepare < Issue
     entry.review
   end
 
+  private
+
+  def set_executor
+    self.executor = current_user
+  end
 end
 
 # == Schema Information

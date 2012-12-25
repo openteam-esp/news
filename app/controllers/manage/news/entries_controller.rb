@@ -63,8 +63,8 @@ class Manage::News::EntriesController < Manage::ApplicationController
     end
 
     def build_resource
-      @entry ||= class_of_resource.new.tap do |entry|
-        entry.initiator = current_user
+      @entry ||= class_of_resource.new do |entry|
+        entry.current_user = current_user
       end
     end
 
@@ -100,7 +100,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
     end
 
     def set_current_user
-      resource.current_user = current_user
+      resource.set_current_user(current_user)
     end
 
     def available_channels

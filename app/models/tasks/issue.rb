@@ -2,9 +2,6 @@ class Issue < Task
 
   has_many :subtasks, :before_add => :set_entry
 
-  def next_task
-  end
-
   def description
     self.class.model_name.human
   end
@@ -25,27 +22,23 @@ class Issue < Task
     def after_complete
       cancel_subtasks
       entry.up!
-      if next_task
-        next_task.entry.current_user = current_user
-        next_task.clear!
-      end
+      next_task.try :clear!
     end
 
     def after_accept
-      update_attributes! :executor => current_user
     end
 
     def after_restore
-      update_attributes! :executor => current_user
       entry.down!
-      if next_task
-        next_task.entry.current_user = current_user
-        next_task.suspend!
-      end
+      next_task.try :suspend!
     end
 
     def after_refuse
       cancel_subtasks
+    end
+
+    def change_executor
+      update_attributes!({:executor => current_user}, :without_protection => true)
     end
 end
 
