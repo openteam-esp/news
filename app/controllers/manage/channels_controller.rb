@@ -5,15 +5,5 @@ class Manage::ChannelsController < ApplicationController
 
   has_scope :page, :default => 1, :only => :index
 
-  def create
-    create! { manage_channels_path }
-  end
-
-  def destroy
-    destroy! { manage_channels_path }
-  end
-
-  def update
-    update! { manage_channels_path }
-  end
+  actions :new, :create, :edit, :update, :index
 end

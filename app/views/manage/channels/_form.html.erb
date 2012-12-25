@@ -3,12 +3,12 @@
     <%= form.input :title %>
     <%= form.input :description  %>
     <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a, :required => false %>
-    <%= form.input :parent, :as => :select,
-                            :collection => Channel.subtree_for(current_user),
-                            :member_label => ->(c) { ('&nbsp;' * 2 * c.depth + c.title).html_safe },
-                            :include_blank => t('commons.not_selected'),
-                            :selected => form.object.parent,
-                            :disabled => form.object.respond_to?(:disabled_contexts) ? form.object.disabled_contexts : [] %>
+    <%= form.input :parent_id,  :as => :select,
+                                :collection => Channel.subtree_for(current_user),
+                                :member_label => ->(c) { ('&nbsp;' * 2 * c.depth + c.title).html_safe },
+                                :include_blank => t('commons.not_selected'),
+                                :selected => form.object.parent_id,
+                                :disabled => form.object.persisted? ? form.object.subtree_ids : [] %>
 
   <% end %>
   <%= form.actions do %>

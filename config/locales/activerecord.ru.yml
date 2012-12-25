@@ -14,7 +14,7 @@ ru:
 
     attributes:
       channel:
-        parent:                 Родительский канал
+        parent_id:              Родительский канал
         title:                  Заголовок
         entry_type:             Тип записи
         entry_type_enum:

@@ -1,14 +1,12 @@
 class Channel < ActiveRecord::Base
-  attr_accessible :title, :parent_id
+  attr_accessible :title, :parent_id, :entry_type, :description
 
   has_many :recipients
   has_and_belongs_to_many :entries, :uniq => true
 
   validates_presence_of :title
 
-  has_ancestry
-
-  before_save :set_ancestry_path
+  before_save :set_weight, :if => :need_set_weight?
   before_save :set_title_path
   after_update :set_subtree_weights, :if => :weight_changed?, :unless => :ancestry_callbacks_disabled?
 
@@ -18,10 +16,13 @@ class Channel < ActiveRecord::Base
 
   has_enums
 
+  has_ancestry
+
   audited
 
   # TODO: rewrite with squeel sifter
   scope :subtree_for, ->(user, options={}) {
+    return Channel.scoped if user.manager?
     channels = user.root_channels
     channels = channels.where(:permissions => {:role => options[:role]}) if options[:role]
     channel_table = Channel.arel_table
@@ -40,19 +41,22 @@ class Channel < ActiveRecord::Base
 
   protected
 
-    def set_ancestry_path
+    def set_weight
       if parent
-        self.weight = parent.weight + '/' + ((parent.children - [self]).last.try(:next_position) || '00')
+        self.weight = parent.weight + '/' + next_position_for((parent.children - [self]).last)
       else
-        if root = Channel.roots.last
-          self.weight = sprintf "%02d", root.weight.to_i + 1
-        else
-          self.weight = '00'
-        end
+        self.weight = next_position_for(Channel.roots.last)
       end
     end
 
   private
+    def next_position_for(channel_or_nil)
+      channel_or_nil.try(:next_position) || '00'
+    end
+
+    def need_set_weight?
+      ancestry_changed? || !weight?
+    end
 
     def set_title_path
       self.title_path = [parent.try(:title_path), title].compact.join('/')
@@ -74,7 +78,7 @@ class Channel < ActiveRecord::Base
       reload.send(:unscoped_descendants).each do |descendant|
         # ... replace old weight with new weight
         descendant.without_ancestry_callbacks do
-          descendant.set_ancestry_path
+          descendant.set_weight
           descendant.save
         end
       end

@@ -1,4 +1,6 @@
 class AnnouncementEntry < Entry
+  attr_accessible :actuality_expired_at
+
   def is_announce?
     true
   end

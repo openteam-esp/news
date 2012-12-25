@@ -1,7 +1,7 @@
 module Manage::News::EntryHelper
 
   def will_be_destroed_in(entry)
-    distance = (entry.delete_at - Time.now)
+    distance = (entry.deleted_at + 1.month - Time.zone.now)
     return nil if distance < 0
     %w[day hour minute].each do |measure|
       interval = 1.send(measure)
