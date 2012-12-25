@@ -9,8 +9,6 @@ News::Application.configure do
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
-  config.log_level = :info
-
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -36,13 +34,6 @@ News::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = false
-
-  # Rails generate
-  config.generators do |generators|
-    generators.test_framework       :rspec, :fixture => true
-    generators.fixture_replacement  :fabrication
-    generators.stylesheet_engine    :sass
-  end
 
   config.to_prepare do
     Dir[Rails.root.join('app/models/entries/*')].each do |model_path|
