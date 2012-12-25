@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Subtask < Task
-  attr_accessible :description, :executor
+  attr_accessible :description, :executor_id
 
   belongs_to :issue
   belongs_to :entry
@@ -49,7 +49,7 @@ class Subtask < Task
   end
 
   def executors_without_initiator
-    User.where('id not in (?)', initiator_id)
+    User.where('id not in (?)', current_user.id)
   end
 
   def truncated_description
@@ -63,7 +63,7 @@ class Subtask < Task
     end
 
     def not_itself_assigned
-      self.errors[:executor_id] = 'Нелья назначить подзадачу себе' if executor_id == initiator_id
+      self.errors[:executor_id] = 'Нелья назначить подзадачу себе' if executor == current_user
     end
 
 
