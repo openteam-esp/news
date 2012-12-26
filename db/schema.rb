@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121226060640) do
+ActiveRecord::Schema.define(:version => 20121226093613) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -129,6 +129,16 @@ ActiveRecord::Schema.define(:version => 20121226060640) do
   end
 
   add_index "images", ["entry_id"], :name => "index_images_on_entry_id"
+
+  create_table "locks", :force => true do |t|
+    t.integer  "entry_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "locks", ["entry_id"], :name => "index_locks_on_entry_id"
+  add_index "locks", ["user_id"], :name => "index_locks_on_user_id"
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"

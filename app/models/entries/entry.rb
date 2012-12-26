@@ -31,17 +31,17 @@ class Entry < ActiveRecord::Base
   STALE_PERIOD = 1.month
 
   attr_accessible :title, :body, :since, :channel_ids, :annotation, :source, :source_link, :images_attributes
-  attr_accessor :locking, :current_user
+  attr_accessor :current_user
 
   belongs_to :initiator, :class_name => 'User'
-  belongs_to :locked_by, :class_name => 'User'
   belongs_to :deleted_by, :class_name => 'User'
 
   has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}, :uniq => true
 
   has_many :events, :dependent => :destroy
   has_many :images, :dependent => :destroy
-  has_many :tasks, :dependent => :destroy
+  has_many :tasks,  :dependent => :destroy
+  has_many :locks,  :dependent => :destroy
 
   has_one :prepare
   has_one :review
@@ -50,8 +50,6 @@ class Entry < ActiveRecord::Base
   validates_presence_of :current_user
 
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
-
-  after_validation :unlock, :if => :need_unlock?
 
   extend FriendlyId
   friendly_id :truncated_title, :use => :slugged
@@ -179,20 +177,23 @@ class Entry < ActiveRecord::Base
   end
 
   def lock
-    self.locking = true
-    update_attributes!({:locked_at => DateTime.now, :locked_by => current_user}, :without_protection => true)
+    locks.create! :user => current_user unless locked?
   end
 
   def locked?
-    self.locked_at?
-  end
-
-  def need_unlock?
-    !self.locking && self.locked?
+    self.locks.any?
   end
 
   def unlock
-    update_attributes({:locked_at => nil, :locked_by => nil}, :without_protection => true)
+    locks.destroy_all
+  end
+
+  def locked_by
+    locks.first.try :user
+  end
+
+  def locked_at
+    locks.first.try :created_at
   end
 
   def move_to_trash

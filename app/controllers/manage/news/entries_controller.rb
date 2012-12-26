@@ -23,7 +23,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
   def edit
     edit! do
-      @entry.lock
+      resource.lock
     end
   end
 
@@ -41,6 +41,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
   def update
     update! do |success, failure|
       success.html {
+        resource.unlock
         if request.xhr?
           resource.reload
           render :edit, :layout => false and return
