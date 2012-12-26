@@ -44,6 +44,7 @@ group :default do
 end
 
 group :development do
+  gem 'annotate'
   gem 'debugger'
   gem 'hirb',                                     :require => false
   gem 'rails-erd'

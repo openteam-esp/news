@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id           :integer          not null, primary key
+#  deleted_at   :datetime
+#  entry_id     :integer
+#  executor_id  :integer
+#  initiator_id :integer
+#  issue_id     :integer
+#  state        :string(255)
+#  type         :string(255)
+#  comment      :text
+#  description  :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 class Task < ActiveRecord::Base
   attr_accessor :current_user
 
@@ -62,24 +80,4 @@ class Task < ActiveRecord::Base
   def set_current_user_on_entry
     entry.set_current_user current_user
   end
-
 end
-
-# == Schema Information
-#
-# Table name: tasks
-#
-#  comment      :text
-#  created_at   :datetime         not null
-#  deleted_at   :datetime
-#  description  :text
-#  entry_id     :integer
-#  executor_id  :integer
-#  id           :integer          not null, primary key
-#  initiator_id :integer
-#  issue_id     :integer
-#  state        :string(255)
-#  type         :string(255)
-#  updated_at   :datetime         not null
-#
-

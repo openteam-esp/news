@@ -1,3 +1,5 @@
+# -*- SkipSchemaAnnotations
+
 class Ability
   include CanCan::Ability
 

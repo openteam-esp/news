@@ -36,7 +36,7 @@ News::Application.configure do
   config.assets.debug = false
 
   config.to_prepare do
-    Dir[Rails.root.join('app/models/entries/*')].each do |model_path|
+    Dir[Rails.root.join('app/models/{entries,tasks}/*')].each do |model_path|
       require_or_load model_path.to_s
     end
   end

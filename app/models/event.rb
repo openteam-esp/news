@@ -1,4 +1,19 @@
 # encoding: utf-8
+# == Schema Information
+#
+# Table name: events
+#
+#  id               :integer          not null, primary key
+#  entry_id         :integer
+#  task_id          :integer
+#  user_id          :integer
+#  event            :string(255)
+#  serialized_entry :text
+#  text             :text
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
+
 
 include ActionView::Helpers::DateHelper
 
@@ -33,19 +48,3 @@ class Event < ActiveRecord::Base
       self.serialized_entry = JSON.generate(entry.attributes.as_json) if event == 'complete'
     end
 end
-
-# == Schema Information
-#
-# Table name: events
-#
-#  created_at       :datetime         not null
-#  entry_id         :integer
-#  event            :string(255)
-#  id               :integer          not null, primary key
-#  serialized_entry :text
-#  task_id          :integer
-#  text             :text
-#  updated_at       :datetime         not null
-#  user_id          :integer
-#
-

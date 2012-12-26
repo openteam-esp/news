@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id          :integer          not null, primary key
+#  url         :text
+#  description :text
+#  entry_id    :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class Image < ActiveRecord::Base
   belongs_to :entry
 
@@ -13,16 +25,3 @@ class Image < ActiveRecord::Base
     super(:only => [:url, :description], :methods => [:width, :height, :thumbnail])
   end
 end
-
-# == Schema Information
-#
-# Table name: images
-#
-#  created_at  :datetime         not null
-#  description :text
-#  entry_id    :integer
-#  id          :integer          not null, primary key
-#  updated_at  :datetime         not null
-#  url         :text
-#
-

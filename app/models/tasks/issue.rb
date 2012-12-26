@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id           :integer          not null, primary key
+#  deleted_at   :datetime
+#  entry_id     :integer
+#  executor_id  :integer
+#  initiator_id :integer
+#  issue_id     :integer
+#  state        :string(255)
+#  type         :string(255)
+#  comment      :text
+#  description  :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 class Issue < Task
 
   has_many :subtasks, :before_add => :set_entry
@@ -41,22 +59,3 @@ class Issue < Task
       update_attributes!({:executor => current_user}, :without_protection => true)
     end
 end
-
-# == Schema Information
-#
-# Table name: tasks
-#
-#  comment      :text
-#  created_at   :datetime         not null
-#  deleted_at   :datetime
-#  description  :text
-#  entry_id     :integer
-#  executor_id  :integer
-#  id           :integer          not null, primary key
-#  initiator_id :integer
-#  issue_id     :integer
-#  state        :string(255)
-#  type         :string(255)
-#  updated_at   :datetime         not null
-#
-

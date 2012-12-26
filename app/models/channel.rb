@@ -1,3 +1,20 @@
+# encoding: utf-8
+# == Schema Information
+#
+# Table name: channels
+#
+#  id          :integer          not null, primary key
+#  deleted_at  :datetime
+#  ancestry    :string(255)
+#  title       :string(255)
+#  weight      :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  entry_type  :string(255)
+#  title_path  :text
+#  description :text
+#
+
 class Channel < ActiveRecord::Base
   attr_accessible :title, :parent_id, :entry_type, :description
 
@@ -84,21 +101,3 @@ class Channel < ActiveRecord::Base
       end
     end
 end
-
-# == Schema Information
-#
-# Table name: channels
-#
-#  ancestry    :string(255)
-#  context_id  :integer
-#  created_at  :datetime         not null
-#  deleted_at  :datetime
-#  description :text
-#  entry_type  :string(255)
-#  id          :integer          not null, primary key
-#  title       :string(255)
-#  title_path  :text
-#  updated_at  :datetime         not null
-#  weight      :text
-#
-

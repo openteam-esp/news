@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: recipients
+#
+#  id          :integer          not null, primary key
+#  active      :boolean
+#  channel_id  :integer
+#  email       :string(255)
+#  description :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class Recipient < ActiveRecord::Base
   belongs_to :channel
 
@@ -9,17 +22,3 @@ class Recipient < ActiveRecord::Base
   default_scope order(:email)
 
 end
-
-# == Schema Information
-#
-# Table name: recipients
-#
-#  active      :boolean
-#  channel_id  :integer
-#  created_at  :datetime         not null
-#  description :text
-#  email       :string(255)
-#  id          :integer          not null, primary key
-#  updated_at  :datetime         not null
-#
-
