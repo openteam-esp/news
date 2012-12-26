@@ -33,6 +33,7 @@ group :default do
   gem 'kaminari'
   gem 'nested_form'
   gem 'openteam-commons'
+  gem 'progress_bar'
   gem 'russian'
   gem 'sanitize'
   gem 'sass-rails'

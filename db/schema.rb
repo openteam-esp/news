@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121218055351) do
+ActiveRecord::Schema.define(:version => 20121226060640) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -89,10 +89,10 @@ ActiveRecord::Schema.define(:version => 20121218055351) do
   create_table "event_entry_properties", :force => true do |t|
     t.datetime "since"
     t.datetime "until"
-    t.integer  "event_entry_id"
+    t.integer  "entry_id"
     t.text     "location"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "events", :force => true do |t|

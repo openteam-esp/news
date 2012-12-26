@@ -1,5 +1,5 @@
-<% if can?(:create, current_user.followings.build(:target => task.initiator)) && !task.initiator.followers.include?(current_user) %>
-  <%= semantic_form_for [:manage, :news, current_user.followings.build(:target => task.initiator)] do |form| %>
+<% if can?(:create, current_user.followings.build(:target_id => task.initiator.id)) && !task.initiator.followers.include?(current_user) %>
+  <%= semantic_form_for [:manage, :news, current_user.followings.build(:target_id => task.initiator.id)] do |form| %>
     <%= form.inputs do %>
       <%= form.input :target_id, :as => :hidden %>
     <% end %>

@@ -108,7 +108,9 @@ class Entry < ActiveRecord::Base
     "/news/#{Time.now.strftime('%Y/%m/%d/%H-%M')}-#{SecureRandom.hex(4)}"
   end
 
-  searchable(:include => [:channels]) do
+  has_many :event_entry_properties
+
+  searchable(:include => [:channels, :event_entry_properties]) do
     boolean :deleted
 
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
@@ -128,11 +130,11 @@ class Entry < ActiveRecord::Base
     time   :since
 
     time :event_entry_properties_since do
-      event_entry_properties.first.try(:since) if respond_to?(:event_entry_properties)
+      event_entry_properties.first.try(:since)
     end
 
     time :event_entry_properties_until do
-      event_entry_properties.last.try :until if respond_to?(:event_entry_properties)
+      event_entry_properties.last.try :until
     end
 
     time :actuality_expired_at

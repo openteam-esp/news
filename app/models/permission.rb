@@ -13,5 +13,5 @@
 
 class Permission < ActiveRecord::Base
   attr_accessible :role, :context
-  sso_auth_permission :roles => [:manager, :publisher, :corrector, :initiator]
+  sso_auth_permission :roles => [:administrator, :manager, :publisher, :corrector, :initiator]
 end
