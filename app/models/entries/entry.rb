@@ -28,6 +28,8 @@
 
 
 class Entry < ActiveRecord::Base
+  STALE_PERIOD = 1.month
+
   attr_accessible :title, :body, :since, :channel_ids, :annotation, :source, :source_link, :images_attributes
   attr_accessor :locking, :current_user
 
@@ -87,7 +89,7 @@ class Entry < ActiveRecord::Base
   scope :processing, -> { where(:state => processing_states).not_deleted }
   scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
   scope :draft, -> { where(:state => :draft).not_deleted }
-  scope :stale, -> { deleted.where('deleted_at <= ?', 1.month.ago) }
+  scope :stale, -> { deleted.where('deleted_at <= ?', STALE_PERIOD.ago) }
 
   def self.folder(folder, user)
     case folder.to_sym
@@ -263,6 +265,10 @@ class Entry < ActiveRecord::Base
       review.current_user = current_user
       publish.current_user = current_user
     end
+  end
+
+  def will_be_destroyed_at
+    deleted_at + STALE_PERIOD
   end
 
   private
