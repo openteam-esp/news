@@ -29,13 +29,20 @@ namespace :deploy do
   task :airbrake do
     run "cd #{deploy_to}/current && RAILS_ENV=production TO=production bin/rake airbrake:deploy"
   end
+
+  desc "Update crontab tasks"
+  task :update_crontab do
+    run "cd #{deploy_to}/current && exec bundle exec whenever --update-crontab --load-file #{deploy_to}/current/config/schedule.rb"
+  end
 end
 
 # deploy
 after "deploy:finalize_update", "deploy:config_app"
+
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
 after "deploy", "deploy:reload_servers"
+after "deploy", "deploy:update_crontab"
 after "deploy:restart", "deploy:cleanup"
 after "deploy", "deploy:airbrake"
 
