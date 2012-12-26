@@ -11,6 +11,8 @@
 #
 
 class Image < ActiveRecord::Base
+  attr_accessible :url, :description
+
   belongs_to :entry
 
   default_scope order(:id)
