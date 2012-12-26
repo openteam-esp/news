@@ -38,7 +38,6 @@ class Task < ActiveRecord::Base
     types = ['Subtask']
     types << 'Review' if user.corrector?
     types << 'Publish' if user.publisher?
-    types += %w[Review Publish] if user.manager?
     Task.not_deleted.where(:type => types).where(:state => :fresh).where(['executor_id IS NULL OR executor_id = ?', user])
   end
   scope :processed_by_me, ->(user) do

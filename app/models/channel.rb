@@ -39,7 +39,7 @@ class Channel < ActiveRecord::Base
 
   # TODO: rewrite with squeel sifter
   scope :subtree_for, ->(user, options={}) {
-    return Channel.scoped if user.manager?
+    return Channel.scoped if user.permissions.for_context(nil).any?
     channels = user.root_channels
     channels = channels.where(:permissions => {:role => options[:role]}) if options[:role]
     channel_table = Channel.arel_table

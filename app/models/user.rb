@@ -40,4 +40,15 @@ class User < ActiveRecord::Base
   def to_s
     name
   end
+
+  alias_method :sso_corrector?, :corrector?
+  alias_method :sso_publisher?, :publisher?
+
+  def corrector?
+    manager? || sso_corrector?
+  end
+
+  def publisher?
+    manager? || sso_publisher?
+  end
 end
