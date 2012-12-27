@@ -6,7 +6,7 @@ class Ability
   def initialize(user)
     return unless user
 
-    can :manage, :all if user.manager?
+    #can :manage, :all if user.manager?
 
     can :manage, :application if user.permissions.any?
 
@@ -31,14 +31,14 @@ class Ability
     ###          Review            ###
     ##################################
     can [:accept, :restore, :complete, :refuse], Review do |review|
-      user.corrector?
+      user.corrector_of?(review.entry) || user.manager_of?(review.entry)
     end
 
     ##################################
     ###          Publish           ###
     ##################################
     can [:accept, :restore, :complete, :refuse], Publish do |publish|
-      user.publisher?
+      user.publisher_of?(publish.entry) || user.manager_of?(publish.entry)
     end
 
     ##################################
@@ -75,7 +75,7 @@ class Ability
     end
 
     can :read, Entry do |entry|
-      (user.corrector? || user.publisher?) && !entry.draft?
+      (user.corrector_of?(entry) || user.publisher_of?(entry) || user.manager_of?(entry)) && !entry.draft?
     end
 
     can :read, Entry do |entry|

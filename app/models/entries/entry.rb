@@ -96,6 +96,9 @@ class Entry < ActiveRecord::Base
     when :draft       then draft.initiated_by(user)
     when :deleted     then where(:deleted_by_id => user)
     end.descending(:id)
+      .joins(:channels)
+        .where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
+        .uniq
   end
 
   before_create :set_initiator

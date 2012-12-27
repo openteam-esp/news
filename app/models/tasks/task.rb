@@ -25,6 +25,8 @@ class Task < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   belongs_to :executor, :class_name => 'User'
 
+  has_many :channels, :through => :entry
+
   before_create :set_initiator
 
   validates_presence_of :current_user
@@ -36,21 +38,26 @@ class Task < ActiveRecord::Base
   scope :for_channel, ->(channel) do
     joins(:entry).joins(:channel)
   end
-  scope :folder, ->(folder, user) { send folder, user }
+  scope :folder, ->(folder, user) { current_scope.send folder, user }
   scope :fresh, ->(user) do
     types = ['Subtask']
-    types << 'Review' if user.corrector?
-    types << 'Publish' if user.publisher?
-    Task.not_deleted.where(:type => types).where(:state => :fresh).where(['executor_id IS NULL OR executor_id = ?', user])
+    types << 'Review' if user.corrector? || user.manager?
+    types << 'Publish' if user.publisher? || user.manager?
+    not_deleted
+      .where(:type => types)
+      .where(:state => :fresh)
+      .where(['executor_id IS NULL OR executor_id = ?', user])
+      .joins(:channels)
+        .where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
   end
   scope :processed_by_me, ->(user) do
-    Task.not_deleted.processing.where(:executor_id => user)
+    not_deleted.processing.where(:executor_id => user)
   end
   scope :initiated_by_me, ->(user) do
-    Task.not_deleted.where(:initiator_id => user).where("state <> 'pending'")
+    not_deleted.where(:initiator_id => user).where("state <> 'pending'")
   end
 
-  default_scope ordered
+  #default_scope ordered
 
   delegate :prepare, :review, :publish, :to => :entry
   delegate :fresh?, :to => :next_task, :prefix => true

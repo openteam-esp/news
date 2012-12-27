@@ -30,25 +30,35 @@ class Channel < ActiveRecord::Base
 
   scope :without_entries,   -> { where('entry_type IS NULL') }
   scope :ordered_by_weight, -> { order(:weight) }
+  scope :for_entry,         ->(entry) { joins(:entry).where('entry.id' => entry) }
+
+  def self.roots_for(user, options={})
+    roles = options[:role] || Permission.available_roles
+    if user.permissions.for_context(nil).for_role(roles).any?
+      roots
+    else
+      user.root_channels.where(:permissions => {:role => roles})
+    end
+  end
+
+  def self.subtrees_of(channels)
+    channel_table = Channel.arel_table
+    Channel.where(
+      channel_table[:id].in(channels.map(&:id))
+        .or(channel_table[:ancestry].in(channels.map(&:child_ancestry)))
+        .or(channel_table[:ancestry].matches_any(channels.map{|c| "#{c.child_ancestry}/%"}))
+    )
+  end
+
+  def self.subtree_for(user, options={})
+    subtrees_of(roots_for(user, options)).ordered_by_weight
+  end
 
   has_enums
 
   has_ancestry
 
   audited
-
-  # TODO: rewrite with squeel sifter
-  scope :subtree_for, ->(user, options={}) {
-    return Channel.ordered_by_weight if user.permissions.for_context(nil).any?
-    channels = user.root_channels
-    channels = channels.where(:permissions => {:role => options[:role]}) if options[:role]
-    channel_table = Channel.arel_table
-    Channel.ordered_by_weight.where(
-      channel_table[:id].in(channels.map(&:id))
-        .or(channel_table[:ancestry].in(channels.map(&:child_ancestry)))
-        .or(channel_table[:ancestry].matches_any(channels.map{|c| "#{c.child_ancestry}/%"}))
-    )
-  }
 
   def as_json(options)
     super(:only => [:id, :title, :entry_type, :description], :methods => :depth)

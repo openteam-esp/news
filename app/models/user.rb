@@ -41,14 +41,9 @@ class User < ActiveRecord::Base
     name
   end
 
-  alias_method :sso_corrector?, :corrector?
-  alias_method :sso_publisher?, :publisher?
-
-  def corrector?
-    manager? || sso_corrector?
-  end
-
-  def publisher?
-    manager? || sso_publisher?
+  %w[initiator corrector publisher manager].each do |role|
+    define_method "#{role}_of?" do |entry|
+      Channel.subtree_for(self, :role => role).joins(:entries).where(:entries => {:id => entry.id}).any?
+    end
   end
 end

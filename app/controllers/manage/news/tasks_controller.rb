@@ -3,11 +3,10 @@ class Manage::News::TasksController < Manage::ApplicationController
 
   actions :index
 
+  skip_load_resource
   skip_authorize_resource
 
-  has_scope :not_deleted, :type => :boolean, :default => true, :only => :index
-
-  has_scope :folder do | controller, scope, value |
+  has_scope :folder do |controller, scope, value|
     scope.folder(value, controller.current_user)
   end
 

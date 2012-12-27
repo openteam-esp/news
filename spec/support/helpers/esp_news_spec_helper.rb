@@ -21,7 +21,7 @@ module EspNewsSpecHelper
   end
 
   def draft
-     @draft ||= NewsEntry.create!({:current_user => initiator_of(channel), :title => 'title', :body => 'body'}, :without_protection => true)
+     @draft ||= NewsEntry.create!({:current_user => initiator_of(channel), :title => 'title', :body => 'body', :channels => [channel]}, :without_protection => true)
   end
 
   def fresh_correcting
