@@ -5,7 +5,7 @@ class Manage::ChannelsController < ApplicationController
 
   has_scope :page, :default => 1, :only => :index
   has_scope :per, :default => 1000, :only => :index
-  has_scope :available_channels, :default => true, :type => :boolean do | controller, scope, value |
+  has_scope :permitted_channels, :default => true, :type => :boolean do | controller, scope, value |
     scope.subtree_for(controller.current_user)
   end
 
