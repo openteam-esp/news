@@ -14,8 +14,6 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
   has_searcher
 
-  helper_method :available_channels, :disabled_channels
-
   def destroy
     resource.move_to_trash
     redirect_to manage_news_root_path
@@ -104,12 +102,5 @@ class Manage::News::EntriesController < Manage::ApplicationController
       resource.set_current_user(current_user)
     end
 
-    def available_channels
-      @available_channels ||= Channel.subtree_for(current_user).where(:entry_type => resource.class.model_name.underscore)
-    end
-
-    def disabled_channels
-      @disabled_channels ||= available_channels.reject(&:entry_type).map(&:id)
-    end
 end
 

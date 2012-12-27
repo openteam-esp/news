@@ -4,7 +4,7 @@
     <%= form.input :description  %>
     <%= form.input :entry_type, :as => :select, :collection => Channel.human_enums[:entry_type].invert.to_a, :required => false %>
     <%= form.input :parent_id,  :as => :select,
-                                :collection => Channel.subtree_for(current_user),
+                                :collection => available_channels,
                                 :member_label => ->(c) { ('&nbsp;' * 2 * c.depth + c.title).html_safe },
                                 :include_blank => t('commons.not_selected'),
                                 :selected => form.object.parent_id,

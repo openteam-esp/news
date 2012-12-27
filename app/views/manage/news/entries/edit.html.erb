@@ -23,11 +23,12 @@
           <ol>
             <%= form.input  :channels,
                             :label => false,
-                            :as => :select,
+                            :as => :check_boxes,
                             :multiple => true,
                             :collection => available_channels,
-                            :member_label => ->(c) { ("&nbsp;" * c.depth * 2).html_safe + c.title},
-                            :disabled => disabled_channels
+                            :member_label => ->(c) { ("&nbsp;" * c.depth * 4).html_safe + c.title},
+                            :disabled => disabled_channel_ids,
+                            :input_html => { :class => :depth  }
             %>
           </ol>
         </div>

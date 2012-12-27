@@ -33,6 +33,9 @@ class Task < ActiveRecord::Base
   scope :not_deleted, where(:deleted_at => nil)
   scope :processing, where(:state => :processing)
 
+  scope :for_channel, ->(channel) do
+    joins(:entry).joins(:channel)
+  end
   scope :folder, ->(folder, user) { send folder, user }
   scope :fresh, ->(user) do
     types = ['Subtask']

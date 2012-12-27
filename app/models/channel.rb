@@ -25,11 +25,11 @@ class Channel < ActiveRecord::Base
 
   before_save :set_weight, :if => :need_set_weight?
   before_save :set_title_path
+
   after_update :set_subtree_weights, :if => :weight_changed?, :unless => :ancestry_callbacks_disabled?
 
-  default_scope order(:weight)
-
-  scope :without_entries, where('entry_type IS NULL')
+  scope :without_entries,   -> { where('entry_type IS NULL') }
+  scope :ordered_by_weight, -> { order(:weight) }
 
   has_enums
 
@@ -39,14 +39,14 @@ class Channel < ActiveRecord::Base
 
   # TODO: rewrite with squeel sifter
   scope :subtree_for, ->(user, options={}) {
-    return Channel.scoped if user.permissions.for_context(nil).any?
+    return Channel.ordered_by_weight if user.permissions.for_context(nil).any?
     channels = user.root_channels
     channels = channels.where(:permissions => {:role => options[:role]}) if options[:role]
     channel_table = Channel.arel_table
-    Channel.where(
-      channel_table[:id].in(channels.map(&:id)).or(
-        channel_table[:ancestry].matches_any(channels.map{|c| "#{c.child_ancestry}/%"})
-      )
+    Channel.ordered_by_weight.where(
+      channel_table[:id].in(channels.map(&:id))
+        .or(channel_table[:ancestry].in(channels.map(&:child_ancestry)))
+        .or(channel_table[:ancestry].matches_any(channels.map{|c| "#{c.child_ancestry}/%"}))
     )
   }
 
@@ -60,9 +60,9 @@ class Channel < ActiveRecord::Base
 
     def set_weight
       if parent
-        self.weight = parent.weight + '/' + next_position_for((parent.children - [self]).last)
+        self.weight = parent.weight + '/' + next_position_for((parent.children.ordered_by_weight - [self]).last)
       else
-        self.weight = next_position_for(Channel.roots.last)
+        self.weight = next_position_for(Channel.roots.ordered_by_weight.last)
       end
     end
 

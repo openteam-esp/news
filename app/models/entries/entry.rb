@@ -48,6 +48,7 @@ class Entry < ActiveRecord::Base
   has_one :publish
 
   validates_presence_of :current_user
+  #validates_presence_of :channel_ids, :on => :update
 
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
 
