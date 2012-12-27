@@ -20,6 +20,17 @@
         <% end %>
         <div>
           <span>Каналы</span>
+          <span class='channels'>
+            <span class="text">
+            <% if  @entry.channels.present? %>
+              <%= @entry.channels.join(', ') %>
+            <% else %>
+              не указаны
+            <% end %>
+            </span>
+            <a href='#' class='channels_list_toggle'>выбрать</a>
+          </span>
+          <%= form.semantic_errors :channels %>
           <ol>
             <%= form.input  :channels,
                             :label => false,

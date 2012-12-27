@@ -13,6 +13,7 @@
  *= require info_plugin.js
  *= require jquery_nested_form.js
  *= require colorbox
+ *= require sugar
  */
 
 function preload_images(images) {
@@ -227,11 +228,43 @@ function choose_file(){
 
 function delete_file(){
   $('.delete_file').live('click', function(){
-      $('.attached_file .wrapper').html('<span>Файл не выбран</span>');
-      $('#image_url').val('');
+    $('.attached_file .wrapper').html('<span>Файл не выбран</span>');
+    $('#image_url').val('');
 
-      return false;
-    });
+    return false;
+  });
+};
+
+function choose_channels() {
+  if (!$('a.channels_list_toggle').length) {
+    return true;
+  };
+  var link = $('a.channels_list_toggle'),
+      list = $('ol:first', link.closest('div')),
+      text_block = link.prev('span.text');
+  list.hide();
+  $('<li><a href=\'#\' class=\'close_channel_list\'>закрыть</a></li>').prependTo(list);
+  $('<li><a href=\'#\' class=\'close_channel_list\'>закрыть</a></li>').appendTo(list);
+  link.click(function(event) {
+    list.slideToggle();
+    return false;
+  });
+  $('a.close_channel_list', list).click(function() {
+    list.slideUp();
+    return false;
+  });
+  $('input', list).change(function() {
+    checked_list = $('input:checked', list);
+    if (checked_list.length) {
+      result = [];
+      checked_list.each(function(index, item) {
+        result.push($(this).closest('label').text().compact());
+      });
+      text_block.text(result.join(', '));
+    } else {
+      text_block.text('не указаны');
+    };
+  });
 };
 
 /* вызов функций после построения полной структуры документа */
@@ -254,6 +287,7 @@ $(function() {
   $('form').live('nested:fieldAdded', function() {
     initialize_datepicker();
   });
-  init_colorbox()
+  init_colorbox();
+  choose_channels();
 });
 /*////*/
