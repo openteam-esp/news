@@ -1,4 +1,6 @@
-<% if collection.any? %>
+<% if collection.length.zero? %>
+  <h2 class='empty'><%= t('no_any_tasks') %></h2>
+<% else %>
   <ul class='item_list'>
     <% collection.each do | task | %>
       <li class='balnk <%= "followed" if task.initiator.followers.include?(current_user) %>'>
@@ -41,7 +43,5 @@
       </li>
     <% end %>
   </ul>
-  <%= paginate collection %>
-<% else %>
-  <h2 class='empty'><%= t('no_any_tasks') %></h2>
+  <%= paginate collection, :total_count => collection.except(:offset, :limit, :order, :includes).count('DISTINCT tasks.id') %>
 <% end %>

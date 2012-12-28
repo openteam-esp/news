@@ -5,3 +5,4 @@ ru:
       next: "&rarr;"
       first: первая страница
       last: последняя страница
+      truncate: ...

@@ -39,14 +39,19 @@ class Task < ActiveRecord::Base
   scope :for_channel, ->(channel) do
     joins(:entry).joins(:channel)
   end
-  scope :folder, ->(folder, user) { current_scope.send folder, user }
+
+  scope :folder, ->(folder, user) do
+    current_scope.send(folder, user)
+      .order('tasks.id desc')
+  end
+
   scope :fresh, ->(user) do
     types = ['Subtask']
     types << 'Review' if user.corrector? || user.manager?
     types << 'Publish' if user.publisher? || user.manager?
     not_deleted
       .where(:type => types)
-      .where(:state => :fresh)
+      .where(:tasks => {:state => :fresh})
       .where(['executor_id IS NULL OR executor_id = ?', user])
       .joins(:channels)
         .where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
@@ -55,7 +60,10 @@ class Task < ActiveRecord::Base
     not_deleted.processing.where(:executor_id => user)
   end
   scope :initiated_by_me, ->(user) do
-    not_deleted.where(:initiator_id => user).where("state <> 'pending'")
+    not_deleted.where('tasks.initiator_id' => user)
+      .where('tasks.state not in (?)', [:pending, :completed])
+      .joins(:entry)
+      .where('entries.state <> ?', :published)
   end
 
   #default_scope ordered

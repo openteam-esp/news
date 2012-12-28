@@ -1,4 +1,6 @@
-<% if collection.any? %>
+<% if collection.length.zero? %>
+  <h2 class='empty'><%= t('no_any_entries') %></h2>
+<% else %>
   <ul class='item_list'>
     <% collection.each do | entry | %>
       <li>
@@ -24,7 +26,5 @@
       </li>
     <% end %>
   </ul>
-  <%= paginate collection %>
-<% else %>
-  <h2 class='empty'><%= t('no_any_entries') %></h2>
+  <%= paginate collection, :total_count => collection.except(:offset, :limit, :order, :includes).count('DISTINCT entries.id') %>
 <% end %>

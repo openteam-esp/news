@@ -30,6 +30,7 @@ News::Application.routes.draw do
 
       get '/last_:period/entries' => 'entries#index',
         :constraints => {:period => /(day|week|month)/},
+        :defaults => { :folder => 'published' },
         :as => :archive
 
       get '/:folder/tasks' => 'tasks#index',

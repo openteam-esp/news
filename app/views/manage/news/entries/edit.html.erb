@@ -1,7 +1,7 @@
 <div class="content_wrapper with_sidebar">
   <div class="article">
 
-    <%= semantic_nested_form_for @entry, :as => :entry, :url => manage_news_entry_path(@entry) do |form| %>
+    <%= semantic_nested_form_for @entry, :as => :entry, :url => manage_news_entry_path(@entry.id) do |form| %>
 
       <div class="top_stuff">
         <div>
@@ -75,9 +75,9 @@
     <div class="top_border"></div>
 
     <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
-    <%= link_to t('cancel'), manage_news_entry_path(@entry), :class => 'button cancel', :id => "cancel_form_entry" %>
+    <%= link_to t('cancel'), manage_news_entry_path(@entry.id), :class => 'button cancel', :id => "cancel_form_entry" %>
 
-    <%= semantic_form_for @entry, :as => :entry, :url => unlock_manage_news_entry_path(@entry), :html => { :method => :post, :class => "hidden" } do | form | %>
+    <%= semantic_form_for @entry, :as => :entry, :url => unlock_manage_news_entry_path(@entry.id), :html => { :method => :post, :class => "hidden" } do | form | %>
       <%= form.actions :class => "buttons" do %>
         <%= form.action :submit, :label => t('cancel') %>
       <% end %>

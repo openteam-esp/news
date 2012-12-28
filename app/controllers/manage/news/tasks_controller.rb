@@ -12,8 +12,16 @@ class Manage::News::TasksController < Manage::ApplicationController
 
   has_scope :page, :default => 1, :only => :index
 
+  has_scope :per, :default => true, :only => :index, :type => :boolean do |controller, scope|
+    scope.per(7)
+  end
+
   has_scope :load_associations, :default => true, :type => :boolean, :only => :index do |controller, scope, value|
     scope.includes(:initiator).includes(:executor).includes(:entry).includes(:images)
+  end
+
+  has_scope :ordered, :default => :true, :type => :boolean, :only => :index do |controller, scope, value|
+    scope.order('id desc')
   end
 
   expose(:task)

@@ -86,19 +86,20 @@ class Entry < ActiveRecord::Base
   scope :descending, ->(attribute) { order("#{attribute} desc") }
   scope :initiated_by, ->(user) { where(:initiator_id => user) }
   scope :processing, -> { where(:state => processing_states).not_deleted }
-  scope :published, -> { where(:state => :published).not_deleted.descending(:since) }
+  scope :published, -> { where(:state => :published).not_deleted }
   scope :draft, -> { where(:state => :draft).not_deleted }
   scope :stale, -> { deleted.where('deleted_at <= ?', STALE_PERIOD.ago) }
+  scope :since_greater_than, ->(date) { where('since >= ?', date) }
 
   def self.folder(folder, user)
     case folder.to_sym
     when :processing  then user.initiator? ? processing.initiated_by(user) : processing
     when :draft       then draft.initiated_by(user)
+    when :published   then published
     when :deleted     then where(:deleted_by_id => user)
-    end.descending(:id)
-      .joins(:channels)
-        .where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
-        .uniq
+    end
+      .joins(:channels).where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
+      .uniq
   end
 
   before_create :set_initiator
