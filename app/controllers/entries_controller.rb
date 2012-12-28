@@ -9,6 +9,9 @@ class EntriesController < ApplicationController
 
   has_scope :published, :type => :boolean, :default => true
   has_scope :not_deleted, :type => :boolean, :default => true
+  has_scope :load_associations, :default => true, :type => :boolean do |controller, scope, value|
+    scope.includes(:images)
+  end
 
   belongs_to :channel, :optional => true
 

@@ -6,13 +6,15 @@ class Manage::News::EntriesController < Manage::ApplicationController
 
   layout :resolve_layout
 
-  has_scope :folder do | controller, scope, value |
+  has_scope :folder do |controller, scope, value|
     scope.folder(value, controller.current_user)
   end
 
   has_scope :page, :default => 1, :only => :index
 
-  has_searcher
+  has_scope :load_associations, :default => true, :type => :boolean, :only => :index do |controller, scope, value|
+    scope.includes(:images).includes(:initiator)
+  end
 
   def destroy
     resource.move_to_trash

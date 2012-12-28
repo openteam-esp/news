@@ -26,6 +26,7 @@ class Task < ActiveRecord::Base
   belongs_to :executor, :class_name => 'User'
 
   has_many :channels, :through => :entry
+  has_many :images, :through => :entry
 
   before_create :set_initiator
 
