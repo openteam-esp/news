@@ -1,4 +1,21 @@
 # encoding: utf-8
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id           :integer          not null, primary key
+#  entry_id     :integer
+#  executor_id  :integer
+#  initiator_id :integer
+#  issue_id     :integer
+#  state        :string(255)
+#  type         :string(255)
+#  comment      :text
+#  description  :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 require 'spec_helper'
 
 describe Task do
@@ -99,22 +116,3 @@ describe Task do
 
   end
 end
-
-# == Schema Information
-#
-# Table name: tasks
-#
-#  comment      :text
-#  created_at   :datetime         not null
-#  deleted_at   :datetime
-#  description  :text
-#  entry_id     :integer
-#  executor_id  :integer
-#  id           :integer          not null, primary key
-#  initiator_id :integer
-#  issue_id     :integer
-#  state        :string(255)
-#  type         :string(255)
-#  updated_at   :datetime         not null
-#
-

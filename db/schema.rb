@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121228022030) do
+ActiveRecord::Schema.define(:version => 20121228074813) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20121228022030) do
   add_index "entries", ["initiator_id"], :name => "index_entries_on_initiator_id"
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"
   add_index "entries", ["since"], :name => "index_entries_on_since"
+  add_index "entries", ["state"], :name => "index_entries_on_state"
 
   create_table "event_entry_properties", :force => true do |t|
     t.datetime "since"
@@ -161,7 +162,6 @@ ActiveRecord::Schema.define(:version => 20121228022030) do
   add_index "recipients", ["channel_id"], :name => "index_recipients_on_channel_id"
 
   create_table "tasks", :force => true do |t|
-    t.datetime "deleted_at"
     t.integer  "entry_id"
     t.integer  "executor_id"
     t.integer  "initiator_id"
@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(:version => 20121228022030) do
   add_index "tasks", ["executor_id"], :name => "index_tasks_on_executor_id"
   add_index "tasks", ["initiator_id"], :name => "index_tasks_on_initiator_id"
   add_index "tasks", ["issue_id"], :name => "index_tasks_on_issue_id"
+  add_index "tasks", ["state"], :name => "index_tasks_on_state"
 
   create_table "users", :force => true do |t|
     t.string   "uid"

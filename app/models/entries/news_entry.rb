@@ -4,12 +4,10 @@
 #
 #  id                   :integer          not null, primary key
 #  deleted_at           :datetime
-#  locked_at            :datetime
 #  since                :datetime
 #  deleted_by_id        :integer
 #  initiator_id         :integer
 #  legacy_id            :integer
-#  locked_by_id         :integer
 #  author               :string(255)
 #  slug                 :string(255)
 #  state                :string(255)

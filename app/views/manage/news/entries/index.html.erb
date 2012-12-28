@@ -26,5 +26,5 @@
       </li>
     <% end %>
   </ul>
-  <%= paginate collection, :total_count => collection.except(:offset, :limit, :order, :includes).count('DISTINCT entries.id') %>
+  <%= paginate collection %>
 <% end %>

@@ -10,11 +10,13 @@ class Ability
 
     can :manage, :application if user.permissions.any?
 
+    can :manage, :channels if user.manager?
+
     ##################################
     ###           Task             ###
     ##################################
     can :update, Task do |task|
-      can?(:read, task.entry) && !task.deleted? && can?(task.state_event, task)
+      can?(:read, task.entry) && can?(task.state_event, task)
     end
     can [:complete, :refuse], Task do |task|
       task.executor == user
@@ -45,7 +47,7 @@ class Ability
     ###           Subtask          ###
     ##################################
     can :create, Subtask do |subtask|
-      user == subtask.issue.executor && subtask.issue.processing? && !subtask.issue.deleted?
+      user == subtask.issue.executor && subtask.issue.processing?
     end
     can :accept, Subtask do |subtask|
       user == subtask.executor

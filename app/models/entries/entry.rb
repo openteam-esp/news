@@ -5,12 +5,10 @@
 #
 #  id                   :integer          not null, primary key
 #  deleted_at           :datetime
-#  locked_at            :datetime
 #  since                :datetime
 #  deleted_by_id        :integer
 #  initiator_id         :integer
 #  legacy_id            :integer
-#  locked_by_id         :integer
 #  author               :string(255)
 #  slug                 :string(255)
 #  state                :string(255)
@@ -166,7 +164,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.all_states
-    state_machine.states.map(&:name)
+    @all_states ||= state_machine.states.map(&:name)
   end
 
   def self.shared_states
@@ -179,6 +177,10 @@ class Entry < ActiveRecord::Base
 
   def self.processing_states
     [:correcting, :publishing]
+  end
+
+  def self.non_published_states
+    all_states - [:published]
   end
 
   def lock
@@ -202,17 +204,11 @@ class Entry < ActiveRecord::Base
   end
 
   def move_to_trash
-    transaction do
-      update_attributes!({:deleted_by => current_user, :deleted_at => DateTime.now}, :without_protection => true)
-      tasks.update_all :deleted_at => self.updated_at
-    end
+    update_attributes!({:deleted_by => current_user, :deleted_at => DateTime.now}, :without_protection => true)
   end
 
   def revivify
-    transaction do
-      update_attributes!({:deleted_by => nil, :deleted_at => nil}, :without_protection => true)
-      tasks.update_all :deleted_at => nil
-    end
+    update_attributes!({:deleted_by => nil, :deleted_at => nil}, :without_protection => true)
   end
 
   def has_processing_task_executed_by?(user)

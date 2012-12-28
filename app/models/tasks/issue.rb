@@ -3,7 +3,6 @@
 # Table name: tasks
 #
 #  id           :integer          not null, primary key
-#  deleted_at   :datetime
 #  entry_id     :integer
 #  executor_id  :integer
 #  initiator_id :integer

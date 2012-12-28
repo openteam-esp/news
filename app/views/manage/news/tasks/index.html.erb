@@ -43,5 +43,5 @@
       </li>
     <% end %>
   </ul>
-  <%= paginate collection, :total_count => collection.except(:offset, :limit, :order, :includes).count('DISTINCT tasks.id') %>
+  <%= paginate collection %>
 <% end %>

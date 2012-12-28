@@ -3,7 +3,6 @@
 # Table name: tasks
 #
 #  id           :integer          not null, primary key
-#  deleted_at   :datetime
 #  entry_id     :integer
 #  executor_id  :integer
 #  initiator_id :integer
@@ -34,19 +33,19 @@ class Review < Issue
       transition :pending => :fresh
     end
     event :accept do
-      transition :fresh => :processing, :unless => :deleted?
+      transition :fresh => :processing
     end
     event :complete do
-      transition :processing => :completed, :unless => :deleted?
+      transition :processing => :completed
     end
     event :refuse do
-      transition :processing => :fresh, :unless => :deleted?
+      transition :processing => :fresh
     end
     event :suspend do
       transition :fresh => :pending
     end
     event :restore do
-      transition :completed => :processing, :if => :next_task_fresh?, :unless => :deleted?
+      transition :completed => :processing, :if => :next_task_fresh
     end
   end
 

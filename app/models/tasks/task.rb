@@ -3,7 +3,6 @@
 # Table name: tasks
 #
 #  id           :integer          not null, primary key
-#  deleted_at   :datetime
 #  entry_id     :integer
 #  executor_id  :integer
 #  initiator_id :integer
@@ -33,15 +32,21 @@ class Task < ActiveRecord::Base
   validates_presence_of :current_user
 
   scope :ordered, order('id desc')
-  scope :not_deleted, where(:deleted_at => nil)
-  scope :processing, where(:state => :processing)
+
+  scope :not_deleted,   -> { joins(:entry).where(:entries => {:deleted_at => nil}) }
+  scope :not_published, -> { joins(:entry).where(:entries => {:state      => Entry.non_published_states}) }
+
+  scope :processing,    -> { where(:state => :processing) }
+  scope :useful,        -> { where(:state => Task.useful_states) }
 
   scope :for_channel, ->(channel) do
     joins(:entry).joins(:channel)
   end
 
   scope :folder, ->(folder, user) do
-    current_scope.send(folder, user)
+    send(folder, user)
+      .not_deleted
+      .not_published
       .order('tasks.id desc')
   end
 
@@ -49,21 +54,19 @@ class Task < ActiveRecord::Base
     types = ['Subtask']
     types << 'Review' if user.corrector? || user.manager?
     types << 'Publish' if user.publisher? || user.manager?
-    not_deleted
-      .where(:type => types)
+    where(:type => types)
       .where(:tasks => {:state => :fresh})
       .where(['executor_id IS NULL OR executor_id = ?', user])
       .joins(:channels)
         .where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
   end
+
   scope :processed_by_me, ->(user) do
-    not_deleted.processing.where(:executor_id => user)
+    processing.where(:executor_id => user)
   end
+
   scope :initiated_by_me, ->(user) do
-    not_deleted.where('tasks.initiator_id' => user)
-      .where('tasks.state not in (?)', [:pending, :completed])
-      .joins(:entry)
-      .where('entries.state <> ?', :published)
+    useful.where('tasks.initiator_id' => user)
   end
 
   #default_scope ordered
@@ -71,8 +74,12 @@ class Task < ActiveRecord::Base
   delegate :prepare, :review, :publish, :to => :entry
   delegate :fresh?, :to => :next_task, :prefix => true
 
-  def deleted?
-    deleted_at
+  def self.all_states
+    @all_states ||= Task.descendants.flat_map{|c| c.state_machine(:state).states.map(&:name) }
+  end
+
+  def self.useful_states
+    @useful_states ||= all_states - [:completed, :pending]
   end
 
   def self.human_state_events

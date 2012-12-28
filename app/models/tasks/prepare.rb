@@ -3,7 +3,6 @@
 # Table name: tasks
 #
 #  id           :integer          not null, primary key
-#  deleted_at   :datetime
 #  entry_id     :integer
 #  executor_id  :integer
 #  initiator_id :integer
@@ -29,11 +28,11 @@ class Prepare < Issue
     state :completed
 
     event :complete do
-      transition :processing => :completed, :unless => :deleted?
+      transition :processing => :completed
     end
 
     event :restore do
-      transition :completed => :processing, :if => :next_task_fresh?, :unless => :deleted?
+      transition :completed => :processing, :if => :next_task_fresh?
     end
   end
 
