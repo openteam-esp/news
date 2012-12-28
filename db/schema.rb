@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121226093613) do
+ActiveRecord::Schema.define(:version => 20121228022030) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -59,12 +59,10 @@ ActiveRecord::Schema.define(:version => 20121226093613) do
 
   create_table "entries", :force => true do |t|
     t.datetime "deleted_at"
-    t.datetime "locked_at"
     t.datetime "since"
     t.integer  "deleted_by_id"
     t.integer  "initiator_id"
     t.integer  "legacy_id"
-    t.integer  "locked_by_id"
     t.string   "author"
     t.string   "slug"
     t.string   "state"
@@ -84,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20121226093613) do
   add_index "entries", ["deleted_by_id"], :name => "index_entries_on_deleted_by_id"
   add_index "entries", ["initiator_id"], :name => "index_entries_on_initiator_id"
   add_index "entries", ["legacy_id"], :name => "index_entries_on_legacy_id"
-  add_index "entries", ["locked_by_id"], :name => "index_entries_on_locked_by_id"
+  add_index "entries", ["since"], :name => "index_entries_on_since"
 
   create_table "event_entry_properties", :force => true do |t|
     t.datetime "since"

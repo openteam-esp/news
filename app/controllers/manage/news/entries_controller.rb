@@ -10,7 +10,19 @@ class Manage::News::EntriesController < Manage::ApplicationController
     scope.folder(value, controller.current_user)
   end
 
+  has_scope :period, :only => :index do |controller, scope, value|
+    scope.since_greater_than(1.send(value).ago.change(:hour => 0))
+  end
+
+  has_scope :ordered, :default => true, :type => :boolean, :only => :index do |controller, scope, value|
+    scope.order('since desc, id desc')
+  end
+
   has_scope :page, :default => 1, :only => :index
+
+  has_scope :per, :default => true, :only => :index, :type => :boolean do |controller, scope|
+    scope.per(7)
+  end
 
   has_scope :load_associations, :default => true, :type => :boolean, :only => :index do |controller, scope, value|
     scope.includes(:images).includes(:initiator)
@@ -46,7 +58,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
           resource.reload
           render :edit, :layout => false and return
         end
-        redirect_to manage_news_entry_path(resource) and return
+        redirect_to manage_news_entry_path(resource.id) and return
       }
     end
   end
@@ -67,31 +79,6 @@ class Manage::News::EntriesController < Manage::ApplicationController
       @entry ||= class_of_resource.new do |entry|
         entry.current_user = current_user
       end
-    end
-
-    def collection
-      get_collection_ivar || set_collection_ivar(search_and_paginate_collection)
-    end
-
-    def search_and_paginate_collection
-      if params[:period]
-        searcher.order_by = 'since desc'
-        searcher.since_gt = 1.send(params[:period]).ago.to_date
-      end
-      if params[:utf8] || params[:period]
-        searcher.per_page = paginate_options[:per_page]
-        searcher.pagination.merge! paginate_options
-        searcher.results
-      else
-        end_of_association_chain.page(paginate_options[:page]).per(paginate_options[:per_page])
-      end
-    end
-
-    def paginate_options()
-      {
-        :page       => params[:page],
-        :per_page   => [[(params[:per_page] || 10).to_i,  1].max, 10].min
-      }
     end
 
     def resolve_layout
