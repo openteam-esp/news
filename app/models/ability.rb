@@ -6,7 +6,7 @@ class Ability
   def initialize(user)
     return unless user
 
-    #can :manage, :all if user.manager?
+    can :manage, :all if user.administrator?
 
     can :manage, :application if user.permissions.any?
 

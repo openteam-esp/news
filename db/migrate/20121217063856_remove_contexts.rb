@@ -11,20 +11,25 @@ end
 
 class RemoveContexts < ActiveRecord::Migration
   def up
-
-    root_channels = Channel.all.select { |c| c.parent != nil }
-    root_channels.each do |c| c.context = nil; c.save! end
-
-    Permission.where(context_type: 'Context').each do |permission|
-      Channel.where(context_id: permission.context.subtree_ids).each do |channel|
-        permission.user.permissions.create(context: channel, role: permission.role)
+    Permission.where(context_type: 'Context').all.each do |permission|
+      channels = permission.context.channels.roots
+      permission.update_attributes(context: channels.first)
+      if channels.many?
+        (channels - [channels.first]).each do |channel|
+          permission.user.permissions.create(context: channel, role: permission.role)
+        end
       end
-      permission.destroy
     end
 
     remove_column :channels, :context_id
-    Channel.update_all(updated_at: Time.now)
 
     drop_table :contexts
+
+    Permission.for_role(:manager).each do |permission|
+      Permission.for_context(permission.context).where(:user_id => permission.user).for_role([:initiator, :corrector, :publisher]).destroy_all
+    end
+
+    Permission.where(:user_id => User.find_by_uid('1')).where(:context_type => 'Channel').destroy_all
+    Permission.where(:user_id => User.find_by_uid('1')).for_context(nil).update_all(:role => :administrator)
   end
 end

@@ -14,10 +14,6 @@ class Manage::News::EntriesController < Manage::ApplicationController
     scope.since_greater_than(1.send(value).ago.change(:hour => 0))
   end
 
-  has_scope :ordered, :default => true, :type => :boolean, :only => :index do |controller, scope, value|
-    scope.order('since desc, id desc')
-  end
-
   has_scope :page, :default => 1, :only => :index
 
   has_scope :per, :default => true, :only => :index, :type => :boolean do |controller, scope|

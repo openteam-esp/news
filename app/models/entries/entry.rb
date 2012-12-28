@@ -97,6 +97,7 @@ class Entry < ActiveRecord::Base
     when :deleted     then where(:deleted_by_id => user)
     end
       .joins(:channels).where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
+      .order('id desc')
       .uniq
   end
 

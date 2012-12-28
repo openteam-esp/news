@@ -5,7 +5,7 @@
     <% collection.each do | entry | %>
       <li>
         <div class="time_ago">
-          <%= time_ago_in_words(entry.updated_at) %> назад
+          <%= time_ago_in_words(entry.created_at) %> назад
         </div>
 
         <% if entry.images.any? %>

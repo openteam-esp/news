@@ -69,8 +69,6 @@ class Task < ActiveRecord::Base
     useful.where('tasks.initiator_id' => user)
   end
 
-  #default_scope ordered
-
   delegate :prepare, :review, :publish, :to => :entry
   delegate :fresh?, :to => :next_task, :prefix => true
 

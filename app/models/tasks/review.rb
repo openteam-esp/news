@@ -45,7 +45,7 @@ class Review < Issue
       transition :fresh => :pending
     end
     event :restore do
-      transition :completed => :processing, :if => :next_task_fresh
+      transition :completed => :processing, :if => :next_task_fresh?
     end
   end
 
