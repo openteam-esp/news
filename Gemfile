@@ -12,6 +12,7 @@ group :default do
   gem 'audited-activerecord'
   gem 'coffee-rails'
   gem 'compass-rails'
+  gem 'decent_exposure'
   gem 'default_value_for'
   gem 'devise'
   gem 'devise-russian'
@@ -41,7 +42,7 @@ group :default do
   gem 'sso-auth'
   gem 'state_machine'
   gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
-  gem 'decent_exposure'
+  gem 'timecop',          :require => false
 end
 
 group :development do
