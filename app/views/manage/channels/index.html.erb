@@ -5,8 +5,10 @@
     <% collection.each do |channel| %>
       <li class='channel'>
         <%= ('&nbsp;' * channel.depth * 2).html_safe %> <%= channel %>
-        <%= link_to t('commons.delete'), manage_channel_path(channel), :method => :delete, :data => {:confirm => t('commons.confirm')}, :class => 'button delete simple' %>
-        <%= link_to t('commons.edit'), edit_manage_channel_path(channel) %>
+        <% if can?(:manage, channel) %>
+          <%= link_to t('commons.delete'), manage_channel_path(channel), :method => :delete, :data => {:confirm => t('commons.confirm')}, :class => 'button delete simple' %>
+          <%= link_to t('commons.edit'), edit_manage_channel_path(channel) %>
+        <% end %>
       </li>
     <% end %>
   </ul>

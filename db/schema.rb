@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121228074813) do
+ActiveRecord::Schema.define(:version => 20121229043936) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -182,16 +182,10 @@ ActiveRecord::Schema.define(:version => 20121228074813) do
 
   create_table "users", :force => true do |t|
     t.string   "uid"
-    t.text     "name"
-    t.text     "email"
-    t.text     "nickname"
-    t.text     "first_name"
-    t.text     "last_name"
-    t.text     "location"
-    t.text     "description"
-    t.text     "image"
-    t.text     "phone"
-    t.text     "urls"
+    t.string   "name"
+    t.string   "email"
+    t.string   "first_name"
+    t.string   "last_name"
     t.text     "raw_info"
     t.integer  "sign_in_count"
     t.datetime "current_sign_in_at"
