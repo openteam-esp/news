@@ -31,14 +31,14 @@ class Ability
     ###          Review            ###
     ##################################
     can [:accept, :restore, :complete, :refuse], Review do |review|
-      user.corrector_of?(review.entry) || user.manager_of?(review.entry)
+      user.corrector_of?(review.entry)
     end
 
     ##################################
     ###          Publish           ###
     ##################################
     can [:accept, :restore, :complete, :refuse], Publish do |publish|
-      user.publisher_of?(publish.entry) || user.manager_of?(publish.entry)
+      user.publisher_of?(publish.entry)
     end
 
     ##################################
@@ -75,7 +75,7 @@ class Ability
     end
 
     can :read, Entry do |entry|
-      (user.corrector_of?(entry) || user.publisher_of?(entry) || user.manager_of?(entry)) && !entry.draft?
+      (user.corrector_of?(entry) || user.publisher_of?(entry)) && !entry.draft?
     end
 
     can :read, Entry do |entry|
@@ -103,9 +103,10 @@ class Ability
     end
 
     ##################################
-    ###           Following        ###
+    ###           Channel          ###
     ##################################
     can :manage, :channels if user.manager?
+
     can :manage, Channel do |channel|
       Channel.subtree_for(user).find_by_id(channel.id)
     end

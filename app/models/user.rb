@@ -46,4 +46,11 @@ class User < ActiveRecord::Base
       Channel.subtree_for(self, :role => role).joins(:entries).where(:entries => {:id => entry.id}).any?
     end
   end
+
+  %w[initiator corrector publisher].each do |role|
+    alias_method "old_#{role}_of?", "#{role}_of?"
+    define_method "#{role}_of?" do |entry|
+      send("old_#{role}_of?", entry) || manager_of?(entry)
+    end
+  end
 end
