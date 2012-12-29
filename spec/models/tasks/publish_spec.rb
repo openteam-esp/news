@@ -40,16 +40,17 @@ describe Publish do
     its(:entry) { should be_publishing }
   end
 
-  def publish(options={})
-    Publish.new(options, :without_protection => true)
+  def publish(options)
+    entry = Entry.new(options.delete(:entry), :without_protection => true)
+    Publish.new(options.merge(:entry => entry), :without_protection => true)
   end
 
   describe "доступные действия" do
     specify { publish(:state => 'pending').human_state_events.should == [] }
     specify { publish(:state => 'fresh').human_state_events.should == [:accept]}
-    specify { publish(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
+    specify { publish(:state => 'fresh', :entry => {:deleted_at => Time.now}).human_state_events.should == []}
     specify { publish(:state => 'processing').human_state_events.should == [:complete, :refuse]}
-    specify { publish(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
+    specify { publish(:state => 'processing', :entry => {:deleted_at => Time.now}).human_state_events.should == []}
     specify { published.publish.human_state_events.should == [:restore] }
   end
 

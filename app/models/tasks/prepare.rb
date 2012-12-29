@@ -28,11 +28,11 @@ class Prepare < Issue
     state :completed
 
     event :complete do
-      transition :processing => :completed
+      transition :processing => :completed, :unless => :deleted?
     end
 
     event :restore do
-      transition :completed => :processing, :if => :next_task_fresh?
+      transition :completed => :processing, :if => :next_task_fresh?, :unless => :deleted?
     end
   end
 

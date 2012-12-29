@@ -13,14 +13,14 @@ describe Ability do
       it_behaves_like 'can only read processed news'
       it_behaves_like 'can not create channels'
     end
-    context 'of another channel' do
-      subject { ability_for(initiator_of(another_channel)) }
-      it_behaves_like 'can not create news'
-      it_behaves_like 'can do nothing with processed news'
-    end
     context '(second) of channlel' do
       subject { ability_for(another_initiator_of(channel)) }
       it_behaves_like 'can create news'
+      it_behaves_like 'can do nothing with processed news'
+    end
+    context 'of another channel' do
+      subject { ability_for(initiator_of(another_channel)) }
+      it_behaves_like 'can not create news'
       it_behaves_like 'can do nothing with processed news'
     end
   end

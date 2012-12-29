@@ -41,19 +41,19 @@ class Subtask < Task
     state :canceled
 
     event :accept do
-      transition :fresh => :processing
+      transition :fresh => :processing, :unless => :deleted?
     end
 
     event :complete do
-      transition :processing => :completed
+      transition :processing => :completed, :unless => :deleted?
     end
 
     event :refuse do
-      transition [:fresh, :processing] => :refused
+      transition [:fresh, :processing] => :refused, :unless => :deleted?
     end
 
     event :cancel do
-      transition [:fresh, :processing] => :canceled
+      transition [:fresh, :processing] => :canceled, :unless => :deleted?
     end
 
     event :clear do

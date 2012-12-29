@@ -10,8 +10,6 @@ class Ability
 
     can :manage, :application if user.permissions.any?
 
-    can :manage, :channels if user.manager?
-
     ##################################
     ###           Task             ###
     ##################################
@@ -102,6 +100,14 @@ class Ability
     ##################################
     can [:create, :destroy], Following do |following|
       following.follower == user
+    end
+
+    ##################################
+    ###           Following        ###
+    ##################################
+    can :manage, :channels if user.manager?
+    can :manage, Channel do |channel|
+      Channel.subtree_for(user).find_by_id(channel.id)
     end
   end
 end

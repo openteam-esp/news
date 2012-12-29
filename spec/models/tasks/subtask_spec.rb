@@ -47,7 +47,7 @@ describe Subtask do
   end
 
   def subtask(state)
-    Subtask.new({:state => state}, :without_protection => true)
+    Subtask.new({:state => state, :entry => Entry.new}, :without_protection => true)
   end
 
   describe "#human_state_events" do

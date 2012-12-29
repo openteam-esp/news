@@ -97,25 +97,10 @@ describe NewsEntry do
 
   end
 
-  context "в процессе публикации" do
+  context 'после публикации' do
     subject { processing_publishing }
-
-    context "с каналами" do
-      before { subject.channels = [channel] }
-
-      it "должна успешно опубликоваться" do
-        expect { subject.publish.complete! }.to_not raise_error
-      end
-
-      context 'после публикации' do
-        before { subject.publish.complete! }
-        its(:since) { should > Time.now - 1.second  }
-      end
-    end
-
-    context 'без каналов' do
-      it { expect { subject.publish.complete! }.to raise_error }
-    end
+    before { subject.publish.complete! }
+    its(:since) { should > Time.now - 1.second  }
   end
 
   context 'блокировка' do
@@ -145,24 +130,8 @@ describe NewsEntry do
       it { deleted_draft.should be_persisted }
       it { deleted_draft.should be_deleted }
     end
-    describe '#move_to_trash' do
-      it "должно маркировать таски флагом удалено" do
-        tasks = []
-        draft.should_receive(:tasks).and_return(tasks)
-        tasks.should_receive(:update_all)
-        draft.move_to_trash
-      end
-    end
 
     it {revivified_draft.should_not be_deleted}
-    describe '#revivify' do
-      it "должно восстановить таски" do
-        tasks = []
-        deleted_draft.should_receive(:tasks).and_return(tasks)
-        tasks.should_receive(:update_all).with(:deleted_at => nil)
-        deleted_draft.revivify
-      end
-    end
   end
 
   describe 'should send message to queue <esp.news.cms>' do

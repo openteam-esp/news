@@ -8,7 +8,13 @@ class EntriesController < ApplicationController
   layout :resolve_layout
 
   has_scope :published, :type => :boolean, :default => true
+
   has_scope :not_deleted, :type => :boolean, :default => true
+
+  has_scope :ordered_by_since, :type => :boolean, :default => true do |controller, scope|
+    scope.except(:order).order('since desc')
+  end
+
   has_scope :load_associations, :default => true, :type => :boolean do |controller, scope, value|
     scope.includes(:images)
   end

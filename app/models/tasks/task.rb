@@ -31,8 +31,6 @@ class Task < ActiveRecord::Base
 
   validates_presence_of :current_user
 
-  scope :ordered, order('id desc')
-
   scope :not_deleted,   -> { joins(:entry).where(:entries => {:deleted_at => nil}) }
   scope :not_published, -> { joins(:entry).where(:entries => {:state      => Entry.non_published_states}) }
 
@@ -43,10 +41,15 @@ class Task < ActiveRecord::Base
     joins(:entry).joins(:channel)
   end
 
+  scope :for_user_channels, ->(user) do
+    joins(:channels).where("\"channels\".\"id\" IN (#{Channel.subtree_for(user).select(:id).to_sql})")
+  end
+
   scope :folder, ->(folder, user) do
     send(folder, user)
       .not_deleted
       .not_published
+      .for_user_channels(user)
       .order('tasks.id desc')
   end
 
@@ -56,9 +59,7 @@ class Task < ActiveRecord::Base
     types << 'Publish' if user.publisher? || user.manager?
     where(:type => types)
       .where(:tasks => {:state => :fresh})
-      .where(['executor_id IS NULL OR executor_id = ?', user])
-      .joins(:channels)
-        .where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
+      .where(['"tasks"."executor_id" IS NULL OR "tasks"."executor_id" = ?', user])
   end
 
   scope :processed_by_me, ->(user) do
@@ -70,6 +71,7 @@ class Task < ActiveRecord::Base
   end
 
   delegate :prepare, :review, :publish, :to => :entry
+  delegate :deleted?, :to => :entry
   delegate :fresh?, :to => :next_task, :prefix => true
 
   def self.all_states

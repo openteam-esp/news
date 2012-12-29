@@ -7,24 +7,16 @@ describe Manage::ChannelsController do
   let(:channel_2) { Fabricate :channel, :title => 'channel2', :parent => channel_1 }
   let(:channel_3) { Fabricate :channel, :title => 'channel3', :parent => channel_2 }
 
-  def prepare_data
-    channel_3
-  end
-
   before :all do
     ActiveRecord::IdentityMap.enabled = false
   end
 
-  before :each do
-    prepare_data
-
-    sign_in manager
-  end
-
   describe 'PUT update' do
-    before do
-      put :update, :id => channel_2.id, :channel => {:parent_id => nil}
-    end
+    before { channel_3 }
+
+    before { sign_in manager_of(channel_1) }
+
+    before { put :update, :id => channel_2.id, :channel => {:parent_id => nil} }
 
     it { should redirect_to manage_channels_path }
 

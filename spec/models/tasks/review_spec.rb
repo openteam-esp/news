@@ -39,19 +39,20 @@ describe Review do
     end
   end
 
-  def review(options={})
-    Review.new(options, :without_protection => true)
+  def review(options)
+    entry = Entry.new(options.delete(:entry), :without_protection => true)
+    Review.new(options.merge(:entry => entry), :without_protection => true)
   end
 
   describe "доступные действия" do
     it { review(:state => 'pending').human_state_events.should == [] }
     it { review(:state => 'fresh').human_state_events.should == [:accept]}
-    it { review(:state => 'fresh', :deleted_at => Time.now).human_state_events.should == []}
+    it { review(:state => 'fresh', :entry => {:deleted_at => Time.now}).human_state_events.should == []}
     it { review(:state => 'processing').human_state_events.should == [:complete, :refuse]}
-    it { review(:state => 'processing', :deleted_at => Time.now).human_state_events.should == []}
+    it { review(:state => 'processing', :entry => {:deleted_at => Time.now}).human_state_events.should == []}
     it { fresh_publishing.review.human_state_events.should == [:restore] }
     it {
-      fresh_publishing.review.deleted_at = Time.now
+      fresh_publishing.move_to_trash
       fresh_publishing.review.human_state_events.should == []
     }
   end

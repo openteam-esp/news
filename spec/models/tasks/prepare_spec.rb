@@ -38,13 +38,18 @@ describe Prepare do
     end
   end
 
+  def prepare(options)
+    entry = Entry.new(options.delete(:entry), :without_protection => true)
+    Prepare.new(options.merge(:entry => entry), :without_protection => true)
+  end
+
   describe "доступные действия" do
-    it { Prepare.new({:state => 'processing'}, :without_protection => true).human_state_events.should == [:complete] }
-    it { Prepare.new({:state => 'processing', :deleted_at => Time.now}, :without_protection => true).human_state_events.should == [] }
+    it { prepare(:state => 'processing').human_state_events.should == [:complete] }
+    it { prepare(:state => 'processing', :entry => {:deleted_at => Time.now}).human_state_events.should == [] }
     it { fresh_correcting.prepare.human_state_events.should == [:restore] }
     it {
-      fresh_correcting.prepare.deleted_at = Time.now
-      fresh_correcting.prepare.human_state_events.should == []
+         fresh_correcting.move_to_trash
+         fresh_correcting.prepare.human_state_events.should == []
     }
   end
 

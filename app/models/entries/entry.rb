@@ -58,7 +58,7 @@ class Entry < ActiveRecord::Base
     state :correcting
     state :publishing
     state :published do
-      validates_presence_of :title, :body, :channels, :since
+      validates_presence_of :title, :body, :since
       validates_presence_of :actuality_expired_at, :if => :is_announce?
     end
 
@@ -205,11 +205,17 @@ class Entry < ActiveRecord::Base
   end
 
   def move_to_trash
-    update_attributes!({:deleted_by => current_user, :deleted_at => DateTime.now}, :without_protection => true)
+    transaction do
+      update_column :deleted_by_id, current_user.id
+      update_column :deleted_at, DateTime.now
+    end
   end
 
   def revivify
-    update_attributes!({:deleted_by => nil, :deleted_at => nil}, :without_protection => true)
+    transaction do
+      update_column :deleted_by_id, nil
+      update_column :deleted_at, nil
+    end
   end
 
   def has_processing_task_executed_by?(user)
@@ -258,7 +264,7 @@ class Entry < ActiveRecord::Base
   end
 
   def deleted?
-    !!deleted_by_id
+    !!deleted_at
   end
 
   alias_method :deleted, :deleted?

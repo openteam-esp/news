@@ -16,17 +16,18 @@ describe Ability do
       it_behaves_like 'can do anything',  :processing_publishing
       it_behaves_like 'can only read',    :published
     end
-    context 'of another channel' do
-      subject { ability_for(publisher_of(another_channel)) }
-      it_behaves_like 'can not create news'
-      it_behaves_like 'can do nothing',   :draft
-      it_behaves_like 'can only read processed news'
-    end
     context '(second) of channel' do
       subject { ability_for(another_publisher_of(channel)) }
       it_behaves_like 'can create news'
       it_behaves_like 'can do nothing',   :draft
       it_behaves_like 'can only read processed news'
+    end
+    context 'of another channel' do
+      subject { ability_for(publisher_of(another_channel)) }
+      it_behaves_like 'can not create news'
+      it_behaves_like 'can do nothing',  :draft
+      it_behaves_like 'can do nothing with processed news'
+      it_behaves_like 'can not create channels'
     end
   end
 end
