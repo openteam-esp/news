@@ -104,7 +104,7 @@ CKEDITOR.on('instanceReady', function(ev) {
     });
   };
 
-  tags = ['div', 'blockquote', 'pre', 'audio','video'];
+  tags = ['div', 'blockquote', 'pre', 'audio', 'video', 'object', 'param', 'embed'];
 
   for (var tag in tags) {
     ev.editor.dataProcessor.writer.setRules(tags[tag], {

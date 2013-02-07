@@ -1,11 +1,14 @@
 AttributeNormalizer.configure do |config|
 
   SANITIZE_CONFIG  = Sanitize::Config::RELAXED
-  SANITIZE_CONFIG[:elements] += %w[audio video source div hr]
+  SANITIZE_CONFIG[:elements] += %w[audio video source div hr object param embed]
   SANITIZE_CONFIG[:attributes]['a'] << 'target'
   SANITIZE_CONFIG[:attributes]['audio'] = %w[controls src]
   SANITIZE_CONFIG[:attributes]['video'] = %w[controls src poster width height]
   SANITIZE_CONFIG[:attributes]['source'] = %w[src type]
+  SANITIZE_CONFIG[:attributes]['object'] = %w[width height]
+  SANITIZE_CONFIG[:attributes]['param'] = %w[name value]
+  SANITIZE_CONFIG[:attributes]['embed'] = %w[src type width height allowscriptaccess allowfullscreen]
   SANITIZE_CONFIG[:attributes][:all] += %w[style class]
   SANITIZE_CONFIG[:output] = :xhtml
 
