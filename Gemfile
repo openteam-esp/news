@@ -47,6 +47,7 @@ end
 
 group :development do
   gem 'annotate'
+  gem 'brakeman'
   gem 'debugger'
   gem 'hirb',                                     :require => false
   gem 'rails-erd'

@@ -81,7 +81,6 @@ class Entry < ActiveRecord::Base
 
   scope :deleted, where('deleted_by_id IS NOT NULL')
   scope :not_deleted, where(:deleted_by_id => nil)
-  scope :descending, ->(attribute) { order("#{attribute} desc") }
   scope :initiated_by, ->(user) { where(:initiator_id => user) }
   scope :processing, -> { where(:state => processing_states).not_deleted }
   scope :published, -> { where(:state => :published).not_deleted }
