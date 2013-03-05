@@ -1,8 +1,10 @@
-source :rubygems
+source 'http://rubygems.org'
 
 group :assets do
-  gem 'therubyracer'
-  #gem 'libv8'
+  gem 'coffee-rails'
+  gem 'compass-rails'
+  gem 'jquery-rails'
+  gem 'sass-rails'
   gem 'uglifier'
 end
 
@@ -10,8 +12,6 @@ group :default do
   gem 'ancestry'
   gem 'attribute_normalizer'
   gem 'audited-activerecord'
-  gem 'coffee-rails'
-  gem 'compass-rails'
   gem 'decent_exposure'
   gem 'default_value_for'
   gem 'devise'
@@ -30,14 +30,12 @@ group :default do
   gem 'has_scope'
   gem 'has_searcher',     '< 0.0.90'
   gem 'inherited_resources'
-  gem 'jquery-rails'
   gem 'kaminari'
   gem 'nested_form'
   gem 'openteam-commons'
   gem 'progress_bar'
   gem 'russian'
   gem 'sanitize'
-  gem 'sass-rails'
   gem 'simple-navigation'
   gem 'sso-auth'
   gem 'state_machine'
@@ -48,11 +46,17 @@ end
 group :development do
   gem 'annotate'
   gem 'brakeman'
+  gem 'capistrano-ext'
   gem 'debugger'
   gem 'hirb',                                     :require => false
   gem 'rails-erd'
   gem 'rvm-capistrano'
   gem 'sunspot_solr',     '>= 2.0.0.pre.120417',  :require => false
+end
+
+group :linux do
+   gem 'libv8'                                     unless RUBY_PLATFORM =~ /freebsd/
+   gem 'therubyracer'                              unless RUBY_PLATFORM =~ /freebsd/
 end
 
 group :production do
