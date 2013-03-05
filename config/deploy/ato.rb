@@ -28,7 +28,11 @@ set :keep_releases, 7
 set :bundle_gemfile,  "Gemfile"
 set :bundle_dir,      File.join(fetch(:shared_path), 'bundle')
 set :bundle_flags,    "--deployment --quiet --binstubs"
+<<<<<<< HEAD
 set :bundle_without,  [:development, :test]
+=======
+set :bundle_without,  [:development, :test, :linux]
+>>>>>>> Add multistage capistrano
 
 role :web, domain
 role :app, domain
@@ -70,6 +74,7 @@ namespace :deploy do
 
   desc "Copy unicorn.rb file"
   task :copy_unicorn_config do
+<<<<<<< HEAD
     run "ln -s #{deploy_to}/shared/config/unicorn.rb #{deploy_to}/current/config/unicorn.rb"
   end
 
@@ -78,6 +83,12 @@ namespace :deploy do
     run "cd #{deploy_to}/current && exec bundle exec whenever --update-crontab --load-file #{deploy_to}/current/config/schedule.rb"
   end
 
+=======
+    run "mv #{deploy_to}/current/config/unicorn.rb #{deploy_to}/current/config/unicorn.rb.example"
+    run "ln -s #{deploy_to}/shared/config/unicorn.rb #{deploy_to}/current/config/unicorn.rb"
+  end
+
+>>>>>>> Add multistage capistrano
   desc "Airbrake notify"
   task :airbrake do
     run "cd #{deploy_to}/current && RAILS_ENV=production TO=production bin/rake airbrake:deploy"
@@ -100,6 +111,14 @@ namespace :unicorn do
     run "/usr/local/etc/rc.d/unicorn stop"
   end
 
+<<<<<<< HEAD
+=======
+  desc "Reload Unicorn"
+  task :reload do
+    run "/usr/local/etc/rc.d/unicorn reload"
+  end
+
+>>>>>>> Add multistage capistrano
   desc "Restart Unicorn"
   task :restart do
     run "/usr/local/etc/rc.d/unicorn restart"
@@ -111,10 +130,16 @@ after "deploy:finalize_update", "deploy:config_app"
 
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
+<<<<<<< HEAD
 after "deploy", "unicorn:restart"
 after "deploy", "deploy:update_crontab"
 after "deploy:restart", "deploy:cleanup"
 after "deploy", "deploy:crontab"
+=======
+after "deploy", "unicorn:reload"
+#after "deploy", "deploy:update_crontab"
+after "deploy:restart", "deploy:cleanup"
+>>>>>>> Add multistage capistrano
 after "deploy", "deploy:airbrake"
 
 # deploy:rollback

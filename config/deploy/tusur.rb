@@ -16,7 +16,10 @@ set :gateway, gateway
 set :pg_domain, pg_domain
 
 set :ssh_options, { :forward_agent => true }
+<<<<<<< HEAD
 set :default_shell, "bash -l"
+=======
+>>>>>>> Add multistage capistrano
 
 set :rails_env, "production"
 set :deploy_to, "/srv/#{application}"
@@ -77,6 +80,10 @@ namespace :deploy do
 
   desc "HASK copy right unicorn.rb file"
   task :copy_unicorn_config do
+<<<<<<< HEAD
+=======
+    run "mv #{deploy_to}/current/config/unicorn.rb #{deploy_to}/current/config/unicorn.rb.example"
+>>>>>>> Add multistage capistrano
     run "ln -s #{deploy_to}/shared/config/unicorn.rb #{deploy_to}/current/config/unicorn.rb"
   end
 
@@ -103,8 +110,13 @@ after "deploy:finalize_update", "deploy:config_app"
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
 after "deploy", "deploy:reload_servers"
+<<<<<<< HEAD
 after "deploy:restart", "deploy:cleanup"
 after "deploy", "deploy:update_crontab"
+=======
+after "deploy", "deploy:update_crontab"
+after "deploy:restart", "deploy:cleanup"
+>>>>>>> Add multistage capistrano
 after "deploy", "deploy:airbrake"
 
 # deploy:rollback

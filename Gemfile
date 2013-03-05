@@ -55,6 +55,11 @@ group :development do
   gem 'sunspot_solr',     '>= 2.0.0.pre.120417',  :require => false
 end
 
+group :linux do
+   gem 'libv8'                                     unless RUBY_PLATFORM =~ /freebsd/
+   gem 'therubyracer'                              unless RUBY_PLATFORM =~ /freebsd/
+end
+
 group :production do
   gem 'pg'
 end

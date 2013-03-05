@@ -373,6 +373,7 @@ DEPENDENCIES
   inherited_resources
   jquery-rails
   kaminari
+  libv8
   nested_form
   openteam-commons
   pg
