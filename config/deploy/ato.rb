@@ -28,7 +28,7 @@ set :keep_releases, 7
 set :bundle_gemfile,  "Gemfile"
 set :bundle_dir,      File.join(fetch(:shared_path), 'bundle')
 set :bundle_flags,    "--deployment --quiet --binstubs"
-set :bundle_without,  [:development, :test, :linux]
+set :bundle_without,  [:development, :test]
 
 role :web, domain
 role :app, domain
