@@ -16,6 +16,7 @@ set :gateway, gateway
 set :pg_domain, pg_domain
 
 set :ssh_options, { :forward_agent => true }
+set :default_shell, "bash -l"
 
 set :rails_env, "production"
 set :deploy_to, "/srv/#{application}"
