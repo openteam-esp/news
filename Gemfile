@@ -2,8 +2,9 @@ source 'http://rubygems.org'
 
 group :assets do
   gem 'coffee-rails'
-  gem 'execjs'
   gem 'compass-rails'
+  gem 'execjs'
+  gem 'fancy-buttons'
   gem 'jquery-rails'
   gem 'sass-rails'
   gem 'uglifier'
@@ -22,7 +23,6 @@ group :default do
   gem 'esp-ckeditor'
   gem 'esp-commons'
   gem 'esp-views'
-  gem 'fancy-buttons'
   gem 'forgery',                                    :require => false
   gem 'formtastic',       '< 2.2.0'
   gem 'friendly_id'
