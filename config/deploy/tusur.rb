@@ -104,8 +104,8 @@ after "deploy:finalize_update", "deploy:config_app"
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
 after "deploy", "deploy:reload_servers"
-after "deploy", "deploy:update_crontab"
 after "deploy:restart", "deploy:cleanup"
+after "deploy", "deploy:update_crontab"
 after "deploy", "deploy:airbrake"
 
 # deploy:rollback

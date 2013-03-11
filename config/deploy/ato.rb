@@ -74,6 +74,11 @@ namespace :deploy do
     run "ln -s #{deploy_to}/shared/config/unicorn.rb #{deploy_to}/current/config/unicorn.rb"
   end
 
+  desc "Update crontab tasks"
+  task :crontab do
+    run "cd #{deploy_to}/current && exec bundle exec whenever --update-crontab --load-file #{deploy_to}/current/config/schedule.rb"
+  end
+
   desc "Airbrake notify"
   task :airbrake do
     run "cd #{deploy_to}/current && RAILS_ENV=production TO=production bin/rake airbrake:deploy"
@@ -115,6 +120,7 @@ after "deploy", "deploy:copy_unicorn_config"
 after "deploy", "unicorn:reload"
 after "deploy", "deploy:update_crontab"
 after "deploy:restart", "deploy:cleanup"
+after "deploy", "deploy:crontab"
 after "deploy", "deploy:airbrake"
 
 # deploy:rollback
