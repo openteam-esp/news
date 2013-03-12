@@ -12,12 +12,15 @@ end
 class RemoveContexts < ActiveRecord::Migration
   def up
     Permission.where(context_type: 'Context').all.each do |permission|
-      channels = permission.context.channels.roots
-      permission.update_attributes(context: channels.first)
-      if channels.many?
-        (channels - [channels.first]).each do |channel|
-          permission.user.permissions.create(context: channel, role: permission.role)
+      if (channels = permission.context.channels.roots).any?
+        permission.update_attributes(context: channels.first)
+        if channels.many?
+          (channels - [channels.first]).each do |channel|
+            permission.user.permissions.create(context: channel, role: permission.role)
+          end
         end
+      else
+        permission.destroy
       end
     end
 
