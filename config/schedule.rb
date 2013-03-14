@@ -1,12 +1,7 @@
-require File.expand_path('../directories.rb', __FILE__)
+log_dir       = File.expand_path('../../log', __FILE__)
+path_to_bash  = (RUBY_PLATFORM =~ /freebsd/) ? '/usr/local/bin/bash' : '/bin/bash'
 
-dir = Directories.new
-
-if RUBY_PLATFORM =~ /freebsd/
-  set :job_template, "/usr/local/bin/bash -l -i -c ':job' 1>#{dir.log('schedule.log')} 2>#{dir.log('schedule-errors.log')}"
-else
-  set :job_template, "/bin/bash -l -i -c ':job' 1>#{dir.log('schedule.log')} 2>#{dir.log('schedule-errors.log')}"
-end
+set :job_template, "#{path_to_bash} -l -i -c ':job' 1>>#{log_dir}/schedule.log 2>>#{log_dir}/schedule-errors.log"
 
 every :day do
   rake 'cron'
