@@ -114,10 +114,10 @@ describe NewsEntry do
     end
 
     context 'заблокированная новость' do
-      subject { draft.tap do |draft| draft.locked_at = Time.now end}
+      subject { draft.tap do |draft| draft.lock end }
 
       describe '#save' do
-        before { subject.save! }
+        before { subject.unlock }
         it { should_not be_locked }
         its(:locked_at) { should be_nil }
         its(:locked_by) { should be_nil }

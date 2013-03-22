@@ -1,16 +1,17 @@
 source 'http://rubygems.org'
 
 group :assets do
-  gem 'coffee-rails'
   gem 'compass-rails'
   gem 'execjs'
   gem 'fancy-buttons'
-  gem 'jquery-rails'
-  gem 'sass-rails'
   gem 'uglifier'
+  gem 'turbo-sprockets-rails3'
 end
 
 group :default do
+  gem 'coffee-rails'
+  gem 'sass-rails'
+  gem 'jquery-rails'
   gem 'ancestry'
   gem 'attribute_normalizer'
   gem 'audited-activerecord'
