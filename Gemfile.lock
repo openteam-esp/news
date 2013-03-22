@@ -31,9 +31,10 @@ GEM
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    airbrake (3.1.6)
+    airbrake (3.1.8)
+      activesupport
       builder
-      girl_friday
+      json
     amq-client (0.9.10)
       amq-protocol (>= 0.9.4)
       eventmachine
@@ -93,7 +94,6 @@ GEM
       compass (>= 0.12.0, < 0.14)
     configliere (0.4.8)
       json
-    connection_pool (0.9.3)
     curb (0.8.0)
     daemons (1.1.9)
     debugger (1.2.2)
@@ -148,9 +148,6 @@ GEM
     friendly_id (4.0.9)
     fssm (0.2.9)
     gilenson (1.2.2)
-    girl_friday (0.11.1)
-      connection_pool (~> 0.9.0)
-      rubinius-actor
     haml (4.0.0)
       tilt
     has_enum (0.10.1)
@@ -268,9 +265,6 @@ GEM
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
-    rubinius-actor (0.0.2)
-      rubinius-core-api
-    rubinius-core-api (0.0.1)
     ruby-graphviz (0.9.21)
     ruby2ruby (2.0.3)
       ruby_parser (~> 3.1)
