@@ -67,8 +67,14 @@ class Manage::News::EntriesController < Manage::ApplicationController
   end
 
   protected
+    ENTRY_CLASSES = {
+      'announcement_entry'=> AnnouncementEntry,
+      'event_entry'=> EventEntry,
+      'news_entry'=> NewsEntry,
+    }
+
     def class_of_resource
-      params[:type].classify.constantize
+      ENTRY_CLASSES[params[:type]]
     end
 
     def build_resource
