@@ -41,19 +41,20 @@ group :default do
   gem 'simple-navigation'
   gem 'sso-auth'
   gem 'state_machine'
-  gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
+  gem 'sunspot_rails'
   gem 'timecop',          :require => false
 end
 
 group :development do
   gem 'annotate'
   gem 'brakeman'
-  gem 'capistrano-ext'
+  gem 'capistrano-db-tasks', :git => 'git://github.com/openteam/capistrano-db-tasks'
+  gem 'capistrano-unicorn',  :git => 'git://github.com/sosedoff/capistrano-unicorn'
   gem 'debugger'
   gem 'hirb',                                     :require => false
+  gem 'openteam-capistrano'
   gem 'rails-erd'
-  gem 'rvm-capistrano'
-  gem 'sunspot_solr',     '>= 2.0.0.pre.120417',  :require => false
+  gem 'sunspot_solr',                             :require => false
 end
 
 group :linux do
