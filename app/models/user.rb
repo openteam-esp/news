@@ -53,4 +53,9 @@ class User < ActiveRecord::Base
       send("old_#{role}_of?", entry) || manager_of?(entry)
     end
   end
+
+  def is_administrator?
+    self.permissions.map(&:role).include?('administrator')
+  end
+
 end

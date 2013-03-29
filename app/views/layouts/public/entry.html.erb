@@ -5,7 +5,7 @@
     <%= composed_title(@entry) %>
   </div>
 
-  <% if current_user && current_user.publisher_of?(@entry) %>
+  <% if current_user && (current_user.publisher_of?(@entry) || current_user.is_administrator?) %>
     <%= link_to "Управление новостью", manage_news_entry_path(@entry), :class => "button to_manage" %>
   <% end %>
 <% end  %>
