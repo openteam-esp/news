@@ -14,6 +14,9 @@
 
 
 class EventEntryProperty < ActiveRecord::Base
+
+  attr_accessible :since, :until, :location
+
   validates_presence_of :since, :until
 
   def interval

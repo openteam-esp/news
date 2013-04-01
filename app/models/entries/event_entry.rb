@@ -28,6 +28,8 @@
 class EventEntry < Entry
   accepts_nested_attributes_for :event_entry_properties
 
+  attr_accessible :event_entry_properties_attributes
+
   def as_json(options={})
     super options.merge(:methods => :event_entry_properties)
   end
