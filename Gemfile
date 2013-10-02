@@ -50,7 +50,6 @@ group :development do
   gem 'brakeman'
   gem 'capistrano-db-tasks', :git => 'git://github.com/sgruhier/capistrano-db-tasks'
   gem 'capistrano-unicorn'
-  gem 'debugger'
   gem 'hirb',                                     :require => false
   gem 'openteam-capistrano'
   gem 'rails-erd'
