@@ -112,7 +112,7 @@ class Entry < ActiveRecord::Base
   has_many :event_entry_properties
 
   searchable(:include => [:channels, :event_entry_properties]) do
-    boolean :deleted
+    string(:deleted) { deleted? ? 'deleted' : 'not_deleted' }
 
     integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
 
@@ -241,7 +241,7 @@ class Entry < ActiveRecord::Base
         minimum_word_length         3
         with(:state, :published)
         with(:since).greater_than(1.month.ago)
-        with(:deleted, false)
+        with(:deleted, 'not_deleted')
         with(:channel_ids, options[:channel_id]) if options[:channel_id]
         paginate :per_page => options[:count].to_i
       end.results

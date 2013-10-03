@@ -40,7 +40,7 @@ class EntrySearch < Search
   column :order_by,       :string
   column :per_page,       :integer
   column :state,          :string
-  column :deleted,        :boolean
+  column :deleted,        :string
   column :updated_at_gt,  :date
 
   column :interval_year,  :integer
