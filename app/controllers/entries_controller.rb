@@ -41,8 +41,8 @@ class EntriesController < ApplicationController
 
     def search_and_paginate_collection
       if params[:utf8]
-        searcher.deleted      = 'not_deleted'
-        searcher.per_page     = paginate_options[:per_page]
+        searcher.deleted_state = 'not_deleted'
+        searcher.per_page      = paginate_options[:per_page]
 
         searcher.pagination.merge! paginate_options
         results = searcher.results
