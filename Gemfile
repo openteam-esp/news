@@ -29,7 +29,7 @@ group :default do
   gem 'friendly_id'
   gem 'gilenson'
   gem 'has_enum'
-  gem 'has_scope'
+  gem 'has_scope',        '0.6.0.rc'
   gem 'has_searcher',     '< 0.0.90'
   gem 'inherited_resources'
   gem 'kaminari'
@@ -50,7 +50,7 @@ group :development do
   gem 'brakeman'
   gem 'capistrano-db-tasks', :git => 'git://github.com/sgruhier/capistrano-db-tasks'
   gem 'capistrano-unicorn'
-  gem 'hirb',                                     :require => false
+  gem 'hirb'
   gem 'openteam-capistrano'
   gem 'rails-erd'
   gem 'sunspot_solr',                             :require => false
