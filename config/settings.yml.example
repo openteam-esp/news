@@ -5,13 +5,16 @@ errors:
   key:          KEY
   url:          http://errors.openteam.ru
 
-#solr:
-#  url:          http://localhost:8982/solr
+amqp:
+  url:          http://rabbitmq
 
-#sso:
-#  key:          KEY
-#  secret:       SECRET
-#  url:          http://esp-sso.openteam.ru
+solr:
+  url:          http://localhost:8982/solr
 
-#storage:
-  #url:         http://esp-storage.openteam.ru
+sso:
+  key:          KEY
+  secret:       SECRET
+  url:          http://esp-sso.openteam.ru
+
+storage:
+  url:         http://esp-storage.openteam.ru
