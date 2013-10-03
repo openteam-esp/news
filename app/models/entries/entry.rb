@@ -208,6 +208,7 @@ class Entry < ActiveRecord::Base
       update_column :deleted_by_id, current_user.id
       update_column :deleted_at, DateTime.now
     end
+    index!
   end
 
   def revivify
@@ -215,6 +216,7 @@ class Entry < ActiveRecord::Base
       update_column :deleted_by_id, nil
       update_column :deleted_at, nil
     end
+    index!
   end
 
   def has_processing_task_executed_by?(user)
