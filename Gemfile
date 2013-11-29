@@ -24,13 +24,13 @@ group :default do
   gem 'esp-ckeditor'
   gem 'esp-commons'
   gem 'esp-views'
-  gem 'forgery',                                    :require => false
-  gem 'formtastic',       '< 2.2.0'
+  gem 'forgery', :require => false
+  gem 'formtastic', '< 2.2.0'
   gem 'friendly_id'
   gem 'gilenson'
   gem 'has_enum'
-  gem 'has_scope',        '0.6.0.rc'
-  gem 'has_searcher',     '< 0.0.90'
+  gem 'has_scope', '0.6.0.rc'
+  gem 'has_searcher', '< 0.0.90'
   gem 'inherited_resources'
   gem 'kaminari'
   gem 'nested_form'
@@ -42,18 +42,19 @@ group :default do
   gem 'sso-auth'
   gem 'state_machine'
   gem 'sunspot_rails'
-  gem 'timecop',          :require => false
+  gem 'timecop', :require => false
 end
 
 group :development do
   gem 'annotate'
   gem 'brakeman'
+  gem 'capistrano', '~> 2.14.2'
   gem 'capistrano-db-tasks', :git => 'git://github.com/sgruhier/capistrano-db-tasks'
-  gem 'capistrano-unicorn'
+  gem 'capistrano-unicorn', '~> 0.1.10'
   gem 'hirb'
   gem 'openteam-capistrano'
   gem 'rails-erd'
-  gem 'sunspot_solr',                             :require => false
+  gem 'sunspot_solr', :require => false
 end
 
 group :production do
@@ -61,10 +62,10 @@ group :production do
 end
 
 group :test do
-  gem 'fabrication',      '< 2.0.0'
-  gem 'rspec-rails',                              :require => false
-  gem 'shoulda-matchers',                         :require => false
-  gem 'sqlite3',                                  :require => false
-  gem 'sunspot_matchers',                         :require => false
+  gem 'fabrication', '< 2.0.0'
+  gem 'rspec-rails', :require => false
+  gem 'shoulda-matchers', :require => false
+  gem 'sqlite3', :require => false
+  gem 'sunspot_matchers', :require => false
   gem 'timecop'
 end
