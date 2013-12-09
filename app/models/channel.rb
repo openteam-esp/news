@@ -56,7 +56,7 @@ class Channel < ActiveRecord::Base
 
   has_enums
 
-  has_ancestry
+  acts_as_tree
 
   audited
 
