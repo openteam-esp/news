@@ -9,5 +9,5 @@ class Manage::ChannelsController < ApplicationController
     scope.subtree_for(controller.current_user)
   end
 
-  actions :new, :create, :edit, :update, :index
+  actions :new, :create, :edit, :update, :index, :destroy
 end
