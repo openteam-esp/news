@@ -2,11 +2,11 @@
 
 <% if collection.any? %>
   <ul class='channel_list'>
-    <% collection.each do |channel| %>
+    <% Channel.arrange_as_array.each do |channel| %>
       <li class='channel'>
         <%= ('&nbsp;' * channel.depth * 2).html_safe %> <%= channel %>
         <% if can?(:manage, channel) %>
-          <%= link_to t('commons.delete'), manage_channel_path(channel), :method => :delete, :data => {:confirm => t('commons.confirm')}, :class => 'button delete simple' %>
+          <%= link_to t('commons.delete'), manage_channel_path(channel), :method => :delete, :data => {:confirm => t('commons.confirm')} %>
           <%= link_to t('commons.edit'), edit_manage_channel_path(channel) %>
         <% end %>
       </li>

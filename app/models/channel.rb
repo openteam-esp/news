@@ -54,6 +54,17 @@ class Channel < ActiveRecord::Base
     subtrees_of(roots_for(user, options)).ordered_by_weight
   end
 
+  def self.arrange_as_array(options={}, hash=nil)
+    hash ||= arrange(options)
+
+    arr = []
+    hash.each do |node, children|
+      arr << node
+      arr += arrange_as_array(options, children) unless children.empty?
+    end
+    arr
+  end
+
   has_enums
 
   acts_as_tree
