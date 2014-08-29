@@ -3,7 +3,7 @@
     <% collection.each do | entry | %>
       <li>
         <div class="time_ago">
-          <%= l entry.since, :format => :short %>
+          <%= l entry.since, :format => :long %>
         </div>
         <div class="title">
           <%= link_to entry.title, entry_path(entry) %>

@@ -106,7 +106,7 @@ class Entry < ActiveRecord::Base
   after_create :create_event
 
   default_value_for :vfs_path do
-    "/news/#{Time.now.strftime('%Y/%m/%d/%H-%M')}-#{SecureRandom.hex(4)}"
+    generate_vfs_path
   end
 
   has_many :event_entry_properties
@@ -152,6 +152,14 @@ class Entry < ActiveRecord::Base
 
   def issues
     [prepare, review, publish]
+  end
+
+  def generate_vfs_path
+    Entry.generate_vfs_path
+  end
+
+  def self.generate_vfs_path
+    "/news/#{Time.now.strftime('%Y/%m/%d/%H-%M')}-#{SecureRandom.hex(4)}"
   end
 
   def truncated_title
