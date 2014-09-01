@@ -67,5 +67,4 @@ group :test do
   gem 'shoulda-matchers', :require => false
   gem 'sqlite3', :require => false
   gem 'sunspot_matchers', :require => false
-  gem 'timecop'
 end
