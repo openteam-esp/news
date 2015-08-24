@@ -12,10 +12,6 @@ class Parser
     @channel ||= Channel.find(channel_id)
   end
 
-  def page_quantity
-    pagination = Nokogiri::HTML(open(url)).css(".b-paginator ul")
-    @page_quantity ||= pagination.children[pagination.count-3].text.to_i
-  end
 
   def parse
     pb = ProgressBar.new(page_quantity)
@@ -33,24 +29,24 @@ class Parser
       news_url = entry.css("h2 a").attr("href")
       news_title = entry.css("h2").text.squish
       news_annotation = entry.css("p").text.squish
-      news_date = normalize_date entry
+      news_date = DateTime.parse entry.css(".b-entry-date").text.squish
       news_body = Nokogiri::HTML(open(news_url)).css(".b-blog-item p").map{|node| "<p>#{node.text}<p>"}.join("")
 
-      news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation, :body => news_body)
-      news.set_current_user(user)
-      news.channels << channel
-      news.state = "published"
-      news.save
+      if new_entry?(news_title)
+        news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation, :body => news_body)
+        news.since = news_date
+        news.title = news_title
+        news.annotation = news_annotation
+        news.body = news_body
+        news.set_current_user(user)
+        news.channels << channel
+        news.state = "published"
+        news.save
 
-      resolve_tasks(news)
-      fetch_gallery_images(news_url, news)  if Nokogiri::HTML(open(news_url)).css(".gallery")
+        resolve_tasks(news)
+        fetch_gallery_images(news_url, news)  if Nokogiri::HTML(open(news_url)).css(".gallery")
+      end
     end
-  end
-
-  def normalize_date(entry)
-    date = entry.css(".b-news-date time").text.squish
-    time = entry.css(".b-news-time").text.squish
-    DateTime.parse "#{date} #{time}"
   end
 
   def fetch_gallery_images(news_url, news)
@@ -59,6 +55,11 @@ class Parser
       storage_url = upload_file(node.attr("src").sub(/-\d{2,}x\d{2,}/,''), news.vfs_path)
       news.images.create(:url => storage_url)
     end
+  end
+
+  def new_entry?(title)
+    news = NewsEntry.find_by_title(title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''))
+    news && news.channels.include?(channel) ? false : true
   end
 
   def upload_file(from, to)
@@ -103,5 +104,10 @@ class Parser
       entry_task.update_attribute :executor, user
       entry_task.update_attribute :state, 'completed'
     end
+  end
+
+  def page_quantity
+    pagination = Nokogiri::HTML(open(url)).css(".b-paginator ul")
+    @page_quantity ||= 3#pagination.children[pagination.count-3].text.to_i
   end
 end
