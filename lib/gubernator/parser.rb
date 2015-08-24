@@ -108,6 +108,6 @@ class Parser
 
   def page_quantity
     pagination = Nokogiri::HTML(open(url)).css(".b-paginator ul")
-    @page_quantity ||= 3#pagination.children[pagination.count-3].text.to_i
+    @page_quantity ||= pagination.children[pagination.count-3].text.to_i
   end
 end
