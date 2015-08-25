@@ -4,12 +4,13 @@ require "open-uri"
 require "curl"
 
 class Parser
-  attr_accessor :url, :user, :channel
+  attr_accessor :url, :user, :channel, :news_selector
 
-  def initialize(url, channel_id)
+  def initialize(url, channel_id, news_selector = ".b-newsone")
     @url ||= url
     @user ||= User.find_by_email "mail@openteam.ru"
     @channel ||= Channel.find(channel_id)
+    @news_selector ||= news_selector
   end
 
 
@@ -24,14 +25,13 @@ class Parser
 
   private
   def fetch_entries(paginated_url)
-    entries = Nokogiri::HTML(open(paginated_url)).css(".b-newsone")
+    entries = Nokogiri::HTML(open(paginated_url)).css(news_selector)
     entries.each do |entry|
       news_url = entry.css("h2 a").attr("href")
       news_title = entry.css("h2").text.squish
       news_annotation = entry.css("p").text.squish
       news_date = DateTime.parse entry.css(".b-entry-date").text.squish
-      news_body = Nokogiri::HTML(open(news_url)).css(".b-blog-item p").map{|node| "<p>#{node.text}<p>"}.join("")
-
+      news_body = fetch_news_body(news_url)
       if new_entry?(news_title)
         news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation, :body => news_body)
         news.since = news_date
@@ -47,6 +47,10 @@ class Parser
         fetch_gallery_images(news_url, news)  if Nokogiri::HTML(open(news_url)).css(".gallery")
       end
     end
+  end
+
+  def fetch_news_body(news_url)
+    Nokogiri::HTML(open(news_url)).css("#{news_selector} p").map{|node| "<p>#{node.text}<p>"}.join("")
   end
 
   def fetch_gallery_images(news_url, news)
