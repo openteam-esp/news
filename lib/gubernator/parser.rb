@@ -28,10 +28,10 @@ class Parser
     entries = Nokogiri::HTML(open(paginated_url)).css(news_selector)
     entries.each do |entry|
       news_title = entry.css("h2").text.squish
-      if new_entry?(news_title)
+      news_date = DateTime.parse entry.css(".b-entry-date").text.squish
+      if new_entry?(news_title, news_date)
         news_url = entry.css("h2 a").attr("href")
         news_annotation = entry.css("p").text.squish
-        news_date = DateTime.parse entry.css(".b-entry-date").text.squish
         news_body = fetch_news_body(news_url)
         news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation, :body => news_body)
         news.since = news_date
@@ -59,7 +59,7 @@ class Parser
     body.css(".b-blogcomment-count").remove
     body.css(".b-blog-date").remove
     body.css(".yashare-auto-init").first.try(:parent).try(:remove)
-    body.children.to_html.squish
+    body.children.to_html.squish.gsub('<p>&nbsp;</p>', '')
   end
 
   def fetch_gallery_images(news_url, news)
@@ -70,8 +70,8 @@ class Parser
     end
   end
 
-  def new_entry?(title)
-    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, '')).empty?
+  def new_entry?(title, news_date)
+    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''), :since => news_date).empty?
   end
 
   def upload_file(from, to)
