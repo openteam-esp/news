@@ -62,8 +62,9 @@ class Parser
   end
 
   def new_entry?(title)
-    news = NewsEntry.find_by_title(title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''))
-    news && news.channels.include?(channel) ? false : true
+    #news = NewsEntry.find_by_title(title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''))
+    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, '')).empty?
+    #news && news.channels.include?(channel) ? false : true
   end
 
   def upload_file(from, to)
