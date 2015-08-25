@@ -50,7 +50,7 @@ class Parser
   end
 
   def fetch_news_body(news_url)
-    body = Nokogiri::HTML(open(news_url)).css("#{news_selector}")
+    body = Nokogiri::HTML(open(news_url)).css(".b-blog-item")
     body.css("style").remove
     body.css("script").remove
     body.css("h2").remove
