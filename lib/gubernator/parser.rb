@@ -23,18 +23,24 @@ class Parser
     end
   end
 
-  private
+  def testtest(test_param, news)
+    fetch_news_body(test_param, news)
+  end
+
+  protected
+
   def fetch_entries(paginated_url)
     entries = Nokogiri::HTML(open(paginated_url)).css(news_selector)
     entries.each do |entry|
       news_title = entry.css("h2").text.squish
-      news_date = DateTime.parse entry.css(".b-entry-date").text.squish
+      news_date = Time.zone.parse entry.css(".b-entry-date").text.squish
       if new_entry?(news_title, news_date)
         news_url = entry.css("h2 a").attr("href")
         news_annotation = entry.css("p").text.squish
-        news_body = fetch_news_body(news_url)
-        news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation, :body => news_body)
+        news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation)
+        news_body = fetch_news_body(news_url, news)
         news.since = news_date
+        news.body = news_body
         news.title = news_title
         news.annotation = news_annotation
         news.body = news_body
@@ -49,7 +55,7 @@ class Parser
     end
   end
 
-  def fetch_news_body(news_url)
+  def fetch_news_body(news_url, news)
     body = Nokogiri::HTML(open(news_url)).css(".b-blog-item")
     body.css("style").remove
     body.css("script").remove
