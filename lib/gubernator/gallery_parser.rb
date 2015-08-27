@@ -20,14 +20,18 @@ class GalleryParser < Parser
 
   def create_gallery(gallery_url)
     gallery = YAML.load(open(gallery_url).read)
-    news = NewsEntry.new(:title => gallery['album'], :body => gallery['album'], :since => Time.zone.parse(gallery['datetime']))
-    news.set_current_user(user)
-    news.channels << channel
-    news.state = "published"
-    news.save
+    news_title = gallery['album']
+    news_date = Time.zone.parse(gallery['datetime'])
+    if new_entry?(news_title, news_date)
+      news = NewsEntry.new(:title => news_title, :body => news_title, :since => news_date)
+      news.set_current_user(user)
+      news.channels << channel
+      news.state = "published"
+      news.save
 
-    resolve_tasks(news)
-    fetch_gallery_images(gallery['items'], news)
+      resolve_tasks(news)
+      fetch_gallery_images(gallery['items'], news)
+    end
   end
 
   def fetch_gallery_images(gallery_items, news)
