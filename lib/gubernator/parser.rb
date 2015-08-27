@@ -65,9 +65,9 @@ class Parser
   end
 
   def fetch_gallery_images(news_url, news)
-    gallery =  Nokogiri::HTML(open(news_url)).css(".gallery-item img")
+    gallery =  Nokogiri::HTML(open(news_url)).css(".gallery-item a")
     gallery.each do |node|
-      storage_url = upload_file(node.attr("src").sub(/-\d{2,}x\d{2,}/,''), news.vfs_path)
+      storage_url = upload_file(node.attr("href"), news.vfs_path)
       news.images.create(:url => storage_url)
     end
   end
