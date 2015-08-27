@@ -83,14 +83,19 @@ class Parser
   def upload_file(from, to)
     filename = from.split('/').last.gsub(/(\.\w+)_\d+\.\w+\z/, '\1').downcase
 
+    return "http://storage.esp.tomsk.gov.ru/files/78458/70-85/zhvachkin.jpg" if filename == "zhvachkin.jpg"
+    return "http://storage.esp.tomsk.gov.ru/files/78459/70-74/golovatov-1.jpg" if filename == "golovatov-1.jpg"
+
     tmpfile = Tempfile.new(filename)
     tmpfile.binmode
 
-    c = Curl::Easy.new(from) do |curl|
-      curl.on_body { |data| tmpfile.write(data) }
-      curl.on_failure { |easy| puts "Failure link #{from}" }
+    rest = RestClient::Request.execute(method: :get, url: from, timeout: -1, :open_timeout => -1)
+    if rest.code == 200
+      tmpfile.write(rest.to_str)
+    else
+      puts "Failure link #{from}"
+      return false
     end
-    c.perform
 
     c = Curl::Easy.new("#{Settings['storage.url']}/api/el_finder/v2#{to}?cmd=upload&target=r17306_Lw") do |curl|
       curl.headers['User-Agent'] = 'curl'

@@ -10,13 +10,11 @@ class InterviewParser < Parser
     page = Nokogiri::HTML(news_body)
     page.xpath("//img").each do |node|
       storage_response = upload_file(node.attr('src'), news.vfs_path)
-      p storage_response
       node['src'] = storage_response
     end
 
     page.css(".answer a").each do |node|
       storage_response = upload_file(node.attr('href'), news.vfs_path)
-      p storage_response
       node['href'] = storage_response
     end
 

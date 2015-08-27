@@ -146,7 +146,8 @@ class Entry < ActiveRecord::Base
   attr_accessor :more_like_this
 
   normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
-  normalize_attribute :annotation, :body, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
+  normalize_attribute :annotation, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
+  normalize_attribute :body, :with => [:sanitize, :strip, :blank]
 
   audited
 

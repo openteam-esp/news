@@ -36,6 +36,7 @@ group :default do
   gem 'nested_form'
   gem 'openteam-commons'
   gem 'progress_bar'
+  gem 'rest-client'
   gem 'russian'
   gem 'sanitize'
   gem 'simple-navigation'
