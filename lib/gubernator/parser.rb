@@ -16,15 +16,11 @@ class Parser
 
   def parse
     pb = ProgressBar.new(page_quantity)
-    (1..@page_quantity).each do |page_number|
+    (1..page_quantity).each do |page_number|
       paginated_url = "#{url}/page/#{page_number}"
       fetch_entries(paginated_url)
       pb.increment!
     end
-  end
-
-  def testtest(test_param, news)
-    fetch_news_body(test_param, news)
   end
 
   protected

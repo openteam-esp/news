@@ -1,5 +1,6 @@
 require 'gubernator/parser'
 require 'gubernator/interview_parser'
+require 'gubernator/gallery_parser'
 
 namespace :gubernator do
   desc "fetch news from http://gubernator.tomsk.ru/news"
@@ -15,5 +16,10 @@ namespace :gubernator do
   desc "fetch news from http://gubernator.tomsk.ru/interview"
   task :interviews => :environment do
     InterviewParser.new("http://gubernator.tomsk.ru/interview", 168).parse
+  end
+
+  desc "fetch news from http://gubernator.tomsk.ru/photo"
+  task :gallery => :environment do
+    GalleryParser.new("http://gubernator.tomsk.ru/photo#albums", 169).parse
   end
 end
