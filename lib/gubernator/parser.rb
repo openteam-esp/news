@@ -85,36 +85,40 @@ class Parser
     tmpfile = Tempfile.new(filename)
     tmpfile.binmode
 
-    rest = RestClient::Request.execute(method: :get, url: from, timeout: -1, :open_timeout => -1)
-    if rest.code == 200
-      tmpfile.write(rest.to_str)
-    else
-      puts "Failure link #{from}"
-      return false
-    end
+    begin
+      rest = RestClient::Request.execute(method: :get, url: from, timeout: -1, :open_timeout => -1)
+      if rest.code == 200
+        tmpfile.write(rest.to_str)
+      else
+        puts "Failure link #{from}"
+        return false
+      end
 
-    c = Curl::Easy.new("#{Settings['storage.url']}/api/el_finder/v2#{to}?cmd=upload&target=r17306_Lw") do |curl|
-      curl.headers['User-Agent'] = 'curl'
-      curl.headers['Accept'] = 'application/json'
-      curl.headers['CLIENT_IP'] = '127.0.0.1'
-      curl.headers['X_FORWARDED_FOR'] = ''
-      curl.headers['REMOTE_ADDR'] = ''
-      curl.multipart_form_post = true
-      curl.on_failure { |easy| puts '===> Storage is not available! <===' }
-    end
-    c.http_post(Curl::PostField.file('upload[]', tmpfile.path, filename))
-    tmpfile.close
-    tmpfile.unlink
+      c = Curl::Easy.new("#{Settings['storage.url']}/api/el_finder/v2#{to}?cmd=upload&target=r17306_Lw") do |curl|
+        curl.headers['User-Agent'] = 'curl'
+        curl.headers['Accept'] = 'application/json'
+        curl.headers['CLIENT_IP'] = '127.0.0.1'
+        curl.headers['X_FORWARDED_FOR'] = ''
+        curl.headers['REMOTE_ADDR'] = ''
+        curl.multipart_form_post = true
+        curl.on_failure { |easy| puts '===> Storage is not available! <===' }
+      end
+      c.http_post(Curl::PostField.file('upload[]', tmpfile.path, filename))
+      tmpfile.close
+      tmpfile.unlink
 
-    response = JSON.parse(c.body_str)
-    case response.keys.first
-    when 'added'
-      response = response['added'].first['url']
-    when 'error'
-      response = URI.extract(response['error'], ['http', 'https']).first
-    end
+      response = JSON.parse(c.body_str)
+      case response.keys.first
+      when 'added'
+        response = response['added'].first['url']
+      when 'error'
+        response = URI.extract(response['error'], ['http', 'https']).first
+      end
 
-    response
+      response
+    rescue
+      false
+    end
   end
 
   def resolve_tasks(news)

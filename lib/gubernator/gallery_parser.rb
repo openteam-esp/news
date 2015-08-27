@@ -36,8 +36,8 @@ class GalleryParser < Parser
 
   def fetch_gallery_images(gallery_items, news)
     gallery_items.each do |item|
-      storage_url = upload_file(item['big'], news.vfs_path)
-      news.images.create(:url => storage_url , :description => item['title'])
+      storage_url = upload_file(item['big'].gsub("`","%"), news.vfs_path)
+      news.images.create(:url => storage_url , :description => item['title']) if storage_url
     end
   end
 
