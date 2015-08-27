@@ -32,8 +32,6 @@ class GalleryParser < Parser
 
   def fetch_gallery_images(gallery_items, news)
     gallery_items.each do |item|
-      p item['src'].sub(/-\d{2,}x\d{2,}/,'')
-      p news.vfs_path
       storage_url = upload_file(item['big'], news.vfs_path)
       news.images.create(:url => storage_url , :description => item['title'])
     end
