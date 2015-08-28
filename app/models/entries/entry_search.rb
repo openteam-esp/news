@@ -109,7 +109,7 @@ class EntrySearch < Search
   protected
 
     def is_archive?
-      interval_year && interval_month
+      !!interval_year
     end
 
     def additional_search(search)
