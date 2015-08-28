@@ -166,11 +166,19 @@ class EntrySearch < Search
     end
 
     def interval_start
-      Time.local(interval_year, interval_month, 1)
+      if interval_year && interval_month
+        Time.local(interval_year, interval_month, 1)
+      elsif interval_year && !interval_month
+        Time.local(interval_year, 1, 1)
+      end
     end
 
     def interval_end
-      interval_start.end_of_month
+      if interval_year && interval_month
+        interval_start.end_of_month
+      elsif interval_year && !interval_month
+        interval_start.end_of_year
+      end
     end
 
     def search_columns
