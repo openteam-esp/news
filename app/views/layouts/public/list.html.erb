@@ -14,7 +14,8 @@
                           :multiple => true,
                           :collection => Channel.all,
                           :member_label => ->(c) { ("&nbsp;" * c.depth * 2).html_safe + c.title},
-                          :disabled => Channel.without_entries.pluck(:id)
+                          :disabled => Channel.without_entries.pluck(:id),
+                          :selected => normalize_channel_ids
                         %>
           <%= form.input :order_by, :required => false, :include_blank => false, :as => :select, :collection => {'по дате публикации' => 'since desc' } %>
         <% end %>
