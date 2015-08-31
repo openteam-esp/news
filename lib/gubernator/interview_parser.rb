@@ -11,6 +11,7 @@ class InterviewParser < Parser
     page.xpath("//img").each do |node|
       storage_response = upload_file(node.attr('src'), news.vfs_path)
       node['src'] = storage_response
+      node["class"] = "img-responsive"
     end
 
     page.css(".answer a").each do |node|
