@@ -28,4 +28,21 @@ namespace :gubernator do
   task :video => :environment do
     VideoParser.new("http://gubernator.tomsk.ru/video", 170, ".b-videolist-block .b-videolist-thumb").parse
   end
+
+  desc "fix annotation in gubernator news"
+  task :fix_annotation => :environment do
+    entries = Channel.find(ENV['channel_id'].to_i).entries
+    counter = 0
+    entries.each do |entry|
+      if entry.annotation && entry.body
+        annotation = entry.annotation.gsub(/&nbsp;|<span class=\"nobr\">|<\/span>|<p>|<\/p>/," ").squish
+        if entry.body.match("<p>#{annotation}</p>")
+          gsubed_body = entry.body.gsub("<p>#{annotation}</p>","")
+          entry.update_attribute(:body, gsubed_body)
+          counter+=1
+        end
+      end
+    end
+    puts "#{counter} news updated"
+  end
 end
