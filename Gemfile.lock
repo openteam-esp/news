@@ -59,6 +59,7 @@ GEM
     audited-activerecord (3.0.0)
       activerecord (~> 3.0)
       audited (= 3.0.0)
+    awesome_print (1.6.1)
     bcrypt-ruby (3.0.1)
     brakeman (1.9.4)
       erubis (~> 2.6)
@@ -360,6 +361,7 @@ DEPENDENCIES
   annotate
   attribute_normalizer
   audited-activerecord
+  awesome_print
   brakeman
   capistrano (~> 2.14.2)
   capistrano-db-tasks!

@@ -9,12 +9,11 @@ group :assets do
 end
 
 group :default do
-  gem 'coffee-rails'
-  gem 'sass-rails'
-  gem 'jquery-rails'
   gem 'ancestry'
   gem 'attribute_normalizer'
   gem 'audited-activerecord'
+  gem 'awesome_print'
+  gem 'coffee-rails'
   gem 'decent_exposure'
   gem 'default_value_for'
   gem 'devise'
@@ -32,6 +31,7 @@ group :default do
   gem 'has_scope', '0.6.0.rc'
   gem 'has_searcher', '< 0.0.90'
   gem 'inherited_resources'
+  gem 'jquery-rails'
   gem 'kaminari'
   gem 'nested_form'
   gem 'openteam-commons'
@@ -39,6 +39,7 @@ group :default do
   gem 'rest-client'
   gem 'russian'
   gem 'sanitize'
+  gem 'sass-rails'
   gem 'simple-navigation'
   gem 'sso-auth'
   gem 'state_machine'
