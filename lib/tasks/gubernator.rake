@@ -37,7 +37,7 @@ namespace :gubernator do
       if entry.annotation && entry.body
         annotation = entry.annotation.gsub(/&nbsp;|<span class=\"nobr\">|<\/span>|<p>|<\/p>/," ").squish
         if entry.body.gsub("&nbsp;"," ").match("<p>#{annotation}</p>")
-          gsubed_body = entry.body.gsub("&nbsp"," ").gsub("<p>#{annotation}</p>","")
+          gsubed_body = entry.body.gsub("&nbsp;"," ").gsub("<p>#{annotation}</p>","")
           entry.update_attribute(:body, gsubed_body)
           counter+=1
         end
