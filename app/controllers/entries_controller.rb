@@ -43,7 +43,7 @@ class EntriesController < ApplicationController
 
     def search_and_paginate_collection
       if params[:utf8]
-        params[:entry_search][:channel_ids] = normalize_channel_ids
+        params[:entry_search][:channel_ids] = normalize_channel_ids if params[:entry_search]
         searcher.deleted_state = 'not_deleted'
         searcher.per_page      = paginate_options[:per_page]
 
