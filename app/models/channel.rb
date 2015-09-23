@@ -72,7 +72,14 @@ class Channel < ActiveRecord::Base
   audited
 
   def as_json(options)
-    super(:only => [:id, :title, :entry_type, :description], :methods => :depth)
+    super(:only => [:id, :title, :entry_type, :description], :methods => [:depth, :archive_dates])
+  end
+
+  def archive_dates
+    {
+      :min_date => entries.minimum(:since),
+      :max_date => entries.maximum(:since)
+    }
   end
 
   alias_attribute :to_s, :title
@@ -88,6 +95,7 @@ class Channel < ActiveRecord::Base
     end
 
   private
+
     def next_position_for(channel_or_nil)
       channel_or_nil.try(:next_position) || '00'
     end
