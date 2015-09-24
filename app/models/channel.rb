@@ -87,7 +87,7 @@ class Channel < ActiveRecord::Base
   def archive_statistics
     date_column = :since
     date_column = :event_entry_properties_since if entry_type == 'event_entry'
-    dates = entries.published.pluck(date_column).compact.sort.reverse
+    dates = entries.published.pluck(date_column).sort.reverse
     hash = { :years => [] }
     dates.group_by(&:year).each do |year, year_dates|
       year_data = {
