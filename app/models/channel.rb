@@ -76,9 +76,11 @@ class Channel < ActiveRecord::Base
   end
 
   def archive_dates
+    date_column = :since
+    date_column = :event_entry_properties_since if entry_type == 'event_entry'
     {
-      :min_date => entries.minimum(:since),
-      :max_date => entries.maximum(:since)
+      :min_date => entries.minimum(date_column),
+      :max_date => entries.maximum(date_column)
     }
   end
 
