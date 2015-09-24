@@ -88,7 +88,7 @@ class Channel < ActiveRecord::Base
     date_column = :since
     date_column = :event_entry_properties_since if entry_type == 'event_entry'
     dates = entries.published.pluck(date_column).sort.reverse
-    hash = { :years => [] }
+    hash = { :entries_count => dates.count, :years => [] }
     dates.group_by(&:year).each do |year, year_dates|
       year_data = {
         :number => year,
