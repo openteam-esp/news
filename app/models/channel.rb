@@ -72,7 +72,7 @@ class Channel < ActiveRecord::Base
   audited
 
   def as_json(options)
-    super(:only => [:id, :title, :entry_type, :description], :methods => [:depth, :archive_dates])
+    super(:only => [:id, :title, :entry_type, :description], :methods => [:depth, :archive_dates, :archive_statistics])
   end
 
   def archive_dates
@@ -80,6 +80,28 @@ class Channel < ActiveRecord::Base
       :min_date => entries.minimum(:since),
       :max_date => entries.maximum(:since)
     }
+  end
+
+  def archive_statistics
+    date_column = :since
+    date_column = :event_entry_properties_since if entry_type == 'event_entry'
+    dates = entries.published.pluck(date_column).compact.sort.reverse
+    hash = { :years => [] }
+    dates.group_by(&:year).each do |year, year_dates|
+      year_data = {
+        :number => year,
+        :entries_count => year_dates.count,
+        :months => year_dates.group_by(&:month).map do |month, month_dates|
+          {
+            :number => month,
+            :entries_count => month_dates.count
+          }
+        end
+      }
+      hash[:years] << year_data
+    end
+
+    hash
   end
 
   alias_attribute :to_s, :title
