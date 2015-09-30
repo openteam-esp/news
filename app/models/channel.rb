@@ -77,7 +77,7 @@ class Channel < ActiveRecord::Base
 
   def archive_dates
     date_column = :since
-    date_column = :event_entry_properties_since if entry_type == 'event_entry'
+    #date_column = :event_entry_properties_since if entry_type == 'event_entry' # broken method
     {
       :min_date => entries.minimum(date_column),
       :max_date => entries.maximum(date_column)
@@ -86,7 +86,7 @@ class Channel < ActiveRecord::Base
 
   def archive_statistics
     date_column = :since
-    date_column = :event_entry_properties_since if entry_type == 'event_entry'
+    #date_column = :event_entry_properties_since if entry_type == 'event_entry' # broken method
     dates = entries.published.pluck(date_column).sort.reverse
     hash = { :entries_count => dates.count, :years => [] }
     dates.group_by(&:year).each do |year, year_dates|
