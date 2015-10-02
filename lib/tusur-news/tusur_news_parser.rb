@@ -11,22 +11,20 @@ class TusurNewsParser
     @url  = url
     @host = URI.parse(@url).host
     @scheme = URI.parse(@url).scheme
-    #@user ||= User.find_by_email "mail@openteam.ru"
-    #@channel ||= Channel.find(channel_id)
+    @user ||= User.find_by_email "mail@openteam.ru"
+    @channel ||= Channel.find(channel_id)
     @news_selector ||= news_selector
   end
 
 
   def parse
-    (2015..Date.today.year).each do |year|
-      (7..12).each do |month|
+    (2007..Date.today.year).each do |year|
+      (1..12).each do |month|
         month = month.to_s.rjust(2, '0')
         puts "importing #{year}.#{month}"
         next if Date.today < Date.parse("01.#{month}.#{year}")
         (0..page_quantity(url_builder(url, year, month))).each do |page_number|
           paginated_url = "#{@url}#{year}/#{month}&page=#{page_number}"
-
-          puts paginated_url
           fetch_entries(paginated_url)
         end
       end
@@ -38,43 +36,52 @@ class TusurNewsParser
   def fetch_entries(paginated_url)
     entries = Nokogiri::HTML(open(paginated_url)).css(news_selector)
     entries.each do |entry|
+      begin
+        news_url = scheme + "://" + host + entry.at_css(".subnode-name a")['href']
+        puts news_url
+      rescue
+        next
+      end
       news_title = entry.css(".subnode-name").text.squish
       news_date = Time.zone.parse entry.css(".subnode-date").text
       if new_entry?(news_title, news_date)
-        news_url = scheme + "://" + host + entry.at_css(".subnode-name a")["href"]
         news_annotation = entry.text.squish
         news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation)
         news_body = fetch_news_body(news_url)
-        #news.body = news_body
-        #news.set_current_user(user)
-        #news.channels << channel
-        #news.state = "published"
-        #news.save
-
-        #resolve_tasks(news)
-        #fetch_gallery_images(news_url, news)  if Nokogiri::HTML(open(news_url)).css(".gallery")
+        news.body = news_body[:body]
+        news.set_current_user(user)
+        news.channels << channel
+        news.state = "published"
+        news.save
+        resolve_tasks(news)
+        fetch_gallery_images(news_body[:gallery], news)  if news_body[:gallery].any?
       end
     end
   end
 
   def fetch_news_body(news_url)
     body = Nokogiri::HTML(open(news_url)).css("#center-side-full .content")
-    body.css("p span")[0].children.each{|c| c.remove if c.is_a?(Nokogiri::XML::Text)}
-
-    #body.css("style").remove
-    #body.css("script").remove
-    #body.css("h2").remove
-    #body.css(".gallery").remove
-    #body.css(".b-blogcomment").remove
-    #body.css(".b-blogcomment-count").remove
-    #body.css(".b-blog-date").remove
-    #body.css(".yashare-auto-init").first.try(:parent).try(:remove)
-    p body.children.to_html.squish.gsub('<p>&nbsp;</p>', '')
+    text_remover(body.css("p")[0]) if body.css("p")[0]
+    gallery = body.css(".colorbox").map(&:remove)
+    body.children.each{ |n| n.remove if n.text.blank? }
+    return { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), gallery: gallery }
   end
 
-  def fetch_gallery_images(news_url, news)
-    gallery =  Nokogiri::HTML(open(news_url)).css(".gallery-item a")
+  def text_remover(node)
+    node.children.each do |child|
+      text_remover(child) if child.children.any?
+      child.remove if child.is_a? Nokogiri::XML::Text
+    end
+  end
+
+  def fetch_gallery_images(gallery, news)
     gallery.each do |node|
+      href = scheme + "://" + host
+      if node.css("img").any?
+        href += node.at_css("img")["src"]
+      elsif node['href'].nil?
+        next
+      end
       storage_url = upload_file(node.attr("href"), news.vfs_path)
       news.images.create(:url => storage_url)
     end
