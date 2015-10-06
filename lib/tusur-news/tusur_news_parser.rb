@@ -18,8 +18,9 @@ class TusurNewsParser
 
 
   def parse
-    (2007..Date.today.year).each do |year|
-      (1..12).each do |month|
+    #(2015..Date.today.year).each do |year|
+    (2008..2008).each do |year|
+      (9..9).each do |month|
         month = month.to_s.rjust(2, '0')
         puts "importing #{year}.#{month}"
         next if Date.today < Date.parse("01.#{month}.#{year}")
@@ -43,28 +44,57 @@ class TusurNewsParser
         next
       end
       news_title = entry.css(".subnode-name").text.squish
-      news_date = Time.zone.parse entry.css(".subnode-date").text
+      news_date = Time.zone.parse(entry.css(".subnode-date").text) + Time.zone.now.hour.hours + Time.zone.now.sec
       if new_entry?(news_title, news_date)
-        news_annotation = entry.text.squish
+        news_annotation = entry.children.select{|c| c.is_a? Nokogiri::XML::Text}.map(&:text).join("\n")
         news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation)
-        news_body = fetch_news_body(news_url)
-        news.body = news_body[:body]
+        parsed_entry = parse_entry(news_url, news.vfs_path)
+        news.body = parsed_entry[:body]
         news.set_current_user(user)
         news.channels << channel
         news.state = "published"
         news.save
+        puts "new news vfs_path is #{ news.vfs_path}"
         resolve_tasks(news)
-        fetch_gallery_images(news_body[:gallery], news)  if news_body[:gallery].any?
+        fetch_gallery_images(parsed_entry[:gallery], news)  if parsed_entry[:gallery].any?
       end
     end
   end
 
-  def fetch_news_body(news_url)
-    body = Nokogiri::HTML(open(news_url)).css("#center-side-full .content")
-    text_remover(body.css("p")[0]) if body.css("p")[0]
+  def parse_entry(news_url, vfs_path)
+    body = Nokogiri::HTML(open(news_url)).css("#center-side-full .content") #получили контент новостной записи
+    text_remover(body.css("p")[0]) if body.css("p")[0]  #чистим контент первого p от лишних span
     gallery = body.css(".colorbox").map(&:remove)
-    body.children.each{ |n| n.remove if n.text.blank? }
+    update_files_src body, vfs_path
+    update_inner_images_src body, vfs_path
+    update_links body, vfs_path
+    body.children.each{ |n| n.remove if n.text.blank? && n.children.empty?}
     return { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), gallery: gallery }
+  end
+
+  def update_files_src(node, vfs_path)
+    node.css("a").select{|a| a["href"].match(/\/\S*\w*[.]\w*$/)}.each do |link|
+      from = url_begin + link["href"]
+      to = vfs_path
+      storage_url = upload_file(from, to)
+      link["href"] = storage_url
+    end
+  end
+
+  def update_links(node, vfs_path)
+    node.css("a").select{|a| a["href"].match(/^\/\S*/)}.each do |a|
+      new_url = "http://old.tusur.ru" + a["href"]
+      a["href"] = new_url
+    end
+  end
+
+  def update_inner_images_src(node, vfs_path)
+    node.css("img").each do |img|
+      from = img["src"].match(/^\/\S*/) ? url_begin + img["src"] : img["src"]
+      to = vfs_path
+      storage_url = upload_file(from, to)
+      img["src"] = storage_url
+    end
   end
 
   def text_remover(node)
@@ -82,22 +112,21 @@ class TusurNewsParser
       elsif node['href'].nil?
         next
       end
-      storage_url = upload_file(node.attr("href"), news.vfs_path)
+      puts href + " is href"
+      storage_url = upload_file(href, news.vfs_path)
+      puts storage_url + " is storage url"
+      puts "**" * 30
       news.images.create(:url => storage_url)
     end
   end
 
   def new_entry?(title, news_date)
     true
-    #channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''), :since => news_date).empty?
+    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''), :since => news_date).empty?
   end
 
   def upload_file(from, to)
     filename = from.split('/').last.gsub(/(\.\w+)_\d+\.\w+\z/, '\1').downcase
-
-    return "http://storage.esp.tomsk.gov.ru/files/78458/70-85/zhvachkin.jpg" if filename == "zhvachkin.jpg"
-    return "http://storage.esp.tomsk.gov.ru/files/78459/70-74/golovatov-1.jpg" if filename == "golovatov-1.jpg"
-
     tmpfile = Tempfile.new(filename)
     tmpfile.binmode
 
@@ -152,6 +181,10 @@ class TusurNewsParser
 
   def url_builder(base, year, month = 0, page = 0)
     "#{base}#{year}/#{month}/&page=#{page}"
+  end
+
+  def url_begin
+    scheme + "://" + host
   end
 
 end
