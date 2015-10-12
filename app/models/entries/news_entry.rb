@@ -1,3 +1,11 @@
+
+class NewsEntry < Entry
+  # NOTE: используется для методов min_since_event_datetime и max_until_event_datetime в #EntrySearch
+  def event_entry_properties
+    []
+  end
+end
+
 # == Schema Information
 #
 # Table name: entries
@@ -17,16 +25,9 @@
 #  title                :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  source               :string(255)
+#  source               :text
 #  source_link          :string(255)
 #  type                 :string(255)
 #  actuality_expired_at :datetime
 #
 
-
-class NewsEntry < Entry
-  # NOTE: используется для методов min_since_event_datetime и max_until_event_datetime в #EntrySearch
-  def event_entry_properties
-    []
-  end
-end

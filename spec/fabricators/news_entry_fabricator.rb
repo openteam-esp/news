@@ -1,4 +1,13 @@
 # encoding: utf-8
+
+Fabricator(:news_entry) do
+  title       'Заголовок новости'
+  annotation  'Аннотация новости'
+  body        'Текст новости'
+  initiator
+  current_user {|e| e.initiator}
+end
+
 # == Schema Information
 #
 # Table name: entries
@@ -18,17 +27,9 @@
 #  title                :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  source               :string(255)
+#  source               :text
 #  source_link          :string(255)
 #  type                 :string(255)
 #  actuality_expired_at :datetime
 #
 
-
-Fabricator(:news_entry) do
-  title       'Заголовок новости'
-  annotation  'Аннотация новости'
-  body        'Текст новости'
-  initiator
-  current_user {|e| e.initiator}
-end

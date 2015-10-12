@@ -1,7 +1,7 @@
 AttributeNormalizer.configure do |config|
 
   SANITIZE_CONFIG  = Sanitize::Config::RELAXED
-  SANITIZE_CONFIG[:elements] += %w[audio video source div hr object param embed]
+  SANITIZE_CONFIG[:elements] += %w[audio video source div hr object param embed iframe]
   SANITIZE_CONFIG[:attributes]['a'] << 'target'
   SANITIZE_CONFIG[:attributes]['audio'] = %w[controls src]
   SANITIZE_CONFIG[:attributes]['video'] = %w[controls src poster width height]
@@ -9,6 +9,7 @@ AttributeNormalizer.configure do |config|
   SANITIZE_CONFIG[:attributes]['object'] = %w[width height]
   SANITIZE_CONFIG[:attributes]['param'] = %w[name value]
   SANITIZE_CONFIG[:attributes]['embed'] = %w[src type width height allowscriptaccess allowfullscreen]
+  SANITIZE_CONFIG[:attributes]['iframe'] = %w[src width height allowfullscreen frameborder]
   SANITIZE_CONFIG[:attributes][:all] += %w[style class]
   SANITIZE_CONFIG[:output] = :xhtml
 

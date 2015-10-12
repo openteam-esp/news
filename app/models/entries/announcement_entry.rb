@@ -1,4 +1,12 @@
 # encoding: utf-8
+class AnnouncementEntry < Entry
+  attr_accessible :actuality_expired_at
+
+  def is_announce?
+    true
+  end
+end
+
 # == Schema Information
 #
 # Table name: entries
@@ -18,16 +26,9 @@
 #  title                :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  source               :string(255)
+#  source               :text
 #  source_link          :string(255)
 #  type                 :string(255)
 #  actuality_expired_at :datetime
 #
 
-class AnnouncementEntry < Entry
-  attr_accessible :actuality_expired_at
-
-  def is_announce?
-    true
-  end
-end

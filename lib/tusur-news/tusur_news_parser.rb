@@ -18,9 +18,10 @@ class TusurNewsParser
 
 
   def parse
-    #(2015..Date.today.year).each do |year|
-    (2008..2008).each do |year|
-      (9..9).each do |month|
+    pb = ProgressBar.new((2015..Date.today.year).count * 12)
+    (2015..Date.today.year).each do |year|
+      (10..12).each do |month|
+        pb.increment!
         month = month.to_s.rjust(2, '0')
         puts "importing #{year}.#{month}"
         next if Date.today < Date.parse("01.#{month}.#{year}")
@@ -32,7 +33,7 @@ class TusurNewsParser
     end
   end
 
-  protected
+  #protected
 
   def fetch_entries(paginated_url)
     entries = Nokogiri::HTML(open(paginated_url)).css(news_selector)
@@ -44,36 +45,60 @@ class TusurNewsParser
         next
       end
       news_title = entry.css(".subnode-name").text.squish
-      news_date = Time.zone.parse(entry.css(".subnode-date").text) + Time.zone.now.hour.hours + Time.zone.now.sec
-      if new_entry?(news_title, news_date)
+      if new_entry?(news_title)
         news_annotation = entry.children.select{|c| c.is_a? Nokogiri::XML::Text}.map(&:text).join("\n")
-        news = NewsEntry.new(:since => news_date, :title => news_title, :annotation => news_annotation)
+        news = NewsEntry.new(:title => news_title, :annotation => news_annotation)
+
         parsed_entry = parse_entry(news_url, news.vfs_path)
-        news.body = parsed_entry[:body]
+        news.body          = parsed_entry[:body]
+        news.since         = parsed_entry[:time]
+
+        unless parsed_entry[:source].empty?
+          news.source      = parsed_entry[:source][:title]
+          news.source_link = parsed_entry[:source][:link] if parsed_entry[:source][:link]
+        end
+
+        gallery            = parsed_entry[:gallery]
+
         news.set_current_user(user)
         news.channels << channel
         news.state = "published"
         news.save
-        puts "new news vfs_path is #{ news.vfs_path}"
+
         resolve_tasks(news)
-        fetch_gallery_images(parsed_entry[:gallery], news)  if parsed_entry[:gallery].any?
+        fetch_gallery_images(gallery, news)  if gallery.any?
       end
     end
   end
 
   def parse_entry(news_url, vfs_path)
-    body = Nokogiri::HTML(open(news_url)).css("#center-side-full .content") #получили контент новостной записи
-    text_remover(body.css("p")[0]) if body.css("p")[0]  #чистим контент первого p от лишних span
-    gallery = body.css(".colorbox").map(&:remove)
-    update_files_src body, vfs_path
-    update_inner_images_src body, vfs_path
-    update_links body, vfs_path
-    body.children.each{ |n| n.remove if n.text.blank? && n.children.empty?}
-    return { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), gallery: gallery }
+    page = Nokogiri::HTML(open(news_url)).css("#center-side-full")                        #страница
+    time = Time.zone.parse page.css(".date .hidden").text                                 #время публикации
+    body = page.css(".content")                                                           #контент страницы
+    text_remover(body.css("p")[0]) if body.css("p")[0]                                    #чистим контент первого p от лишних span
+
+
+    gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
+
+    update_files_src body, vfs_path                                                       #перекладываем файлы на сторадж и апдейтим ссылки на них
+    update_inner_images_src body, vfs_path                                                #перекладываем оставшиеся после резни изображения на сторадж и обновляем им ссылки
+    update_links body
+
+    source = find_source(body) || {}
+    body.children.select{|n| n.text.squish.match(/^Источник.*:/)}.map(&:remove)           #чистим тело новости от нод источников
+
+    body.children.each do |n|                                                             #чистим тело от пустых текстовых нод
+      next if n.name == "iframe"
+      text_remover n
+      n.remove if n.text.squish.blank? && n.children.reject{ |c| c.name == 'br' }.empty?
+    end
+    puts  body.children
+
+    return  { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), time: time,  gallery: gallery, source: source }
   end
 
   def update_files_src(node, vfs_path)
-    node.css("a").select{|a| a["href"].match(/\/\S*\w*[.]\w*$/)}.each do |link|
+    node.css("a").select{|a| a["href"] && a["href"].match(/^\/export\/sites/)}.each do |link|
       from = url_begin + link["href"]
       to = vfs_path
       storage_url = upload_file(from, to)
@@ -81,8 +106,8 @@ class TusurNewsParser
     end
   end
 
-  def update_links(node, vfs_path)
-    node.css("a").select{|a| a["href"].match(/^\/\S*/)}.each do |a|
+  def update_links(node)
+    node.css("a").select{|a| a["href"] && a["href"].match(/^\/\S*/)}.each do |a|
       new_url = "http://old.tusur.ru" + a["href"]
       a["href"] = new_url
     end
@@ -97,10 +122,36 @@ class TusurNewsParser
     end
   end
 
+  def find_source(node)
+    query = node.children.select{|n| n.text.match(/Источник.*:/)}
+    if query.any?
+      puts "query any"
+      source = query.first                                                               #нода источника
+      if source.at_css("a")
+        source = source.at_css("a")
+        link = source["href"]
+        link = url_checker(link)
+        result = { link: source["href"], title: source.text.squish }          #имя и адрес источника
+        puts "link is #{result[:link]}, title is #{result[:title]}"
+      else
+        result = { title: source.text.squish.gsub(/Источник.*:/, "" )}
+        puts result[:title]
+        if result[:title] =~ /\A#{URI::regexp}\z/
+          result[:link] = result[:title]
+        else
+          result[:link] = nil
+        end
+      end
+      puts "success"
+      return result
+    end
+    return
+  end
+
   def text_remover(node)
     node.children.each do |child|
       text_remover(child) if child.children.any?
-      child.remove if child.is_a? Nokogiri::XML::Text
+      child.remove if child.is_a?(Nokogiri::XML::Text) && child.text.squish.blank?
     end
   end
 
@@ -112,6 +163,7 @@ class TusurNewsParser
       elsif node['href'].nil?
         next
       end
+      href = href.gsub(/_\d*.\D*$/, '')
       puts href + " is href"
       storage_url = upload_file(href, news.vfs_path)
       puts storage_url + " is storage url"
@@ -120,9 +172,8 @@ class TusurNewsParser
     end
   end
 
-  def new_entry?(title, news_date)
-    true
-    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, ''), :since => news_date).empty?
+  def new_entry?(title)
+    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, '')).empty?
   end
 
   def upload_file(from, to)
@@ -185,6 +236,10 @@ class TusurNewsParser
 
   def url_begin
     scheme + "://" + host
+  end
+
+  def url_checker(url)
+    url.match(/^\/\S*/) ? url_begin + url : url
   end
 
 end

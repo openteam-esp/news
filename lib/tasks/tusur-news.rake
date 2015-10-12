@@ -9,6 +9,10 @@ namespace :tusur do
     TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse
   end
 
+  task :test => :environment do
+    TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse_entry("http://www.tusur.ru/ru/news/index.html?path=2015/10/01.html", "blabla")
+  end
+
   desc "fetch news from http://gubernator.tomsk.ru/words"
   task :words => :environment do
     Parser.new("http://gubernator.tomsk.ru/words", 167, ".b-blog-item").parse

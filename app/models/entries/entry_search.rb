@@ -1,37 +1,3 @@
-# == Schema Information
-#
-# Table name: searches
-#
-#  keywords               :text
-#  since_lt               :date
-#  since_gt               :date
-#  channel_ids            :string
-#  order_by               :string
-#  per_page               :integer
-#  state                  :string
-#  deleted                :boolean
-#  updated_at_gt          :date
-#  interval_year          :integer
-#  interval_month         :integer
-#  entry_type             :string
-#  events_type            :string
-#  interval_archive_query :string
-#  keywords               :text
-#  since_lt               :date
-#  since_gt               :date
-#  channel_ids            :string
-#  order_by               :string
-#  per_page               :integer
-#  state                  :string
-#  deleted                :boolean
-#  updated_at_gt          :date
-#  interval_year          :integer
-#  interval_month         :integer
-#  entry_type             :string
-#  events_type            :string
-#  interval_archive_query :string
-#
-
 class EntrySearch < Search
   column :keywords,       :text
   column :since_lt,       :date
@@ -185,3 +151,38 @@ class EntrySearch < Search
       @entry_search_columns ||= super.reject{ |c| c.match /^(interval_|entry_|events_)/ }
     end
 end
+
+# == Schema Information
+#
+# Table name: searches
+#
+#  keywords               :text
+#  since_lt               :date
+#  since_gt               :date
+#  channel_ids            :string
+#  order_by               :string
+#  per_page               :integer
+#  state                  :string
+#  deleted_state          :string
+#  updated_at_gt          :date
+#  interval_year          :integer
+#  interval_month         :integer
+#  entry_type             :string
+#  events_type            :string
+#  interval_archive_query :string
+#  keywords               :text
+#  since_lt               :date
+#  since_gt               :date
+#  channel_ids            :string
+#  order_by               :string
+#  per_page               :integer
+#  state                  :string
+#  deleted_state          :string
+#  updated_at_gt          :date
+#  interval_year          :integer
+#  interval_month         :integer
+#  entry_type             :string
+#  events_type            :string
+#  interval_archive_query :string
+#
+

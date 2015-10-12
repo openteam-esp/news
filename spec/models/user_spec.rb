@@ -1,20 +1,24 @@
 # encoding: utf-8
+
+require 'spec_helper'
+
+describe User do
+
+  it { should have_many(:followers) }
+  it { should have_many(:followings) }
+
+end
+
 # == Schema Information
 #
 # Table name: users
 #
 #  id                 :integer          not null, primary key
 #  uid                :string(255)
-#  name               :text
-#  email              :text
-#  nickname           :text
-#  first_name         :text
-#  last_name          :text
-#  location           :text
-#  description        :text
-#  image              :text
-#  phone              :text
-#  urls               :text
+#  name               :string(255)
+#  email              :string(255)
+#  first_name         :string(255)
+#  last_name          :string(255)
 #  raw_info           :text
 #  sign_in_count      :integer
 #  current_sign_in_at :datetime
@@ -25,12 +29,3 @@
 #  updated_at         :datetime         not null
 #
 
-
-require 'spec_helper'
-
-describe User do
-
-  it { should have_many(:followers) }
-  it { should have_many(:followings) }
-
-end

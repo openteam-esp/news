@@ -1,4 +1,15 @@
 # encoding: utf-8
+
+class EventEntry < Entry
+  accepts_nested_attributes_for :event_entry_properties
+
+  attr_accessible :event_entry_properties_attributes
+
+  def as_json(options={})
+    super options.merge(:methods => :event_entry_properties)
+  end
+end
+
 # == Schema Information
 #
 # Table name: entries
@@ -18,19 +29,9 @@
 #  title                :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  source               :string(255)
+#  source               :text
 #  source_link          :string(255)
 #  type                 :string(255)
 #  actuality_expired_at :datetime
 #
 
-
-class EventEntry < Entry
-  accepts_nested_attributes_for :event_entry_properties
-
-  attr_accessible :event_entry_properties_attributes
-
-  def as_json(options={})
-    super options.merge(:methods => :event_entry_properties)
-  end
-end

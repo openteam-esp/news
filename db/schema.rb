@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121229043936) do
+ActiveRecord::Schema.define(:version => 20151009083824) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -72,8 +72,8 @@ ActiveRecord::Schema.define(:version => 20121229043936) do
     t.text     "title"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
-    t.string   "source"
-    t.string   "source_link"
+    t.text     "source"
+    t.text     "source_link"
     t.string   "type"
     t.datetime "actuality_expired_at"
   end
