@@ -9,13 +9,15 @@ namespace :tusur do
     TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse
   end
 
+  desc "rake for testing parser code"
   task :test => :environment do
     TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse_entry("http://www.tusur.ru/ru/news/index.html?path=2011/01/21.html", Entry.new(annotation: "27 сентября в ТУСУР состоялся квест «В поисках сокровищ. Кубок первокурсников -2015»."))
   end
 
-  desc "fetch news from http://gubernator.tomsk.ru/words"
-  task :words => :environment do
-    Parser.new("http://gubernator.tomsk.ru/words", 167, ".b-blog-item").parse
+  desc "rake for cleaning channel 4"
+  task :clean4 => :environment do
+    Channel.find(4).entries.map(&:destroy)
+    puts "Новости в канале 4 удалены"
   end
 
   desc "fetch news from http://gubernator.tomsk.ru/interview"

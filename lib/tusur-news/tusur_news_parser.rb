@@ -15,6 +15,7 @@ class TusurNewsParser
     @channel ||= Channel.find(channel_id)
     @news_selector ||= news_selector
     @error_counter = {}
+    @legacy_urls = []
   end
 
 
@@ -39,6 +40,12 @@ class TusurNewsParser
       puts key
       puts value
     end
+    file = File.open("legacy_urls.yml", 'a+')
+    yml = YAML.load_stream file
+    hash = {}
+    yml.each{|h| hash[h.keys.first] = h.values.first}
+    @legacy_urls.each {|pair| file.write pair.to_yaml unless hash[pair.keys.first] }
+    file.close
   end
 
   def fetch_entries(paginated_url)
@@ -65,6 +72,7 @@ class TusurNewsParser
         news.channels << channel
         news.state = "published"
         news.save
+        @legacy_urls << {"'#{news_url}'" => "'#{news.slug}'"}
 
         resolve_tasks(news)
         fetch_gallery_images(gallery, news) if gallery.any?
