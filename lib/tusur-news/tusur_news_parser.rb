@@ -19,8 +19,8 @@ class TusurNewsParser
 
 
   def parse
-    years = 2007..Date.today.year
-    months = 1..12
+    years = 2011..2011#Date.today.year
+    months = 1..2
     pb = ProgressBar.new(years.count * months.count)
     years.each do |year|
       months.each do |month|
@@ -78,13 +78,13 @@ class TusurNewsParser
     recursive_node_cleaner(body.at_css("p"), "", %w(p span br text )) if body.at_css("p") #чистим контент первого p от лишних span
 
     gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
-
+    remove_duplicate_links(body, gallery)
     update_files_src body, entry.vfs_path                                                 #перекладываем файлы на сторадж и апдейтим ссылки на них
     update_inner_images_src body, entry.vfs_path                                          #перекладываем оставшиеся после резни изображения на сторадж и обновляем им ссылки
     update_links body
 
     source = find_source(body) || {}
-    recursive_node_cleaner(body, /^$/, %w(br p span text))                                    #чистим тело новости от пустых элементов
+    recursive_node_cleaner(body, /^$/, %w(br p span text))                                #чистим тело новости от пустых элементов
     return  { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), time: time,  gallery: gallery, source: source }
   end
 
@@ -94,6 +94,18 @@ class TusurNewsParser
       to = vfs_path
       storage_url = upload_file(from, to)
       link["href"] = storage_url
+    end
+  end
+
+  def remove_duplicate_links(node, gallery)
+    regex = /_\d*[.]jpg$/
+    duplicates = node.css("a img").select{ |i| i["src"].gsub(regex, "") == i.parent["href"] }
+    duplicates.each do |image|
+      a = image.parent
+      image["src"] = image["src"].gsub(regex, '')
+      gallery << image
+      image.remove
+      a.remove if a.text.squish.empty?
     end
   end
 
@@ -154,17 +166,21 @@ class TusurNewsParser
   end
 
   def fetch_gallery_images(gallery, news)
+    images = []
     gallery.each do |node|
-      href = scheme + "://" + host
       if node.css("img").any?
-        href += node.at_css("img")["src"]
-      elsif node['href'].nil?
+        images << node.at_css("img")
+      elsif node.name == "img"
+        images << node
+      elsif node['href'].nil? || node["src"].nil?
         next
       end
-      href = href.gsub(/_\d*.\D*$/, '')
+    end
+    images.each do |image|
+      href = url_begin + image["src"].gsub(/_\d*.\D*$/, '')
+      description = image["alt"] || image["title"] || ""
       storage_url = upload_file(href, news.vfs_path)
-      puts "**" * 30
-      news.images.create(:url => storage_url)
+      news.images.create(:url => storage_url, :description => description )
     end
   end
 

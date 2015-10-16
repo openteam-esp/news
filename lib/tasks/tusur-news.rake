@@ -10,7 +10,7 @@ namespace :tusur do
   end
 
   task :test => :environment do
-    TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse_entry("http://www.tusur.ru/ru/news/index.html?path=2015/10/01.html", Entry.new(annotation: "27 сентября в ТУСУР состоялся квест «В поисках сокровищ. Кубок первокурсников -2015»."))
+    TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse_entry("http://www.tusur.ru/ru/news/index.html?path=2011/01/21.html", Entry.new(annotation: "27 сентября в ТУСУР состоялся квест «В поисках сокровищ. Кубок первокурсников -2015»."))
   end
 
   desc "fetch news from http://gubernator.tomsk.ru/words"
