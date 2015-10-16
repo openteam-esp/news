@@ -19,8 +19,8 @@ class TusurNewsParser
 
 
   def parse
-    years = 2007.i.Date.today.year
     months = 1..12
+    years = 2007..Date.today.year
     pb = ProgressBar.new(years.count * months.count)
     years.each do |year|
       months.each do |month|
