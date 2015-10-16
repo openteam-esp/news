@@ -19,8 +19,8 @@ class TusurNewsParser
 
 
   def parse
-    months = 1..12
-    years = 2007..Date.today.year
+    months = 5..5
+    years = 2012..2012#Date.today.year
     pb = ProgressBar.new(years.count * months.count)
     years.each do |year|
       months.each do |month|
@@ -53,7 +53,7 @@ class TusurNewsParser
       if new_entry?(news_title)
         news = NewsEntry.new(:title => news_title, :annotation => news_annotation)
         parsed_entry = parse_entry(news_url, news)
-        news.body          = parsed_entry[:body]
+        news.body          = parsed_entry[:body].present? ? parsed_entry[:body] : "-"
         news.since         = parsed_entry[:time]
         unless parsed_entry[:source].empty?
           news.source      = parsed_entry[:source][:title]
@@ -64,6 +64,7 @@ class TusurNewsParser
         news.channels << channel
         news.state = "published"
         news.save
+        puts news.errors.inspect if news.errors.any?
         resolve_tasks(news)
         fetch_gallery_images(gallery, news) if gallery.any?
       end
