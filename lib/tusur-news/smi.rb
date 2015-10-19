@@ -27,8 +27,11 @@ class SmiParser < TusurNewsParser
     page = Nokogiri::HTML(open(news_url)).css("#center-side-full")                        #страница
     time = get_time(page)                                                                 #время публикации
     body = get_body(page, entry)                                                          #контент страницы
-    recursive_node_cleaner(body.at_css("p"), "", %w(p span br text )) if entry.annotation && body.at_css("p").text.squish == entry.annotation.squish #чистим контент первого p от лишних span
-
+    begin
+      recursive_node_cleaner(body.at_css("p"), "", %w(p span br text )) if entry.annotation && body.at_css("p").text.squish == entry.annotation.squish #чистим контент первого p от лишних span
+    rescue
+      errors[news_url] = "Проблема с первым абзацем"
+    end
     gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
     remove_duplicate_links(body, gallery)
     update_files_src body, entry.vfs_path                                                 #перекладываем файлы на сторадж и апдейтим ссылки на них
