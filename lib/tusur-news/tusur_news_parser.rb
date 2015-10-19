@@ -40,12 +40,7 @@ class TusurNewsParser
       puts key
       puts value
     end
-    file = File.open("legacy_urls.yml", 'a+')
-    yml = YAML.load_stream file
-    hash = {}
-    yml.each{|h| hash[h.keys.first] = h.values.first}
-    @legacy_urls.each {|pair| file.write pair.to_yaml unless hash[pair.keys.first] }
-    file.close
+    write_to "legacy_urls_news.yml"
   end
 
   def fetch_entries(paginated_url)
@@ -56,12 +51,12 @@ class TusurNewsParser
       news_title = entry.css(".subnode-name").text.squish
       node_cleaner entry, ".subnode-name", '.subnode-date'
       news_annotation = entry.text.squish
+      news = NewsEntry.new(:title => news_title, :annotation => news_annotation)
 
-      if new_entry?(news_title)
-        news = NewsEntry.new(:title => news_title, :annotation => news_annotation)
+      if new_entry?(news)
         parsed_entry = parse_entry(news_url, news)
         news.body          = parsed_entry[:body].present? ? parsed_entry[:body] : "-"
-        news.body == "-" ? @error_counter["news_url"] = "Пустое тело на урле" : 0
+        news.body == "-" ? @error_counter["#{news_url}"] = "Пустое тело на урле" : 0
         news.since         = parsed_entry[:time]
         unless parsed_entry[:source].empty?
           news.source      = parsed_entry[:source][:title]
@@ -72,8 +67,6 @@ class TusurNewsParser
         news.channels << channel
         news.state = "published"
         news.save
-        puts news.annotation
-        puts news.title
         raise news.errors.inspect if news.errors.any?
         @legacy_urls << {"'#{news_url}'" => "'#{news.slug}'"}
 
@@ -86,8 +79,8 @@ class TusurNewsParser
   def parse_entry(news_url, entry)
     puts news_url
     page = Nokogiri::HTML(open(news_url)).css("#center-side-full")                        #страница
-    time = Time.zone.parse page.css(".date .hidden").text                                 #время публикации
-    body = page.css(".content")                                                           #контент страницы
+    time = get_time(page)                                                                 #время публикации
+    body = get_body(page, entry)                                                          #контент страницы
     recursive_node_cleaner(body.at_css("p"), "", %w(p span br text )) if body.at_css("p") #чистим контент первого p от лишних span
 
     gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
@@ -100,6 +93,9 @@ class TusurNewsParser
     recursive_node_cleaner(body, /^$/, %w(br p span text))                                #чистим тело новости от пустых элементов
     return  { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), time: time,  gallery: gallery, source: source }
   end
+
+
+  private
 
   def update_files_src(node, vfs_path)
     node.css("a").select{|a| a["href"] && a["href"].match(/^\/export\/sites/)}.each do |link|
@@ -127,6 +123,14 @@ class TusurNewsParser
       new_url = "http://old.tusur.ru" + a["href"]
       a["href"] = new_url
     end
+  end
+
+  def get_body(page, entry)
+    page.css ".content"
+  end
+
+  def get_time(page)
+    Time.zone.parse page.css(".date .hidden").text
   end
 
   def update_inner_images_src(node, vfs_path)
@@ -197,8 +201,8 @@ class TusurNewsParser
     end
   end
 
-  def new_entry?(title)
-    channel.entries.where(:title => title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, '')).empty?
+  def new_entry?(entry)
+    channel.entries.where(:title => entry.title.gilensize(:html => false, :raw_output => true).gsub(%r{</?.+?>}, '')).empty?
   end
 
   def upload_file(from, to)
@@ -248,6 +252,15 @@ class TusurNewsParser
       entry_task.update_attribute :executor, user
       entry_task.update_attribute :state, 'completed'
     end
+  end
+
+  def write_to(filename)
+    file = File.open(filename, 'a+')
+    yml = YAML.load_stream file
+    hash = {}
+    yml.each{|h| hash[h.keys.first] = h.values.first}
+    @legacy_urls.each {|pair| file.write pair.to_yaml unless hash[pair.keys.first] }
+    file.close
   end
 
   def page_quantity(url)
