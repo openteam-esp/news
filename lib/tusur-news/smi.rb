@@ -30,7 +30,7 @@ class SmiParser < TusurNewsParser
     begin
       recursive_node_cleaner(body.at_css("p"), "", %w(p span br text )) if entry.annotation && body.at_css("p").text.squish == entry.annotation.squish #чистим контент первого p от лишних span
     rescue
-      errors[news_url] = "Проблема с первым абзацем"
+      @error_counter[news_url] = "Проблема с первым абзацем"
     end
     gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
     remove_duplicate_links(body, gallery)
