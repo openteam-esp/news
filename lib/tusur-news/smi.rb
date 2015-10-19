@@ -27,6 +27,7 @@ class SmiParser < TusurNewsParser
     page = Nokogiri::HTML(open(news_url)).css("#center-side-full")                        #страница
     time = get_time(page)                                                                 #время публикации
     body = get_body(page, entry)                                                          #контент страницы
+    recursive_node_cleaner(body.at_css("p"), "", %w(p span br text )) if body.at_css("p").text.squish == entry.annotation.squish #чистим контент первого p от лишних span
 
     gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
     remove_duplicate_links(body, gallery)
