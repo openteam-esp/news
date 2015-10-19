@@ -29,7 +29,7 @@ class TusurNewsParser
         month = month.to_s.rjust(2, '0')
         puts "importing #{year}.#{month}"
         next if Date.today < Date.parse("01.#{month}.#{year}")
-        (0..page_quantity(url_builder(url, year, month))).each do |page_number|
+        (0..page_quantity(news_url_builder(url, year, month))).each do |page_number|
           paginated_url = "#{@url}#{year}/#{month}&page=#{page_number}"
           fetch_entries(paginated_url)
         end
@@ -72,6 +72,9 @@ class TusurNewsParser
         news.channels << channel
         news.state = "published"
         news.save
+        puts news.annotation
+        puts news.title
+        raise news.errors.inspect if news.errors.any?
         @legacy_urls << {"'#{news_url}'" => "'#{news.slug}'"}
 
         resolve_tasks(news)
@@ -252,7 +255,7 @@ class TusurNewsParser
     pagination.any? ? pagination.last['href'].split(/page=/).last.to_i : 0
   end
 
-  def url_builder(base, year, month = 0, page = 0)
+  def news_url_builder(base, year, month = 0, page = 0)
     "#{base}#{year}/#{month}/&page=#{page}"
   end
 

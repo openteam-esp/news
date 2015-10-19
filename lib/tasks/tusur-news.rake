@@ -1,4 +1,5 @@
 require 'tusur-news/tusur_news_parser'
+require 'tusur-news/smi'
 require 'tusur-news/interview_parser'
 require 'tusur-news/gallery_parser'
 require 'tusur-news/video_parser'
@@ -7,6 +8,16 @@ namespace :tusur do
   desc "fetch news from http://www.tusur.ru"
   task :news => :environment do
     TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse
+  end
+
+  desc "fetch announces from http://www.tusur.ru"
+  task :announces => :environment do
+    TusurNewsParser.new("http://www.tusur.ru/ru/announcements/index.html?path=", 7).parse
+  end
+
+  desc "fetch SMI about TUSUR from http://www.tusur.ru"
+  task :smi => :environment do
+    SmiParser.new("http://www.tusur.ru/ru/tusur/smi/", 8).parse
   end
 
   desc "rake for testing parser code"
