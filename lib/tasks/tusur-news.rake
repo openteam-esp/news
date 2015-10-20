@@ -1,6 +1,7 @@
 require 'tusur-news/tusur_news_parser'
 require 'tusur-news/smi'
 require 'tusur-news/releases'
+require 'tusur-news/gallery'
 
 namespace :tusur do
   desc "fetch news from http://www.tusur.ru"
@@ -29,9 +30,13 @@ namespace :tusur do
     puts "Новости в канале 4 удалены"
   end
 
-  desc "fetch announces from http://www.tusur.ru"
+  desc "fetch releases from http://www.tusur.ru"
   task :releases => :environment do
     ReleasesParser.new("http://www.tusur.ru/ru/smi/", 9).parse
   end
 
+  desc "fetch gallerys from http://www.tusur.ru"
+  task :gallery => :environment do
+    TusurGalleryParser.new("http://www.tusur.ru/ru/tusur/gallery.html", 10).parse
+  end
 end

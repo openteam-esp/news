@@ -259,7 +259,7 @@ class TusurNewsParser
     yml = YAML.load_stream file
     hash = {}
     yml.each{|h| hash[h.keys.first] = h.values.first}
-    @legacy_urls.each {|pair| file.write pair.to_yaml unless hash[pair.keys.first] }
+    (yml + @legacy_urls).each {|pair| file.write pair.to_yaml unless hash[pair.keys.first] }
     file.close
   end
 
