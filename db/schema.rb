@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151009083824) do
+ActiveRecord::Schema.define(:version => 20151021054001) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20151009083824) do
     t.text     "source_link"
     t.string   "type"
     t.datetime "actuality_expired_at"
+    t.string   "youtube_code"
   end
 
   add_index "entries", ["deleted_at"], :name => "index_entries_on_delete_at"

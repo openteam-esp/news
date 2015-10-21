@@ -9,9 +9,11 @@
           <%= link_to entry.title, entry_path(entry) %>
         </div>
         <%= image_for entry.images.first, :width => 100, :height => 100 if entry.images.any? %>
+        <%= small_youtube_thumbnail(entry.youtube_code) if entry.is_a? YoutubeEntry %>
         <div class="annotation">
           <%= raw entry.annotation %>
         </div>
+
       </li>
     <% end %>
   </ul>

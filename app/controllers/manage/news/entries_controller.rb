@@ -71,6 +71,7 @@ class Manage::News::EntriesController < Manage::ApplicationController
       'announcement_entry'=> AnnouncementEntry,
       'event_entry'=> EventEntry,
       'news_entry'=> NewsEntry,
+      'youtube_entry'=> YoutubeEntry,
     }
 
     def class_of_resource

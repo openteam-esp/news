@@ -45,6 +45,8 @@ group :default do
   gem 'state_machine'
   gem 'sunspot_rails'
   gem 'timecop', :require => false
+  gem 'yt', '~> 0.25.6'
+  gem 'video_info'
 end
 
 group :development do

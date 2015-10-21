@@ -37,6 +37,7 @@ GEM
     activesupport (3.2.22)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    addressable (2.3.8)
     airbrake (3.1.8)
       activesupport
       builder
@@ -53,7 +54,9 @@ GEM
       activerecord (>= 3.0.0)
     annotate (2.5.0)
       rake
+    ansi (1.5.0)
     arel (3.0.3)
+    ast (2.1.0)
     attribute_normalizer (1.1.0)
     audited (3.0.0)
     audited-activerecord (3.0.0)
@@ -164,6 +167,7 @@ GEM
     highline (1.6.20)
     hike (1.2.3)
     hirb (0.7.1)
+    htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     httpauth (0.2.0)
@@ -171,6 +175,7 @@ GEM
     inherited_resources (1.4.1)
       has_scope (~> 0.6.0.rc)
       responders (~> 1.0.0.rc)
+    iso8601 (0.8.7)
     journey (1.0.4)
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
@@ -204,12 +209,16 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
+    oga (1.3.1)
+      ast
+      ruby-ll (~> 2.1)
     omniauth (1.1.1)
       hashie (~> 1.2)
       rack
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
+    open_uri_redirections (0.2.1)
     openteam-capistrano (0.0.14)
       capistrano-db-tasks
       capistrano-ext
@@ -280,6 +289,9 @@ GEM
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
     ruby-graphviz (0.9.21)
+    ruby-ll (2.1.2)
+      ansi
+      ast
     ruby2ruby (2.0.3)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
@@ -347,11 +359,20 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    video_info (2.5.0)
+      addressable
+      htmlentities
+      iso8601
+      multi_json (~> 1.11)
+      oga
+      open_uri_redirections
     warden (1.2.1)
       rack (>= 1.0)
     whenever (0.7.3)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
+    yt (0.25.9)
+      activesupport
 
 PLATFORMS
   ruby
@@ -413,6 +434,8 @@ DEPENDENCIES
   timecop
   turbo-sprockets-rails3
   uglifier
+  video_info
+  yt (~> 0.25.6)
 
 BUNDLED WITH
    1.10.6

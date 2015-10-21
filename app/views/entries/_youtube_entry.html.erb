@@ -1,0 +1,22 @@
+<div class="content_wrapper">
+  <div class="article">
+    <div class="top_stuff">
+      <div>
+        <span>Опубликовано</span>
+        <%= l entry.since, :format => :short %>
+      </div>
+    </div>
+
+    <%= presented_header entry %>
+
+    <div class='embed'>
+      <%= youtube_embed_for entry.youtube_code%>
+    </div>
+
+    <div class="body">
+      <%= presented_html entry, :body %>
+    </div>
+
+    <%= yield(:additional) %>
+  </div>
+</div>

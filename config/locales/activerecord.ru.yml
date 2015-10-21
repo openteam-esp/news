@@ -4,6 +4,7 @@ ru:
       channel:                  Канал
       entry:                    Запись
       event_entry:              Событие
+      youtube_entry:            Видео Youtube
       announcement_entry:       Анонс
       image:                    Изображение
       news_entry:               Новость
@@ -22,6 +23,7 @@ ru:
           news_entry:           новость
           event_entry:          событие
           announcement_entry:   анонс
+          youtube_entry:        видео youtube
 
       entry:
         current_user:           Текущий пользователь

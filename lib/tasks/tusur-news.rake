@@ -2,6 +2,7 @@ require 'tusur-news/tusur_news_parser'
 require 'tusur-news/smi'
 require 'tusur-news/releases'
 require 'tusur-news/gallery'
+require 'tusur-news/youtube'
 
 namespace :tusur do
   desc "fetch news from http://www.tusur.ru"
@@ -38,5 +39,10 @@ namespace :tusur do
   desc "fetch gallerys from http://www.tusur.ru"
   task :gallery => :environment do
     TusurGalleryParser.new("http://www.tusur.ru/ru/tusur/gallery.html", 10).parse
+  end
+
+  desc "fetch tusur-tv from http://www.tusur.ru"
+  task :youtube => :environment do
+    YoutubeParser.new("UC81Ox-2oL5_nFfRMve7uCGg").import
   end
 end

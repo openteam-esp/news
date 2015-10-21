@@ -143,4 +143,11 @@ module EntryHelper
 
   end
 
+  def youtube_embed_for(id)
+    Yt::Video.new( id: id).embed_html.html_safe
+  end
+
+  def small_youtube_thumbnail(id)
+    image_tag Yt::Video.new( id: id).thumbnail_url
+  end
 end
