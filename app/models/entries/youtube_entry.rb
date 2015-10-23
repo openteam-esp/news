@@ -1,6 +1,7 @@
 
 class YoutubeEntry < Entry
   # NOTE: используется для методов min_since_event_datetime и max_until_event_datetime в #EntrySearch
+  CLEAN_KEYS = %w(annotation source source_link author images)
   attr_accessible :youtube_code
   validates_presence_of :youtube_code, :on => :update
   validate :available_video, :on => :update
@@ -26,6 +27,10 @@ class YoutubeEntry < Entry
     rescue
       errors.add(:youtube_code, 'Неверная ссылка на видео (или видео закрыто для вставки на другие сайты)')
     end
+  end
+
+  def as_json
+    super.merge( youtube_code: youtube_code ).reject{|s| CLEAN_KEYS.include? s}
   end
 
 end
