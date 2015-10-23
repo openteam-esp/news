@@ -40,7 +40,7 @@ group :default do
   gem 'russian'
   gem 'sanitize'
   gem 'sass-rails'
-  gem 'sidekiq'
+  gem 'sidekiq', '~> 2.14'
   gem 'sidekiq-status'
   gem 'simple-navigation'
   gem 'sso-auth'
