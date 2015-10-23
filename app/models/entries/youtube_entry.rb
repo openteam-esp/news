@@ -29,7 +29,7 @@ class YoutubeEntry < Entry
     end
   end
 
-  def as_json
+  def as_json(options = {})
     super.merge( youtube_code: youtube_code ).reject{|s| CLEAN_KEYS.include? s}
   end
 
