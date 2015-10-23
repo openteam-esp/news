@@ -18,6 +18,7 @@ ru:
       channel:
         parent_id:              Родительский канал
         title:                  Заголовок
+        channel_code:           Код канала на youtube или ссылка на него
         entry_type:             Тип записи
         entry_type_enum:
           news_entry:           новость
@@ -30,6 +31,7 @@ ru:
         actuality_expired_at:   Актуально до
         annotation:             Аннотация
         body:                   Текст
+        youtube_code:           Код видео или ссылка на youtube
         channels:               Каналы
         events:                 История
         image_description:      Описание изображения

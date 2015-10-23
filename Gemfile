@@ -40,13 +40,15 @@ group :default do
   gem 'russian'
   gem 'sanitize'
   gem 'sass-rails'
+  gem 'sidekiq'
+  gem 'sidekiq-status'
   gem 'simple-navigation'
   gem 'sso-auth'
   gem 'state_machine'
   gem 'sunspot_rails'
   gem 'timecop', :require => false
-  gem 'yt', '~> 0.25.6'
   gem 'video_info'
+  gem 'yt', '~> 0.25.6'
 end
 
 group :development do

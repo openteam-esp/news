@@ -2,11 +2,32 @@
 class YoutubeEntry < Entry
   # NOTE: используется для методов min_since_event_datetime и max_until_event_datetime в #EntrySearch
   attr_accessible :youtube_code
-  validates_presence_of :youtube_code
+  validates_presence_of :youtube_code, :on => :update
+  validate :available_video, :on => :update
+  normalize_attribute :youtube_code do |code|
+    code.match(URI.regexp) ? Yt::Video.new(url: code).id : code
+  end
 
   def event_entry_properties
     []
   end
+
+  def prefix
+    "youtube_entry"
+  end
+
+  def is_youtube?
+    true
+  end
+
+  def available_video
+    begin
+      Yt::Video.new(id: youtube_code).embeddable?
+    rescue
+      errors.add(:youtube_code, 'Неверная ссылка на видео (или видео закрыто для вставки на другие сайты)')
+    end
+  end
+
 end
 
 # == Schema Information

@@ -33,8 +33,9 @@ class Entry < ActiveRecord::Base
     state :correcting
     state :publishing
     state :published do
-      validates_presence_of :title, :body, :since
+      validates_presence_of :title, :since
       validates_presence_of :actuality_expired_at, :if => :is_announce?
+      validates_presence_of :body, :unless => :is_youtube?
     end
 
     before_transition :publishing => :published, :do => :set_since
@@ -248,6 +249,10 @@ class Entry < ActiveRecord::Base
     false
   end
 
+  def is_youtube?
+    false
+  end
+
   def deleted?
     !!deleted_at
   end
@@ -265,6 +270,10 @@ class Entry < ActiveRecord::Base
 
   def will_be_destroyed_at
     deleted_at + STALE_PERIOD
+  end
+
+  def prefix
+    "regular_entry"
   end
 
   private

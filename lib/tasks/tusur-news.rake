@@ -1,9 +1,3 @@
-require 'tusur-news/tusur_news_parser'
-require 'tusur-news/smi'
-require 'tusur-news/releases'
-require 'tusur-news/gallery'
-require 'tusur-news/youtube'
-
 namespace :tusur do
   desc "fetch news from http://www.tusur.ru"
   task :news => :environment do

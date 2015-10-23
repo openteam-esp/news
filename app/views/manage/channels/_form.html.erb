@@ -9,6 +9,7 @@
                                 :include_blank => t('commons.not_selected'),
                                 :selected => form.object.parent_id,
                                 :disabled => form.object.persisted? ? form.object.subtree_ids : [] %>
+    <%= form.input :channel_code  %>
 
   <% end %>
   <%= form.actions do %>

@@ -41,7 +41,10 @@ News::Application.routes.draw do
 
     end
 
-    resources :channels, :except => :show
+    resources :channels, :except => :show do
+      get :sync, :on => :member
+    end
+
 
     root :to => 'news/tasks#index', :folder => 'fresh'
   end
@@ -55,6 +58,8 @@ News::Application.routes.draw do
   resources :channels, :only => [:index], :format => :json
 
   root :to => 'entries#index'
+
+  get 'job_status', :as => 'job_status', :to => "job_status#status"
 
   mount ElVfsClient::Engine => '/'
 

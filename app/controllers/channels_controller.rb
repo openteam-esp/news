@@ -1,6 +1,6 @@
 class ChannelsController < ApplicationController
   inherit_resources
-  actions :index, :show
+  actions :index, :show, :sync
   respond_to :json
 
   def index

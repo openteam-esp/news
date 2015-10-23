@@ -19,4 +19,6 @@
  *= require pagination
  *= require esp/views
  *= require esp_views
+ *= require progress_bar
+ *= require channel-form
  */

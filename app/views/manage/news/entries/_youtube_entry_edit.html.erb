@@ -1,0 +1,78 @@
+<div class="content_wrapper with_sidebar">
+  <div class="article">
+
+    <%= semantic_nested_form_for @entry, :as => :entry, :url => manage_news_entry_path(@entry.id) do |form| %>
+
+      <div class="top_stuff">
+        <div>
+          <span>Опубликовать</span>
+          <ol>
+            <%= form.input :since, :label => false, :as => :datetime_picker %>
+          </ol>
+        </div>
+        <% if @entry.is_announce? %>
+          <div>
+            <span>Актуально до</span>
+            <ol>
+              <%= form.input :actuality_expired_at, :label => false, :as => :datetime_picker %>
+            </ol>
+          </div>
+        <% end %>
+        <div>
+          <span>Каналы</span>
+          <span class='channels'>
+            <span class="text">
+            <% if  @entry.channels.present? %>
+              <%= @entry.channels.join(', ') %>
+            <% else %>
+              не указаны
+            <% end %>
+            </span>
+            <a href='#' class='channels_list_toggle'>выбрать</a>
+          </span>
+          <%= form.semantic_errors :channels %>
+          <ol>
+            <%= form.input  :channels,
+                            :label => false,
+                            :as => :check_boxes,
+                            :multiple => true,
+                            :collection => available_channels,
+                            :member_label => ->(c) { ("&nbsp;" * c.depth * 4).html_safe + c.title},
+                            :disabled => disabled_channel_ids,
+                            :input_html => { :class => :depth  }
+            %>
+          </ol>
+        </div>
+      </div>
+
+      <%= form.inputs :class => "inputs common_fields" do %>
+        <%= form.input :id, :as => :hidden %>
+        <%= form.input :title, :input_html => { :class => "focus_first" } %>
+        <%= form.input :body %>
+        <%= form.input :youtube_code %>
+      <% end %>
+
+      <%= form.actions :class => "buttons hidden" do %>
+        <%= form.action :submit %>
+      <% end %>
+    <% end %>
+  </div>
+
+</div>
+
+<% content_for :right_sidebar do %>
+  <div class="side_stuff">
+
+    <div class="top_border"></div>
+
+    <%= link_to t('save_entry'), "#", :class => 'button positive_button', :id => "commit_form_entry" %>
+    <%= link_to t('cancel'), manage_news_entry_path(@entry.id), :class => 'button cancel', :id => "cancel_form_entry" %>
+
+    <%= semantic_form_for @entry, :as => :entry, :url => unlock_manage_news_entry_path(@entry.id), :html => { :method => :post, :class => "hidden" } do | form | %>
+      <%= form.actions :class => "buttons" do %>
+        <%= form.action :submit, :label => t('cancel') %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+

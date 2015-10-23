@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151021054001) do
+ActiveRecord::Schema.define(:version => 20151022053542) do
 
   create_table "audits", :force => true do |t|
     t.integer  "auditable_id"
@@ -39,11 +39,12 @@ ActiveRecord::Schema.define(:version => 20151021054001) do
     t.string   "ancestry"
     t.string   "title"
     t.text     "weight"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.string   "entry_type"
     t.text     "title_path"
     t.text     "description"
+    t.string   "channel_code"
   end
 
   add_index "channels", ["ancestry"], :name => "index_channels_on_ancestry"

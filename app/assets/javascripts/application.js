@@ -14,6 +14,8 @@
  *= require jquery_nested_form.js
  *= require colorbox
  *= require sugar
+ *= require progress-bar
+ *= require channel-form-js
  */
 
 function preload_images(images) {

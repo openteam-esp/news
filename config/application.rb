@@ -20,7 +20,9 @@ module News
                                 #{config.root}/app/navigation_renderers
                                 #{config.root}/app/models/entries
                                 #{config.root}/app/models/tasks
+                                #{config.root}/app/workers
                                 #{config.root}/lib
+                                #{config.root}/lib/tusur_news
                                )
 
 

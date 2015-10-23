@@ -16,12 +16,14 @@
 #
 
 class Channel < ActiveRecord::Base
-  attr_accessible :title, :parent_id, :entry_type, :description
+  attr_accessible :title, :parent_id, :entry_type, :description, :channel_code
 
   has_many :recipients
   has_and_belongs_to_many :entries, :uniq => true
 
   validates_presence_of :title
+  validates_presence_of :channel_code, :if => :is_youtube?
+  validate :check_channel_code, :if => :is_youtube?
 
   before_save :set_weight, :if => :need_set_weight?
   before_save :set_title_path
@@ -152,5 +154,19 @@ class Channel < ActiveRecord::Base
           descendant.save
         end
       end
+    end
+
+    def check_channel_code
+      begin
+        unless Yt::Channel.new(id: channel_code).public?
+          errors.add(:channel_code, 'Канал закрыт для публичного просмотра')
+        end
+      rescue
+        errors.add(:channel_code, 'Такой канал отсутствует')
+      end
+    end
+
+    def is_youtube?
+      entry_type == "youtube_entry"
     end
 end

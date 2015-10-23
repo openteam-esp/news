@@ -8,6 +8,7 @@
         <% if can?(:manage, channel) %>
           <%= link_to t('commons.delete'), manage_channel_path(channel), :method => :delete, :data => {:confirm => t('commons.confirm')} %>
           <%= link_to t('commons.edit'), edit_manage_channel_path(channel) %>
+          <%= link_to( "Синхронизировать", sync_manage_channel_path(channel) ) if  channel.entry_type == "youtube_entry" %>
         <% end %>
       </li>
     <% end %>

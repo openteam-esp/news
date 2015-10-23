@@ -10,4 +10,10 @@ class Manage::ChannelsController < ApplicationController
   end
 
   actions :new, :create, :edit, :update, :index, :destroy
+
+  custom_actions :resource => [:sync]
+
+  def sync
+    @job_id = YoutubeWorker.perform_async(resource.channel_code)
+  end
 end
