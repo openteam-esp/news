@@ -91,6 +91,7 @@ class TusurNewsParser
 
     source = find_source(body) || {}
     recursive_node_cleaner(body, /^$/, %w(br p span text))                                #чистим тело новости от пустых элементов
+    check_for_bad_images(body)
     return  { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), time: time,  gallery: gallery, source: source }
   end
 
@@ -134,10 +135,11 @@ class TusurNewsParser
   end
 
   def update_inner_images_src(node, vfs_path)
+    regex = /_\d*[.]jpg$/
     node.css("img").each do |img|
       from = img["src"].match(/^\/\S*/) ? url_begin + img["src"] : img["src"]
       to = vfs_path
-      storage_url = upload_file(from, to)
+      storage_url = upload_file(from.gsub(regex, ''), to)
       img["src"] = storage_url
     end
   end
@@ -174,6 +176,20 @@ class TusurNewsParser
     rescue
       return
     end
+  end
+
+  def check_for_bad_images(node)
+    node.css("img").each do |img|
+      unless image_ok?(img["src"])
+        img.remove
+        @error_counter[:bad_images] ||= []
+        @error_counter[:bad_images] << img["src"]
+      end
+    end
+  end
+
+  def image_ok?(href)
+    FastImage.size(href).present?
   end
 
   def node_cleaner(node, *selectors)

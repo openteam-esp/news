@@ -23,6 +23,7 @@ group :default do
   gem 'esp-ckeditor'
   gem 'esp-commons'
   gem 'esp-views'
+  gem 'fastimage'
   gem 'forgery', :require => false
   gem 'formtastic', '< 2.2.0'
   gem 'friendly_id'
