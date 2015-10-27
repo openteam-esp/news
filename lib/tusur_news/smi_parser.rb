@@ -37,8 +37,12 @@ class SmiParser < TusurNewsParser
     update_files_src body, entry.vfs_path                                                 #перекладываем файлы на сторадж и апдейтим ссылки на них
     update_inner_images_src body, entry.vfs_path                                          #перекладываем оставшиеся после резни изображения на сторадж и обновляем им ссылки
     update_links body
+    update_iframes(body)                                                                  #iframe с ссылками на youtube заменяем на p с ссылкой
+    update_objects(body)                                                                  #апдейтим objects с ссылками на старый тусур и youtube
+
     page.children.select{|n| n["style"].present? && n["style"].match("text-align: right")}.map(&:remove) #чистим от нод-подписей
     recursive_node_cleaner(body, /^$/, %w(br p span text))                                #чистим тело новости от пустых элементов
+    check_for_bad_images(body)
     return  { body: body.children.to_html.squish.gsub('<p>&nbsp;</p>', ''), time: time,  gallery: gallery, source: {} }
   end
 

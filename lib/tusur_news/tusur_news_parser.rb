@@ -85,6 +85,8 @@ class TusurNewsParser
 
     gallery = body.css(".colorbox").map(&:remove)                                         #фотографии с .colorbox вырезаем и отправляем в галерею
     remove_duplicate_links(body, gallery)
+    update_iframes(body)                                                                  #iframe с ссылками на youtube заменяем на p с ссылкой
+    update_objects(body)                                                                  #апдейтим objects с ссылками на старый тусур и youtube
     update_files_src body, entry.vfs_path                                                 #перекладываем файлы на сторадж и апдейтим ссылки на них
     update_inner_images_src body, entry.vfs_path                                          #перекладываем оставшиеся после резни изображения на сторадж и обновляем им ссылки
     update_links body
@@ -123,6 +125,32 @@ class TusurNewsParser
     node.css("a").select{|a| a["href"] && a["href"].match(/^\/\S*/)}.each do |a|
       new_url = "http://old.tusur.ru" + a["href"]
       a["href"] = new_url
+    end
+  end
+
+  def update_iframes(node)
+    node.css("iframe").each do |iframe|
+      if iframe["src"].match(/youtu/)
+        video_code = iframe["src"].split("/").last.match(/^[^?=.'"]+/).to_s
+        iframe.add_next_sibling "<p>http://youtu.be/#{video_code}</p>"
+        iframe.remove
+      end
+    end
+  end
+
+  def update_objects(node)
+    node.css("object").each do |object|
+      if embed = object.at_css("embed")
+        case embed["src"]
+        when /youtu/
+          youtube_code = embed["src"].split("/").last.match(/[^?=".']+/).to_s
+          object.add_next_sibling "<p>http://youtu.be/#{youtube_code}</p>"
+          object.remove
+        when /www.tusur/
+          object.add_next_sibling object.to_s.gsub("www.tusur", "old.tusur")
+          object.remove
+        end
+      end
     end
   end
 
@@ -212,8 +240,9 @@ class TusurNewsParser
     images.each do |image|
       href = url_begin + image["src"].gsub(/_\d*.\D*$/, '')
       description = image["alt"] || image["title"] || ""
+      description = "" if description.match(/^\d+$/)
       storage_url = upload_file(href, news.vfs_path)
-      news.images.create(:url => storage_url, :description => description )
+      news.images.create(:url => storage_url, :description => description ) if image_ok?(storage_url)
     end
   end
 

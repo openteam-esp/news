@@ -16,7 +16,7 @@ namespace :tusur do
 
   desc "rake for testing parser code"
   task :test => :environment do
-    TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse_entry("http://www.tusur.ru/ru/news/index.html?path=2008/03/13.html", Entry.new(annotation: "27 сентября в ТУСУР состоялся квест «В поисках сокровищ. Кубок первокурсников -2015»."))
+    TusurNewsParser.new("http://www.tusur.ru/ru/news/index.html?path=", 4).parse_entry("http://www.tusur.ru/ru/news/index.html?path=2015/07/02.html", Entry.new(annotation: "27 сентября в ТУСУР состоялся квест «В поисках сокровищ. Кубок первокурсников -2015»."))
   end
 
   desc "rake for cleaning channel 4"
