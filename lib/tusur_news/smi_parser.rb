@@ -20,10 +20,9 @@ class SmiParser < TusurNewsParser
     write_to("legacy_urls_smi.yml")
   end
 
-  private
 
   def parse_entry(news_url, entry)
-    puts news_url
+    #puts news_url
     page = Nokogiri::HTML(open(news_url)).css("#center-side-full")                        #страница
     time = get_time(page)                                                                 #время публикации
     body = get_body(page, entry)                                                          #контент страницы
@@ -59,7 +58,7 @@ class SmiParser < TusurNewsParser
     author = title.gsub(header_text, '').squish
     entry.author = author
     entry.title  = header_text.present? ? header_text : title
-    entry.source = source || ""
+    entry.source = sanitize_source(source || "")
     page
   end
 
@@ -69,5 +68,52 @@ class SmiParser < TusurNewsParser
 
   def new_entry?(entry)
     channel.entries.where(:annotation => entry.annotation).empty?
+  end
+
+  def sanitize_source(string)
+    replacements = {
+      ""                => /3.июля/ ,
+      "Томские Новости" => /^Томские новости/ ,
+      "Томский Вестник" => /То.*ский вестник/i ,
+      "Ёж (Молодежное приложение к газете «Томские новости»)" => /Ёж/,
+      "Аргументы и Факты Томск" => /АиФ|Аргументы/ ,
+      "Здоровье ONLINE. – 3 апреля. – 2011" => /Антон/,
+      "Бизнес-журнал" => /Бизнес-журнал/,
+      "Бизнес-журнал. Томск" => /Томский бизнес/,
+      "БиТ: Бизнес и Техника" => /it-magazine/,
+      "vesti70.ru" => /Веб-сайт/,
+      "Вести-Томск" => /Вести.+томск/i,
+      'ГТРК "Томск"' => /Г.+К-Томск/,
+      "Живое ТВ" => /Живое/,
+      "ИА Интефакс-Сибирь" => /Интерфакс-сибирь/i,
+      "ИА Интерфакс" => /Интерфакс – Россия/,
+      "PC week" => /PCweek/,
+      "Комсомольская правда в Томске" => /КП/,
+      "Комсомольская правда в Томске" => /правда.*томск/i,
+      "Континент–Сибирь" => /Континент – Сибирь/,
+      "Красное Знамя" => /Красное Знамя/i,
+      "Московский Комсомолец в Томске" => /МК в Томске/,
+      "Наука и технологии РФ" => /Наука.*РФ/i,
+      "РИА Новости" => /РИА.*Новости/i,
+      "Работа и обучение" => /Работа/,
+      "Российская газета" => /Российская газета/,
+      "Территория Интеллекта " => /Территория Интеллекта/i,
+      "TOMCK magazine" => /томск.*agazine/i,
+      "УниверCITY" => /Универ.*TY/,
+      "Час Пик" => /Час.Пик/
+    }
+
+    if string.present?
+      array = string.split(".")
+      replacements.each do |k, v|
+        if array.first.match(v)
+          array[0] = k
+          break
+        end
+      end
+      array.join(".")
+    else
+      ""
+    end
   end
 end
