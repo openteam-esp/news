@@ -8,7 +8,7 @@ class SmiParser < TusurNewsParser
       puts "importing #{year}"
       (0..page_quantity(smi_url_builder(year))).each do |page_number|
         paginated_url = "#{@url}#{year}/index.html?page=#{page_number}"
-        puts paginated_url
+        #puts paginated_url
         fetch_entries(paginated_url)
       end
     end
@@ -88,8 +88,7 @@ class SmiParser < TusurNewsParser
       "ИА Интефакс-Сибирь" => /Интерфакс-сибирь/i,
       "ИА Интерфакс" => /Интерфакс – Россия/,
       "PC week" => /PCweek/,
-      "Комсомольская правда в Томске" => /КП/,
-      "Комсомольская правда в Томске" => /правда.*томск/i,
+      "Комсомольская правда в Томске" => /(КП.*томск)|(комсомольская.*да.*томск)/i,
       "Континент–Сибирь" => /Континент – Сибирь/,
       "Красное Знамя" => /Красное Знамя/i,
       "Московский Комсомолец в Томске" => /МК в Томске/,
