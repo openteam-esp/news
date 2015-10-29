@@ -3,7 +3,7 @@
 class Entry < ActiveRecord::Base
   STALE_PERIOD = 1.month
 
-  attr_accessible :title, :body, :since, :channel_ids, :annotation, :source, :source_link, :images_attributes
+  attr_accessible :title, :body, :since, :channel_ids, :annotation, :source, :source_link, :images_attributes, :author
   attr_accessor :current_user
 
   belongs_to :initiator, :class_name => 'User'

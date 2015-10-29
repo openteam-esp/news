@@ -47,6 +47,12 @@
       </div>
     <% end %>
 
+    <% if entry.author.present? %>
+      <div class="author_info">
+        Автор: <%= entry.author %>
+      </div>
+    <% end %>
+
     <%= yield(:additional) %>
   </div>
 </div>

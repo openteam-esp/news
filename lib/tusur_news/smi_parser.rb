@@ -56,7 +56,7 @@ class SmiParser < TusurNewsParser
     header_node.remove if header_node
     header_text = (header_node ? header_node.text : "")
     author = title.gsub(header_text, '').squish
-    entry.author = author
+    entry.author = sanitize_author(author)
     entry.title  = header_text.present? ? header_text : title
     entry.source = sanitize_source(source || "")
     page
@@ -115,5 +115,10 @@ class SmiParser < TusurNewsParser
     else
       ""
     end
+  end
+
+  def sanitize_author(string)
+    return "" if string.nil?
+    (string.match(/^[А-Я]{1}[а-я]+\s[А-Я]{1}[.]/) || "").to_s
   end
 end
