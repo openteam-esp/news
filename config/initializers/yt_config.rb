@@ -1,1 +1,1 @@
-Yt.configuration.api_key = Settings[:youtube][:api_key]
+Yt.configuration.api_key = Settings['youtube.api_key']
