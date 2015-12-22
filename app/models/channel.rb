@@ -22,7 +22,6 @@ class Channel < ActiveRecord::Base
   has_and_belongs_to_many :entries, :uniq => true
 
   validates_presence_of :title
-  validates_presence_of :channel_code, :if => :is_youtube?
   validate :check_channel_code, :if => :is_youtube?
 
   before_save :set_weight, :if => :need_set_weight?
@@ -167,6 +166,6 @@ class Channel < ActiveRecord::Base
     end
 
     def is_youtube?
-      entry_type == "youtube_entry"
+      entry_type == 'youtube_entry' && channel_code?
     end
 end
