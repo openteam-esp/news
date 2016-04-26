@@ -60,6 +60,12 @@ class EntriesController < ApplicationController
 
         results
       else
+        total_count = end_of_association_chain.count
+        total_pages = (total_count / paginate_options[:per_page].to_f).ceil
+        headers['X-Current-Page'] = paginate_options[:page].to_s
+        headers['X-Total-Pages'] = total_pages.to_s
+        headers['X-Total-Count'] = total_count.to_s
+
         end_of_association_chain.page(paginate_options[:page]).per(paginate_options[:per_page])
       end
     end
