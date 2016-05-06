@@ -38,6 +38,7 @@ ru:
         since:                  Публиковать с
         source:                 Название источника
         source_link:            Ссылка на источник
+        source_target:          Открывать ссылку на источник
         state_enum:
           draft:                Подготавливается
           correcting:           Корректируется

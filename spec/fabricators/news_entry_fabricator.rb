@@ -28,8 +28,10 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  source               :text
-#  source_link          :string(255)
+#  source_link          :text
 #  type                 :string(255)
 #  actuality_expired_at :datetime
+#  youtube_code         :string(255)
+#  source_target        :string(255)
 #
 

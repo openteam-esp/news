@@ -20,6 +20,7 @@ group :default do
   gem 'devise-russian'
   gem 'dynamic_form'
   gem 'el_vfs_client'
+  gem 'enumerize'
   gem 'esp-ckeditor'
   gem 'esp-commons'
   gem 'esp-views'

@@ -1,20 +1,4 @@
 # encoding: utf-8
-# == Schema Information
-#
-# Table name: channels
-#
-#  id          :integer          not null, primary key
-#  deleted_at  :datetime
-#  ancestry    :string(255)
-#  title       :string(255)
-#  weight      :text
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  entry_type  :string(255)
-#  title_path  :text
-#  description :text
-#
-
 class Channel < ActiveRecord::Base
   attr_accessible :title, :parent_id, :entry_type, :description, :channel_code
 
@@ -169,3 +153,21 @@ class Channel < ActiveRecord::Base
       entry_type == 'youtube_entry' && channel_code?
     end
 end
+
+# == Schema Information
+#
+# Table name: channels
+#
+#  id           :integer          not null, primary key
+#  deleted_at   :datetime
+#  ancestry     :string(255)
+#  title        :string(255)
+#  weight       :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  entry_type   :string(255)
+#  title_path   :text
+#  description  :text
+#  channel_code :string(255)
+#
+

@@ -38,7 +38,7 @@
 
     <% if entry.source.present? %>
       <div class="source_info">
-        Источник: <%= link_to entry.source, entry.source_link %>
+        Источник: <%= link_to entry.source, entry.source_link, :target => entry.new_tab? ? '_blank' : nil %>
       </div>
     <% end %>
 

@@ -1,0 +1,6 @@
+ru:
+  enumerize:
+    entry:
+      source_target:
+        current: 'в текущем окне'
+        new_tab: 'в новом окне (_blank)'

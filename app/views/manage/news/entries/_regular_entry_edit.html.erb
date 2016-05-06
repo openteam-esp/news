@@ -54,6 +54,7 @@
         <%= form.input :body, :as => :ckeditor %>
         <%= form.input :source %>
         <%= form.input :source_link %>
+        <%= form.input :source_target, :include_blank => false %>
         <%= form.input :author %>
         <li class='images_wrapper'>
           <%= render :partial => 'attached_file', :locals => { :form => form } %>

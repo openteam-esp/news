@@ -3,7 +3,10 @@
 class Entry < ActiveRecord::Base
   STALE_PERIOD = 1.month
 
-  attr_accessible :title, :body, :since, :channel_ids, :annotation, :source, :source_link, :images_attributes, :author
+  attr_accessible :title, :body, :since, :channel_ids, :annotation,
+    :source, :source_link, :source_target,
+    :images_attributes, :author
+
   attr_accessor :current_user
 
   belongs_to :initiator, :class_name => 'User'
@@ -27,6 +30,9 @@ class Entry < ActiveRecord::Base
 
   extend FriendlyId
   friendly_id :truncated_title, :use => :slugged
+
+  extend Enumerize
+  enumerize :source_target, :in => [:current, :new_tab], :predicates => true
 
   state_machine :initial => :draft do
     state :draft
@@ -214,7 +220,7 @@ class Entry < ActiveRecord::Base
 
   def as_json(options={})
     methods = [*options[:methods]] + [:more_like_this, :images, :thumbnail] - [*options[:except]]
-    super options.merge(:only => [:annotation, :author, :body, :since, :updated_at, :slug, :source, :source_link, :title, :type],
+    super options.merge(:only => [:annotation, :author, :body, :since, :updated_at, :slug, :source, :source_link, :source_target, :title, :type],
                         :methods => methods)
   end
 
@@ -325,8 +331,10 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  source               :text
-#  source_link          :string(255)
+#  source_link          :text
 #  type                 :string(255)
 #  actuality_expired_at :datetime
+#  youtube_code         :string(255)
+#  source_target        :string(255)
 #
 
