@@ -144,10 +144,10 @@ module EntryHelper
   end
 
   def youtube_embed_for(id)
-    Yt::Video.new( id: id).embed_html.html_safe
+    Yt::Video.new( id: id).embed_html.html_safe rescue content_tag(:p, 'Ошибка генерации видео!', class: :warning)
   end
 
   def small_youtube_thumbnail(id)
-    image_tag Yt::Video.new( id: id).thumbnail_url
+    image_tag Yt::Video.new( id: id).thumbnail_url rescue content_tag(:p, 'Ошибка генерации превью для видео!', class: :warning)
   end
 end
