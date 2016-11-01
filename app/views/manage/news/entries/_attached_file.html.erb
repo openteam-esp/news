@@ -1,5 +1,4 @@
 <%= form.semantic_fields_for :images do |image_form| %>
-
   <div class='image_wrapper'>
     <% if image_form.object.url? %>
       <%= link_to image_tag(image_form.object.url.gsub(/\/\d+-\d+\//, '/150-150/'), :width => '150', :title => image_form.object.description), image_form.object.url %>
@@ -7,15 +6,11 @@
       <span><%= t('file_not_selected') %></span>
     <% end %>
   </div>
-
   <%= image_form.inputs do %>
     <%= image_form.input :url, :as => :hidden, :input_html => { :class => 'image_url' } %>
     <%= image_form.input :description, :as => :text %>
   <% end %>
-
   <%= link_to t('choose_file'), '#', :class => 'choose_file button simple icon settings', :id => Time.now.to_i %>
   <%= image_form.link_to_remove t('remove'), :class => 'button trash icon simple' %>
-
 <% end %>
-
-<%= form.link_to_add t('add_image'), :images, :class => 'button icon add' %>
+<p><%= form.link_to_add t('add_image'), :images, :class => 'button icon add' %></p>

@@ -11,7 +11,7 @@
  *= require jquery.ui.timepicker.js
  *= require jquery.ui.timepicker.ru.js
  *= require info_plugin.js
- *= require jquery_nested_form.js
+ *= require jquery_nested_form
  *= require colorbox
  *= require sugar
  *= require progress-bar

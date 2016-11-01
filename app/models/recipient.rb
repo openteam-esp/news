@@ -1,3 +1,15 @@
+class Recipient < ActiveRecord::Base
+  belongs_to :channel
+
+  validates_presence_of :email
+  validates_uniqueness_of :email
+
+  scope :active, where(:active => true)
+
+  default_scope order(:email)
+
+end
+
 # == Schema Information
 #
 # Table name: recipients
@@ -11,14 +23,3 @@
 #  updated_at  :datetime         not null
 #
 
-class Recipient < ActiveRecord::Base
-  belongs_to :channel
-
-  validates_presence_of :email
-  validates_uniqueness_of :email
-
-  scope :active, where(:active => true)
-
-  default_scope order(:email)
-
-end

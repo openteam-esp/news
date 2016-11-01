@@ -1,3 +1,8 @@
+class Permission < ActiveRecord::Base
+  attr_accessible :role, :context
+  sso_auth_permission :roles => [:administrator, :manager, :publisher, :corrector, :initiator]
+end
+
 # == Schema Information
 #
 # Table name: permissions
@@ -11,7 +16,3 @@
 #  updated_at   :datetime         not null
 #
 
-class Permission < ActiveRecord::Base
-  attr_accessible :role, :context
-  sso_auth_permission :roles => [:administrator, :manager, :publisher, :corrector, :initiator]
-end

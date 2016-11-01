@@ -1,3 +1,7 @@
+Fabricator(:recipient) do
+  email "MyString"
+end
+
 # == Schema Information
 #
 # Table name: recipients
@@ -11,6 +15,3 @@
 #  updated_at  :datetime         not null
 #
 
-Fabricator(:recipient) do
-  email "MyString"
-end

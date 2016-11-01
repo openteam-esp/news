@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/sgruhier/capistrano-db-tasks
-  revision: 00e9aa54b20023a7832e9e38a4070c50660b96ce
+  remote: https://github.com/sgruhier/capistrano-db-tasks
+  revision: 396cbbfe0aa4bfe48c8edf2718f2af6163af42bf
+  ref: 396cbbf
   specs:
     capistrano-db-tasks (0.2)
 
@@ -200,7 +201,7 @@ GEM
     mime-types (1.25.1)
     multi_json (1.11.2)
     multipart-post (1.1.5)
-    nested_form (0.2.1)
+    nested_form (0.3.2)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -461,4 +462,4 @@ DEPENDENCIES
   yt (~> 0.25.6)
 
 BUNDLED WITH
-   1.12.1
+   1.13.6

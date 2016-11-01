@@ -1,21 +1,10 @@
 #encoding: utf-8
-# == Schema Information
-#
-# Table name: event_entry_properties
-#
-#  id         :integer          not null, primary key
-#  since      :datetime
-#  until      :datetime
-#  entry_id   :integer
-#  location   :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 
 class EventEntryProperty < ActiveRecord::Base
 
   attr_accessible :since, :until, :location
+
+  belongs_to :entry
 
   validates_presence_of :since, :until
 
@@ -52,3 +41,17 @@ class EventEntryProperty < ActiveRecord::Base
       end
     end
 end
+
+# == Schema Information
+#
+# Table name: event_entry_properties
+#
+#  id         :integer          not null, primary key
+#  since      :datetime
+#  until      :datetime
+#  entry_id   :integer
+#  location   :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+

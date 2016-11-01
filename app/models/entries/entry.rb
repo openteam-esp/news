@@ -5,68 +5,72 @@ class Entry < ActiveRecord::Base
 
   attr_accessible :title, :body, :since, :channel_ids, :annotation,
     :source, :source_link, :source_target,
-    :images_attributes, :author
+    :images_attributes, :author, :event_entry_properties_attributes
+
 
   attr_accessor :current_user
 
-  belongs_to :initiator, :class_name => 'User'
-  belongs_to :deleted_by, :class_name => 'User'
+  belongs_to :initiator, class_name: 'User'
+  belongs_to :deleted_by, class_name: 'User'
 
-  has_and_belongs_to_many :channels, :conditions => {:deleted_at => nil}, :uniq => true
+  has_and_belongs_to_many :channels, conditions: { deleted_at: nil }, uniq: true
 
-  has_many :events, :dependent => :destroy
-  has_many :images, :dependent => :destroy
-  has_many :tasks,  :dependent => :destroy
-  has_many :locks,  :dependent => :destroy
+  has_many :events, dependent: :destroy
+  has_many :images, dependent: :destroy
+  has_many :tasks,  dependent: :destroy
+  has_many :locks,  dependent: :destroy
 
   has_one :prepare
   has_one :review
   has_one :publish
 
   validates_presence_of :current_user
-  validates_presence_of :channels, :on => :update
+  validates_presence_of :channels, on: :update
 
-  accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :images, allow_destroy: true, reject_if: :all_blank
+
+  has_many :event_entry_properties, foreign_key: :entry_id, dependent: :destroy
+  accepts_nested_attributes_for :event_entry_properties, allow_destroy: true
 
   extend FriendlyId
-  friendly_id :truncated_title, :use => :slugged
+  friendly_id :truncated_title, use: :slugged
 
   extend Enumerize
-  enumerize :source_target, :in => [:current, :new_tab], :predicates => true
+  enumerize :source_target, in: [:current, :new_tab], predicates: true
 
-  state_machine :initial => :draft do
+  state_machine initial: :draft do
     state :draft
     state :correcting
     state :publishing
     state :published do
       validates_presence_of :title, :since
-      validates_presence_of :actuality_expired_at, :if => :is_announce?
-      validates_presence_of :body, :unless => :is_youtube?
+      validates_presence_of :actuality_expired_at, if: :is_announce?
+      validates_presence_of :body, unless: :is_youtube?
     end
 
-    before_transition :publishing => :published, :do => :set_since
+    before_transition publishing: :published, do: :set_since
 
-    after_transition :publishing => :published, :do => :send_publish_message
+    after_transition publishing: :published, do: :send_publish_message
 
-    after_transition :published => :publishing, :do => :send_unpublish_message
+    after_transition published: :publishing, do: :send_unpublish_message
 
     event :up do
-      transition :draft => :correcting, :correcting => :publishing, :publishing => :published
+      transition draft: :correcting, correcting: :publishing, publishing: :published
     end
 
     event :down do
-      transition :published => :publishing, :publishing => :correcting, :correcting => :draft
+      transition published: :publishing, publishing: :correcting, correcting: :draft
     end
   end
 
-  scope :by_state, ->(state) { where(:state => state) }
+  scope :by_state, ->(state) { where(state: state) }
 
   scope :deleted, where('deleted_by_id IS NOT NULL')
-  scope :not_deleted, where(:deleted_by_id => nil)
-  scope :initiated_by, ->(user) { where(:initiator_id => user) }
-  scope :processing, -> { where(:state => processing_states).not_deleted }
-  scope :published, -> { where(:state => :published).not_deleted }
-  scope :draft, -> { where(:state => :draft).not_deleted }
+  scope :not_deleted, where(deleted_by_id: nil)
+  scope :initiated_by, ->(user) { where(initiator_id: user) }
+  scope :processing, -> { where(state: processing_states).not_deleted }
+  scope :published, -> { where(state: :published).not_deleted }
+  scope :draft, -> { where(state: :draft).not_deleted }
   scope :stale, -> { deleted.where('deleted_at <= ?', STALE_PERIOD.ago) }
   scope :since_greater_than, ->(date) { where('since >= ?', date) }
 
@@ -75,7 +79,7 @@ class Entry < ActiveRecord::Base
     when :processing  then user.initiator? ? processing.initiated_by(user) : processing
     when :draft       then draft.initiated_by(user)
     when :published   then published
-    when :deleted     then where(:deleted_by_id => user)
+    when :deleted     then where(deleted_by_id: user)
     end
       .joins(:channels).where("channels.id IN (#{Channel.subtree_for(user).select(:id).to_sql})")
       .order('id desc')
@@ -93,33 +97,24 @@ class Entry < ActiveRecord::Base
 
   has_many :event_entry_properties
 
-  searchable(:include => [:channels, :event_entry_properties]) do
+  searchable(include: [:channels, :event_entry_properties]) do
     string(:deleted_state) { deleted? ? 'deleted' : 'not_deleted' }
-
-    integer :channel_ids, :multiple => true do channels.map(&:id).uniq end
-
-    text   :title,      :boost => 3.0, :more_like_this => true
-
-    text   :annotation, :boost => 2.0, :more_like_this => true do
+    integer :channel_ids, multiple: true do channels.map(&:id).uniq end
+    text :title, boost: 3.0, more_like_this: true
+    text :annotation, boost: 2.0, more_like_this: true do
       annotation.to_s.strip_html
     end
-
-    text   :body,       :boost => 1.0, :more_like_this => true do
+    text :body, boost: 1.0, more_like_this: true do
       body.to_s.strip_html
     end
-
     string :state
-
     time   :since
-
     time :event_entry_properties_since do
       event_entry_properties.first.try(:since)
     end
-
     time :event_entry_properties_until do
       event_entry_properties.last.try :until
     end
-
     time :actuality_expired_at
   end
 
@@ -127,9 +122,9 @@ class Entry < ActiveRecord::Base
 
   attr_accessor :more_like_this
 
-  normalize_attribute :title, :with => [:squish, :gilensize_as_text, :blank]
-  normalize_attribute :annotation, :with => [:sanitize, :gilensize_as_html, :strip, :blank]
-  normalize_attribute :body, :with => [:sanitize, :strip, :blank]
+  normalize_attribute :title, with: [:squish, :gilensize_as_text, :blank]
+  normalize_attribute :annotation, with: [:sanitize, :gilensize_as_html, :strip, :blank]
+  normalize_attribute :body, with: [:sanitize, :strip, :blank]
 
   audited
 
@@ -147,7 +142,7 @@ class Entry < ActiveRecord::Base
 
   def truncated_title
     return nil unless title
-    self.class.model_name.human + " " + title.truncate(100, :ommission => '', :separator => ' ')
+    %[#{self.class.model_name.human} #{title.truncate(100, ommission: '', separator: ' ')}]
   end
 
   def processing_issue
@@ -175,7 +170,7 @@ class Entry < ActiveRecord::Base
   end
 
   def lock
-    locks.create! :user => current_user unless locked?
+    locks.create! user: current_user unless locked?
   end
 
   def locked?
@@ -211,7 +206,7 @@ class Entry < ActiveRecord::Base
   end
 
   def has_processing_task_executed_by?(user)
-    tasks.processing.where(:executor_id => user).exists?
+    tasks.processing.where(executor_id: user).exists?
   end
 
   def has_participant?(user)
@@ -220,8 +215,8 @@ class Entry < ActiveRecord::Base
 
   def as_json(options={})
     methods = [*options[:methods]] + [:more_like_this, :images, :thumbnail] - [*options[:except]]
-    super options.merge(:only => [:annotation, :author, :body, :since, :updated_at, :slug, :source, :source_link, :source_target, :title, :type],
-                        :methods => methods)
+    super options.merge(only: [:annotation, :author, :body, :since, :updated_at, :slug, :source, :source_link, :source_target, :title, :type],
+                        methods: methods)
   end
 
   def find_more_like_this(options)
@@ -236,7 +231,7 @@ class Entry < ActiveRecord::Base
         with(:since).greater_than(options[:months].to_i.month.ago)
         with(:deleted_state, 'not_deleted')
         with(:channel_ids, options[:channel_id]) if options[:channel_id]
-        paginate :per_page => options[:count].to_i
+        paginate per_page: options[:count].to_i
       end.results
 
       self.more_like_this.each do |entry|
@@ -248,7 +243,7 @@ class Entry < ActiveRecord::Base
   end
 
   def message_for_queue
-    { :slug => slug, :channel_ids => channels.map(&:id) }
+    { slug: slug, channel_ids: channels.map(&:id) }
   end
 
   def is_announce?
@@ -285,13 +280,13 @@ class Entry < ActiveRecord::Base
   private
 
   def create_tasks
-    create_prepare!({:current_user => current_user}, :without_protection => true)
-    create_review!({:current_user => current_user}, :without_protection => true)
-    create_publish!({:current_user => current_user}, :without_protection => true)
+    create_prepare!({ current_user: current_user }, without_protection: true)
+    create_review!({ current_user: current_user }, without_protection: true)
+    create_publish!({ current_user: current_user }, without_protection: true)
   end
 
   def create_event
-    events.create! :event => 'accept', :task => prepare, :user => current_user
+    events.create! event: 'accept', task: prepare, user: current_user
   end
 
   def set_since

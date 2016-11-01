@@ -61,11 +61,11 @@
         </li>
       <% end %>
 
-      <%= form.actions :class => "buttons hidden" do %>
+      <%= render :partial => 'event_entry_fields', :locals => { :form => form } if @entry.is_a?(EventEntry) %>
+
+      <%= form.actions class: 'buttons hidden' do %>
         <%= form.action :submit %>
       <% end %>
-
-      <%= render :partial => "event_entry_fields", :locals => { :form => form } if @entry.is_a?(EventEntry) %>
     <% end %>
   </div>
 

@@ -1,3 +1,10 @@
+class Lock < ActiveRecord::Base
+  attr_accessible :user
+
+  belongs_to :entry
+  belongs_to :user
+end
+
 # == Schema Information
 #
 # Table name: locks
@@ -9,9 +16,3 @@
 #  updated_at :datetime         not null
 #
 
-class Lock < ActiveRecord::Base
-  attr_accessible :user
-
-  belongs_to :entry
-  belongs_to :user
-end
