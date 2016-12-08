@@ -1,20 +1,27 @@
 app:
-  secret:       SECRET
+  secret:  SECRET
 
 errors:
-  key:          KEY
-  url:          http://errors.openteam.ru
+  key:     KEY
+  url:     http://errbit
+
+slack:
+  channel: channel
+  webhook: http://webhook
 
 amqp:
-  url:          http://rabbitmq
+  url:     http://rabbitmq
 
 solr:
-  url:          http://localhost:8982/solr
+  url:     http://localhost:8982/solr
 
 sso:
-  key:          KEY
-  secret:       SECRET
-  url:          http://esp-sso.openteam.ru
+  key:     KEY
+  secret:  SECRET
+  url:     http://sso
 
 storage:
-  url:         http://esp-storage.openteam.ru
+  url:     http://storage
+
+youtube:
+  api_key: KEY

@@ -36,8 +36,9 @@ group :default do
   gem 'jquery-rails'
   gem 'kaminari'
   gem 'nested_form'
-  gem 'openteam-commons'
+  gem 'openteam-commons', '~> 0.3.3'
   gem 'progress_bar'
+  gem 'rails', '~> 3.2.20'
   gem 'rest-client'
   gem 'russian'
   gem 'sanitize'
@@ -49,18 +50,16 @@ group :default do
   gem 'state_machine'
   gem 'sunspot_rails'
   gem 'timecop', require: false
-  gem 'video_info'
+  gem 'video_info', '~> 2.5.0'
   gem 'yt', '~> 0.25.6'
 end
 
 group :development do
   gem 'annotate'
   gem 'brakeman'
-  gem 'capistrano', '~> 2.14.2'
-  gem 'capistrano-db-tasks', git: 'https://github.com/sgruhier/capistrano-db-tasks', ref: '396cbbf'
-  gem 'capistrano-unicorn', '~> 0.1.10'
+  gem 'capistrano-db-tasks', '0.4', require: false
   gem 'hirb'
-  gem 'openteam-capistrano'
+  gem 'openteam-capistrano', '~> 1.0.16'
   gem 'rails-erd'
   gem 'sunspot_solr', require: false
 end

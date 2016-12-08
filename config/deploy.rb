@@ -1,7 +1,9 @@
-require 'openteam/capistrano/recipes'
-require 'whenever/capistrano'
-require 'sidekiq/capistrano'
+require 'openteam/capistrano/deploy'
 
-set :default_stage, 'ato'
+set :bundle_binstubs, -> { shared_path.join('bin') }
 
-set :shared_children, fetch(:shared_children) + %w[config/sunspot.yml]
+set :db_remote_clean, true
+
+set :slackistrano,
+  channel: (Settings['slack.channel'] rescue ''),
+  webhook: (Settings['slack.webhook'] rescue '')
