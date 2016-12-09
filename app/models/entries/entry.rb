@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 class Entry < ActiveRecord::Base
   STALE_PERIOD = 1.month
 
   attr_accessible :title, :body, :since, :channel_ids, :annotation,
     :source, :source_link, :source_target,
     :images_attributes, :author, :event_entry_properties_attributes
-
 
   attr_accessor :current_user
 
@@ -15,10 +12,15 @@ class Entry < ActiveRecord::Base
 
   has_and_belongs_to_many :channels, conditions: { deleted_at: nil }, uniq: true
 
-  has_many :events, dependent: :destroy
-  has_many :images, dependent: :destroy
-  has_many :tasks,  dependent: :destroy
-  has_many :locks,  dependent: :destroy
+  has_many :events, dependent: :delete_all
+  has_many :tasks,  dependent: :delete_all
+  has_many :locks,  dependent: :delete_all
+
+  has_many :images, dependent: :delete_all
+  accepts_nested_attributes_for :images, allow_destroy: true, reject_if: :all_blank
+
+  has_many :event_entry_properties, foreign_key: :entry_id, dependent: :delete_all
+  accepts_nested_attributes_for :event_entry_properties, allow_destroy: true
 
   has_one :prepare
   has_one :review
@@ -26,11 +28,6 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :current_user
   validates_presence_of :channels, on: :update
-
-  accepts_nested_attributes_for :images, allow_destroy: true, reject_if: :all_blank
-
-  has_many :event_entry_properties, foreign_key: :entry_id, dependent: :destroy
-  accepts_nested_attributes_for :event_entry_properties, allow_destroy: true
 
   extend FriendlyId
   friendly_id :truncated_title, use: :slugged
@@ -94,8 +91,6 @@ class Entry < ActiveRecord::Base
   default_value_for :vfs_path do
     generate_vfs_path
   end
-
-  has_many :event_entry_properties
 
   searchable(include: [:channels, :event_entry_properties]) do
     string(:deleted_state) { deleted? ? 'deleted' : 'not_deleted' }
