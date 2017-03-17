@@ -272,6 +272,10 @@ class Entry < ActiveRecord::Base
     "regular_entry"
   end
 
+  def should_generate_new_friendly_id?
+    slug.blank?
+  end
+
   private
 
   def create_tasks
