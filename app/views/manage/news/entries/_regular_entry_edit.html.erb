@@ -45,14 +45,14 @@
         </div>
       </div>
 
-      <%= form.inputs :class => "inputs common_fields" do %>
-        <%= form.input :id, :as => :hidden %>
-        <%= form.input :title, :input_html => { :class => "focus_first" } %>
-        <%= form.input :annotation, :as => :ckeditor, :input_html => { :ckeditor => { :height => 100 } } %>
-        <%= form.input :body, :as => :ckeditor %>
+      <%= form.inputs class: 'inputs common_fields' do %>
+        <%= form.input :id, as: :hidden %>
+        <%= form.input :title, input_html: { class: 'focus_first' } %>
+        <%= form.input :annotation, as: :ckeditor, input_html: { ckeditor: { height: 100 } } %>
+        <%= form.input :body, as: :ckeditor %>
         <%= form.input :source %>
         <%= form.input :source_link %>
-        <%= form.input :source_target, :include_blank => false %>
+        <%= form.input :source_target, include_blank: false %>
         <%= form.input :author %>
         <li class='images_wrapper'>
           <%= render :partial => 'attached_file', :locals => { :form => form } %>
