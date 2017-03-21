@@ -27,7 +27,7 @@ group :default do
   gem 'fastimage'
   gem 'forgery', require: false
   gem 'formtastic', '< 2.2.0'
-  gem 'friendly_id'
+  gem 'friendly_id', '~> 4.0.10'
   gem 'gilenson'
   gem 'has_enum'
   gem 'has_scope', '0.6.0.rc'

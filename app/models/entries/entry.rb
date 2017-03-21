@@ -32,6 +32,10 @@ class Entry < ActiveRecord::Base
   extend FriendlyId
   friendly_id :truncated_title, use: :slugged
 
+  def should_generate_new_friendly_id?
+    slug.blank? && title.present?
+  end
+
   extend Enumerize
   enumerize :source_target, in: [:current, :new_tab], predicates: true
 
@@ -270,10 +274,6 @@ class Entry < ActiveRecord::Base
 
   def prefix
     "regular_entry"
-  end
-
-  def should_generate_new_friendly_id?
-    slug.blank?
   end
 
   private
