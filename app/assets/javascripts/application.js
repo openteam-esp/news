@@ -10,6 +10,7 @@
  *= require jquery.ui.datepicker.ru.js
  *= require jquery.ui.timepicker.js
  *= require jquery.ui.timepicker.ru.js
+ *= require ckeditor/init
  *= require info_plugin.js
  *= require jquery_nested_form
  *= require colorbox

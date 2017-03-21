@@ -45,12 +45,10 @@
         </div>
       </div>
 
-      <%= javascript_include_tag "esp-ckeditor/application" %>
-
       <%= form.inputs :class => "inputs common_fields" do %>
         <%= form.input :id, :as => :hidden %>
         <%= form.input :title, :input_html => { :class => "focus_first" } %>
-        <%= form.input :annotation, :as => :ckeditor, :input_html => { :height => 100 } %>
+        <%= form.input :annotation, :as => :ckeditor, :input_html => { :ckeditor => { :height => 100 } } %>
         <%= form.input :body, :as => :ckeditor %>
         <%= form.input :source %>
         <%= form.input :source_link %>
