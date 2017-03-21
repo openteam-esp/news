@@ -9,6 +9,7 @@ News::Application.routes.draw do
         member do
           post :revivify
           post :unlock
+          post :regenerate_slug
         end
         get '/:type/' => 'assets#index', :constraints => { :type => /(assets|images|audios|videos|attachments)/ }
         resources :assets, :only => [:create, :destroy]

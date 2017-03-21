@@ -1,6 +1,6 @@
 class Manage::News::EntriesController < Manage::ApplicationController
   actions :index, :show, :create, :edit, :update, :destroy
-  custom_actions :resource => [:revivify, :unlock]
+  custom_actions :resource => [:revivify, :unlock, :regenerate_slug]
 
   before_filter :set_current_user, :except => [:index, :show]
 
@@ -62,6 +62,14 @@ class Manage::News::EntriesController < Manage::ApplicationController
   def unlock
     unlock! do
       @entry.unlock
+      redirect_to manage_news_entry_path(resource) and return
+    end
+  end
+
+  def regenerate_slug
+    regenerate_slug! do
+      @entry.slug = nil
+      @entry.save
       redirect_to manage_news_entry_path(resource) and return
     end
   end

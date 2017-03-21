@@ -21,6 +21,14 @@
 
     <%= presented_header entry %>
 
+    <% if entry.slug.present? %>
+      <h3 class='title'>
+        <%= entry.slug %>
+        <%= link_to 'перегенерировать', regenerate_slug_manage_news_entry_path(entry),
+          method: :post, class: 'button simple' %>
+      </h3>
+    <% end %>
+
     <%= image_for entry.images.first, :width => 100, :height => 100, :title => true if entry.images.any? %>
 
     <div class="annotation">
