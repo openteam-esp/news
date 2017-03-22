@@ -13,7 +13,7 @@ group :default do
   gem 'attribute_normalizer'
   gem 'audited-activerecord'
   gem 'awesome_print'
-  gem 'ckeditor'
+  gem 'ckeditor', '4.1.3'
   gem 'coffee-rails'
   gem 'decent_exposure'
   gem 'default_value_for'
