@@ -261,24 +261,31 @@ CKEDITOR.editorConfig = function( config )
   ];
 
   CKEDITOR.on( 'dialogDefinition', function( ev ){
-    // Take the dialog name and its definition from the event data.
+    var editor = ev.editor;
     var dialogName = ev.data.name;
-    //console.log(dialogName);
     var dialogDefinition = ev.data.definition;
-    //console.log(dialogDefinition);
-    var content, upload;
+    var dialog = dialogDefinition.dialog;
 
     if (dialogName == 'image') {
-      //dialogDefinition.onSizeChange = function (e) {
-        //console.log('onSizeChange');
-      //}
-      //dialogDefinition.onResize = function (e) {
-        //console.log('onResize');
-      //}
-      //dialogDefinition.onOk = function (e) {
-        //console.log('onOk');
-      //}
-      //console.log(dialogDefinition);
+      dialogDefinition.onOk = function(e) {
+        var width = dialog.getValueOf('info', 'txtWidth');
+        var height = dialog.getValueOf('info', 'txtHeight');
+        var src = dialog.getValueOf('info', 'txtUrl');
+        src = src.replace(/\/\d+-\d+\//, '/' + width + '-' + height + '/');
+        var alt = dialog.getValueOf('info', 'txtAlt');
+        var klass = dialog.getValueOf('advanced', 'txtGenClass');
+        var style = dialog.getValueOf('advanced', 'txtdlgGenStyle');
+
+        var imgHtml = CKEDITOR.dom.element.createFromHtml(
+          "<img src='" + src + "'" +
+          " width='" + width + "'" +
+          " height='" + height + "'" +
+          " alt='" + alt + "'" +
+          " class='" + klass + "'" +
+          " style='" + style + "' />"
+        );
+        editor.insertElement(imgHtml);
+      };
     }
   });
 };
