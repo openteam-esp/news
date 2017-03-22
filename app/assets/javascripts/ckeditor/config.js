@@ -278,9 +278,10 @@ CKEDITOR.editorConfig = function( config )
         var alt = dialog.getValueOf('info', 'txtAlt');
         alt = " alt='" + alt + "'";
         var klass = dialog.getValueOf('advanced', 'txtGenClass');
-        if (klass.length) {
-          klass = " class='" + klass + "'";
+        if (!klass.match(/img-responsive/)) {
+          klass = klass + ' img-responsive';
         }
+        klass = " class='" + klass + "'";
         var style = dialog.getValueOf('advanced', 'txtdlgGenStyle');
         if (style.length) {
           style = " style='" + style + "'";
