@@ -268,21 +268,36 @@ CKEDITOR.editorConfig = function( config )
 
     if (dialogName == 'image') {
       dialogDefinition.onOk = function(e) {
+        var src = dialog.getValueOf('info', 'txtUrl');
         var width = dialog.getValueOf('info', 'txtWidth');
         var height = dialog.getValueOf('info', 'txtHeight');
-        var src = dialog.getValueOf('info', 'txtUrl');
         src = src.replace(/\/\d+-\d+\//, '/' + width + '-' + height + '/');
+        src = " src='" + src + "'";
+        width = " width='" + width + "'";
+        height = " height='" + height + "'";
         var alt = dialog.getValueOf('info', 'txtAlt');
+        alt = " alt='" + alt + "'";
         var klass = dialog.getValueOf('advanced', 'txtGenClass');
+        if (klass.length) {
+          klass = " class='" + klass + "'";
+        }
         var style = dialog.getValueOf('advanced', 'txtdlgGenStyle');
+        if (style.length) {
+          style = " style='" + style + "'";
+        }
+        var longdesc = dialog.getValueOf('advanced', 'txtGenLongDescr');
+        if (longdesc.length) {
+          longdesc = " longDesc='" + longdesc + "'";
+        }
+        var title = dialog.getValueOf('advanced', 'txtGenTitle');
+        if (title.length) {
+          title =  " title='" + title + "'";
+        }
 
         var img =
-          "<img src='" + src + "'" +
-          " width='" + width + "'" +
-          " height='" + height + "'" +
-          " alt='" + alt + "'" +
-          " class='" + klass + "'" +
-          " style='" + style + "' />";
+          "<img" + src + width + height + alt +
+          klass + longdesc + title + style +
+          " />";
 
         var target = dialog.getValueOf('Link', 'cmbTarget')
         if (target.length) {
