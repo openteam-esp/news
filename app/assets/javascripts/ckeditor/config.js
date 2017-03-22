@@ -276,15 +276,30 @@ CKEDITOR.editorConfig = function( config )
         var klass = dialog.getValueOf('advanced', 'txtGenClass');
         var style = dialog.getValueOf('advanced', 'txtdlgGenStyle');
 
-        var imgHtml = CKEDITOR.dom.element.createFromHtml(
+        var img =
           "<img src='" + src + "'" +
           " width='" + width + "'" +
           " height='" + height + "'" +
           " alt='" + alt + "'" +
           " class='" + klass + "'" +
-          " style='" + style + "' />"
-        );
-        editor.insertElement(imgHtml);
+          " style='" + style + "' />";
+
+        var target = dialog.getValueOf('Link', 'cmbTarget')
+        if (target.length) {
+          target = " target='" + target + "'";
+        }
+
+        var link = dialog.getValueOf('Link', 'txtUrl'),
+            link_open = '',
+            link_close = '';
+        if (link.length) {
+          link_open = "<a href='" + link + "'" + target + ">";
+          link_close = "</a>";
+        }
+
+        element = CKEDITOR.dom.element.createFromHtml(link_open + img + link_close);
+
+        editor.insertElement(element);
       };
     }
   });
