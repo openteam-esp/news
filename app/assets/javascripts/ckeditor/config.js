@@ -319,4 +319,18 @@ CKEDITOR.editorConfig = function( config )
       };
     }
   });
+
+  CKEDITOR.on('instanceReady', function( ev ) {
+    var dtd = CKEDITOR.dtd;
+    ev.editor.dataProcessor.writer.indentationChars = '  ';
+    for ( var e in CKEDITOR.tools.extend( {}, dtd.$nonBodyContent, dtd.$block, dtd.$listItem, dtd.$tableContent ) ) {
+      ev.editor.dataProcessor.writer.setRules( e, {
+        indent: true,
+        breakBeforeOpen: true,
+        breakAfterOpen: false,
+        breakBeforeClose: false,
+        breakAfterClose: true
+      });
+    }
+  });
 };
