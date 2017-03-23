@@ -2,6 +2,9 @@
 @import 'compass/css3'
 @import 'list'
 
+.CodeMirror-code
+  +text-shadow(none)
+
 .content_wrapper
   background: #818a97
   padding: 0 0 0 10px
@@ -165,6 +168,7 @@
           font-size: 16px
           font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace
           white-space: pre-wrap
+          +text-shadow(none)
 
     .attached_file
       float: left
@@ -267,12 +271,14 @@
     font-size: 16px
     font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace
     white-space: pre-wrap
+    +text-shadow(none)
 
   .cke_maximized
     top: 30px !important
 
     .cke_source
       width: 100% !important
+      +text-shadow(none)
 
 .entry_image
   +clearfix
