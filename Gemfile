@@ -43,7 +43,7 @@ group :default do
   gem 'russian'
   gem 'sanitize'
   gem 'sass-rails'
-  gem 'sidekiq', '~> 2.14'
+  gem 'sidekiq'
   gem 'sidekiq-status'
   gem 'simple-navigation'
   gem 'sso-auth'
