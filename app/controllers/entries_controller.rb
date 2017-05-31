@@ -47,7 +47,10 @@ class EntriesController < ApplicationController
 
         searcher.deleted_state = 'not_deleted'
         searcher.per_page      = paginate_options[:per_page]
-        searcher.order_by = 'random' if params[:random] == 'true'
+        if params[:random] == 'true'
+          searcher.since_gt = params[:period_for_random].to_i.month.ago if params[:period_for_random].present?
+          searcher.order_by = 'random'
+        end
 
         searcher.pagination.merge! paginate_options
         results = searcher.results
