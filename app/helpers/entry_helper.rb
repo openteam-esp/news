@@ -79,7 +79,7 @@ module EntryHelper
     unless entry.annotation.blank?
       description += content_tag(:p, content_tag(:em, entry.annotation.gsub(/\<\/?p>/, '').gsub(/\<\/?em>/, '').html_safe))
     end
-    description += entry.body.html_safe
+    description += entry.body.to_s.html_safe
     description += content_tag :div do
       content = ''
       entry.event_entry_properties.each do |event|
