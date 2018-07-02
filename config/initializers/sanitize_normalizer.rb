@@ -10,7 +10,7 @@ AttributeNormalizer.configure do |config|
   SANITIZE_CONFIG[:attributes]['param'] = %w[name value]
   SANITIZE_CONFIG[:attributes]['embed'] = %w[src type width height allowscriptaccess allowfullscreen]
   SANITIZE_CONFIG[:attributes]['iframe'] = %w[src width height allowfullscreen frameborder]
-  SANITIZE_CONFIG[:attributes][:all] += %w[style class]
+  SANITIZE_CONFIG[:attributes][:all] += %w[style class id]
   SANITIZE_CONFIG[:output] = :xhtml
 
   config.normalizers[:sanitize] = ->(value, options) do
