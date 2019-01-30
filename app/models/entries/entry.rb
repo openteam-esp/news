@@ -121,8 +121,8 @@ class Entry < ActiveRecord::Base
 
   attr_accessor :more_like_this
 
-  normalize_attribute :title, with: [:squish, :gilensize_as_text, :blank]
-  normalize_attribute :annotation, with: [:sanitize, :gilensize_as_html, :strip, :blank]
+  normalize_attribute :title, with: [:squish, :blank]
+  normalize_attribute :annotation, with: [:sanitize, :strip, :blank]
   normalize_attribute :body, with: [:sanitize, :strip, :blank]
 
   audited
@@ -331,4 +331,3 @@ end
 #  youtube_code         :string(255)
 #  source_target        :string(255)
 #
-

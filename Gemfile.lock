@@ -172,7 +172,6 @@ GEM
     friendly_id (4.0.10.1)
       activerecord (>= 3.0, < 4.0)
     fssm (0.2.9)
-    gilenson (1.2.2)
     haml (4.0.1)
       tilt
     has_enum (0.10.1)
@@ -435,7 +434,6 @@ DEPENDENCIES
   forgery
   formtastic (< 2.2.0)
   friendly_id (~> 4.0.10)
-  gilenson
   has_enum
   has_scope (= 0.6.0.rc)
   has_searcher (< 0.0.90)
@@ -472,4 +470,4 @@ DEPENDENCIES
   yt (~> 0.25.6)
 
 BUNDLED WITH
-   1.14.6
+   1.16.5
